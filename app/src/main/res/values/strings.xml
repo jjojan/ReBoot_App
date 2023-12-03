@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">ReBoot App</string>
+
+    <string name="back4app_server_url">https://parseapi.back4app.com/</string>
+
+    <string name="back4app_app_id">NNyEnZ8QLzklluhbnUE52mgWU9zfnrUdDEK2ihQl</string>
+    <string name="back4app_client_key">h2yfWZerOhexddGPdv5BKHZRLRqhv8efigTp32Ud</string>
+
+
+    <string name="web_client_id">802376172514-kqkalh3980aggmefeb001fcv1pghfukv.apps.googleusercontent.com</string>
+    <string name="or_sign_up">or Sign Up</string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

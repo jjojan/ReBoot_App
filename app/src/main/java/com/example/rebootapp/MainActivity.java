@@ -37,14 +37,14 @@ public class MainActivity extends AppCompatActivity {
                         fragment = new HomeFragment();
                         break;
                     case R.id.mSearch:
-                        fragment = new HomeFragment();
+                        fragment = new SearchFragment();
                         break;
                     case R.id.mEvents:
                         fragment = new HomeFragment();
                         break;
                     case R.id.mCart:
                     default:
-                        fragment = new HomeFragment();
+                        fragment = new ProfileFragment();
                         break;
                 }
                 fragmentManager.beginTransaction().replace(R.id.fLayoutContainer, fragment).commit();
