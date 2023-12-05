@@ -87,7 +87,7 @@ public class SignUp extends AppCompatActivity {
 
             // Signed in successfully, show authenticated UI.
             GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(this);
-            if(acct != null){
+            if(account != null){
                 String personName = account.getDisplayName();
                 String personGivenName = account.getGivenName();
                 String personEmail = account.getEmail();
@@ -95,6 +95,7 @@ public class SignUp extends AppCompatActivity {
 
                 ParseUser user = new ParseUser();
                 user.setUsername(personGivenName);
+                user.setEmail(personEmail);
                 user.setPassword(personId);
 
                 user.signUpInBackground(new SignUpCallback() {
