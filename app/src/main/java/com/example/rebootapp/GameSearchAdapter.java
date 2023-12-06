@@ -62,8 +62,10 @@ public class GameSearchAdapter extends RecyclerView.Adapter<GameSearchAdapter.Vi
         }
 
         public void bind(GameSearch game) {
+            String date = game.getOverview();
+            String[] arrOfStr = date.split("-", 2);
             tvTitle.setText(game.getTitle());
-            tvDate.setText(game.getOverview());
+            tvDate.setText(arrOfStr[0]);
             String imageUrl;
 
 
