@@ -36,6 +36,7 @@ public class GameSearch {
     public GameSearch() {}
 
     public GameSearch(JSONObject game) throws JSONException {
+        Log.i("searchh", "searching");
         title = game.getString("name");
         id = game.getString("id");
         String decName = game.getString("metacritic");
