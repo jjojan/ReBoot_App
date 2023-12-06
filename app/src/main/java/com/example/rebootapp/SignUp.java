@@ -3,9 +3,13 @@ package com.example.rebootapp;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,15 +33,57 @@ public class SignUp extends AppCompatActivity {
     ImageView googleImage;
     GoogleSignInAccount account;
 
+    //Manual Sign Up Variables
+    EditText edtUserName;
+    EditText edtEmail;
+    EditText edtPassword;
+    Button btnSignUp;
+    TextView tvLoginLink;
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
 
+        edtUserName = findViewById(R.id.edtUsername);
+        edtEmail = findViewById(R.id.edtEmail);
+        edtPassword = findViewById(R.id.edtPassword);
+        btnSignUp = findViewById(R.id.btnSignUp);
+        tvLoginLink = findViewById(R.id.tvLoginLink);
+
         googleImage = findViewById(R.id.google_img);
 
         gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
         gsc = GoogleSignIn.getClient(this, gso);
+
+        btnSignUp.setOnClickListener(new View.OnClickListener() {
+            String username = edtUserName.toString();
+            String email = edtEmail.toString();
+            String password = edtPassword.toString();
+            @Override
+            public void onClick(View v) {
+                if(TextUtils.isEmpty(username)){
+                    Toast.makeText(getApplicationContext(), "Username is Required.", Toast.LENGTH_LONG).show();
+                }
+                else if(TextUtils.isEmpty(email)) {
+                    Toast.makeText(getApplicationContext(), "Email is Required.", Toast.LENGTH_LONG).show();
+                }
+                else if(TextUtils.isEmpty(password)){
+                    Toast.makeText(getApplicationContext(), "Password is Required.", Toast.LENGTH_LONG).show();
+                }
+                else {
+                    signInManual(username, email, password);
+                    navigateToHomePage();
+
+                }
+
+                //signInManual(username, email, password);
+                //navigateToHomePage();
+            }
+
+        });
 
         googleImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,6 +115,28 @@ public class SignUp extends AppCompatActivity {
         Intent signInIntent = gsc.getSignInIntent();
         startActivityForResult(signInIntent, 1000);
     }
+
+    void signInManual(String username, String email, String password ){
+        ParseUser user = new ParseUser();
+
+        user.setUsername(username);
+        user.setEmail(email);
+        user.setPassword(password);
+
+        user.signUpInBackground(new SignUpCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e == null) {
+                    Toast.makeText(getApplicationContext(), "Sign Up Successful", Toast.LENGTH_LONG).show();
+
+                }
+                else{
+                    Toast.makeText(getApplicationContext(), "Sign Up Unsuccessful", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+    }
+
 
     void updateUI(GoogleSignInAccount account){
 

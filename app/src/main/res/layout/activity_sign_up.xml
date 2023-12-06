@@ -87,7 +87,7 @@
         android:linksClickable="true"
         android:textSize="18dp"
         android:textColor="@color/white"
-        android:layout_marginTop="35pt" />
+        android:layout_marginTop="25pt" />
     <ImageView
         android:layout_width="79dp"
         android:layout_height="62dp"
@@ -96,6 +96,15 @@
         android:layout_below="@id/tvSignUpLink"
         android:id="@+id/google_img"/>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvLoginLink"
+        android:text="Already have an account? Login here"
+        android:textColor="@color/white"
+        android:layout_below="@+id/google_img"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="12dp"/>
 
 
 </RelativeLayout>

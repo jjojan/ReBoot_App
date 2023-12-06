@@ -3,19 +3,23 @@ package com.example.rebootapp;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
+import com.parse.ParseUser;
 
 
 public class Login extends AppCompatActivity {
@@ -23,6 +27,10 @@ public class Login extends AppCompatActivity {
     GoogleSignInClient gsc;
     ImageView googleImage;
     GoogleSignInAccount account;
+
+    Button btnLogin;
+    EditText edtEmail;
+    EditText edtPassword;
 
     @Override
     protected void onCreate (Bundle savedInstanceState){
@@ -34,6 +42,31 @@ public class Login extends AppCompatActivity {
         gsc = GoogleSignIn.getClient(this, gso);
 
         Button btnSignUp = (Button)findViewById(R.id.btnSignUpLink);
+        btnLogin = (Button)findViewById(R.id.btnLogin);
+
+        edtEmail = findViewById(R.id.edtEmail);
+        edtPassword = findViewById(R.id.edtPassword);
+
+        btnLogin.setOnClickListener(new View.OnClickListener() {
+
+            String username = edtEmail.toString();
+            String password = edtPassword.toString();
+
+            @Override
+            public void onClick(View v) {
+                if(TextUtils.isEmpty(username)){
+                    Toast.makeText(getApplicationContext(), "Username is Required.", Toast.LENGTH_LONG).show();
+                }
+                else if(TextUtils.isEmpty(password)){
+                    Toast.makeText(getApplicationContext(), "Password is Required.", Toast.LENGTH_LONG).show();
+                }
+                else {
+                    logInManual(username, password);
+                    navigateToHomePage();
+
+                }
+            }
+        });
         btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -71,6 +104,21 @@ public class Login extends AppCompatActivity {
     void logIn(){
         Intent intent = gsc.getSignInIntent();
         startActivityForResult(intent, 1000);
+    }
+
+    void logInManual(String username, String password){
+
+        ParseUser.logInInBackground(username, password, (parseUser, e) -> {
+            //progressDialog.dismiss();
+            if (parseUser != null) {
+                //showAlert("Successful Login", "Welcome back " + username + " !");
+                Toast.makeText(Login.this, "Login Successful.", Toast.LENGTH_LONG).show();
+
+            } else {
+                ParseUser.logOut();
+                Toast.makeText(Login.this, "Login Unsuccesful.", Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     @Override
