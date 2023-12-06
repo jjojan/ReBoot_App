@@ -175,6 +175,36 @@ public class SearchFragment extends Fragment {
 
             @Override
             public boolean onQueryTextChange(String newText) {
+                svSearch = view.findViewById(R.id.svSearch);
+                RecyclerView searchRecyclerView = view.findViewById(R.id.searchRecyclerView);
+                Games = new ArrayList<>();
+                GameSearchAdapter searchGameAdapter = new GameSearchAdapter(getContext(), Games);
+                searchRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+                searchRecyclerView.setAdapter(searchGameAdapter);
+                String search = "https://api.rawg.io/api/games?key=63502b95db9f41c99bb3d0ecf77aa811&&search_precise&search=" + newText + "&ordering=-added";
+                client.get(search, new JsonHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, Headers headers, JSON json) {
+                        JSONObject jsonObject = json.jsonObject;
+                        try{
+                            JSONArray results = jsonObject.getJSONArray("results");
+                            //Log.i(TAG, "Results" + results.toString());
+                            Games.addAll(GameSearch.fromJSONArray(results));
+                            searchGameAdapter.notifyDataSetChanged();
+                            println("hello");
+                            //Log.i(TAG, "Movies" + searchGame.size());
+                        } catch(JSONException e){
+                            //Log.e(TAG, "hit json expception", e);
+                        }
+
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+
+                    }
+                });
+
                 return false;
             }
         });
