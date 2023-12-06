@@ -17,6 +17,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
 
@@ -75,18 +77,23 @@ public class SignUp extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
         if(requestCode == 1000) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             handleSignInResult(task);
+
         }
     }
 
     private void handleSignInResult(Task<GoogleSignInAccount> task) {
         try {
+            Log.i("sign", "signup");
             GoogleSignInAccount account = task.getResult(ApiException.class);
+            Log.i("sign", String.valueOf(account));
 
             // Signed in successfully, show authenticated UI.
             GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(this);
+
             if(acct != null){
                 String personName = account.getDisplayName();
                 String personGivenName = account.getGivenName();
@@ -96,6 +103,12 @@ public class SignUp extends AppCompatActivity {
                 ParseUser user = new ParseUser();
                 user.setUsername(personGivenName);
                 user.setPassword(personId);
+                user.setEmail(personEmail);
+
+                ParseQuery<ParseObject> query = ParseQuery.getQuery("User");
+
+                Log.i("personGivenName", personGivenName);
+                Log.i("id", personId);
 
                 user.signUpInBackground(new SignUpCallback() {
                     @Override
@@ -111,6 +124,7 @@ public class SignUp extends AppCompatActivity {
                 navigateToHomePage();
             }
         } catch (ApiException e) {
+            Log.i("sign", "error");
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
             Log.w(ContentValues.TAG, "signInResult:failed code=" + e.getStatusCode());
