@@ -59,7 +59,6 @@ public class SignUp extends AppCompatActivity {
 
         btnSignUp.setOnClickListener(new View.OnClickListener() {
 
-
             @Override
             public void onClick(View v) {
                 String username = edtUserName.getText().toString();

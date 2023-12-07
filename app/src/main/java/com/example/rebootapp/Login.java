@@ -19,9 +19,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
-import com.parse.GetCallback;
+import com.parse.LogInCallback;
 import com.parse.ParseException;
-import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 
@@ -119,48 +118,25 @@ public class Login extends AppCompatActivity {
 
     boolean logInManual(String username, String password){
 
-        //Get current user and make sure they are logged out
-        //ParseUser currentUser = ParseUser.getCurrentUser();
-        Log.i("Username", username);
-//
-/*        if (currentUser != null) {
-            //Logout
-            ParseUser.logOutInBackground(e -> {
-                //progressDialog.dismiss();
-                if (e == null){
-                    Toast.makeText(getApplicationContext(), "User Logged Out", Toast.LENGTH_LONG).show();
+        Log.i("Before Login", "Attempting to log in user " + username);
+        ParseUser.logInInBackground(username, password, new LogInCallback() {
+            @Override
+            public void done(ParseUser user, ParseException e) {
+                if(e != null){
+                    Log.e("After Login", "Error with Login");
+                    System.out.println(e.toString());
+                    return;
                 }
-            });
-        }*/
-
-        if(username.indexOf('@') != -1){
-            ParseQuery<ParseUser> query = ParseUser.getQuery();
-            query.whereEqualTo("email", username);
-            query.getFirstInBackground(new GetCallback<ParseUser>() {
-                @Override
-                public void done(ParseUser object, ParseException e) {
-                    if(e != null){
-                        Log.d("score", "The getFirst request failed.");
-                    }
-                    else{
-                        ParseUser.logInInBackground(username, password, (parseUser, exception) -> {
-                            //progressDialog.dismiss();
-                            if (parseUser != null) {
-                                //showAlert("Successful Login", "Welcome back " + username + " !");
-                                Toast.makeText(Login.this, "Login Successful.", Toast.LENGTH_LONG).show();
-                                navigateToHomePage();
-                            } else {
-                                ParseUser.logOut();
-                                Toast.makeText(Login.this, "Login Unsuccesful.", Toast.LENGTH_LONG).show();
-                            }
-                        });
-                    }
+                else{
+                    //System.out.println(e.toString());
                 }
-            });
-        }
-
+                navigateToHomePage();
+                Toast.makeText(Login.this, "Sucess", Toast.LENGTH_SHORT).show();
+            }
+        });
         return true;
     }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -178,7 +154,13 @@ public class Login extends AppCompatActivity {
 
             // Signed in successfully, show authenticated UI.
             GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(this);
-            navigateToHomePage();
+            //Get Current User Information
+            String email = acct.getEmail();
+            String password = acct.getId();
+            Log.i("Google Email", email);
+            Log.i("Google Password", password);
+            logInManual(email, password);
+           // navigateToHomePage();
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
