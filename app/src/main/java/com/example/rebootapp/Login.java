@@ -19,6 +19,9 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
+import com.parse.GetCallback;
+import com.parse.ParseException;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 
@@ -69,7 +72,6 @@ public class Login extends AppCompatActivity {
                 }
                 else{
                     logInManual(username, password);
-                    navigateToHomePage();
                 }
 
             }
@@ -115,11 +117,13 @@ public class Login extends AppCompatActivity {
         startActivityForResult(intent, 1000);
     }
 
-    void logInManual(String username, String password){
+    boolean logInManual(String username, String password){
 
         //Get current user and make sure they are logged out
-        ParseUser currentUser = ParseUser.getCurrentUser();
-        if (currentUser != null) {
+        //ParseUser currentUser = ParseUser.getCurrentUser();
+        Log.i("Username", username);
+//
+/*        if (currentUser != null) {
             //Logout
             ParseUser.logOutInBackground(e -> {
                 //progressDialog.dismiss();
@@ -127,19 +131,35 @@ public class Login extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "User Logged Out", Toast.LENGTH_LONG).show();
                 }
             });
+        }*/
+
+        if(username.indexOf('@') != -1){
+            ParseQuery<ParseUser> query = ParseUser.getQuery();
+            query.whereEqualTo("email", username);
+            query.getFirstInBackground(new GetCallback<ParseUser>() {
+                @Override
+                public void done(ParseUser object, ParseException e) {
+                    if(e != null){
+                        Log.d("score", "The getFirst request failed.");
+                    }
+                    else{
+                        ParseUser.logInInBackground(username, password, (parseUser, exception) -> {
+                            //progressDialog.dismiss();
+                            if (parseUser != null) {
+                                //showAlert("Successful Login", "Welcome back " + username + " !");
+                                Toast.makeText(Login.this, "Login Successful.", Toast.LENGTH_LONG).show();
+                                navigateToHomePage();
+                            } else {
+                                ParseUser.logOut();
+                                Toast.makeText(Login.this, "Login Unsuccesful.", Toast.LENGTH_LONG).show();
+                            }
+                        });
+                    }
+                }
+            });
         }
 
-        ParseUser.logInInBackground(username, password, (parseUser, e) -> {
-            //progressDialog.dismiss();
-            if (parseUser != null) {
-                //showAlert("Successful Login", "Welcome back " + username + " !");
-                Toast.makeText(Login.this, "Login Successful.", Toast.LENGTH_LONG).show();
-
-            } else {
-                ParseUser.logOut();
-                Toast.makeText(Login.this, "Login Unsuccesful.", Toast.LENGTH_LONG).show();
-            }
-        });
+        return true;
     }
 
     @Override
