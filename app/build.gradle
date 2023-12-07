@@ -66,4 +66,7 @@ dependencies {
     //Google login integration include
     implementation("com.google.android.gms:play-services-auth:20.7.0")
 
+    //Picasso for image loading
+    implementation 'com.squareup.picasso:picasso:2.8'
+
 }

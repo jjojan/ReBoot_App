@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/sun_orange"
+    android:layout_alignParentBottom="false"
+    android:background="@color/gray"
+    android:visibility="visible"
     tools:context=".ProfileFragment">
 
     <!-- TODO: Update blank fragment layout -->
@@ -11,8 +14,8 @@
         android:id="@+id/tvWelcomeUser"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Welcome"
         android:layout_centerHorizontal="true"
+        android:text="Welcome"
         android:textSize="30dp" />
 
     <Button
@@ -21,8 +24,54 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:text="Sign Out"
-        android:layout_marginBottom="50dp"/>
+        android:layout_marginBottom="50dp"
+        android:text="Sign Out" />
+
+    <TextView
+        android:id="@+id/tv_Username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvWelcomeUser"
+        android:layout_marginTop="51dp"
+        android:text="Username: "
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/tvUser_Username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/tv_Username"
+        android:layout_marginLeft="110dp"
+        android:layout_toRightOf="@id/tv_Username"
+        android:text="TextView"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/tv_Test"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignWithParentIfMissing="false"
+        android:layout_below="@id/tvUser_Username"
+        android:layout_alignRight="@id/tvUser_Username"
+        android:text="TextView"
+        android:textSize="20sp" />
+
+    <ImageView
+        android:id="@+id/ProfilePic"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_below="@id/tv_Test"
+        android:layout_alignLeft="@id/tv_Test"
+        android:src="?attr/selectableItemBackground"
+        app:srcCompat="@drawable/baseline_person_24" />
+
+    <Button
+        android:id="@+id/button_upload_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:backgroundTint="#00CCD3"
+        android:text="Upload Image" />
 
 
 </RelativeLayout>

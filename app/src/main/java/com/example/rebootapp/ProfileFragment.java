@@ -4,14 +4,24 @@ import static com.parse.Parse.getApplicationContext;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.ContactsContract;
+import android.provider.MediaStore;
 import android.se.omapi.Session;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
+import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
@@ -21,14 +31,34 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+
+import com.parse.GetCallback;
+import com.parse.ParseException;
+import com.parse.ParseFile;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
+
+import com.squareup.picasso.Picasso;
+
+
+
 
 
 public class ProfileFragment extends Fragment {
 
     Button btnSignOut;
+    Button btnUploadImage;
     GoogleSignInAccount account;
     Session session;
+    TextView tvUser_Username;
+    TextView tv_Test;
+    ImageView ProfilePic;
+    private static final int PICK_IMAGE_REQUEST = 1;
+    ActivityResultLauncher<Intent> resultLauncher;
+    Uri profile_Uri;
+
+
 
 
     @Override
@@ -36,8 +66,33 @@ public class ProfileFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
         }
+
+
     }
 
+    public void pickImage(){
+        Intent intent = new Intent(MediaStore.ACTION_PICK_IMAGES);
+        resultLauncher.launch(intent);
+    }
+
+    public void registerResult(){
+        resultLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultCallback<ActivityResult>() {
+                    @Override
+                    public void onActivityResult(ActivityResult result) {
+                        try {
+                            Uri imageUri = result.getData().getData();
+                            ProfilePic.setImageURI(imageUri);
+                            profile_Uri = imageUri;
+                        }
+                        catch (Exception e){
+                            System.out.println("no image selected");
+                        }
+                    }
+                }
+        );
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -45,9 +100,42 @@ public class ProfileFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
         btnSignOut = view.findViewById(R.id.btnSignOut);
 
+        tvUser_Username = view.findViewById(R.id.tvUser_Username);
+        ProfilePic = view.findViewById(R.id.ProfilePic);
+        btnUploadImage = view.findViewById(R.id.button_upload_image);
+
+        tv_Test = view.findViewById(R.id.tv_Test);
+
         GoogleSignInOptions gso = new  GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail().build();
         GoogleSignInClient gsc = GoogleSignIn.getClient(getActivity(), gso);
+
+
+        registerResult();
+//        btnUploadImage.setOnClickListener(view -> pickImage());
+        btnUploadImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                pickImage();
+
+//                ParseUser currentUser = ParseUser.getCurrentUser();
+//                String currentUserObjectID = currentUser.getObjectId();
+//                ParseQuery<ParseObject> query = ParseQuery.getQuery("_User");
+//                query.getInBackground(currentUserObjectID, new GetCallback<ParseObject>() {
+//                    @Override
+//                    public void done(ParseObject object, ParseException e) {
+//                        if (e == null) {
+//                            object.put("profile_pic", profile_Uri);
+//                            object.saveInBackground();
+//                        }
+//                    }
+//                });
+
+            }
+        });
+
+
+
 
         btnSignOut.setOnClickListener(new View.OnClickListener() {
 
@@ -91,6 +179,19 @@ public class ProfileFragment extends Fragment {
         });
 
 
+
+//        btnUploadImage.setOnClickListener(new View.OnClickListener(){
+//            @Override
+//            public void onClick(View v){
+//
+//                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+//                ActivityResultContracts.StartActivityForResult(intent, );
+//                startActivityForResult(intent, PICK_IMAGE_REQUEST);
+//
+//            }
+//        });
+
+
         // Inflate the layout for this fragment
         return view;
     }
@@ -101,6 +202,50 @@ public class ProfileFragment extends Fragment {
 
 
     }
+
+    @Override
+    public void onStart(){
+        super.onStart();
+
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        String currentUserObjectID = currentUser.getObjectId();
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("_User");
+
+
+        query.getInBackground(currentUserObjectID, new GetCallback<ParseObject>() {
+            @Override
+            public void done(ParseObject object, ParseException e) {
+                if (e == null){
+//                    tempString[0] = object.getString("username");
+                    tvUser_Username.setText(object.getString("username"));
+                    ParseFile image = object.getParseFile("profile_pic");
+                    String imageUrl;
+                    if (image != null) {
+                        imageUrl = image.getUrl();
+                        Picasso.get().load(imageUrl).into(ProfilePic);
+                    }
+                    else {}
+
+
+
+                    String w = "working";
+                    tv_Test.setText(w);
+                }
+                else {
+
+                    String w = "error";
+
+                    tv_Test.setText(w);
+                    System.out.println(e.toString());
+                }
+            }
+        });
+//        String tmpString = currentUser.getObjectId();
+
+
+    }
+
+
 
 
 
