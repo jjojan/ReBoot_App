@@ -21,6 +21,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.parse.ParseUser;
 
 
 public class ProfileFragment extends Fragment {
@@ -53,21 +54,40 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                gsc.signOut().addOnCompleteListener(getActivity(), new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        SharedPreferences getUser = getActivity().getSharedPreferences("user info", getActivity().MODE_PRIVATE);
-                        SharedPreferences.Editor ed = getUser.edit();
-                        ed.putString("username", null);
-                        ed.commit();
-                        Toast.makeText(getApplicationContext(), "User Logged Out", Toast.LENGTH_SHORT).show();
+                if (gsc != null) {
+                    gsc.signOut().addOnCompleteListener(getActivity(), new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            SharedPreferences getUser = getActivity().getSharedPreferences("user info", getActivity().MODE_PRIVATE);
+                            SharedPreferences.Editor ed = getUser.edit();
+                            ed.putString("username", null);
+                            ed.commit();
+                            Toast.makeText(getApplicationContext(), "User Logged Out", Toast.LENGTH_SHORT).show();
 
-                        Intent intent = new Intent(getActivity(), Login.class);
-                        startActivity(intent);
+                            Intent intent = new Intent(getActivity(), Login.class);
+                            startActivity(intent);
 
+                        }
+                    });
+                }
+                else{
+                    //Get current Parse User
+                    ParseUser currentUser = ParseUser.getCurrentUser();
+                    if (currentUser != null) {
+                        ParseUser.logOutInBackground(e -> {
+                            //progressDialog.dismiss();
+                            if (e == null)
+                                //showAlert("So, you're going...", "Ok...Bye-bye then");
+                                Toast.makeText(getApplicationContext(), "User Logged Out", Toast.LENGTH_SHORT).show();
+
+                        });
+                    } else {
+                        // show the signup or login screen
                     }
-                });
+
+                }
             }
+
         });
 
 

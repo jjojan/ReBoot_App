@@ -64,7 +64,7 @@
         android:text="LOGIN" />
 
     <TextView
-        android:id="@+id/tvSignUpLink"
+        android:id="@+id/tvLoginLink"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Login with Google"
@@ -80,7 +80,7 @@
         android:layout_height="62dp"
         android:layout_centerHorizontal="true"
         android:src="@drawable/google_icon"
-        android:layout_below="@id/tvSignUpLink"
+        android:layout_below="@id/tvLoginLink"
         android:id="@+id/google_img_login"/>
 
     <Button

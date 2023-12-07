@@ -29,6 +29,7 @@ public class Login extends AppCompatActivity {
     GoogleSignInAccount account;
 
     Button btnLogin;
+    Button btnSignUp;
     EditText edtEmail;
     EditText edtPassword;
 
@@ -37,36 +38,44 @@ public class Login extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        googleImage = findViewById(R.id.google_img_login);
+        btnLogin = findViewById(R.id.btnLogin); //Login Button
+        btnSignUp = findViewById(R.id.btnSignUpLink); //Sign Up Link
+        googleImage = findViewById(R.id.google_img_login); //Google Login
+
+        //Create Google Client
         gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
         gsc = GoogleSignIn.getClient(this, gso);
-
-        Button btnSignUp = (Button)findViewById(R.id.btnSignUpLink);
-        btnLogin = (Button)findViewById(R.id.btnLogin);
-
+        
+        //User info for Manual Setup
         edtEmail = findViewById(R.id.edtEmail);
         edtPassword = findViewById(R.id.edtPassword);
 
+        //Manual Login Button onClickListener
         btnLogin.setOnClickListener(new View.OnClickListener() {
-
-            String username = edtEmail.toString();
-            String password = edtPassword.toString();
 
             @Override
             public void onClick(View v) {
+                String username = edtEmail.getText().toString();
+                String password = edtPassword.getText().toString();
                 if(TextUtils.isEmpty(username)){
                     Toast.makeText(getApplicationContext(), "Username is Required.", Toast.LENGTH_LONG).show();
                 }
                 else if(TextUtils.isEmpty(password)){
                     Toast.makeText(getApplicationContext(), "Password is Required.", Toast.LENGTH_LONG).show();
-                }
-                else {
-                    logInManual(username, password);
-                    navigateToHomePage();
 
                 }
+                else if(TextUtils.isEmpty(username)&TextUtils.isEmpty(password)){
+                    Toast.makeText(getApplicationContext(), "Username and Password is Required.", Toast.LENGTH_LONG).show();
+                }
+                else{
+                    logInManual(username, password);
+                    navigateToHomePage();
+                }
+
             }
         });
+
+        //SignUp Link
         btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -107,6 +116,18 @@ public class Login extends AppCompatActivity {
     }
 
     void logInManual(String username, String password){
+
+        //Get current user and make sure they are logged out
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        if (currentUser != null) {
+            //Logout
+            ParseUser.logOutInBackground(e -> {
+                //progressDialog.dismiss();
+                if (e == null){
+                    Toast.makeText(getApplicationContext(), "User Logged Out", Toast.LENGTH_LONG).show();
+                }
+            });
+        }
 
         ParseUser.logInInBackground(username, password, (parseUser, e) -> {
             //progressDialog.dismiss();

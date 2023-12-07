@@ -3,7 +3,6 @@ package com.example.rebootapp;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -59,18 +58,21 @@ public class SignUp extends AppCompatActivity {
         gsc = GoogleSignIn.getClient(this, gso);
 
         btnSignUp.setOnClickListener(new View.OnClickListener() {
-            String username = edtUserName.toString();
-            String email = edtEmail.toString();
-            String password = edtPassword.toString();
+
+
             @Override
             public void onClick(View v) {
-                if(TextUtils.isEmpty(username)){
+                String username = edtUserName.getText().toString();
+                String email = edtEmail.getText().toString();
+                String password = edtPassword.getText().toString();
+                if(username.isEmpty()){
+                    Log.i("username", username);
                     Toast.makeText(getApplicationContext(), "Username is Required.", Toast.LENGTH_LONG).show();
                 }
-                else if(TextUtils.isEmpty(email)) {
+                else if(email.isEmpty()) {
                     Toast.makeText(getApplicationContext(), "Email is Required.", Toast.LENGTH_LONG).show();
                 }
-                else if(TextUtils.isEmpty(password)){
+                else if(password.isEmpty()){
                     Toast.makeText(getApplicationContext(), "Password is Required.", Toast.LENGTH_LONG).show();
                 }
                 else {
