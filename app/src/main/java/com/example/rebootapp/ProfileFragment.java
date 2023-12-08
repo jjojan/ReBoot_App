@@ -55,6 +55,7 @@ public class ProfileFragment extends Fragment {
     GoogleSignInAccount account;
     Session session;
     TextView tvUser_Username;
+    TextView tvUser_Email;
 
     ImageView ProfilePic;
     private static final int PICK_IMAGE_REQUEST = 1;
@@ -104,6 +105,7 @@ public class ProfileFragment extends Fragment {
         btnSignOut = view.findViewById(R.id.btnSignOut);
 
         tvUser_Username = view.findViewById(R.id.tvUser_Username);
+        tvUser_Email = view.findViewById(R.id.tvUser_Email);
         ProfilePic = view.findViewById(R.id.ProfilePic);
         Friends = view.findViewById(R.id.Friends);
         Starred = view.findViewById(R.id.Starred);
@@ -236,6 +238,7 @@ public class ProfileFragment extends Fragment {
                 if (e == null){
 //                    tempString[0] = object.getString("username");
                     tvUser_Username.setText(object.getString("username"));
+                    tvUser_Email.setText(object.getString("email"));
                     ParseFile image = object.getParseFile("profile_pic");
                     String imageUrl;
                     if (image != null) {

@@ -22,10 +22,10 @@
 
     <TextView
         android:id="@+id/tvUser_Username"
-        android:layout_width="133dp"
+        android:layout_width="218dp"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@id/tv_Username"
-        android:layout_marginLeft="120dp"
+        android:layout_marginLeft="35dp"
         android:layout_marginRight="375dp"
         android:layout_toRightOf="@id/tv_Username"
         android:text="TextView"
@@ -62,8 +62,8 @@
         android:textSize="20sp" />
 
     <TextView
-        android:id="@+id/textView5"
-        android:layout_width="133dp"
+        android:id="@+id/tvUser_Email"
+        android:layout_width="219dp"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@id/textView3"
         android:layout_alignLeft="@id/tvUser_Username"
