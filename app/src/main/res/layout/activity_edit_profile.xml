@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_alignParentBottom="false"
+    android:background="#2C7187"
+    android:visibility="visible"
+    tools:context=".EditProfileActivity">
+
+    <EditText
+        android:id="@+id/et_editUsername"
+        android:layout_width="match_parent"
+        android:layout_height="25dp"
+        android:layout_marginLeft="150dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginRight="28dp"
+        android:background="@drawable/edt_background"
+        android:textColorHint="@color/black" />
+
+    <TextView
+        android:id="@+id/textView11"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/et_editUsername"
+        android:layout_marginLeft="25dp"
+        android:layout_marginTop="50dp"
+        android:text="Edit Username" />
+
+    <Button
+        android:id="@+id/btn_SaveProfile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="100dp"
+        android:text="Save" />
+
+    <Button
+        android:id="@+id/btn_ProfileDone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="50dp"
+        android:text="Done" />
+
+</RelativeLayout>

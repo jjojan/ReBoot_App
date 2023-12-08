@@ -47,7 +47,7 @@ public class SignUp extends AppCompatActivity {
         setContentView(R.layout.activity_sign_up);
 
         edtUserName = findViewById(R.id.edtUsername);
-        edtEmail = findViewById(R.id.edtEmail);
+        edtEmail = findViewById(R.id.et_editUsername);
         edtPassword = findViewById(R.id.edtPassword);
         btnSignUp = findViewById(R.id.btnSignUp);
         tvLoginLink = findViewById(R.id.tvLoginLink);

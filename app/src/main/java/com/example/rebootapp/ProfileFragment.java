@@ -2,6 +2,7 @@ package com.example.rebootapp;
 
 import static com.parse.Parse.getApplicationContext;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -45,6 +46,7 @@ import com.squareup.picasso.Picasso;
 
 public class ProfileFragment extends Fragment {
 
+    Context context;
     Button btnSignOut;
     //Button btnUploadImage;
     ImageButton Friends;
@@ -183,7 +185,15 @@ public class ProfileFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        
+        EditProfile = view.findViewById(R.id.EditProfile);
+        EditProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), EditProfileActivity.class);
+                getActivity().startActivity(intent);
+            }
+        });
+
 
 //        btnUploadImage = view.findViewById(R.id.button_upload_image);
 //        registerResult();
@@ -233,8 +243,6 @@ public class ProfileFragment extends Fragment {
                         Picasso.get().load(imageUrl).into(ProfilePic);
                     }
                     else {}
-
-
 
 
                 }

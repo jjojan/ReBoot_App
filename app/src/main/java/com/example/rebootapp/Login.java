@@ -49,7 +49,7 @@ public class Login extends AppCompatActivity {
         gsc = GoogleSignIn.getClient(this, gso);
         
         //User info for Manual Setup
-        edtEmail = findViewById(R.id.edtEmail);
+        edtEmail = findViewById(R.id.et_editUsername);
         edtPassword = findViewById(R.id.edtPassword);
 
         //Manual Login Button onClickListener
