@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".GameReviewDetailsActivity">
+
+    <TextView
+        android:id="@+id/tvTitleR"
+        android:layout_width="398dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="14dp"
+        android:layout_marginEnd="13dp"
+        android:text="Movie Title"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:gravity="center"/>
+    <ImageView
+        android:id="@+id/ivPosterR"
+        android:layout_width="725dp"
+        android:layout_height="250dp"
+        android:layout_below="@+id/tvTitleR"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="0dp"
+        tools:srcCompat="@tools:sample/avatars" />
+
+
+    <EditText
+        android:id="@+id/etReviewTextR"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:layout_below="@+id/ivPosterR"
+        android:maxLength="200"
+        android:text="Write your review here..."
+        />
+
+
+
+
+</RelativeLayout>
