@@ -29,7 +29,7 @@
         />
 
     <EditText
-        android:id="@+id/et_editUsername"
+        android:id="@+id/edtEmail"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_below="@id/tvIntroduction"
@@ -45,12 +45,12 @@
         android:id="@+id/inputLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/et_editUsername">
+        android:layout_below="@+id/edtEmail">
         <EditText
             android:id="@+id/edtPassword"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:layout_below="@id/et_editUsername"
+            android:layout_below="@id/edtEmail"
             android:hint="Password"
             android:textColorHint="@color/black"
             android:layout_marginTop="13dp"
