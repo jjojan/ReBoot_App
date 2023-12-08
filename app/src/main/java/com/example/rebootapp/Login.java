@@ -155,7 +155,7 @@ public class Login extends AppCompatActivity {
             // Signed in successfully, show authenticated UI.
             GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(this);
             //Get Current User Information
-            String email = acct.getEmail();
+            String email = acct.getGivenName();
             String password = acct.getId();
             Log.i("Google Email", email);
             Log.i("Google Password", password);
