@@ -18,14 +18,24 @@
           <timeTargetWasSelectedWithDropDown value="2023-12-06T00:43:20.790553100Z" />
         </State>
       </entry>
-      <entry key="ExampleInstrumentedTest">
-        <State />
-      </entry>
       <entry key="SignUp">
         <State />
       </entry>
       <entry key="app">
-        <State />
+        <State>
+          <runningDeviceTargetSelectedWithDropDown>
+            <Target>
+              <type value="RUNNING_DEVICE_TARGET" />
+              <deviceKey>
+                <Key>
+                  <type value="SERIAL_NUMBER" />
+                  <value value="ZY22HVDJMT" />
+                </Key>
+              </deviceKey>
+            </Target>
+          </runningDeviceTargetSelectedWithDropDown>
+          <timeTargetWasSelectedWithDropDown value="2023-12-08T01:20:12.920626200Z" />
+        </State>
       </entry>
     </value>
   </component>

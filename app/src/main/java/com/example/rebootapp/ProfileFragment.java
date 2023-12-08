@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -45,11 +46,14 @@ import com.squareup.picasso.Picasso;
 public class ProfileFragment extends Fragment {
 
     Button btnSignOut;
-    Button btnUploadImage;
+    //Button btnUploadImage;
+    ImageButton Friends;
+    ImageButton Starred;
+    ImageButton EditProfile;
     GoogleSignInAccount account;
     Session session;
     TextView tvUser_Username;
-    TextView tv_Test;
+
     ImageView ProfilePic;
     private static final int PICK_IMAGE_REQUEST = 1;
     ActivityResultLauncher<Intent> resultLauncher;
@@ -99,37 +103,19 @@ public class ProfileFragment extends Fragment {
 
         tvUser_Username = view.findViewById(R.id.tvUser_Username);
         ProfilePic = view.findViewById(R.id.ProfilePic);
-        btnUploadImage = view.findViewById(R.id.button_upload_image);
+        Friends = view.findViewById(R.id.Friends);
+        Starred = view.findViewById(R.id.Starred);
+        EditProfile = view.findViewById(R.id.EditProfile);
 
-        tv_Test = view.findViewById(R.id.tv_Test);
+
+
 
         GoogleSignInOptions gso = new  GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail().build();
         GoogleSignInClient gsc = GoogleSignIn.getClient(getActivity(), gso);
 
 
-        registerResult();
-//        btnUploadImage.setOnClickListener(view -> pickImage());
-        btnUploadImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                pickImage();
 
-//                ParseUser currentUser = ParseUser.getCurrentUser();
-//                String currentUserObjectID = currentUser.getObjectId();
-//                ParseQuery<ParseObject> query = ParseQuery.getQuery("_User");
-//                query.getInBackground(currentUserObjectID, new GetCallback<ParseObject>() {
-//                    @Override
-//                    public void done(ParseObject object, ParseException e) {
-//                        if (e == null) {
-//                            object.put("profile_pic", profile_Uri);
-//                            object.saveInBackground();
-//                        }
-//                    }
-//                });
-
-            }
-        });
 
 
 
@@ -197,6 +183,31 @@ public class ProfileFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        
+
+//        btnUploadImage = view.findViewById(R.id.button_upload_image);
+//        registerResult();
+//
+//        btnUploadImage.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                pickImage();
+//
+////                ParseUser currentUser = ParseUser.getCurrentUser();
+////                String currentUserObjectID = currentUser.getObjectId();
+////                ParseQuery<ParseObject> query = ParseQuery.getQuery("_User");
+////                query.getInBackground(currentUserObjectID, new GetCallback<ParseObject>() {
+////                    @Override
+////                    public void done(ParseObject object, ParseException e) {
+////                        if (e == null) {
+////                            object.put("profile_pic", profile_Uri);
+////                            object.saveInBackground();
+////                        }
+////                    }
+////                });
+
+//            }
+//        });
 
     }
 
@@ -225,14 +236,10 @@ public class ProfileFragment extends Fragment {
 
 
 
-                    String w = "working";
-                    tv_Test.setText(w);
+
                 }
                 else {
 
-                    String w = "error";
-
-                    tv_Test.setText(w);
                     System.out.println(e.toString());
                 }
             }
@@ -241,6 +248,7 @@ public class ProfileFragment extends Fragment {
 
 
     }
+
 
 
 
