@@ -27,7 +27,7 @@ public class GameSearchDetailsActivity extends AppCompatActivity {
 
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_movie_details);
+        setContentView(R.layout.activity_game_details);
 
         tvTitle = (TextView) findViewById(R.id.tvTitle);
         tvOverview = (TextView) findViewById(R.id.tvOverview);

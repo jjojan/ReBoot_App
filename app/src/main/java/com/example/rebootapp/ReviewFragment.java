@@ -31,11 +31,11 @@ import okhttp3.Headers;
 
 public class ReviewFragment extends Fragment {
 
-    List<GameSearch> Games; //Game Model List for RecyclerView&Adapter
+    List<GameReview> Reviews; //Game Model List for RecyclerView&Adapter
     String search_term = "";//"spiderman" + "&ordering=-added"; //Test String
     private MenuItem menuItem;
     private SearchView svSearchGame;
-    String SEARCH_QUERY = "https://api.rawg.io/api/games?key=63502b95db9f41c99bb3d0ecf77aa811" + search_term;
+    String SEARCH_QUERY = "https://api.rawg.io/api/games?key=63502b95db9f41c99bb3d0ecf77aa811" + search_term + "&ordering=-added";
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -84,12 +84,13 @@ public class ReviewFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         svSearchGame = view.findViewById(R.id.svSearchGame);
-        RecyclerView searchRecyclerView = view.findViewById(R.id.searchRecyclerView);
-        Games = new ArrayList<>();
-        GameSearchAdapter searchGameAdapter = new GameSearchAdapter(getContext(), Games);
-        searchRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-        searchRecyclerView.setAdapter(searchGameAdapter);
+        RecyclerView reviewRecyclerView = view.findViewById(R.id.reviewRecyclerView);
+        Reviews = new ArrayList<>();
+        GameReviewAdapter GameReviewAdapter = new GameReviewAdapter(getContext(), Reviews);
+        reviewRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+        reviewRecyclerView.setAdapter(GameReviewAdapter);
 
         //Create request client
         AsyncHttpClient client = new AsyncHttpClient();
@@ -104,8 +105,8 @@ public class ReviewFragment extends Fragment {
                 try {
                     JSONArray results = jsonObject.getJSONArray("results");
                     //Log.i(TAG, "Results" + results.toString());
-                    Games.addAll(GameSearch.fromJSONArray(results));
-                    searchGameAdapter.notifyDataSetChanged();
+                    Reviews.addAll(GameReview.fromJSONArray(results));
+                    GameReviewAdapter.notifyDataSetChanged();
                     println("hello");
                     //Log.i(TAG, "Movies" + searchGame.size());
                 } catch (JSONException e) {
@@ -129,11 +130,11 @@ public class ReviewFragment extends Fragment {
                 Log.i("new", query);
 
                 svSearchGame = view.findViewById(R.id.svSearchGame);
-                RecyclerView searchRecyclerView = view.findViewById(R.id.searchRecyclerView);
-                Games = new ArrayList<>();
-                GameSearchAdapter searchGameAdapter = new GameSearchAdapter(getContext(), Games);
-                searchRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-                searchRecyclerView.setAdapter(searchGameAdapter);
+                RecyclerView reviewRecyclerView = view.findViewById(R.id.reviewRecyclerView);
+                Reviews = new ArrayList<>();
+                GameReviewAdapter GameReviewAdapter = new GameReviewAdapter(getContext(), Reviews);
+                reviewRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+                reviewRecyclerView.setAdapter(GameReviewAdapter);
                 String search = "https://api.rawg.io/api/games?key=63502b95db9f41c99bb3d0ecf77aa811&&search_precise&search=" + query + "&ordering=-added";
                 client.get(search, new JsonHttpResponseHandler() {
                     @Override
@@ -142,8 +143,8 @@ public class ReviewFragment extends Fragment {
                         try{
                             JSONArray results = jsonObject.getJSONArray("results");
                             //Log.i(TAG, "Results" + results.toString());
-                            Games.addAll(GameSearch.fromJSONArray(results));
-                            searchGameAdapter.notifyDataSetChanged();
+                            Reviews.addAll(GameReview.fromJSONArray(results));
+                            GameReviewAdapter.notifyDataSetChanged();
                             println("hello");
                             //Log.i(TAG, "Movies" + searchGame.size());
                         } catch(JSONException e){
@@ -164,11 +165,11 @@ public class ReviewFragment extends Fragment {
             @Override
             public boolean onQueryTextChange(String newText) {
                 svSearchGame = view.findViewById(R.id.svSearch);
-                RecyclerView searchRecyclerView = view.findViewById(R.id.searchRecyclerView);
-                Games = new ArrayList<>();
-                GameSearchAdapter searchGameAdapter = new GameSearchAdapter(getContext(), Games);
-                searchRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-                searchRecyclerView.setAdapter(searchGameAdapter);
+                RecyclerView reviewRecyclerView = view.findViewById(R.id.reviewRecyclerView);
+                Reviews = new ArrayList<>();
+                GameReviewAdapter GameReviewAdapter = new GameReviewAdapter(getContext(), Reviews);
+                reviewRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+                reviewRecyclerView.setAdapter(GameReviewAdapter);
                 String search = "https://api.rawg.io/api/games?key=63502b95db9f41c99bb3d0ecf77aa811&&search_precise&search=" + newText + "&ordering=-added";
                 client.get(search, new JsonHttpResponseHandler() {
                     @Override
@@ -177,8 +178,8 @@ public class ReviewFragment extends Fragment {
                         try{
                             JSONArray results = jsonObject.getJSONArray("results");
                             //Log.i(TAG, "Results" + results.toString());
-                            Games.addAll(GameSearch.fromJSONArray(results));
-                            searchGameAdapter.notifyDataSetChanged();
+                            Reviews.addAll(GameReview.fromJSONArray(results));
+                            GameReviewAdapter.notifyDataSetChanged();
                             println("hello");
                             //Log.i(TAG, "Movies" + searchGame.size());
                         } catch(JSONException e){
@@ -197,16 +198,7 @@ public class ReviewFragment extends Fragment {
             }
         });
 
-        super.onViewCreated(view, savedInstanceState);
-    }
 
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.search_bar) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
 }

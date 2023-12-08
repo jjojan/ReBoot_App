@@ -12,7 +12,7 @@ import com.bumptech.glide.Glide;
 
 import org.parceler.Parcels;
 
-public class MovieDetailsActivity extends AppCompatActivity {
+public class GameDetailsActivity extends AppCompatActivity {
 
     Game movie;
 
@@ -27,7 +27,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_movie_details);
+        setContentView(R.layout.activity_game_details);
 
         tvTitle = (TextView) findViewById(R.id.tvTitle);
         tvOverview = (TextView) findViewById(R.id.tvOverview);

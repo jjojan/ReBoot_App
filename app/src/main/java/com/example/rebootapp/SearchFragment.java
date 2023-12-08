@@ -129,9 +129,9 @@ public class SearchFragment extends Fragment {
         svSearch = view.findViewById(R.id.svSearch);
         RecyclerView searchRecyclerView = view.findViewById(R.id.searchRecyclerView);
         searchGames = new ArrayList<>();
-        GameSearchAdapter searchAdapter = new GameSearchAdapter(getApplicationContext(), searchGames);
+        GameSearchAdapter gameSearchAdapter = new GameSearchAdapter(getApplicationContext(), searchGames);
         searchRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-        searchRecyclerView.setAdapter(searchAdapter);
+        searchRecyclerView.setAdapter(gameSearchAdapter);
         String search = "https://api.rawg.io/api/games?key=63502b95db9f41c99bb3d0ecf77aa811&&search_precise&search=";
 
         //Create request client
@@ -148,7 +148,7 @@ public class SearchFragment extends Fragment {
                     JSONArray results = jsonObject.getJSONArray("results");
                     //Log.i(TAG, "Results" + results.toString());
                     searchGames.addAll(GameSearch.fromJSONArray(results));
-                    searchAdapter.notifyDataSetChanged();
+                    gameSearchAdapter.notifyDataSetChanged();
                     println("hello");
                     //Log.i(TAG, "Movies" + searchGame.size());
                 } catch (JSONException e) {
@@ -174,9 +174,9 @@ public class SearchFragment extends Fragment {
                 svSearch = view.findViewById(R.id.svSearch);
                 RecyclerView searchRecyclerView = view.findViewById(R.id.searchRecyclerView);
                 searchGames = new ArrayList<>();
-                GameSearchAdapter searchAdapter = new GameSearchAdapter(getContext(), searchGames);
+                GameSearchAdapter gameSearchAdapter = new GameSearchAdapter(getContext(), searchGames);
                 searchRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-                searchRecyclerView.setAdapter(searchAdapter);
+                searchRecyclerView.setAdapter(gameSearchAdapter);
                 String search = "https://api.rawg.io/api/games?key=63502b95db9f41c99bb3d0ecf77aa811&&search_precise&search=" + query + "&ordering=-added";
                 client.get(search, new JsonHttpResponseHandler() {
                     @Override
@@ -186,7 +186,7 @@ public class SearchFragment extends Fragment {
                             JSONArray results = jsonObject.getJSONArray("results");
                             //Log.i(TAG, "Results" + results.toString());
                             searchGames.addAll(GameSearch.fromJSONArray(results));
-                            searchAdapter.notifyDataSetChanged();
+                            gameSearchAdapter.notifyDataSetChanged();
                             println("hello");
                             //Log.i(TAG, "Movies" + searchGame.size());
                         } catch(JSONException e){
@@ -209,9 +209,9 @@ public class SearchFragment extends Fragment {
                 svSearch = view.findViewById(R.id.svSearch);
                 RecyclerView searchRecyclerView = view.findViewById(R.id.searchRecyclerView);
                 searchGames = new ArrayList<>();
-                GameSearchAdapter searchAdapter = new GameSearchAdapter(getContext(), searchGames);
+                GameSearchAdapter gameSearchAdapter = new GameSearchAdapter(getContext(), searchGames);
                 searchRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-                searchRecyclerView.setAdapter(searchAdapter);
+                searchRecyclerView.setAdapter(gameSearchAdapter);
                 String search = "https://api.rawg.io/api/games?key=63502b95db9f41c99bb3d0ecf77aa811&&search_precise&search=" + newText + "&ordering=-added";
                 client.get(search, new JsonHttpResponseHandler() {
                     @Override
@@ -221,7 +221,7 @@ public class SearchFragment extends Fragment {
                             JSONArray results = jsonObject.getJSONArray("results");
                             Log.i("Results", "Results" + results.toString());
                             searchGames.addAll(GameSearch.fromJSONArray(results));
-                            searchAdapter.notifyDataSetChanged();
+                            gameSearchAdapter.notifyDataSetChanged();
                             println("hello");
                             Log.i("Movies", "Movies" + searchGames.size());
                         } catch(JSONException e){

@@ -83,7 +83,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
             tvOverview.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(context, MovieDetailsActivity.class);
+                    Intent intent = new Intent(context, GameDetailsActivity.class);
 
                     intent.putExtra(Movie.class.getSimpleName(), Parcels.wrap(movie));
 
@@ -99,7 +99,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
 
                 Movie movie = movies.get(position);
 
-                Intent intent = new Intent(context, MovieDetailsActivity.class);
+                Intent intent = new Intent(context, GameDetailsActivity.class);
 
                 intent.putExtra(Movie.class.getSimpleName(), Parcels.wrap(movie));
 

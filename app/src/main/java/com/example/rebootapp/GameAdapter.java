@@ -81,7 +81,7 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.ViewHolder> {
             tvPoster.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(context, MovieDetailsActivity.class);
+                    Intent intent = new Intent(context, GameDetailsActivity.class);
 
                     intent.putExtra(Game.class.getSimpleName(), Parcels.wrap(game));
 
@@ -97,7 +97,7 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.ViewHolder> {
 
                 Game game = games.get(position);
 
-                Intent intent = new Intent(context, MovieDetailsActivity.class);
+                Intent intent = new Intent(context, GameDetailsActivity.class);
 
                 intent.putExtra(Game.class.getSimpleName(), Parcels.wrap(game));
 

@@ -20,6 +20,12 @@
         tools:replace="android:theme"
         tools:targetApi="31">
         <activity
+            android:name=".GameReviewAdapter"
+            android:exported="false" />
+        <activity
+            android:name=".GameReviewDetailsActivity"
+            android:exported="false" />
+        <activity
             android:name=".GameSearchDetailsActivity"
             android:exported="false" />
         <activity
@@ -35,14 +41,14 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MovieDetailsActivity"
+            android:name=".GameDetailsActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
-            android:exported="true"></activity>
+            android:exported="true" />
         <activity
             android:name=".HomeActivity"
-            android:exported="true"></activity>
+            android:exported="true" />
 
         <meta-data
             android:name="com.parse.SERVER_URL"
