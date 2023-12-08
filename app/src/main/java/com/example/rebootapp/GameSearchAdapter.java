@@ -87,9 +87,10 @@ public class GameSearchAdapter extends RecyclerView.Adapter<GameSearchAdapter.Vi
             tvPoster.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(context, MovieDetailsActivity.class);
+                    Intent intent = new Intent(context, GameSearchDetailsActivity.class);
 
-                    intent.putExtra(Game.class.getSimpleName(), Parcels.wrap(game));
+                    intent.putExtra(GameSearch.class.getSimpleName(), Parcels.wrap(game));
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
                     context.startActivity(intent);
                 }
@@ -103,9 +104,10 @@ public class GameSearchAdapter extends RecyclerView.Adapter<GameSearchAdapter.Vi
 
                 GameSearch game = games.get(position);
 
-                Intent intent = new Intent(context, MovieDetailsActivity.class);
+                Intent intent = new Intent(context, GameSearchDetailsActivity.class);
 
-                intent.putExtra(Game.class.getSimpleName(), Parcels.wrap(game));
+                intent.putExtra(GameSearch.class.getSimpleName(), Parcels.wrap(game));
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
                 context.startActivity(intent);
             }

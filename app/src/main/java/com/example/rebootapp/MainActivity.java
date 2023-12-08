@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
                         fragment = new SearchFragment();
                         break;
                     case R.id.mEvents:
-                        fragment = new HomeFragment();
+                        fragment = new ReviewFragment();
                         break;
                     case R.id.mCart:
                     default:
