@@ -172,7 +172,7 @@ public class Login extends AppCompatActivity {
 
     void navigateToHomePage(){
         finish();
-        Intent intent = new Intent(Login.this, MainActivity.class);
+        Intent intent = new Intent(Login.this, SplashScreenActivity.class);
         startActivity(intent);
     }
 
