@@ -1,8 +1,12 @@
 package com.example.rebootapp;
 
+import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.renderscript.ScriptGroup;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -11,28 +15,44 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.PickVisualMediaRequest;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 
 
 import com.parse.CountCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.parse.SignUpCallback;
+
+import androidx.activity.result.contract.ActivityResultContract;
+import 	androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia;
 public class EditProfileActivity extends AppCompatActivity {
 
     Button btn_ProfileDone;
     Button btn_SaveProfile;
-    Button Save;
+    Button btn_Profile_Pic;
     EditText et_editUsername;
+    ActivityResultLauncher<Intent> resultLauncher;
 
 
     // currentUser global Variable
 
-
+    private ActivityResultLauncher<Intent> getPicture;
 
     public interface UsernameCheckCallback {
         void onResult(boolean isUsernameAvailable);
@@ -48,6 +68,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
         btn_ProfileDone = findViewById(R.id.btn_ProfileDone);
         btn_SaveProfile = findViewById(R.id.btn_SaveProfile);
+        btn_Profile_Pic = findViewById(R.id.btn_profile_pic);
         et_editUsername = findViewById(R.id.et_editUsername);
 
 
@@ -75,22 +96,60 @@ public class EditProfileActivity extends AppCompatActivity {
             }
         });
 
+//        getPicture = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+//                new ActivityResultCallback<ActivityResult>() {
+//                    @Override
+//                    public void onActivityResult(ActivityResult result) {
+//                        if(result.getResultCode() == -1){
+//                            Intent data = result.getData();
+//                            if (data != null && data.getData() != null){
+//                                Uri selectedImageUri = data.getData();
+//                                uploadImage(selectedImageUri);
+//                            }
+//                        }
+//
+//                    }
+//                });
+
+
+
+//        btn_Profile_Pic.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(MediaStore.ACTION_PICK_IMAGES);
+//                getPicture.launch(intent);
+//            }
+//        });
+
+        btn_Profile_Pic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                pickMedia.launch(new PickVisualMediaRequest.Builder()
+                        .setMediaType(PickVisualMedia.ImageOnly.INSTANCE)
+                        .build());
+            }
+        });
+
 
     }
 
     public void checkUsername(String str, UsernameCheckCallback callback) {
         ParseQuery<ParseObject> query = ParseQuery.getQuery("_User");
         query.whereEqualTo("username", str);
-
-        query.countInBackground(new CountCallback() {
-            @Override
-            public void done(int count, ParseException e) {
-                if (e == null)
-                    callback.onResult(count == 0);
-                else
-                    callback.onResult(false);
-            }
-        });
+        if (str.isEmpty()){
+            System.out.println("invalid username");
+        }
+        else {
+            query.countInBackground(new CountCallback() {
+                @Override
+                public void done(int count, ParseException e) {
+                    if (e == null)
+                        callback.onResult(count == 0);
+                    else
+                        callback.onResult(false);
+                }
+            });
+        }
 
     }
 
@@ -118,4 +177,63 @@ public class EditProfileActivity extends AppCompatActivity {
         });
 
     }
+    public void uploadImage(Uri imageUri){
+        try{
+            InputStream inputStream = getContentResolver().openInputStream(imageUri);
+            byte[] imageData = readInputStreamToByteArray(inputStream);
+
+            ParseFile parseFile = new ParseFile("profile_picture.jpg", imageData);
+            parseFile.saveInBackground(new SaveCallback() {
+                @Override
+                public void done(ParseException e) {
+                    if (e == null) {
+                        ParseUser currentUser = ParseUser.getCurrentUser();
+                        currentUser.put("profile_pic", parseFile);
+                        currentUser.saveInBackground();
+
+                        System.out.println("Saved Picture!!!");
+                        Toast.makeText(getApplicationContext(), "Profile Picture changed", Toast.LENGTH_LONG).show();
+                    }else {
+                        System.out.println("Almost Saved picture :(");
+                    }
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("stream error");
+        }
+    }
+
+
+    public byte[] readInputStreamToByteArray(InputStream inputStream) throws IOException {
+        ByteArrayOutputStream byteBuffer = new ByteArrayOutputStream();
+        int bufferSize = 1024;
+        byte[] buffer = new byte[bufferSize];
+
+        int len;
+        while ((len = inputStream.read(buffer)) != -1){
+            byteBuffer.write(buffer, 0, len);
+        }
+        return byteBuffer.toByteArray();
+    }
+
+
+
+
+
+
+    ActivityResultLauncher<PickVisualMediaRequest> pickMedia =
+            registerForActivityResult(new PickVisualMedia(), uri -> {
+                // Callback is invoked after the user selects a media item or closes the
+                // photo picker.
+                if (uri != null) {
+                    Log.d("PhotoPicker", "Selected URI: " + uri);
+                    uploadImage(uri);
+                } else {
+                    Log.d("PhotoPicker", "No media selected");
+                }
+            });
+
+
+
 }

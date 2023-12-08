@@ -69,4 +69,5 @@ dependencies {
     //Picasso for image loading
     implementation 'com.squareup.picasso:picasso:2.8'
 
+    implementation 'androidx.activity:activity:1.8.1'
 }

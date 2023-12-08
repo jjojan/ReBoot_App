@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="25dp"
         android:layout_marginLeft="150dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="150dp"
         android:layout_marginRight="28dp"
         android:background="@drawable/edt_background"
         android:textColorHint="@color/black" />
@@ -25,7 +25,7 @@
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@id/et_editUsername"
         android:layout_marginLeft="25dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="150dp"
         android:text="Edit Username" />
 
     <Button
@@ -45,5 +45,13 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="50dp"
         android:text="Done" />
+
+    <Button
+        android:id="@+id/btn_profile_pic"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"
+        android:text="Pick Profile Picture" />
 
 </RelativeLayout>

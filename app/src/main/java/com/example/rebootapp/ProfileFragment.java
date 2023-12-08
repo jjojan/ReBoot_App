@@ -167,16 +167,7 @@ public class ProfileFragment extends Fragment {
 
 
 
-//        btnUploadImage.setOnClickListener(new View.OnClickListener(){
-//            @Override
-//            public void onClick(View v){
-//
-//                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-//                ActivityResultContracts.StartActivityForResult(intent, );
-//                startActivityForResult(intent, PICK_IMAGE_REQUEST);
-//
-//            }
-//        });
+
 
 
         // Inflate the layout for this fragment
