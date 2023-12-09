@@ -60,5 +60,15 @@
         android:layout_marginEnd="0dp"
         tools:srcCompat="@tools:sample/avatars" />
 
+    <ToggleButton
+        android:id="@+id/toggleButton"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="500dp"
+        android:background="@drawable/heart_toggle_selector"
+        android:padding="10dp"
+        android:textOff=""
+        android:textOn="" />
+
 </RelativeLayout>
 

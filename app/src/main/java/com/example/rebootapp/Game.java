@@ -90,4 +90,6 @@ public class Game {
         return overview;
     }
 
+    public String getID() { return id; }
+
 }

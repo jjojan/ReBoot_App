@@ -29,23 +29,23 @@
         android:layout_marginRight="375dp"
         android:layout_toRightOf="@id/tv_Username"
         android:textAlignment="textEnd"
-        android:textSize="16sp" />
+        android:textSize="20sp" />
 
     <TextView
         android:id="@+id/tv_Username"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="25dp"
-        android:layout_marginTop="125dp"
+        android:layout_marginTop="175dp"
         android:text="Username: "
-        android:textSize="20sp" />
+        android:textSize="24sp" />
 
     <ImageView
         android:id="@+id/ProfilePic"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="0dp"
         android:scaleType="fitCenter"
         android:src="?attr/selectableItemBackground"
         android:visibility="visible"
@@ -56,9 +56,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="25dp"
-        android:layout_marginTop="175dp"
+        android:layout_marginTop="225dp"
         android:text="Email:"
-        android:textSize="20sp" />
+        android:textSize="24sp" />
 
     <TextView
         android:id="@+id/tvUser_Email"
@@ -67,30 +67,31 @@
         android:layout_alignBaseline="@id/textView3"
         android:layout_alignLeft="@id/tvUser_Username"
         android:textAlignment="textEnd"
-        android:textSize="16sp" />
+        android:textSize="20sp" />
 
     <TextView
         android:id="@+id/textView6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="225dp"
+        android:layout_marginTop="275dp"
         android:text="Bio"
-        android:textSize="20sp" />
+        android:textSize="24sp" />
 
     <TextView
         android:id="@+id/textView7"
         android:layout_width="350dp"
         android:layout_height="160dp"
         android:layout_below="@id/textView6"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:textSize="16sp" />
 
     <ImageButton
         android:id="@+id/Friends"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginLeft="50dp"
-        android:layout_marginTop="450dp"
+        android:layout_marginTop="500dp"
         android:scaleType="fitCenter"
         android:src="@drawable/friends" />
 
@@ -100,15 +101,16 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="false"
         android:layout_marginLeft="50dp"
-        android:layout_marginTop="425dp"
-        android:text="Friends" />
+        android:layout_marginTop="475dp"
+        android:text="Friends"
+        android:textSize="20sp" />
 
     <ImageButton
         android:id="@+id/Starred"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginLeft="175dp"
-        android:layout_marginTop="450dp"
+        android:layout_marginTop="500dp"
         android:scaleType="fitCenter"
         android:src="@drawable/star" />
 
@@ -117,7 +119,7 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginLeft="300dp"
-        android:layout_marginTop="450dp"
+        android:layout_marginTop="500dp"
         android:scaleType="fitCenter"
         android:src="@drawable/edit_profile" />
 
@@ -126,16 +128,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="175dp"
-        android:layout_marginTop="425dp"
-        android:text="Starred" />
+        android:layout_marginTop="475dp"
+        android:text="Starred"
+        android:textSize="20sp" />
 
     <TextView
         android:id="@+id/textView10"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="295dp"
-        android:layout_marginTop="425dp"
-        android:text="EditProfile" />
+        android:layout_marginTop="475dp"
+        android:text="EditProfile"
+        android:textSize="20sp" />
 
 
 </RelativeLayout>
