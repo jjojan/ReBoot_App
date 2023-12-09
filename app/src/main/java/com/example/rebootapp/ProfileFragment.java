@@ -230,7 +230,7 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onStart(){
         super.onStart();
-
+        refreshProfile();
 //        ParseUser currentUser = ParseUser.getCurrentUser();
 //        String currentUserObjectID = currentUser.getObjectId();
 //        ParseQuery<ParseObject> query = ParseQuery.getQuery("_User");
