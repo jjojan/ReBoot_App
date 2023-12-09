@@ -29,12 +29,14 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_marginStart="-2dp"
-        android:layout_marginLeft="-2dp"
-        android:layout_marginTop="54dp"
-        android:layout_marginEnd="2dp"
-        android:layout_marginRight="2dp"
-        android:text="TextView" />
+        android:layout_marginStart="3dp"
+        android:layout_marginLeft="3dp"
+        android:layout_marginTop="-392dp"
+        android:layout_marginEnd="-3dp"
+        android:layout_marginRight="-3dp"
+        android:gravity="center"
+        android:text="TextView"
+        android:textSize="20sp" />
 
     <RatingBar
         android:id="@+id/rbVoteAverage"
@@ -56,8 +58,8 @@
         android:layout_height="250dp"
         android:layout_below="@+id/tvTitle"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="0dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="-1dp"
         tools:srcCompat="@tools:sample/avatars" />
 
     <ToggleButton
