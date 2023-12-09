@@ -31,6 +31,7 @@ public class GameDetailsActivity extends AppCompatActivity {
     RatingBar rbVoteAverage;
     ImageView ivPoster;
     ToggleButton heartButton;
+    int saveFavoriteQueue = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,19 +65,13 @@ public class GameDetailsActivity extends AppCompatActivity {
 
 
         String tempID = movie.getID();
+        String favPath = movie.getPosterPath();
         ParseUser currentUser = ParseUser.getCurrentUser();
-        try {
-            currentUser.fetch();
-        }
-        catch(Exception e){
-            System.out.println("can't fetch");
-        }
         String currentUserID = currentUser.getObjectId();
         checkMovieID(currentUserID, tempID, new QueryCheckCallback() {
             @Override
             public void onResult(boolean isEmpty) {
-                if (isEmpty) heartButton.setChecked(false);
-                else heartButton.setChecked(true);
+                heartButton.setChecked(!isEmpty);
             }
         });
 
@@ -84,24 +79,10 @@ public class GameDetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(heartButton.isChecked()){
-                    checkMovieID(currentUserID, tempID, new QueryCheckCallback() {
-                        @Override
-                        public void onResult(boolean isEmpty) {
-                            if(isEmpty) addFavoriteGame(currentUserID, tempID);
-                            else System.out.println("already favorite");
-                        }
-                    });
-
+                    addFavoriteGame(currentUserID, tempID, favPath);
                 }
                 else{
-                    System.out.println("don't do it");
-                    checkMovieID(currentUserID, tempID, new QueryCheckCallback() {
-                        @Override
-                        public void onResult(boolean isEmpty) {
-                            if(isEmpty) System.out.println("can't find game");
-                            else removeFavoriteGame(currentUserID, tempID);
-                        }
-                    });
+                    removeFavoriteGame(currentUserID, tempID);
                 }
             }
         });
@@ -114,10 +95,11 @@ public class GameDetailsActivity extends AppCompatActivity {
 
     }
 
-    public void addFavoriteGame(String UserID, String gameID){
+    public void addFavoriteGame(String UserID, String gameID, String path){
         ParseObject object = new ParseObject("FavoriteGames");
         object.put("user_id", UserID);
         object.put("game_id", gameID);
+        object.put("picture_uri", path);
         object.saveInBackground();
 
     }
@@ -165,5 +147,16 @@ public class GameDetailsActivity extends AppCompatActivity {
     public interface QueryCheckCallback {
         void onResult(boolean isEmpty);
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+
+
+    }
+
+
+
 
 }
