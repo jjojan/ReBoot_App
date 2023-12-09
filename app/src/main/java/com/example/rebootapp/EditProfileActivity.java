@@ -7,6 +7,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.renderscript.ScriptGroup;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -47,6 +49,9 @@ public class EditProfileActivity extends AppCompatActivity {
     Button btn_SaveProfile;
     Button btn_Profile_Pic;
     EditText et_editUsername;
+    EditText edt_bio;
+    TextView tv_CharCount;
+
     ActivityResultLauncher<Intent> resultLauncher;
 
 
@@ -63,15 +68,46 @@ public class EditProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_edit_profile);
 
         ParseUser currentUser = ParseUser.getCurrentUser();
+        try {
+            currentUser.fetch();
+        }
+        catch (Exception e){
+            System.out.println("won't fetch");
+        }
         String currentUserObjectID = currentUser.getObjectId();
+        String currentUserName = currentUser.getUsername();
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("_User");
+        query.whereEqualTo(currentUserObjectID, "username");
 
 
         btn_ProfileDone = findViewById(R.id.btn_ProfileDone);
         btn_SaveProfile = findViewById(R.id.btn_SaveProfile);
         btn_Profile_Pic = findViewById(R.id.btn_profile_pic);
         et_editUsername = findViewById(R.id.et_editUsername);
+        edt_bio = findViewById(R.id.edt_Bio);
+        tv_CharCount = findViewById(R.id.tv_CharCount);
 
+        et_editUsername.setHint(currentUserName);
 
+        edt_bio.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                //do nothing
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                //do nothing
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String text = s.toString();
+                int length = text.length();
+                text = (length + "/225");
+                tv_CharCount.setText(text);
+            }
+        });
         btn_ProfileDone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -83,11 +119,15 @@ public class EditProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String strUsername = et_editUsername.getText().toString();
+                String strBio = edt_bio.getText().toString();
                 checkUsername(strUsername, new UsernameCheckCallback() {
                     @Override
                     public void onResult(boolean isUsernameAvailable) {
                         if (isUsernameAvailable) {
-                            updateUsername(currentUserObjectID, strUsername);
+                            updateProfile(currentUserObjectID, strUsername, strBio );
+                        }
+                        else{
+                            updateProfile(currentUserObjectID, currentUserName, strBio);
                         }
                     }
                 });
@@ -131,15 +171,18 @@ public class EditProfileActivity extends AppCompatActivity {
         });
 
 
+
+
+
     }
 
     public void checkUsername(String str, UsernameCheckCallback callback) {
         ParseQuery<ParseObject> query = ParseQuery.getQuery("_User");
         query.whereEqualTo("username", str);
-        if (str.isEmpty()){
-            System.out.println("invalid username");
-        }
-        else {
+//        if (str.isEmpty()){
+//            System.out.println("invalid username");
+//        }
+//        else {
             query.countInBackground(new CountCallback() {
                 @Override
                 public void done(int count, ParseException e) {
@@ -149,17 +192,21 @@ public class EditProfileActivity extends AppCompatActivity {
                         callback.onResult(false);
                 }
             });
-        }
+//        }
 
     }
 
-    public void updateUsername(String objectID, String newUsername) {
+    public void updateProfile(String objectID, String newUsername, String newBio) {
         ParseQuery<ParseUser> query = ParseUser.getQuery();
+        String currentUsername = ParseUser.getCurrentUser().getUsername();
         query.getInBackground(objectID, new GetCallback<ParseUser>() {
             @Override
             public void done(ParseUser object, ParseException e) {
                 if (e == null) {
-                    object.setUsername(newUsername);
+                    if(!newUsername.isEmpty() && !(newUsername.equals(currentUsername) ))
+                        object.setUsername(newUsername);
+                    if(!newBio.isEmpty())
+                        object.put("bio", newBio);
                     object.saveInBackground(new SaveCallback() {
                         @Override
                         public void done(ParseException e) {
@@ -177,6 +224,8 @@ public class EditProfileActivity extends AppCompatActivity {
         });
 
     }
+
+
     public void uploadImage(Uri imageUri){
         try{
             InputStream inputStream = getContentResolver().openInputStream(imageUri);
@@ -233,7 +282,15 @@ public class EditProfileActivity extends AppCompatActivity {
                     Log.d("PhotoPicker", "No media selected");
                 }
             });
+//    @Override
+//    public void onStart(){
+//        super.onStart();
+//        String currentUserName = ParseUser.getCurrentUser().getUsername();
+//        et_editUsername.setHint(currentUserName);
+//    }
 
-
-
+//    public void endEditProfile(){
+//        ParseUser currentUser = ParseUser.getCurrentUser();
+//
+//    }
 }

@@ -28,7 +28,6 @@
         android:layout_marginLeft="35dp"
         android:layout_marginRight="375dp"
         android:layout_toRightOf="@id/tv_Username"
-        android:text="TextView"
         android:textAlignment="textEnd"
         android:textSize="16sp" />
 
@@ -43,8 +42,8 @@
 
     <ImageView
         android:id="@+id/ProfilePic"
-        android:layout_width="75dp"
-        android:layout_height="75dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="25dp"
         android:scaleType="fitCenter"
@@ -67,7 +66,6 @@
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@id/textView3"
         android:layout_alignLeft="@id/tvUser_Username"
-        android:text="TextView"
         android:textAlignment="textEnd"
         android:textSize="16sp" />
 
@@ -83,16 +81,15 @@
     <TextView
         android:id="@+id/textView7"
         android:layout_width="350dp"
-        android:layout_height="150dp"
+        android:layout_height="160dp"
         android:layout_below="@id/textView6"
-        android:layout_centerHorizontal="true"
-        android:text="WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW" />
+        android:layout_centerHorizontal="true" />
 
     <ImageButton
         android:id="@+id/Friends"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_marginLeft="25dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginLeft="50dp"
         android:layout_marginTop="450dp"
         android:scaleType="fitCenter"
         android:src="@drawable/friends" />
@@ -108,18 +105,18 @@
 
     <ImageButton
         android:id="@+id/Starred"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_marginLeft="150dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginLeft="175dp"
         android:layout_marginTop="450dp"
         android:scaleType="fitCenter"
         android:src="@drawable/star" />
 
     <ImageButton
         android:id="@+id/EditProfile"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_marginLeft="275dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginLeft="300dp"
         android:layout_marginTop="450dp"
         android:scaleType="fitCenter"
         android:src="@drawable/edit_profile" />

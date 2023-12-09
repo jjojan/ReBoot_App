@@ -56,6 +56,7 @@ public class ProfileFragment extends Fragment {
     Session session;
     TextView tvUser_Username;
     TextView tvUser_Email;
+    TextView bio;
 
     ImageView ProfilePic;
     private static final int PICK_IMAGE_REQUEST = 1;
@@ -110,6 +111,7 @@ public class ProfileFragment extends Fragment {
         Friends = view.findViewById(R.id.Friends);
         Starred = view.findViewById(R.id.Starred);
         EditProfile = view.findViewById(R.id.EditProfile);
+        bio = view.findViewById(R.id.textView7);
 
 
 
@@ -118,6 +120,7 @@ public class ProfileFragment extends Fragment {
                 .requestEmail().build();
         GoogleSignInClient gsc = GoogleSignIn.getClient(getActivity(), gso);
 
+        refreshProfile();
 
 
 
@@ -188,36 +191,11 @@ public class ProfileFragment extends Fragment {
         });
 
 
-//        btnUploadImage = view.findViewById(R.id.button_upload_image);
-//        registerResult();
-//
-//        btnUploadImage.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                pickImage();
-//
-////                ParseUser currentUser = ParseUser.getCurrentUser();
-////                String currentUserObjectID = currentUser.getObjectId();
-////                ParseQuery<ParseObject> query = ParseQuery.getQuery("_User");
-////                query.getInBackground(currentUserObjectID, new GetCallback<ParseObject>() {
-////                    @Override
-////                    public void done(ParseObject object, ParseException e) {
-////                        if (e == null) {
-////                            object.put("profile_pic", profile_Uri);
-////                            object.saveInBackground();
-////                        }
-////                    }
-////                });
 
-//            }
-//        });
 
     }
 
-    @Override
-    public void onStart(){
-        super.onStart();
-
+    public void refreshProfile(){
         ParseUser currentUser = ParseUser.getCurrentUser();
         String currentUserObjectID = currentUser.getObjectId();
         ParseQuery<ParseObject> query = ParseQuery.getQuery("_User");
@@ -227,10 +205,11 @@ public class ProfileFragment extends Fragment {
             @Override
             public void done(ParseObject object, ParseException e) {
                 if (e == null){
-//                    tempString[0] = object.getString("username");
                     tvUser_Username.setText(object.getString("username"));
                     tvUser_Email.setText(object.getString("email"));
+                    bio.setText(object.getString("bio"));
                     ParseFile image = object.getParseFile("profile_pic");
+
                     String imageUrl;
                     if (image != null) {
                         imageUrl = image.getUrl();
@@ -246,7 +225,41 @@ public class ProfileFragment extends Fragment {
                 }
             }
         });
-//        String tmpString = currentUser.getObjectId();
+    }
+
+    @Override
+    public void onStart(){
+        super.onStart();
+
+//        ParseUser currentUser = ParseUser.getCurrentUser();
+//        String currentUserObjectID = currentUser.getObjectId();
+//        ParseQuery<ParseObject> query = ParseQuery.getQuery("_User");
+//
+//
+//        query.getInBackground(currentUserObjectID, new GetCallback<ParseObject>() {
+//            @Override
+//            public void done(ParseObject object, ParseException e) {
+//                if (e == null){
+//                    tvUser_Username.setText(object.getString("username"));
+//                    tvUser_Email.setText(object.getString("email"));
+//                    bio.setText(object.getString("bio"));
+//                    ParseFile image = object.getParseFile("profile_pic");
+//
+//                    String imageUrl;
+//                    if (image != null) {
+//                        imageUrl = image.getUrl();
+//                        Picasso.get().load(imageUrl).into(ProfilePic);
+//                    }
+//                    else {}
+//
+//
+//                }
+//                else {
+//
+//                    System.out.println(e.toString());
+//                }
+//            }
+//        });
 
 
     }

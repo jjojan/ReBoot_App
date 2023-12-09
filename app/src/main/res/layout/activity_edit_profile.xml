@@ -17,6 +17,8 @@
         android:layout_marginTop="150dp"
         android:layout_marginRight="28dp"
         android:background="@drawable/edt_background"
+        android:hint="Edit Username"
+        android:paddingLeft="13dp"
         android:textColorHint="@color/black" />
 
     <TextView
@@ -53,5 +55,26 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="50dp"
         android:text="Pick Profile Picture" />
+
+    <EditText
+        android:id="@+id/edt_Bio"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="200dp"
+        android:background="@drawable/edt_background"
+        android:hint="Enter Bio"
+        android:inputType="textMultiLine"
+        android:maxLines="5"
+        android:paddingLeft="13dp"
+        android:textColorHint="@color/black" />
+
+    <TextView
+        android:id="@+id/tv_CharCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/edt_Bio"
+        android:layout_alignParentRight="true"
+        android:text="0/225" />
+
 
 </RelativeLayout>
