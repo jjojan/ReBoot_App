@@ -66,6 +66,7 @@ public class GameDetailsActivity extends AppCompatActivity {
 
         String tempID = movie.getID();
         String favPath = movie.getPosterPath();
+
         ParseUser currentUser = ParseUser.getCurrentUser();
         String currentUserID = currentUser.getObjectId();
         checkMovieID(currentUserID, tempID, new QueryCheckCallback() {

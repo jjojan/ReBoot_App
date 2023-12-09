@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_alignParentBottom="false"
+    android:background="@color/gray"
+    android:visibility="visible"
+    tools:context=".FavoriteGamesActivity">
+
+    <TextView
+        android:id="@+id/tv_favoriteTitle"
+        android:layout_width="425dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:text="Favorite Games"
+        android:textAlignment="center"
+        android:textSize="34sp" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_games_list"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:scrollbars="vertical" />
+
+    <Button
+        android:id="@+id/btn_Favorite_Done"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="150dp"
+        android:layout_marginTop="600dp"
+        android:text="Done" />
+
+</RelativeLayout>

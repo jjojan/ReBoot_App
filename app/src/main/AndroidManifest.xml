@@ -56,6 +56,9 @@
         <activity
             android:name=".EditProfileActivity"
             android:exported="true"></activity>
+        <activity
+            android:name=".FavoriteGamesActivity"
+            android:exported="true" />
 
         <meta-data
             android:name="com.parse.SERVER_URL"

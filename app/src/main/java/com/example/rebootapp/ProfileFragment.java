@@ -190,6 +190,15 @@ public class ProfileFragment extends Fragment {
             }
         });
 
+        Starred = view.findViewById(R.id.Starred);
+        Starred.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), FavoriteGamesActivity.class);
+                getActivity().startActivity(intent);
+            }
+        });
+
 
 
 

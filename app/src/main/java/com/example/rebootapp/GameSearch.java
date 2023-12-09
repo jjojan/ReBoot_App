@@ -91,4 +91,6 @@ public class GameSearch {
         return date;
     }
 
+    public String getID() {return id;}
+
 }
