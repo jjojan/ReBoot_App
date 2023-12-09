@@ -1,5 +1,8 @@
 package com.example.rebootapp;
 
+import static android.content.Intent.getIntent;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,6 +21,7 @@ import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +46,8 @@ public class HomeFragment extends Fragment {
     List<Game> newGames;
 
     List<Game> yourGames;
+
+    JSONObject result;
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -116,7 +122,10 @@ public class HomeFragment extends Fragment {
         rvNewGames.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         rvYourGames.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
 
+
+
         AsyncHttpClient client = new AsyncHttpClient();
+
 
         client.get(POPULAR_GAMES_URL , new JsonHttpResponseHandler() {
             @Override

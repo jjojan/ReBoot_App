@@ -1,6 +1,8 @@
 package com.example.rebootapp;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
@@ -10,6 +12,11 @@ import androidx.fragment.app.FragmentManager;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.parceler.Parcels;
 
 import java.util.List;
 
@@ -27,34 +34,55 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         final FragmentManager fragmentManager = getSupportFragmentManager();
 
+        Intent intent = getIntent();
+        Log.i("fileName1", "waiting");
+        if (getIntent().hasExtra("jsonArray")) {
+            Log.i("fileName1", "" + getIntent().getStringExtra("jsonArray"));
+        }
 
-        bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                Fragment fragment;
-                switch (item.getItemId()) {
-                    case R.id.mHome:
-                        fragment = new HomeFragment();
-                        break;
-                    case R.id.mSearch:
-                        fragment = new SearchFragment();
-                        break;
-                    case R.id.mEvents:
-                        fragment = new ReviewFragment();
-                        break;
-                    case R.id.mCart:
-                    default:
-                        fragment = new ProfileFragment();
-                        break;
+
+            bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+                @Override
+                public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                    Fragment fragment;
+                    switch (item.getItemId()) {
+                        case R.id.mHome:
+                            HomeFragment homeFragment = new HomeFragment();
+//                        Bundle bundle = new Bundle();
+//                       Intent intent = getIntent();
+//                        Log.i("fileName1", "waiting" );
+//                        if (getIntent().hasExtra("jsonArray")){
+//                            Log.i("fileName1", "it exists" );
+//                        }
+//                        String result = intent.getStringExtra("jsonArray");
+//                        JSONArray jsonArray = null;
+//                        try {
+//                            jsonArray = new JSONArray(result);
+//                        } catch (JSONException e) {
+//                            throw new RuntimeException(e);
+//                        }
+//                        Log.i("fileName1", "" + jsonArray);
+//                        bundle.putString("result", result );
+//                        homeFragment.setArguments(bundle);
+                            fragment = homeFragment;
+                            break;
+                        case R.id.mSearch:
+                            fragment = new SearchFragment();
+                            break;
+                        case R.id.mEvents:
+                            fragment = new ReviewFragment();
+                            break;
+                        case R.id.mCart:
+                        default:
+                            fragment = new ProfileFragment();
+                            break;
+                    }
+                    fragmentManager.beginTransaction().replace(R.id.fLayoutContainer, fragment).commit();
+                    return true;
                 }
-                fragmentManager.beginTransaction().replace(R.id.fLayoutContainer, fragment).commit();
-                return true;
-            }
-        });
-        bottomNavigationView.setSelectedItemId(R.id.mHome);
-    }
-
-
+            });
+            bottomNavigationView.setSelectedItemId(R.id.mHome);
+        }
 
 
 //        RecyclerView rvMovies = findViewById(R.id.rvYourGames);
@@ -88,6 +116,7 @@ public class MainActivity extends AppCompatActivity {
 //            }
 //        });
 //
-}
+    }
+
 
 
