@@ -14,12 +14,15 @@ import android.widget.ToggleButton;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.codepath.asynchttpclient.AsyncHttpClient;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 import com.colormoon.readmoretextview.ReadMoreTextView;
 import com.parse.CountCallback;
+import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseObject;
 import com.parse.ParseException;
@@ -42,6 +45,8 @@ public class GameDetailsActivity extends AppCompatActivity {
 
     List<Game> game;
 
+    List<ParseObject> adapterObjects;
+
     // the view objects
     TextView tvTitle;
     TextView tvOverview;
@@ -56,6 +61,8 @@ public class GameDetailsActivity extends AppCompatActivity {
     String Username;
 
     String tempID;
+
+    RecyclerView recyclerView;
 
 
 
@@ -79,6 +86,7 @@ public class GameDetailsActivity extends AppCompatActivity {
         tvDesc = findViewById(R.id.tvDesc);
         reviewButton = findViewById(R.id.reviewButton);
 
+
         showWriteReview();
 
 
@@ -86,7 +94,8 @@ public class GameDetailsActivity extends AppCompatActivity {
 
                 movie = (Game) Parcels.unwrap(getIntent().getParcelableExtra(Game.class.getSimpleName()));
         Log.d("MovieDetailsActivity", String.format("Showing details for '%s'", movie.getTitle()));
-
+        tempID = movie.getID();
+        displayReviews();
         tvTitle.setText(movie.getTitle());
         tvOverview.setText(movie.getOverview());
 
@@ -102,7 +111,8 @@ public class GameDetailsActivity extends AppCompatActivity {
                 .into(ivPoster);
 
 
-        tempID = movie.getID();
+
+
         Log.i("id", tempID);
         GAME_URL = GAME_URL + tempID + "?key=63502b95db9f41c99bb3d0ecf77aa811";
         Log.i("id", GAME_URL);
@@ -199,7 +209,48 @@ public class GameDetailsActivity extends AppCompatActivity {
 
     }
 
-    public
+    public void displayReviews(){
+
+        try {
+            ParseQuery<ParseObject> query = ParseQuery.getQuery("Review");
+            Log.i("temp ID", tempID);
+            query.whereEqualTo("GameID", tempID);
+
+            query.findInBackground(new FindCallback<ParseObject>() {
+                @Override
+                public void done(List<ParseObject> objects, ParseException e) {
+                    if (e == null){
+
+
+//                        Log.i("review exists", objects.get(0).getString("ReviewText") + "size");
+                        int i = 0;
+
+                        recyclerView = (RecyclerView) findViewById(R.id.rvReviews);
+                        recyclerView.setLayoutManager(new LinearLayoutManager(GameDetailsActivity.this, LinearLayoutManager.HORIZONTAL, false));
+                        ReviewAdapter adapter = new ReviewAdapter(objects, GameDetailsActivity.this);
+                        Log.i("adapter rsult", adapter.toString());
+                        recyclerView.setAdapter(adapter);
+
+                        for (ParseObject item : objects) {
+                            Log.i("review exists", objects.get(i).getString("ReviewText") + "size");
+                            i += 1;
+                        }
+
+
+                    }
+                    else {
+                    }
+
+                }
+            });
+
+        }catch (Exception e){
+            System.out.println("Parse Error Getting Reviews");
+            Log.e("MYAPP", "exception", e);
+        }
+
+
+    }
 
     public void addGame(String GameID, ParseObject review){
 

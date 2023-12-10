@@ -107,9 +107,17 @@
         app:srcCompat="@drawable/baseline_create_24" />
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvReviews"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignBottom="@+id/textView5"/>
+        android:layout_height="122dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="15dp"
+        android:layout_marginEnd="0dp"
+        android:layout_marginBottom="7dp"
+        android:paddingRight="4dp"
+        android:scrollbars="horizontal" />
 
 
 </RelativeLayout>

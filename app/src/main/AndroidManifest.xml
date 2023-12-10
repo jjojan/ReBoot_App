@@ -14,7 +14,7 @@
         android:label="@string/app_name"
         android:roundIcon="@drawable/reboot5"
         android:supportsRtl="true"
-        android:theme="@style/Theme.AppCompat.Light"
+        android:theme="@style/Theme.MaterialComponents.DayNight"
         android:usesCleartextTraffic="true"
         tools:node="merge"
         tools:replace="android:theme"
