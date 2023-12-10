@@ -1,13 +1,18 @@
 package com.example.rebootapp;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
@@ -44,6 +49,14 @@ public class GameDetailsActivity extends AppCompatActivity {
     ImageView ivPoster;
     ToggleButton heartButton;
 
+    ImageButton reviewButton;
+
+    String UserID;
+
+    String Username;
+
+    String tempID;
+
 
 
     ReadMoreTextView tvDesc;
@@ -55,6 +68,7 @@ public class GameDetailsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
 
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_details);
 
@@ -63,6 +77,9 @@ public class GameDetailsActivity extends AppCompatActivity {
         rbVoteAverage = (RatingBar) findViewById(R.id.rbVoteAverage);
         heartButton = findViewById(R.id.toggleButton);
         tvDesc = findViewById(R.id.tvDesc);
+        reviewButton = findViewById(R.id.reviewButton);
+
+        showWriteReview();
 
 
 
@@ -85,7 +102,7 @@ public class GameDetailsActivity extends AppCompatActivity {
                 .into(ivPoster);
 
 
-        String tempID = movie.getID();
+        tempID = movie.getID();
         Log.i("id", tempID);
         GAME_URL = GAME_URL + tempID + "?key=63502b95db9f41c99bb3d0ecf77aa811";
         Log.i("id", GAME_URL);
@@ -167,6 +184,52 @@ public class GameDetailsActivity extends AppCompatActivity {
 
     }
 
+    public void addReview(String UserID, String username, String reviewText){
+
+        ParseObject object = new ParseObject("Review");
+        object.put("ReviewUser", UserID);
+        object.put("ReviewUsername", username);
+        object.put("ReviewText", reviewText);
+        object.put("GameID", tempID);
+        object.saveInBackground();
+
+        addGame(tempID, object);
+
+
+
+    }
+
+    public
+
+    public void addGame(String GameID, ParseObject review){
+
+        try {
+            ParseQuery<ParseObject> query = ParseQuery.getQuery("Game");
+            query.whereEqualTo("GameID", GameID);
+            query.getFirstInBackground(new GetCallback<ParseObject>() {
+                @Override
+                public void done(ParseObject object, ParseException e) {
+                    if (e == null){
+                        Log.i("game exists", "arready exists");
+                        object.add("ReviewArray", review);
+                        object.saveInBackground();
+                    }
+                    else {
+                        ParseObject game = new ParseObject("Game");
+                        game.put("GameID", tempID);
+                        game.add("ReviewArray", review);
+                        game.saveInBackground();
+                    }
+                }
+            });
+
+        }catch (Exception e){
+            System.out.println("Parse Error in Saving");
+        }
+
+
+    }
+
     public void removeFavoriteGame(String UserID, String gameID){
         try {
             ParseQuery<ParseObject> query = ParseQuery.getQuery("FavoriteGames");
@@ -205,6 +268,53 @@ public class GameDetailsActivity extends AppCompatActivity {
             System.out.println("Parse problem checking");
         }
 
+    }
+
+    private void  showWriteReview(){
+        reviewButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                AlertDialog.Builder builder = new AlertDialog.Builder( GameDetailsActivity.this );
+                builder.setTitle("Write Review");
+                EditText etReview = new EditText(GameDetailsActivity.this);
+                builder.setView(etReview);
+
+                ParseUser currentUser = ParseUser.getCurrentUser();
+                String currentUserObjectID = currentUser.getObjectId();
+                ParseQuery<ParseObject> query = ParseQuery.getQuery("_User");
+
+                query.getInBackground(currentUserObjectID, new GetCallback<ParseObject>() {
+                    @Override
+                    public void done(ParseObject object, ParseException e) {
+                        if (e==null){
+                             UserID = object.getObjectId().toString();
+                             Username = object.getString("username");
+                             Log.i("userID", UserID);
+                             Log.i("userID", Username);
+                        }
+                    }
+                });
+
+                builder.setPositiveButton("Submit", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        String reviewText = etReview.getText().toString();
+                        addReview(UserID, Username, reviewText);
+                        Toast.makeText(GameDetailsActivity.this, "Review: " + reviewText, Toast.LENGTH_LONG).show();
+                    }
+                });
+
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.cancel();
+                    }
+                });
+
+                builder.show();
+            }
+        });
     }
 
     public interface QueryCheckCallback {

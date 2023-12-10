@@ -85,6 +85,31 @@
         android:layout_marginBottom="-104dp"
         android:textSize="16sp" />
 
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="140dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/tvDesc"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="275dp"
+        android:layout_marginBottom="-70dp"
+        android:text="Reviews"
+        android:textSize="24sp" />
+
+    <ImageButton
+        android:id="@+id/reviewButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/ivPoster"
+        android:layout_alignBottom="@+id/textView5"
+        android:layout_marginEnd="246dp"
+        android:layout_marginBottom="-4dp"
+        app:srcCompat="@drawable/baseline_create_24" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignBottom="@+id/textView5"/>
 
 
 </RelativeLayout>
