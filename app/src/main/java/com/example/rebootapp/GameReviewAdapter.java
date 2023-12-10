@@ -32,7 +32,7 @@ public class GameReviewAdapter extends RecyclerView.Adapter<GameReviewAdapter.Vi
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View gameView = LayoutInflater.from(context).inflate(R.layout.activity_game_review_details, parent, false);
+        View gameView = LayoutInflater.from(context).inflate(R.layout.item_gamereview, parent, false); //?
         return new ViewHolder(gameView);
     }
 
@@ -49,23 +49,23 @@ public class GameReviewAdapter extends RecyclerView.Adapter<GameReviewAdapter.Vi
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         TextView tvTitle;
-        //TextView tvDate;
+        TextView tvDate;
 
-        //TextView tvID;
+        TextView tvID;
         ImageView tvPoster;
 
         public ViewHolder(@NonNull View itemView){
             super(itemView);
-            tvTitle = itemView.findViewById(R.id.tvTitleR);
-            //tvDate = itemView.findViewById(R.id.tvDate);
-            tvPoster = itemView.findViewById(R.id.ivPosterR);
+            tvTitle = itemView.findViewById(R.id.tvGameTitle);
+            tvDate = itemView.findViewById(R.id.tvDate);
+            tvPoster = itemView.findViewById(R.id.gamePoster);
         }
 
         public void bind(GameReview review) {
-            //String date = reviews.getOverview();
-            //String[] arrOfStr = date.split("-", 2);
+            String date = review.getOverview();
+            String[] arrOfStr = date.split("-", 2);
             tvTitle.setText(review.getTitle());
-            //tvDate.setText(arrOfStr[0]);
+            tvDate.setText(arrOfStr[0]);
             String imageUrl;
 
 
@@ -87,7 +87,9 @@ public class GameReviewAdapter extends RecyclerView.Adapter<GameReviewAdapter.Vi
             tvPoster.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(context, GameReviewDetailsActivity.class);
+                    //int position = getAdapterPosition();
+                    //GameReview game = reviews.get(position);
+                    Intent intent = new Intent(context, ReviewActivity.class);
 
                     intent.putExtra(GameReview.class.getSimpleName(), Parcels.wrap(review));
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -102,7 +104,7 @@ public class GameReviewAdapter extends RecyclerView.Adapter<GameReviewAdapter.Vi
 
             if (position != RecyclerView.NO_POSITION) {
 
-                GameReview game = reviews.get(position);
+                GameReview game = reviews.get(position); //?
 
                 Intent intent = new Intent(context, GameReviewDetailsActivity.class);
 

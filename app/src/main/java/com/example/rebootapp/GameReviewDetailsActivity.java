@@ -2,8 +2,8 @@ package com.example.rebootapp;
 
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,28 +18,33 @@ public class GameReviewDetailsActivity extends AppCompatActivity {
 
     // the view objects
     TextView tvTitle;
-    //TextView tvOverview;
-    //RatingBar rbVoteAverage;
+    TextView tvOverview;
+    RatingBar rbVoteAverage;
     ImageView ivPoster;
-    EditText etReviewText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_game_review_details);
 
-        tvTitle = (TextView) findViewById(R.id.tvTitleR);
-        //tvOverview = (TextView) findViewById(R.id.tvOverview);
-        etReviewText = (EditText) findViewById(R.id.etReviewTextR);
-        ivPoster = (ImageView) findViewById(R.id.ivPosterR);
+
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_game_details);
+
+        tvTitle = (TextView) findViewById(R.id.tvTitle);
+        tvOverview = (TextView) findViewById(R.id.tvOverview);
+        rbVoteAverage = (RatingBar) findViewById(R.id.rbVoteAverage);
+
 
         review = (GameReview) Parcels.unwrap(getIntent().getParcelableExtra(GameReview.class.getSimpleName()));
         Log.d("MovieDetailsActivity", String.format("Showing details for '%s'", review.getTitle()));
 
         tvTitle.setText(review.getTitle());
-        //tvOverview.setText(review.getOverview());
+        tvOverview.setText(review.getOverview());
 
-        ivPoster = (ImageView) findViewById(R.id.ivPosterR);
+
+//        float voteAverage = movie.getVoteAverage().floatValue();
+//        rbVoteAverage.setRating(voteAverage / 2.0f);
+
+        ivPoster = (ImageView) findViewById(R.id.ivPoster);
         Glide.with(this)
                 .load(review.getPosterPath())
                 .placeholder(R.drawable.flicks_movie_placeholder)

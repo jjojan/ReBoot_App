@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/black"
-    tools:context=".GameReviewDetailsActivity">
+    tools:context=".ReviewActivity">
 
     <TextView
         android:id="@+id/tvTitleR"
@@ -38,7 +38,8 @@
         android:layout_height="250dp"
         android:layout_below="@+id/ivPosterR"
         android:maxLength="200"
-        android:text="Write your review here..."
+        android:hint="Write your review here..."
+        android:textColorHint="@color/white"
         android:textColor="@color/white"
         />
 
