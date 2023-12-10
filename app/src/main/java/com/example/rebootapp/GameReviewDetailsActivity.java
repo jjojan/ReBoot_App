@@ -23,6 +23,7 @@ public class GameReviewDetailsActivity extends AppCompatActivity {
     ImageView ivPoster;
     EditText etReviewText;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.bumptech.glide.Glide;
 import com.codepath.asynchttpclient.AsyncHttpClient;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
+import com.colormoon.readmoretextview.ReadMoreTextView;
 import com.parse.CountCallback;
 import com.parse.GetCallback;
 import com.parse.ParseObject;
@@ -42,6 +43,10 @@ public class GameDetailsActivity extends AppCompatActivity {
     RatingBar rbVoteAverage;
     ImageView ivPoster;
     ToggleButton heartButton;
+
+
+
+    ReadMoreTextView tvDesc;
     int saveFavoriteQueue = 0;
 
     String GAME_URL = "https://api.rawg.io/api/games/";
@@ -57,9 +62,12 @@ public class GameDetailsActivity extends AppCompatActivity {
         tvOverview = (TextView) findViewById(R.id.tvOverview);
         rbVoteAverage = (RatingBar) findViewById(R.id.rbVoteAverage);
         heartButton = findViewById(R.id.toggleButton);
+        tvDesc = findViewById(R.id.tvDesc);
 
 
-        movie = (Game) Parcels.unwrap(getIntent().getParcelableExtra(Game.class.getSimpleName()));
+
+
+                movie = (Game) Parcels.unwrap(getIntent().getParcelableExtra(Game.class.getSimpleName()));
         Log.d("MovieDetailsActivity", String.format("Showing details for '%s'", movie.getTitle()));
 
         tvTitle.setText(movie.getTitle());
@@ -97,6 +105,10 @@ public class GameDetailsActivity extends AppCompatActivity {
                 JSONObject jsonObject = json.jsonObject;
                 try {
                     Log.i("id", jsonObject.getString("description_raw"));
+                    tvDesc.setText(jsonObject.getString("description_raw"));
+
+
+
                 } catch (JSONException e) {
                     throw new RuntimeException(e);
                 }
@@ -105,6 +117,7 @@ public class GameDetailsActivity extends AppCompatActivity {
                     Log.i("RETURN results", "Results" + results.toString());
                     game.addAll(Game.fromJSONArray(results));
                     Log.i("return list", "Movies" + game.toString());
+
                 } catch(JSONException e){
                     Log.e("error", "hit json expception", e);
                 }
@@ -115,6 +128,8 @@ public class GameDetailsActivity extends AppCompatActivity {
                 Log.d("fail", "onFailure");
             }
         });
+
+
 
         checkMovieID(currentUserID, tempID, new QueryCheckCallback() {
             @Override
