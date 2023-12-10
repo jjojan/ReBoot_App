@@ -22,6 +22,7 @@ public class GameReviewDetailsActivity extends AppCompatActivity {
     RatingBar rbVoteAverage;
     ImageView ivPoster;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 

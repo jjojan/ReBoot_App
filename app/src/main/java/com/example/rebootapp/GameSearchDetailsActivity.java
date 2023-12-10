@@ -11,6 +11,9 @@ import android.widget.ToggleButton;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
+import com.codepath.asynchttpclient.AsyncHttpClient;
+import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
+import com.colormoon.readmoretextview.ReadMoreTextView;
 import com.parse.CountCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
@@ -18,11 +21,20 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.parceler.Parcels;
+
+import java.util.List;
+
+import okhttp3.Headers;
 
 public class GameSearchDetailsActivity extends AppCompatActivity {
 
     GameSearch movie;
+
+    List<Game> game;
 
     // the view objects
     TextView tvTitle;
@@ -31,6 +43,10 @@ public class GameSearchDetailsActivity extends AppCompatActivity {
     ImageView ivPoster;
 
     ToggleButton heartButton;
+
+    ReadMoreTextView tvDesc;
+
+    String GAME_URL = "https://api.rawg.io/api/games/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +59,7 @@ public class GameSearchDetailsActivity extends AppCompatActivity {
         tvOverview = (TextView) findViewById(R.id.tvOverview);
         rbVoteAverage = (RatingBar) findViewById(R.id.rbVoteAverage);
         heartButton = findViewById(R.id.toggleButton);
+        tvDesc = findViewById(R.id.tvDesc);
 
 
         movie = (GameSearch) Parcels.unwrap(getIntent().getParcelableExtra(GameSearch.class.getSimpleName()));
@@ -50,6 +67,47 @@ public class GameSearchDetailsActivity extends AppCompatActivity {
 
         tvTitle.setText(movie.getTitle());
         tvOverview.setText(movie.getOverview());
+
+        String tempID = movie.getID();
+        Log.i("id", tempID);
+        GAME_URL = GAME_URL + tempID + "?key=63502b95db9f41c99bb3d0ecf77aa811";
+        Log.i("id", GAME_URL);
+
+
+        AsyncHttpClient client = new AsyncHttpClient();
+
+
+        client.get(GAME_URL , new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Headers headers, JSON json) {
+                Log.d("sucess", "onSucess");
+                JSONObject jsonObject = json.jsonObject;
+                try {
+                    Log.i("id", jsonObject.getString("description_raw"));
+                    tvDesc.setText(jsonObject.getString("description_raw"));
+
+
+
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
+                try{
+                    JSONArray results = jsonObject.getJSONArray("results");
+                    Log.i("RETURN results", "Results" + results.toString());
+                    game.addAll(Game.fromJSONArray(results));
+                    Log.i("return list", "Movies" + game.toString());
+
+                } catch(JSONException e){
+                    Log.e("error", "hit json expception", e);
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+                Log.d("fail", "onFailure");
+            }
+        });
+
 
 
 //        float voteAverage = movie.getVoteAverage().floatValue();
@@ -62,7 +120,6 @@ public class GameSearchDetailsActivity extends AppCompatActivity {
                 .error(R.drawable.flicks_movie_placeholder)
                 .into(ivPoster);
 
-        String tempID = movie.getID();
         String favPath = movie.getPosterPath();
 
         ParseUser currentUser = ParseUser.getCurrentUser();
