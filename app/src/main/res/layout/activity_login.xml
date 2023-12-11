@@ -52,6 +52,8 @@
             android:layout_height="50dp"
             android:layout_below="@id/edtEmail"
             android:hint="Password"
+            android:textColorHighlight="@color/black"
+            android:textColor="@color/black"
             android:textColorHint="@color/black"
             android:layout_marginTop="13dp"
             android:layout_marginLeft="28dp"

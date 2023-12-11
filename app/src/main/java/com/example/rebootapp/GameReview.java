@@ -30,6 +30,7 @@ public class GameReview {
         title = game.getString("name");
         Log.i("Game Name", title);
         id = game.getString("id");
+        Log.i("Game ID", id);
         String decName = game.getString("metacritic");
         Log.i("name", decName);
         date = game.getString("released");
@@ -63,6 +64,8 @@ public class GameReview {
     public Double getVoteAverage() {
         return voteAverage;
     }
+
+    public String getId() {return id;}
 
 
 

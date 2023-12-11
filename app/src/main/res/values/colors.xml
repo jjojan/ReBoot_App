@@ -3,10 +3,13 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="maroon">#6A040F</color>
-    <color name="rust">#9D0208</color>
+    <color name="rust">#6E0E0E</color>
     <color name="dark_red">#370617</color>
     <color name="sun_orange">#E85D04</color>
     <color name="bright_red">#D00000</color>
     <color name="gray">#D3D3D3</color>
     <color name="blue">#0009ff</color>
+    <color name="blueberry">#124E78</color>
+    <color name="orange">#D74E09</color>
+    <color name="yellow">#F4C21C</color>
 </resources>

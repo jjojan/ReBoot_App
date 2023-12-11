@@ -15,10 +15,10 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_marginStart="0dp"
-        android:layout_marginTop="14dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="13dp"
         android:text="Movie Title"
-        android:textColor="@color/white"
+        android:textColor="@color/gray"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
         android:gravity="center"/>
 
@@ -31,28 +31,29 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_marginStart="-2dp"
-        android:layout_marginLeft="-2dp"
-        android:layout_marginTop="54dp"
-        android:layout_marginEnd="2dp"
-        android:layout_marginRight="2dp"
-        android:text="TextView"
-        android:textColor="@color/white"/>
+        android:layout_marginStart="3dp"
+        android:layout_marginLeft="3dp"
+        android:layout_marginTop="-392dp"
+        android:layout_marginEnd="-3dp"
+        android:layout_marginRight="-3dp"
+        android:gravity="center"
+        android:textColor="@color/gray"
+        android:textSize="20sp" />
 
     <RatingBar
         android:id="@+id/rbVoteAverage"
         style="@style/Widget.AppCompat.RatingBar.Small"
+        android:theme="@style/RatingBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/ivPoster"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
-        android:layout_marginStart="11dp"
-        android:layout_marginLeft="11dp"
-        android:layout_marginTop="41dp"
+        android:layout_marginStart="0dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="88dp"
         android:numStars="5"
-        android:stepSize="0.5"
-        android:outlineAmbientShadowColor="@color/white"/>
+        android:stepSize="0.5" />
 
     <ImageView
         android:id="@+id/ivPoster"
@@ -60,9 +61,22 @@
         android:layout_height="250dp"
         android:layout_below="@+id/tvTitle"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="0dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="-1dp"
         tools:srcCompat="@tools:sample/avatars" />
+
+    <ToggleButton
+        android:id="@+id/toggleButton"
+        android:layout_width="51dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ivPoster"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="26dp"
+        android:layout_marginEnd="357dp"
+        android:background="@drawable/heart_toggle_selector"
+        android:padding="10dp"
+        android:textOff=""
+        android:textOn="" />
 
     <com.colormoon.readmoretextview.ReadMoreTextView
         android:id="@+id/tvDesc"
@@ -72,6 +86,44 @@
         android:layout_alignBottom="@+id/rbVoteAverage"
         android:layout_marginEnd="25dp"
         android:layout_marginBottom="-104dp"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        android:textColor="@color/gray"
+        android:background="@color/black"/>
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="140dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/tvDesc"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="275dp"
+        android:layout_marginBottom="-70dp"
+        android:text="Reviews"
+        android:textColor="@color/gray"
+        android:textSize="24sp" />
+
+    <ImageButton
+        android:id="@+id/reviewButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/ivPoster"
+        android:layout_alignBottom="@+id/textView5"
+        android:layout_marginEnd="246dp"
+        android:layout_marginBottom="-4dp"
+        app:srcCompat="@drawable/baseline_create_24" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvReviews"
+        android:layout_width="match_parent"
+        android:layout_height="122dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="15dp"
+        android:layout_marginEnd="0dp"
+        android:layout_marginBottom="7dp"
+        android:paddingRight="4dp"
+        android:scrollbars="horizontal"
+        android:outlineAmbientShadowColor="@color/gray"/>
 
 </RelativeLayout>

@@ -51,7 +51,7 @@ public class GameReviewAdapter extends RecyclerView.Adapter<GameReviewAdapter.Vi
         TextView tvTitle;
         TextView tvDate;
 
-        TextView tvID;
+        String tvID;
         ImageView tvPoster;
 
         public ViewHolder(@NonNull View itemView){
@@ -59,9 +59,11 @@ public class GameReviewAdapter extends RecyclerView.Adapter<GameReviewAdapter.Vi
             tvTitle = itemView.findViewById(R.id.tvGameTitle);
             tvDate = itemView.findViewById(R.id.tvDate);
             tvPoster = itemView.findViewById(R.id.gamePoster);
+
         }
 
         public void bind(GameReview review) {
+            String id = review.getId();
             String date = review.getOverview();
             String[] arrOfStr = date.split("-", 2);
             tvTitle.setText(review.getTitle());

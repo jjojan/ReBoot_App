@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/black"
     tools:context=".GameDetailsActivity">
 
     <TextView
@@ -14,9 +15,10 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_marginStart="0dp"
-        android:layout_marginTop="14dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="13dp"
         android:text="Movie Title"
+        android:textColor="@color/gray"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
         android:gravity="center"/>
 
@@ -35,12 +37,13 @@
         android:layout_marginEnd="-3dp"
         android:layout_marginRight="-3dp"
         android:gravity="center"
-        android:text="TextView"
+        android:textColor="@color/gray"
         android:textSize="20sp" />
 
     <RatingBar
         android:id="@+id/rbVoteAverage"
         style="@style/Widget.AppCompat.RatingBar.Small"
+        android:theme="@style/RatingBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/ivPoster"
@@ -83,7 +86,9 @@
         android:layout_alignBottom="@+id/rbVoteAverage"
         android:layout_marginEnd="25dp"
         android:layout_marginBottom="-104dp"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        android:textColor="@color/gray"
+        android:background="@color/black"/>
 
     <TextView
         android:id="@+id/textView5"
@@ -94,6 +99,7 @@
         android:layout_marginEnd="275dp"
         android:layout_marginBottom="-70dp"
         android:text="Reviews"
+        android:textColor="@color/gray"
         android:textSize="24sp" />
 
     <ImageButton
@@ -117,7 +123,8 @@
         android:layout_marginEnd="0dp"
         android:layout_marginBottom="7dp"
         android:paddingRight="4dp"
-        android:scrollbars="horizontal" />
+        android:scrollbars="horizontal"
+        android:outlineAmbientShadowColor="@color/gray"/>
 
 
 </RelativeLayout>
