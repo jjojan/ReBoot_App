@@ -113,9 +113,10 @@
         android:id="@+id/tvLoginLink"
         android:text="Already have an account? Login here"
         android:textColor="@color/white"
-        android:layout_below="@+id/google_img"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="12dp"/>
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="13dp"/>
 
 
 </RelativeLayout>
