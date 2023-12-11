@@ -123,7 +123,6 @@
         android:layout_marginEnd="0dp"
         android:layout_marginBottom="7dp"
         android:paddingRight="4dp"
-        android:scrollbars="horizontal"
-        android:outlineAmbientShadowColor="@color/gray"/>
+        android:scrollbars="horizontal" />
 
 </RelativeLayout>

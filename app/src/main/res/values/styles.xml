@@ -12,4 +12,10 @@
         <item name="android:textColorSecondary">@color/gray</item>
         <item name="android:background">@color/black</item>
     </style>
+    <style name="Theme.MaterialComponents.DayNight" parent="Theme.MaterialComponents">
+        <item name="colorPrimary">@color/blueberry</item>
+    </style>
+    <style name="btnSignUpLink" parent="android:Widget.Button">
+        <item name="android:background">@color/black</item>
+    </style>
 </resources>

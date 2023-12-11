@@ -1,6 +1,8 @@
 package com.example.rebootapp;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -29,51 +31,82 @@ public class ReviewActivity extends AppCompatActivity {
         setContentView(R.layout.activity_review);
 
         TextView gameTitle = findViewById(R.id.tvTitleR);
+        Button btnSubmit = (Button) findViewById(R.id.btnSubmit);
 
-        EditText reviewText = findViewById(R.id.etReviewTextR);
-        String text = reviewText.getText().toString();
+
+
+        ImageView gamePoster = (ImageView) findViewById(R.id.ivPosterR);
+
+
 
         //Use the context from previous page to access game data
         review = (GameReview) Parcels.unwrap(getIntent().getParcelableExtra(GameReview.class.getSimpleName()));
-
-        String id = review.getId();
-        //Add ID to Parse backend under Review Object
-
-
-        gameTitle.setText(review.getTitle());
-
-        ImageView gamePoster = (ImageView) findViewById(R.id.ivPosterR);
         Glide.with(this)
                 .load(review.getPosterPath())
                 .placeholder(R.drawable.flicks_movie_placeholder)
                 .error(R.drawable.flicks_movie_placeholder)
                 .into(gamePoster);
+        String id = review.getId(); //Review ID? Maybe this is created upon creating new object
 
-        Button btnSubmit = (Button) findViewById(R.id.btnSubmit);
-
+        ParseUser currentUser = ParseUser.getCurrentUser();
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Submit data to backend.
-                ParseQuery<ParseObject> reviewQuery = ParseQuery.getQuery("Review");
-                ParseUser currentUser = ParseUser.getCurrentUser();
-
-                //ParseObject Review = new ParseObject("Review");
-                reviewQuery.whereEqualTo("ReviewUser", currentUser.getObjectId());
-                reviewQuery.whereEqualTo("ReviewUsername",currentUser.getUsername());
-                reviewQuery.whereEqualTo("ReviewText",text);
-                reviewQuery.getFirstInBackground(new GetCallback<ParseObject>() {
-                    @Override
-                    public void done(ParseObject object, ParseException e) {
-
-                    }
-                });
-
-                ParseObject Game = new ParseObject("Game");
-                Game.put("GameID", id);
+                EditText reviewText = findViewById(R.id.etReviewTextR);
+                String text = reviewText.getText().toString();
+                String userID = currentUser.getObjectId();
+                String username = currentUser.getUsername();
+                Log.i("Review", reviewText.getText().toString());
+                addReview(userID, username, text, id);
                 Toast.makeText(getApplicationContext(), "Review Submitted", Toast.LENGTH_SHORT).show();
+
+                Intent intent = new Intent(ReviewActivity.this, GameReviewDetailsActivity.class);
+                startActivity(intent);
             }
         });
 
     }
+    public void addReview(String UserID, String username, String reviewText, String id){
+
+        ParseObject object = new ParseObject("Review");
+        object.put("ReviewUser", UserID);
+        object.put("ReviewUsername", username);
+        object.put("ReviewText", reviewText);
+        object.put("GameID", id);
+        object.saveInBackground();
+
+        addGame(id, object);
+
+    }
+
+    public void addGame(String GameID, ParseObject review ){
+
+        try {
+            ParseQuery<ParseObject> query = ParseQuery.getQuery("Game");
+            query.whereEqualTo("GameID", GameID);
+            query.getFirstInBackground(new GetCallback<ParseObject>() {
+                @Override
+                public void done(ParseObject object, ParseException e) {
+                    if (e == null){
+                        Log.i("game exists", "already exists");
+                        object.add("ReviewArray", review);
+                        object.saveInBackground();
+                    }
+                    else {
+                        ParseObject game = new ParseObject("Game");
+                        game.put("GameID", GameID);
+                        game.add("ReviewArray", review);
+                        game.saveInBackground();
+                    }
+                }
+            });
+
+        }catch (Exception e){
+            System.out.println("Parse Error in Saving");
+        }
+
+
+    }
+
+
 }
