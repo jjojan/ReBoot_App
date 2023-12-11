@@ -2,6 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/etReview"
+    android:backgroundTint="@color/white"
+    android:background="@color/white"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -12,6 +14,8 @@
         android:ems="10"
         android:inputType="text"
         android:text="Write Review"
+        android:textColor="@color/black"
+        android:backgroundTint="@color/black"
         android:layout_marginHorizontal="20dp"
         tools:layout_editor_absoluteX="106dp"
         tools:layout_editor_absoluteY="216dp" />
