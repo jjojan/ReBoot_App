@@ -24,9 +24,8 @@ import com.colormoon.readmoretextview.ReadMoreTextView;
 import com.parse.CountCallback;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
-import com.parse.ParseObject;
 import com.parse.ParseException;
-import com.parse.ParseFile;
+import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
@@ -379,8 +378,6 @@ public class GameDetailsActivity extends AppCompatActivity {
 
 
     }
-
-
 
 
 }

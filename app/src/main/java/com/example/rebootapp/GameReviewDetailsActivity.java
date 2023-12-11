@@ -17,7 +17,7 @@ public class GameReviewDetailsActivity extends AppCompatActivity {
     GameReview review;
 
     // the view objects
-    TextView tvTitle;
+    TextView tvTitle = findViewById(R.id.tvTitle);
     TextView tvOverview;
     RatingBar rbVoteAverage;
     ImageView ivPoster;
@@ -30,7 +30,7 @@ public class GameReviewDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_details);
 
-        tvTitle = (TextView) findViewById(R.id.tvTitle);
+
         tvOverview = (TextView) findViewById(R.id.tvOverview);
         rbVoteAverage = (RatingBar) findViewById(R.id.rbVoteAverage);
 
@@ -38,7 +38,10 @@ public class GameReviewDetailsActivity extends AppCompatActivity {
         review = (GameReview) Parcels.unwrap(getIntent().getParcelableExtra(GameReview.class.getSimpleName()));
         Log.d("MovieDetailsActivity", String.format("Showing details for '%s'", review.getTitle()));
 
-        tvTitle.setText(review.getTitle());
+        //
+        tvTitle.setText(review.getTitle().toString());
+        Log.i("Title", tvTitle.getText().toString());
+
         tvOverview.setText(review.getOverview());
 
 

@@ -12,14 +12,13 @@
         <item name="android:textColorSecondary">@color/gray</item>
         <item name="android:background">@color/black</item>
     </style>
+
     <style name="Theme.MaterialComponents.DayNight" parent="Theme.MaterialComponents">
         <item name="colorPrimary">@color/gray</item>
         <item name="colorSecondary">@color/blueberry</item>
         <item name="android:textColor">@color/black</item>
         <item name="hintTextColor">@color/black</item>
-        <item name="colorControlNormal">@color/black</item>
-        <item name="colorControlActivated">@color/black</item>
-        <item name="colorControlHighlight">@color/black</item>
+
     </style>
     <style name="btnSignUpLink" parent="android:Widget.Button">
         <item name="android:background">@color/black</item>

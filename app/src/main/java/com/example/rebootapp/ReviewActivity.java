@@ -41,6 +41,7 @@ public class ReviewActivity extends AppCompatActivity {
 
         //Use the context from previous page to access game data
         review = (GameReview) Parcels.unwrap(getIntent().getParcelableExtra(GameReview.class.getSimpleName()));
+        gameTitle.setText(review.getTitle());
         Glide.with(this)
                 .load(review.getPosterPath())
                 .placeholder(R.drawable.flicks_movie_placeholder)
