@@ -52,18 +52,29 @@
         android:background="@drawable/edt_background"
         android:paddingLeft="13dp"/>
 
-    <EditText
-        android:id="@+id/edtPassword"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/inputLayout"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_below="@id/edtEmail"
-        android:hint="Password"
-        android:textColorHint="@color/black"
-        android:layout_marginTop="13dp"
-        android:layout_marginLeft="28dp"
-        android:layout_marginRight="28dp"
-        android:background="@drawable/edt_background"
-        android:paddingLeft="13dp"/>
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/edtEmail"
+        android:textColorHint="@color/black">
+        <EditText
+            android:id="@+id/edtPassword"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_below="@id/edtEmail"
+            android:hint="Password"
+            android:textColorHighlight="@color/black"
+            android:textColor="@color/black"
+            android:textColorHint="@color/black"
+            android:layout_marginTop="13dp"
+            android:layout_marginLeft="28dp"
+            android:layout_marginRight="28dp"
+            android:background="@drawable/edt_background"
+            android:inputType="textPassword"
+            android:paddingLeft="13dp"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
 
     <Button
         android:id="@+id/btnSignUp"
@@ -71,7 +82,7 @@
         android:layout_height="wrap_content"
         android:text="Sign Up"
         android:textColor="@color/black"
-        android:layout_below="@id/edtPassword"
+        android:layout_below="@id/inputLayout"
         android:layout_centerHorizontal="true"
         android:background="@drawable/btn_background"
         android:layout_marginTop="13dp"

@@ -5,7 +5,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_alignParentBottom="false"
-    android:background="@color/white"
+    android:background="@color/gray"
     android:visibility="visible"
     tools:context=".ProfileFragment">
 
@@ -29,8 +29,6 @@
         android:layout_marginRight="375dp"
         android:layout_toRightOf="@id/tv_Username"
         android:textAlignment="textEnd"
-        android:textColor="@color/black"
-        android:background="@color/white"
         android:textSize="20sp" />
 
     <TextView
@@ -40,7 +38,6 @@
         android:layout_marginLeft="25dp"
         android:layout_marginTop="175dp"
         android:text="Username: "
-        android:textColor="@color/black"
         android:textSize="24sp" />
 
     <ImageView
@@ -61,7 +58,6 @@
         android:layout_marginLeft="25dp"
         android:layout_marginTop="225dp"
         android:text="Email:"
-        android:textColor="@color/black"
         android:textSize="24sp" />
 
     <TextView
@@ -71,7 +67,6 @@
         android:layout_alignBaseline="@id/textView3"
         android:layout_alignLeft="@id/tvUser_Username"
         android:textAlignment="textEnd"
-        android:textColor="@color/black"
         android:textSize="20sp" />
 
     <TextView
@@ -81,8 +76,6 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="275dp"
         android:text="Bio"
-
-        android:textColor="@color/black"
         android:textSize="24sp" />
 
     <TextView
@@ -91,8 +84,7 @@
         android:layout_height="160dp"
         android:layout_below="@id/textView6"
         android:layout_centerHorizontal="true"
-        android:textSize="16sp"
-        android:textColor="@color/black"/>
+        android:textSize="16sp" />
 
     <ImageButton
         android:id="@+id/Friends"

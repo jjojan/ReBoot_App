@@ -93,6 +93,14 @@ public class SignUp extends AppCompatActivity {
             }
         });
 
+        tvLoginLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SignUp.this, Login.class);
+                startActivity(intent);
+            }
+        });
+
 
     }
 
@@ -103,7 +111,6 @@ public class SignUp extends AppCompatActivity {
         if(account == null){
             //If GoogleSignIn.getLastSignedInAccount returns null, the user has not yet signed in to your app with Google. Update your UI to display the Google Sign-in button.
             updateUI(account);
-            Toast.makeText(getApplicationContext(), "User has not yet signed into ReBoot with Google", Toast.LENGTH_SHORT).show();
         } else{
             //Update your UI accordingly—that is, hide the sign-in button, launch your main activity, or whatever is appropriate for your app.
             Toast.makeText(getApplicationContext(), "Users Google info has been saved.", Toast.LENGTH_SHORT).show();

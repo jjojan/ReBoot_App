@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/black"
     tools:context=".Login">
 
@@ -45,7 +46,8 @@
         android:id="@+id/inputLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/edtEmail">
+        android:layout_below="@+id/edtEmail"
+        android:textColorHint="@color/black">
         <EditText
             android:id="@+id/edtPassword"
             android:layout_width="match_parent"
@@ -95,16 +97,17 @@
         android:layout_below="@id/tvLoginLink"
         android:id="@+id/google_img_login"/>
 
-    <Button
+    <TextView
         android:id="@+id/btnSignUpLink"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@color/black"
         android:backgroundTint="@null"
-        android:text="@string/or_sign_up"
+        android:text="Don't have an Account? Sign Up Here"
+        android:textSize="13dp"
         android:textColor="@color/white"
-        android:theme="@style/Theme.AppCompat"
         android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"/>
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="13dp"/>
 
 </RelativeLayout>

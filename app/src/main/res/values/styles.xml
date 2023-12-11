@@ -16,6 +16,7 @@
         <item name="colorPrimary">@color/blueberry</item>
         <item name="colorSecondary">@color/blueberry</item>
         <item name="android:textColor">@color/black</item>
+        <item name="hintTextColor">@color/black</item>
     </style>
     <style name="btnSignUpLink" parent="android:Widget.Button">
         <item name="android:background">@color/black</item>
