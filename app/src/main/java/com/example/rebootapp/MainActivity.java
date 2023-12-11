@@ -1,6 +1,7 @@
 package com.example.rebootapp;
 
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -12,11 +13,6 @@ import androidx.fragment.app.FragmentManager;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.parceler.Parcels;
 
 import java.util.List;
 
@@ -32,6 +28,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+        Resources.Theme theme = this.getTheme();
+        bottomNavigationView.setBackgroundColor(getResources().getColor(R.color.black));
         final FragmentManager fragmentManager = getSupportFragmentManager();
 
         Intent intent = getIntent();
