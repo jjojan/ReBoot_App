@@ -1,13 +1,18 @@
 package com.example.rebootapp;
 
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RatingBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -38,7 +43,7 @@ import java.util.List;
 
 import okhttp3.Headers;
 
-public class GameDetailsActivity extends AppCompatActivity {
+public class GameDetailsActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     Game movie;
 
@@ -67,6 +72,8 @@ public class GameDetailsActivity extends AppCompatActivity {
 
     ReadMoreTextView tvDesc;
     int saveFavoriteQueue = 0;
+
+    public Spinner spinnerTextSize;
 
     String GAME_URL = "https://api.rawg.io/api/games/";
 
@@ -157,6 +164,7 @@ public class GameDetailsActivity extends AppCompatActivity {
 
 
 
+
         checkMovieID(currentUserID, tempID, new QueryCheckCallback() {
             @Override
             public void onResult(boolean isEmpty) {
@@ -179,7 +187,15 @@ public class GameDetailsActivity extends AppCompatActivity {
 
 
 
+        spinnerTextSize = findViewById(R.id.spinnerTextSize);
 
+        spinnerTextSize.setOnItemSelectedListener(this);
+
+        String[] textSizes = getResources().getStringArray(R.array.font_sizes);
+        ArrayAdapter adapter = new ArrayAdapter(this,
+                android.R.layout.simple_spinner_item, textSizes);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
+        spinnerTextSize.setAdapter(adapter);
 
 
     }
@@ -365,6 +381,16 @@ public class GameDetailsActivity extends AppCompatActivity {
                 builder.show();
             }
         });
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
     }
 
     public interface QueryCheckCallback {

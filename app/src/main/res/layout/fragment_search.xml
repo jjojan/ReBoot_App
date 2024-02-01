@@ -16,14 +16,15 @@
 
 <!--        />-->
 
-   <SearchView
-    android:id="@+id/svSearch"
-       app:theme="@style/svSearch"
-    android:layout_width="match_parent"
-    android:layout_height="72dp"
-    android:queryHint="Search Games"
-       android:fontFamily="monospace"
-    android:searchSuggestSelection=" ?" />
+    <SearchView
+        android:id="@+id/svSearch"
+        android:layout_width="match_parent"
+        android:layout_height="72dp"
+        android:fontFamily="monospace"
+        android:queryHint="Search Games"
+        android:searchSuggestSelection=" ?"
+        app:theme="@style/svSearch" />
+
     <TextView
         android:id="@+id/tvSearchResults"
         android:layout_width="match_parent"
