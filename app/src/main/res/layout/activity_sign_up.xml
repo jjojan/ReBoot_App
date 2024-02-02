@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black"
+    android:background="@color/gray"
     tools:context=".SignUp">
 
     <ImageView
@@ -21,7 +21,7 @@
         android:layout_below="@+id/ivRebootLogo"
         android:layout_marginTop="0dp"
         android:text="Get Started with ReBoot"
-        android:textColor="@color/gray"
+        android:textColor="@color/black"
         android:layout_centerHorizontal="true"
         android:autoSizeTextType="uniform"
         android:textSize="25dp"

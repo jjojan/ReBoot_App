@@ -1,14 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
+    <color name="black">#90000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="maroon">#6A040F</color>
     <color name="rust">#6E0E0E</color>
     <color name="dark_red">#370617</color>
     <color name="sun_orange">#E85D04</color>
     <color name="bright_red">#D00000</color>
-    <color name="gray">#D3D3D3</color>
+    <color name="gray">#9579717A</color>
     <color name="blueberry">#124E78</color>
     <color name="orange">#D74E09</color>
     <color name="yellow">#F4C21C</color>
+
+    <color name="taupe">#40A6998F</color>
+    <color name="eggshell">#F2EADF</color>
+    <color name="brown">#262521</color>
+    <color name="armygreen">#595739</color>
+    <color name="pear">#70732D</color>
+    <color name="aqua">#2B3743</color>
+    <color name="aqua1">#902B3743</color>
 </resources>
