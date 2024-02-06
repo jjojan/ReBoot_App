@@ -2,11 +2,15 @@ package com.example.rebootapp;
 
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.Window;
+import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -29,7 +33,18 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         Resources.Theme theme = this.getTheme();
-        bottomNavigationView.setBackgroundColor(getResources().getColor(R.color.black));
+        bottomNavigationView.setBackgroundColor(getResources().getColor(R.color.aqua));
+
+        Window window = getWindow();
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        int colorCodeDark = Color.parseColor("#2B3743");
+        window.setStatusBarColor(colorCodeDark);
+
+        ActionBar actionBar;
+        actionBar= getSupportActionBar();
+        assert actionBar != null;
+        actionBar.setBackgroundDrawable(bottomNavigationView.getBackground());
+
         final FragmentManager fragmentManager = getSupportFragmentManager();
 
         Intent intent = getIntent();

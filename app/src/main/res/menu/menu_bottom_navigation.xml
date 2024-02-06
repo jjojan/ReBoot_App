@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:background="@color/black">
+    android:background="@color/aqua">
 
     <item
         android:id="@+id/mHome"
@@ -18,13 +18,13 @@
     <item
         android:id="@+id/mEvents"
         android:icon="@drawable/baseline_create_24"
-        android:iconTint="@color/black"
+        android:iconTint="@color/white"
         android:title="Review"
         app:showAsAction="always" />
     <item
         android:id="@+id/mCart"
         android:icon="@drawable/baseline_person_24"
-        android:iconTint="@color/black"
+        android:iconTint="@color/white"
         android:title="Profile"
         app:showAsAction="always" />
 </menu>

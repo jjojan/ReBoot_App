@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
-    android:background="@color/taupe"
+    android:background="@color/white"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -12,7 +12,7 @@
         android:text="Popular Games"
         android:textSize="25dp"
         android:textStyle="bold"
-        android:textColor="@color/gray"
+        android:textColor="@color/aqua"
         android:layout_marginVertical="13dp"/>
 
     <androidx.recyclerview.widget.RecyclerView
@@ -20,7 +20,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:scrollbars="horizontal"
-        android:outlineAmbientShadowColor="@color/gray"/>
+        android:outlineAmbientShadowColor="@color/aqua"/>
 
     <TextView
         android:id="@+id/textView"
@@ -29,14 +29,14 @@
         android:text="New Games"
         android:textSize="25dp"
         android:textStyle="bold"
-        android:textColor="@color/gray"
+        android:textColor="@color/aqua"
         android:layout_marginVertical="13dp"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/newGamesRV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:outlineAmbientShadowColor="@color/gray"/>
+        android:outlineAmbientShadowColor="@color/aqua"/>
 
     <TextView
         android:id="@+id/textView4"
@@ -45,14 +45,14 @@
         android:text="Upcoming Games"
         android:textSize="25dp"
         android:textStyle="bold"
-        android:textColor="@color/gray"
+        android:textColor="@color/aqua"
         android:layout_marginVertical="13dp"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvYourGames"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:outlineAmbientShadowColor="@color/gray"/>
+        android:outlineAmbientShadowColor="@color/aqua"/>
 
 
 </LinearLayout>
