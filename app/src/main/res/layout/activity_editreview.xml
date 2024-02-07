@@ -14,9 +14,10 @@
         android:ems="10"
         android:inputType="text"
         android:text="Write Review"
-        android:textColor="@color/black"
-        android:backgroundTint="@color/black"
+        android:textColor="@color/aqua"
+        android:backgroundTint="@color/aqua1"
         android:layout_marginHorizontal="20dp"
         tools:layout_editor_absoluteX="106dp"
-        tools:layout_editor_absoluteY="216dp" />
+        tools:layout_editor_absoluteY="216dp"
+        />
 </LinearLayout>

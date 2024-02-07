@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_alignParentBottom="false"
-    android:background="@color/gray"
+    android:background="@color/white"
     android:visibility="visible"
     tools:context=".FavoriteGamesActivity">
 
@@ -16,7 +16,8 @@
         android:layout_alignParentTop="true"
         android:text="Favorite Games"
         android:textAlignment="center"
-        android:textSize="34sp" />
+        android:textSize="34sp"
+        android:textColor="@color/aqua"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_games_list"
