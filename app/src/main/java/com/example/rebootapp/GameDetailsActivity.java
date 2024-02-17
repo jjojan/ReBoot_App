@@ -75,6 +75,8 @@ public class GameDetailsActivity extends AppCompatActivity implements AdapterVie
 
     public Spinner spinnerTextSize;
 
+    ImageView enter;
+
     String GAME_URL = "https://api.rawg.io/api/games/";
 
     @Override
@@ -91,6 +93,7 @@ public class GameDetailsActivity extends AppCompatActivity implements AdapterVie
         heartButton = findViewById(R.id.toggleButton);
         tvDesc = findViewById(R.id.tvDesc);
         reviewButton = findViewById(R.id.reviewButton);
+        enter = findViewById(R.id.add);
 
 
         showWriteReview();
@@ -185,6 +188,16 @@ public class GameDetailsActivity extends AppCompatActivity implements AdapterVie
         });
 
 
+        enter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String text = favPath;
+                addListGame(currentUserID, tempID, favPath);
+            }
+        });
+
+
+
 
 
         spinnerTextSize = findViewById(R.id.spinnerTextSize);
@@ -209,6 +222,15 @@ public class GameDetailsActivity extends AppCompatActivity implements AdapterVie
 
     }
 
+    public void addListGame(String UserID, String gameID, String path){
+        ParseObject object = new ParseObject("ListGames");
+        object.put("user_id", UserID);
+        object.put("game_id", gameID);
+        object.put("picture_uri", path);
+        object.saveInBackground();
+
+    }
+
     public void addReview(String UserID, String username, String reviewText){
 
         ParseObject object = new ParseObject("Review");
@@ -223,6 +245,8 @@ public class GameDetailsActivity extends AppCompatActivity implements AdapterVie
 
 
     }
+
+
 
     public void displayReviews(){
 
