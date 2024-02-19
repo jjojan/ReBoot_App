@@ -48,7 +48,6 @@ public class ProfileFragment extends Fragment {
 
     Context context;
     Button btnSignOut;
-    //Button btnUploadImage;
     ImageButton Friends;
     ImageButton Starred;
     ImageButton EditProfile;
@@ -57,30 +56,19 @@ public class ProfileFragment extends Fragment {
     TextView tvUser_Username;
     TextView tvUser_Email;
     TextView bio;
-
     ImageView ProfilePic;
     private static final int PICK_IMAGE_REQUEST = 1;
     ActivityResultLauncher<Intent> resultLauncher;
     Uri profile_Uri;
-
-
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
         }
-
-
     }
 
-    public void pickImage(){
-        Intent intent = new Intent(MediaStore.ACTION_PICK_IMAGES);
-        resultLauncher.launch(intent);
-    }
-
-    public void registerResult(){
+    public void registerResult() {
         resultLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 new ActivityResultCallback<ActivityResult>() {
@@ -90,8 +78,7 @@ public class ProfileFragment extends Fragment {
                             Uri imageUri = result.getData().getData();
                             ProfilePic.setImageURI(imageUri);
                             profile_Uri = imageUri;
-                        }
-                        catch (Exception e){
+                        } catch (Exception e) {
                             System.out.println("no image selected");
                         }
                     }
@@ -99,12 +86,10 @@ public class ProfileFragment extends Fragment {
         );
     }
 
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
         btnSignOut = view.findViewById(R.id.btnSignOut);
-
         tvUser_Username = view.findViewById(R.id.tvUser_Username);
         tvUser_Email = view.findViewById(R.id.tvUser_Email);
         ProfilePic = view.findViewById(R.id.ProfilePic);
@@ -113,18 +98,11 @@ public class ProfileFragment extends Fragment {
         EditProfile = view.findViewById(R.id.EditProfile);
         bio = view.findViewById(R.id.textView7);
 
-
-
-
-        GoogleSignInOptions gso = new  GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail().build();
         GoogleSignInClient gsc = GoogleSignIn.getClient(getActivity(), gso);
 
         refreshProfile();
-
-
-
-
 
 
         btnSignOut.setOnClickListener(new View.OnClickListener() {
@@ -147,8 +125,7 @@ public class ProfileFragment extends Fragment {
 
                         }
                     });
-                }
-                else{
+                } else {
                     //Get current Parse User
                     ParseUser currentUser = ParseUser.getCurrentUser();
                     if (currentUser != null) {
@@ -167,10 +144,6 @@ public class ProfileFragment extends Fragment {
             }
 
         });
-
-
-
-
 
 
         // Inflate the layout for this fragment
@@ -196,15 +169,23 @@ public class ProfileFragment extends Fragment {
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), FavoriteGamesActivity.class);
                 getActivity().startActivity(intent);
+
+
+
+
+
+
+
+
             }
         });
 
 
-
-
     }
 
-    public void refreshProfile(){
+
+
+    public void refreshProfile() {
         ParseUser currentUser = ParseUser.getCurrentUser();
         String currentUserObjectID = currentUser.getObjectId();
         ParseQuery<ParseObject> query = ParseQuery.getQuery("_User");
@@ -213,7 +194,7 @@ public class ProfileFragment extends Fragment {
         query.getInBackground(currentUserObjectID, new GetCallback<ParseObject>() {
             @Override
             public void done(ParseObject object, ParseException e) {
-                if (e == null){
+                if (e == null) {
                     tvUser_Username.setText(object.getString("username"));
                     tvUser_Email.setText(object.getString("email"));
                     bio.setText(object.getString("bio"));
@@ -223,12 +204,11 @@ public class ProfileFragment extends Fragment {
                     if (image != null) {
                         imageUrl = image.getUrl();
                         Picasso.get().load(imageUrl).into(ProfilePic);
+                    } else {
                     }
-                    else {}
 
 
-                }
-                else {
+                } else {
 
                     System.out.println(e.toString());
                 }
@@ -237,7 +217,7 @@ public class ProfileFragment extends Fragment {
     }
 
     @Override
-    public void onStart(){
+    public void onStart() {
         super.onStart();
         refreshProfile();
 //        ParseUser currentUser = ParseUser.getCurrentUser();
@@ -274,8 +254,5 @@ public class ProfileFragment extends Fragment {
     }
 
 
-
-
-
-
 }
+

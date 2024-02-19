@@ -98,7 +98,7 @@ public class FavoriteGamesAdapter extends RecyclerView.Adapter<FavoriteGamesAdap
                         if (e == null){
                             String id = object.getString("game_id");
                             System.out.println(id);
-                            //String search = "https://api.rawg.io/api/games?key=63502b95db9f41c99bb3d0ecf77aa811&id=" + id;
+
                             String search = "https://api.rawg.io/api/games/" + id + "?key=63502b95db9f41c99bb3d0ecf77aa811";
                             AsyncHttpClient client = new AsyncHttpClient();
                             client.get(search, new JsonHttpResponseHandler() {
