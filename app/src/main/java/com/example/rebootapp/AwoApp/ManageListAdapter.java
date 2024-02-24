@@ -42,14 +42,14 @@ public class ManageListAdapter extends RecyclerView.Adapter<ManageListAdapter.Vi
         this.context = context;
     }
 
-    // ViewHolder'ı inflate et
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = mInflater.inflate(R.layout.row_userlist, parent, false);
         return new ViewHolder(view);
     }
 
-    // Veriyi bağla
+
     @Override
     public void onBindViewHolder(ManageListAdapter.ViewHolder holder, int position) {
         String listName = userListModelArrayList.get(position).getListName();
@@ -60,42 +60,42 @@ public class ManageListAdapter extends RecyclerView.Adapter<ManageListAdapter.Vi
                 @Override
                 public void onClick(View view) {
                     UserListModel userModel = userListModelArrayList.get(position);
-                    String objectId = userModel.getObjectID(); // Silinecek CustomUserList nesnesinin objectId'i
+                    String objectId = userModel.getObjectID();
 
-                    // AlertDialog ile kullanıcıdan silme işlemi için onay iste
+
                     new AlertDialog.Builder(mInflater.getContext())
-                            .setTitle("Delete List") // Dialog başlığı
-                            .setMessage("Are you sure you want to delete this list?") // Dialog mesajı
+                            .setTitle("Delete List")
+                            .setMessage("Are you sure you want to delete this list?")
                             .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
-                                    // Kullanıcı "Yes" dediğinde, silme işlemi yap
+
                                     ParseQuery<ParseObject> query = ParseQuery.getQuery("CustomUserList");
                                     query.getInBackground(objectId, new GetCallback<ParseObject>() {
                                         @Override
                                         public void done(ParseObject object, ParseException e) {
                                             if (e == null && object != null) {
-                                                // Nesneyi sil
+
                                                 object.deleteInBackground(e1 -> {
                                                     if (e1 == null) {
-                                                        // Silme işlemi başarılı, listeyi güncelle
+
                                                         userListModelArrayList.remove(position);
                                                         notifyItemRemoved(position);
                                                         notifyItemRangeChanged(position, userListModelArrayList.size());
                                                         Toast.makeText(mInflater.getContext(), "List successfully deleted", Toast.LENGTH_SHORT).show();
                                                     } else {
-                                                        // Silme işlemi sırasında hata oluştu
+
                                                         Toast.makeText(mInflater.getContext(), "Error deleting list: " + e1.getMessage(), Toast.LENGTH_SHORT).show();
                                                     }
                                                 });
                                             } else {
-                                                // Sorgu sırasında hata oluştu
+
                                                 Toast.makeText(mInflater.getContext(), "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                                             }
                                         }
                                     });
                                 }
                             })
-                            .setNegativeButton(android.R.string.no, null) // Kullanıcı "No" dediğinde hiçbir şey yapma
+                            .setNegativeButton(android.R.string.no, null)
                             .setIcon(android.R.drawable.ic_dialog_alert)
                             .show();
                 }
@@ -108,15 +108,15 @@ public class ManageListAdapter extends RecyclerView.Adapter<ManageListAdapter.Vi
             });
     }
     public void gameListDialog(int position) {
-        // Inflate the custom layout using layout inflater
+
         LayoutInflater inflater = LayoutInflater.from(context);
         View customView = inflater.inflate(R.layout.layout_user_list, null);
 
-        // Apply the custom style to the AlertDialog
+
         AlertDialog.Builder listDialog = new AlertDialog.Builder(
                 new androidx.appcompat.view.ContextThemeWrapper(context, R.style.AlertDialogCustom));
 
-        listDialog.setView(customView); // Set the custom view for the dialog
+        listDialog.setView(customView);
         AlertDialog userListDialogBuilder = listDialog.create();
 
         Button btnAddNewList=customView.findViewById(R.id.btnNewList);
@@ -142,13 +142,13 @@ public class ManageListAdapter extends RecyclerView.Adapter<ManageListAdapter.Vi
 
         userListDialogBuilder.show();
     }
-    // Toplam öğe sayısı
+
     @Override
     public int getItemCount() {
         return userListModelArrayList.size();
     }
 
-    // Veri ile doldurulacak row'u tutacak ViewHolder
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView tvListName;
         ImageView imgAdd;

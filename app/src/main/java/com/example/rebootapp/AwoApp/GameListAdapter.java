@@ -26,24 +26,24 @@ import java.util.List;
 
 public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHolder> {
 
-//    private ArrayList<UserListModel> userListModelArrayList;
+
     private UserListModel userListModel;
     private LayoutInflater mInflater;
-    // Veriler ve Context ile constructor
+
     public GameListAdapter(Context context,UserListModel userListModel) {
         this.mInflater = LayoutInflater.from(context);
 
         this.userListModel = userListModel;
     }
 
-    // ViewHolder'ı inflate et
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = mInflater.inflate(R.layout.row_userlist, parent, false);
         return new ViewHolder(view);
     }
 
-    // Veriyi bağla
+
     @Override
     public void onBindViewHolder(GameListAdapter.ViewHolder holder, int position) {
         String listName = userListModel.getGameName().get(position);
@@ -53,21 +53,21 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHo
         holder.imgAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String objectId = userListModel.getObjectID(); // Güncellenecek CustomUserList nesnesinin objectId'i
+                String objectId = userListModel.getObjectID();
 
-                // AlertDialog ile kullanıcıdan oyunu silme işlemi için onay iste
+
                 new AlertDialog.Builder(mInflater.getContext())
                         .setTitle("Delete Game") // Dialog başlığı
-                        .setMessage("Are you sure you want to delete this game from the list?") // Dialog mesajı
+                        .setMessage("Are you sure you want to delete this game from the list?")
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
-                                // Kullanıcı "Yes" dediğinde, oyunu silme işlemi yap
+
                                 ParseQuery<ParseObject> query = ParseQuery.getQuery("CustomUserList");
                                 query.getInBackground(objectId, new GetCallback<ParseObject>() {
                                     @Override
                                     public void done(ParseObject customUserList, ParseException e) {
                                         if (e == null && customUserList != null) {
-                                            // İlgili listelerden oyun bilgilerini çıkar
+
                                             List<String> gameIDs = customUserList.getList("gameID");
                                             List<String> gameNames = customUserList.getList("gameName");
                                             List<String> gamePreviewLinks = customUserList.getList("gamePreviewLink");
@@ -80,29 +80,29 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHo
                                             customUserList.put("gameName", gameNames);
                                             customUserList.put("gamePreviewLink", gamePreviewLinks);
 
-                                            // Güncellemeleri Parse'a kaydet
+
                                             customUserList.saveInBackground(e1 -> {
                                                 if (e1 == null) {
-                                                    // Oyun silme işlemi başarılı
+
                                                     userListModel.getGameID().remove(position);
                                                     userListModel.getGameName().remove(position);
                                                     userListModel.getGamePreviewLink().remove(position);
                                                     notifyDataSetChanged();
                                                     Toast.makeText(mInflater.getContext(), "Game successfully deleted from the list", Toast.LENGTH_SHORT).show();
                                                 } else {
-                                                    // Silme işlemi sırasında hata oluştu
+
                                                     Toast.makeText(mInflater.getContext(), "Error deleting game: " + e1.getMessage(), Toast.LENGTH_SHORT).show();
                                                 }
                                             });
                                         } else {
-                                            // Sorgu sırasında hata oluştu
+
                                             Toast.makeText(mInflater.getContext(), "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                                         }
                                     }
                                 });
                             }
                         })
-                        .setNegativeButton(android.R.string.no, null) // Kullanıcı "No" dediğinde hiçbir şey yapma
+                        .setNegativeButton(android.R.string.no, null)
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         .show();
             }
@@ -110,13 +110,13 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHo
 
     }
 
-    // Toplam öğe sayısı
+
     @Override
     public int getItemCount() {
         return userListModel.getGameID().size();
     }
 
-    // Veri ile doldurulacak row'u tutacak ViewHolder
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView tvListName;
         ImageView imgAdd,imgPreview;
