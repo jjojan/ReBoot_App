@@ -30,7 +30,7 @@ import okhttp3.Headers;
 
 public class SearchFragment extends Fragment {
 
-    List<GameSearch> searchGames; //Game Model List for RecyclerView&Adapter
+    List<GameSearch> searchGames; //GameModel Model List for RecyclerView&Adapter
 
     String search_term = "";//"spiderman" + "&ordering=-added"; //Test String
     private MenuItem menuItem;
@@ -101,7 +101,7 @@ public class SearchFragment extends Fragment {
 //                try {
 //                    JSONArray results = jsonObject.getJSONArray("results");
 //                    //Log.i(TAG, "Results" + results.toString());
-//                    Games.addAll(Game.fromJSONArray(results));
+//                    Games.addAll(GameModel.fromJSONArray(results));
 //                    searchGameAdapter.notifyDataSetChanged();
 //                    println("hello");
 //                    //Log.i(TAG, "Movies" + searchGame.size());

@@ -1,13 +1,13 @@
 package com.example.rebootapp;
 
-import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -26,6 +26,8 @@ import com.bumptech.glide.Glide;
 import com.codepath.asynchttpclient.AsyncHttpClient;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 import com.colormoon.readmoretextview.ReadMoreTextView;
+import com.example.rebootapp.AwoApp.UserListModel;
+import com.example.rebootapp.AwoApp.UserListNamesAdapter;
 import com.parse.CountCallback;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
@@ -33,12 +35,14 @@ import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.parceler.Parcels;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.Headers;
@@ -103,6 +107,10 @@ public class GameDetailsActivity extends AppCompatActivity implements AdapterVie
 
                 movie = (Game) Parcels.unwrap(getIntent().getParcelableExtra(Game.class.getSimpleName()));
         Log.d("MovieDetailsActivity", String.format("Showing details for '%s'", movie.getTitle()));
+        Log.i("MARDUK",
+                "Tıtle: "+movie.getTitle()+"\nOverView: "+movie.getOverview()+"\n ID: "+movie.getID()+
+                        "\nBackgropPath: "+movie.getBackdropPath()+
+                        "\nPosterPath: "+movie.getPosterPath()+"\nVote: "+movie.getVoteAverage());
         tempID = movie.getID();
         displayReviews();
         tvTitle.setText(movie.getTitle());
@@ -137,7 +145,7 @@ public class GameDetailsActivity extends AppCompatActivity implements AdapterVie
         client.get(GAME_URL , new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Headers headers, JSON json) {
-                Log.d("sucess", "onSucess");
+                Log.d("sucess", "");
                 JSONObject jsonObject = json.jsonObject;
                 try {
                     Log.i("id", jsonObject.getString("description_raw"));
@@ -191,8 +199,10 @@ public class GameDetailsActivity extends AppCompatActivity implements AdapterVie
         enter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String text = favPath;
-                addListGame(currentUserID, tempID, favPath);
+                addToUserListDialog();
+//                String text = favPath;
+//                addListGame(currentUserID, tempID, favPath);
+
             }
         });
 
@@ -212,7 +222,153 @@ public class GameDetailsActivity extends AppCompatActivity implements AdapterVie
 
 
     }
+    public void addToUserListDialog() {
+        // Inflate the custom layout using layout inflater
+        LayoutInflater inflater = LayoutInflater.from(this);
+        View customView = inflater.inflate(R.layout.layout_user_list, null);
 
+        // Apply the custom style to the AlertDialog
+        AlertDialog.Builder listDialog = new AlertDialog.Builder(
+                new androidx.appcompat.view.ContextThemeWrapper(this, R.style.AlertDialogCustom));
+
+        listDialog.setView(customView); // Set the custom view for the dialog
+        AlertDialog userListDialogBuilder = listDialog.create();
+
+        Button btnAddNewList=customView.findViewById(R.id.btnNewList);
+        Button btnClose=customView.findViewById(R.id.btnClose);
+        RecyclerView recyclerView=customView.findViewById(R.id.recyclerView);
+        btnAddNewList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                userListDialogBuilder.dismiss();
+                createNewList();
+            }
+        });
+        btnClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+            userListDialogBuilder.dismiss();
+            }
+        });
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        String userId = currentUser.getObjectId();
+                ParseQuery<ParseObject> query = ParseQuery.getQuery("CustomUserList");
+                query.whereEqualTo("userID", userId); // objectId'ler içinde sorgula
+                query.findInBackground(new FindCallback<ParseObject>() {
+                    @Override
+                    public void done(List<ParseObject> customUserLists, ParseException e) {
+                        if (e == null) {
+                            // Sorgu başarılı, listName'leri çekiyoruz
+                            ArrayList<UserListModel> userListModelArrayList = new ArrayList<>();
+                            for (ParseObject object : customUserLists) {
+                                String listName = object.getString("listName");
+                                List<String> gameName = object.getList("gameName");
+                                List<String> gamePreviewLink = object.getList("gamePreviewLink");
+                                String userID = object.getString("userID");
+                                List<String> gameID = object.getList("gameID");
+                                String objectID = object.getObjectId(); // ParseObject'in kendine özgü ID'si
+
+                                // Model nesnesini oluştur ve listeye ekle
+                                UserListModel model = new UserListModel(listName, gameName,
+                                        gamePreviewLink,gameID, userID, objectID);
+                                userListModelArrayList.add(model);
+                            }
+                            // TODO: Burada RecyclerView Adapter'ını güncelle veya başka bir işlem yap
+                            UserListNamesAdapter userListNamesAdapter=
+                                    new UserListNamesAdapter(GameDetailsActivity.this,
+                                            userListModelArrayList,movie.getID(),movie.getTitle()
+                                            ,movie.getPosterPath());
+                            recyclerView.setAdapter(userListNamesAdapter);
+                            recyclerView.setLayoutManager(new LinearLayoutManager(GameDetailsActivity.this));
+                        } else {
+                            // Sorgu sırasında hata oluştu, hata mesajını logla veya göster
+                            Log.e("ParseError", "Error retrieving CustomUserList: " + e.getMessage());
+                        }
+                    }
+                });
+
+
+
+        userListDialogBuilder.show();
+    }
+    public void createNewList() {
+        // Inflate the custom layout using layout inflater
+        LayoutInflater inflater = LayoutInflater.from(this);
+        View customView = inflater.inflate(R.layout.layout_new_list, null);
+
+        // Apply the custom style to the AlertDialog
+        AlertDialog.Builder createNewListDialog = new AlertDialog.Builder(
+                new androidx.appcompat.view.ContextThemeWrapper(this, R.style.AlertDialogCustom));
+
+        createNewListDialog.setView(customView); // Set the custom view for the dialog
+        EditText etListName= customView.findViewById(R.id.etListName);
+        final AlertDialog createNewListBuilder = createNewListDialog.create();
+
+        Button btnAdd= customView.findViewById(R.id.btnAdd);
+        btnAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ParseUser currentUser = ParseUser.getCurrentUser();
+                String listName = etListName.getText().toString();
+
+                if (!listName.isEmpty()) {
+                    // Check if the list name already exists
+                    ParseQuery<ParseObject> query = ParseQuery.getQuery("CustomUserList");
+                    query.whereEqualTo("listName", listName);
+                    query.findInBackground(new FindCallback<ParseObject>() {
+                        @Override
+                        public void done(List<ParseObject> lists, ParseException e) {
+                            if (e == null && lists.isEmpty()) {
+                                // List name doesn't exist, create new list
+                                ParseObject customUserList = new ParseObject("CustomUserList");
+                                customUserList.put("listName", listName);
+                                customUserList.put("userID", currentUser.getObjectId());
+                                // Save the new list asynchronously
+                                customUserList.saveInBackground(new SaveCallback() {
+                                    @Override
+                                    public void done(ParseException e) {
+                                        if (e == null) {
+                                            createNewListBuilder.dismiss();
+                                            Toast.makeText(GameDetailsActivity.this, "The list has been created successfully: " + listName, Toast.LENGTH_SHORT).show();
+                                            currentUser.add("userList", customUserList); // Add the new object to the user list
+                                            addToUserListDialog();
+                                            // Update the user
+                                            currentUser.saveInBackground(e1 -> {
+                                                if (e1 == null) {
+                                                    // User updated successfully
+                                                } else {
+                                                    // Error updating the user
+                                                }
+                                            });
+                                        } else {
+                                            createNewListBuilder.dismiss();
+                                            Toast.makeText(GameDetailsActivity.this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                            Log.i("YARDUK",e.getMessage().toString());
+                                        }
+                                    }
+                                });
+                            } else if (e == null) {
+                                // List name exists, show a toast message
+                                Toast.makeText(GameDetailsActivity.this, "A list with this name already exists.", Toast.LENGTH_SHORT).show();
+                            } else {
+                                // An error occurred during the query
+                                Toast.makeText(GameDetailsActivity.this,
+                                        "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+
+                            }
+                        }
+                    });
+                } else {
+                    Toast.makeText(GameDetailsActivity.this, "Please enter a list name!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+
+
+
+        createNewListBuilder.show();
+    }
     public void addFavoriteGame(String UserID, String gameID, String path){
         ParseObject object = new ParseObject("FavoriteGames");
         object.put("user_id", UserID);
@@ -294,7 +450,7 @@ public class GameDetailsActivity extends AppCompatActivity implements AdapterVie
     public void addGame(String GameID, ParseObject review){
 
         try {
-            ParseQuery<ParseObject> query = ParseQuery.getQuery("Game");
+            ParseQuery<ParseObject> query = ParseQuery.getQuery("GameModel");
             query.whereEqualTo("GameID", GameID);
             query.getFirstInBackground(new GetCallback<ParseObject>() {
                 @Override
@@ -305,7 +461,7 @@ public class GameDetailsActivity extends AppCompatActivity implements AdapterVie
                         object.saveInBackground();
                     }
                     else {
-                        ParseObject game = new ParseObject("Game");
+                        ParseObject game = new ParseObject("GameModel");
                         game.put("GameID", tempID);
                         game.add("ReviewArray", review);
                         game.saveInBackground();

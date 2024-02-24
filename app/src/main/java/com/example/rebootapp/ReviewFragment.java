@@ -31,7 +31,7 @@ import okhttp3.Headers;
 
 public class ReviewFragment extends Fragment {
 
-    List<GameReview> Reviews; //Game Model List for RecyclerView&Adapter
+    List<GameReview> Reviews; //GameModel Model List for RecyclerView&Adapter
     String search_term = "";//"spiderman" + "&ordering=-added"; //Test String
     private MenuItem menuItem;
     private SearchView svSearchGame;

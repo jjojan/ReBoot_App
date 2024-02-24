@@ -83,7 +83,7 @@ public class ReviewActivity extends AppCompatActivity {
     public void addGame(String GameID, ParseObject review ){
 
         try {
-            ParseQuery<ParseObject> query = ParseQuery.getQuery("Game");
+            ParseQuery<ParseObject> query = ParseQuery.getQuery("GameModel");
             query.whereEqualTo("GameID", GameID);
             query.getFirstInBackground(new GetCallback<ParseObject>() {
                 @Override
@@ -94,7 +94,7 @@ public class ReviewActivity extends AppCompatActivity {
                         object.saveInBackground();
                     }
                     else {
-                        ParseObject game = new ParseObject("Game");
+                        ParseObject game = new ParseObject("GameModel");
                         game.put("GameID", GameID);
                         game.add("ReviewArray", review);
                         game.saveInBackground();

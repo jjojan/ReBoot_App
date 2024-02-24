@@ -35,7 +35,17 @@ public class Login extends AppCompatActivity {
     TextView btnSignUp;
     EditText edtEmail;
     EditText edtPassword;
+    @Override
+    protected void onStart() {
+        super.onStart();
 
+        // Check if the current user is already logged in
+        if (ParseUser.getCurrentUser() != null) {
+            // User is logged in, navigate to the MainActivity
+            navigateToHomePage();
+        }
+        // No else part needed, if no user is logged in, stay on the Login screen
+    }
     @Override
     protected void onCreate (Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -97,20 +107,20 @@ public class Login extends AppCompatActivity {
 
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        account = GoogleSignIn.getLastSignedInAccount(this);
-        if(account == null){
-            //If GoogleSignIn.getLastSignedInAccount returns null, the user has not yet signed in to your app with Google. Update your UI to display the Google Sign-in button.
-            //updateUI(account);
-            //Go to SignUp
-        } else{
-            //Update your UI accordingly—that is, hide the sign-in button, launch your main activity, or whatever is appropriate for your app.
-            //updateUI(account);
-        }
-
-    }
+//    @Override
+//    protected void onStart() {
+//        super.onStart();
+//        account = GoogleSignIn.getLastSignedInAccount(this);
+//        if(account == null){
+//            //If GoogleSignIn.getLastSignedInAccount returns null, the user has not yet signed in to your app with Google. Update your UI to display the Google Sign-in button.
+//            //updateUI(account);
+//            //Go to SignUp
+//        } else{
+//            //Update your UI accordingly—that is, hide the sign-in button, launch your main activity, or whatever is appropriate for your app.
+//            //updateUI(account);
+//        }
+//
+//    }
 
     void logIn(){
         Intent intent = gsc.getSignInIntent();
