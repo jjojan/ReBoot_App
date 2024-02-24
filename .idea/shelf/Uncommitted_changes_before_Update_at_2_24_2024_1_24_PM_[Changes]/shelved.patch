@@ -1,0 +1,2401 @@
+Index: app/src/main/java/com/example/rebootapp/FavoriteGamesAdapter.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.rebootapp;\r\n\r\nimport androidx.annotation.NonNull;\r\nimport androidx.appcompat.app.AppCompatActivity;\r\n\r\nimport android.content.Context;\r\nimport android.content.Intent;\r\nimport android.os.Bundle;\r\nimport android.util.Log;\r\nimport android.view.LayoutInflater;\r\nimport android.view.View;\r\nimport android.view.ViewGroup;\r\nimport android.widget.ImageView;\r\nimport android.widget.RatingBar;\r\nimport android.widget.TextView;\r\nimport android.widget.Button;\r\nimport android.widget.ToggleButton;\r\nimport androidx.recyclerview.widget.LinearLayoutManager;\r\nimport androidx.recyclerview.widget.RecyclerView;\r\n\r\n\r\nimport com.bumptech.glide.Glide;\r\nimport com.codepath.asynchttpclient.AsyncHttpClient;\r\nimport com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;\r\nimport com.parse.CountCallback;\r\nimport com.parse.GetCallback;\r\nimport com.parse.ParseObject;\r\nimport com.parse.ParseException;\r\nimport com.parse.ParseFile;\r\nimport com.parse.ParseQuery;\r\nimport com.parse.ParseUser;\r\n\r\nimport org.json.JSONArray;\r\nimport org.json.JSONException;\r\nimport org.json.JSONObject;\r\nimport org.parceler.Parcels;\r\n\r\nimport java.util.List;\r\n\r\nimport okhttp3.Headers;\r\n\r\npublic class FavoriteGamesAdapter extends RecyclerView.Adapter<FavoriteGamesAdapter.ViewHolder>{\r\n    private List<String> photoUris; // List of URIs as strings\r\n    public static class ViewHolder extends RecyclerView.ViewHolder {\r\n        ImageView imageViewGamePhoto;\r\n        Context context;\r\n\r\n        public ViewHolder(View view) {\r\n            super(view);\r\n            imageViewGamePhoto = view.findViewById(R.id.imageViewGame);\r\n\r\n\r\n//            imageViewGamePhoto.setOnClickListener(new View.OnClickListener() {\r\n//                @Override\r\n//                public void onClick(View v) {\r\n//                    //start details activity\r\n////                    Intent intent = new Intent(getActivity(), )\r\n//                }\r\n//            });\r\n        }\r\n\r\n\r\n    }\r\n\r\n    public FavoriteGamesAdapter(List<String> photoUris){\r\n\r\n        this.photoUris = photoUris;\r\n    }\r\n\r\n    @NonNull\r\n    @Override\r\n    public FavoriteGamesAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {\r\n        View view = LayoutInflater.from(parent.getContext())\r\n                .inflate(R.layout.item_gamephoto, parent, false);\r\n        return new ViewHolder(view);\r\n    }\r\n\r\n    @Override\r\n    public void onBindViewHolder(ViewHolder holder, int position) {\r\n        String uri = photoUris.get(position);\r\n        int tempPos = position;\r\n        // Using Glide to load the image from the URI\r\n        Glide.with(holder.imageViewGamePhoto.getContext()).load(uri).into(holder.imageViewGamePhoto);\r\n        holder.imageViewGamePhoto.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n\r\n                //GameSearch game = new GameSearch()\r\n\r\n                ParseQuery<ParseObject> gamesQuery = ParseQuery.getQuery(\"FavoriteGames\");\r\n                ParseUser currentUser = ParseUser.getCurrentUser();\r\n                String currentUserID = currentUser.getObjectId();\r\n                gamesQuery.whereEqualTo(\"user_id\", currentUserID);\r\n                gamesQuery.whereEqualTo(\"picture_uri\", photoUris.get(tempPos));\r\n                gamesQuery.getFirstInBackground(new GetCallback<ParseObject>() {\r\n                    @Override\r\n                    public void done(ParseObject object, ParseException e) {\r\n                        if (e == null){\r\n                            String id = object.getString(\"game_id\");\r\n                            System.out.println(id);\r\n\r\n                            String search = \"https://api.rawg.io/api/games/\" + id + \"?key=63502b95db9f41c99bb3d0ecf77aa811\";\r\n                            AsyncHttpClient client = new AsyncHttpClient();\r\n                            client.get(search, new JsonHttpResponseHandler() {\r\n                                @Override\r\n                                public void onSuccess(int statusCode, Headers headers, JSON json) {\r\n                                    JSONObject jsonobject = json.jsonObject;\r\n                                    try {\r\n                                        System.out.println(\"line 1\");\r\n//                                        JSONArray results = jsonobject.getJSONArray(\"results\");\r\n//                                        System.out.println(\"count: \" + results);\r\n                                        Game game = new Game((jsonobject));\r\n                                        System.out.println(\"line 2\");\r\n                                        Intent intent = new Intent(holder.imageViewGamePhoto.getContext(), GameDetailsActivity.class);\r\n                                        System.out.println(\"line 3\");\r\n                                        intent.putExtra(Game.class.getSimpleName(), Parcels.wrap(game));\r\n                                        System.out.println(\"line 4\");\r\n                                        holder.imageViewGamePhoto.getContext().startActivity(intent);\r\n                                        System.out.println(\"line 5\");\r\n\r\n                                    } catch (JSONException ex) {\r\n                                        System.out.println(\"almost\");\r\n                                        throw new RuntimeException(ex);\r\n\r\n                                    }\r\n                                }\r\n\r\n                                @Override\r\n                                public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {\r\n                                    System.out.println(\"oops\");\r\n                                }\r\n                            });\r\n                        }\r\n                    }\r\n                });\r\n\r\n\r\n            }\r\n        });\r\n\r\n\r\n\r\n    }\r\n\r\n    @Override\r\n    public int getItemCount() {\r\n        return photoUris.size();\r\n    }\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/rebootapp/FavoriteGamesAdapter.java b/app/src/main/java/com/example/rebootapp/FavoriteGamesAdapter.java
+--- a/app/src/main/java/com/example/rebootapp/FavoriteGamesAdapter.java	(revision 56c4e84700c03b6f5f13e3765dd2b479645d6000)
++++ b/app/src/main/java/com/example/rebootapp/FavoriteGamesAdapter.java	(date 1708329502000)
+@@ -147,4 +147,4 @@
+         return photoUris.size();
+     }
+ 
+-}
++}
+\ No newline at end of file
+Index: app/src/main/java/com/example/rebootapp/GameDetailsActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.rebootapp;\r\n\r\nimport android.content.Context;\r\nimport android.content.DialogInterface;\r\nimport android.content.Intent;\r\nimport android.os.Bundle;\r\nimport android.util.Log;\r\nimport android.view.View;\r\nimport android.widget.AdapterView;\r\nimport android.widget.ArrayAdapter;\r\nimport android.widget.EditText;\r\nimport android.widget.ImageButton;\r\nimport android.widget.ImageView;\r\nimport android.widget.RatingBar;\r\nimport android.widget.Spinner;\r\nimport android.widget.TextView;\r\nimport android.widget.Toast;\r\nimport android.widget.ToggleButton;\r\n\r\nimport androidx.appcompat.app.AlertDialog;\r\nimport androidx.appcompat.app.AppCompatActivity;\r\nimport androidx.recyclerview.widget.LinearLayoutManager;\r\nimport androidx.recyclerview.widget.RecyclerView;\r\n\r\nimport com.bumptech.glide.Glide;\r\nimport com.codepath.asynchttpclient.AsyncHttpClient;\r\nimport com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;\r\nimport com.colormoon.readmoretextview.ReadMoreTextView;\r\nimport com.parse.CountCallback;\r\nimport com.parse.FindCallback;\r\nimport com.parse.GetCallback;\r\nimport com.parse.ParseException;\r\nimport com.parse.ParseObject;\r\nimport com.parse.ParseQuery;\r\nimport com.parse.ParseUser;\r\n\r\nimport org.json.JSONArray;\r\nimport org.json.JSONException;\r\nimport org.json.JSONObject;\r\nimport org.parceler.Parcels;\r\n\r\nimport java.util.List;\r\n\r\nimport okhttp3.Headers;\r\n\r\npublic class GameDetailsActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {\r\n\r\n    Game movie;\r\n\r\n    List<Game> game;\r\n\r\n    List<ParseObject> adapterObjects;\r\n\r\n    // the view objects\r\n    TextView tvTitle;\r\n    TextView tvOverview;\r\n    RatingBar rbVoteAverage;\r\n    ImageView ivPoster;\r\n    ToggleButton heartButton;\r\n\r\n    ImageButton reviewButton;\r\n\r\n    String UserID;\r\n\r\n    String Username;\r\n\r\n    String tempID;\r\n\r\n    RecyclerView recyclerView;\r\n\r\n\r\n\r\n    ReadMoreTextView tvDesc;\r\n    int saveFavoriteQueue = 0;\r\n\r\n    public Spinner spinnerTextSize;\r\n\r\n    ImageView enter;\r\n\r\n    String GAME_URL = \"https://api.rawg.io/api/games/\";\r\n\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n\r\n\r\n\r\n        super.onCreate(savedInstanceState);\r\n        setContentView(R.layout.activity_game_details);\r\n\r\n        tvTitle = (TextView) findViewById(R.id.tvTitle);\r\n        tvOverview = (TextView) findViewById(R.id.tvOverview);\r\n        rbVoteAverage = (RatingBar) findViewById(R.id.rbVoteAverage);\r\n        heartButton = findViewById(R.id.toggleButton);\r\n        tvDesc = findViewById(R.id.tvDesc);\r\n        reviewButton = findViewById(R.id.reviewButton);\r\n        enter = findViewById(R.id.add);\r\n\r\n\r\n        showWriteReview();\r\n\r\n\r\n\r\n\r\n                movie = (Game) Parcels.unwrap(getIntent().getParcelableExtra(Game.class.getSimpleName()));\r\n        Log.d(\"MovieDetailsActivity\", String.format(\"Showing details for '%s'\", movie.getTitle()));\r\n        tempID = movie.getID();\r\n        displayReviews();\r\n        tvTitle.setText(movie.getTitle());\r\n        tvOverview.setText(movie.getOverview());\r\n\r\n\r\n//        float voteAverage = movie.getVoteAverage().floatValue();\r\n//        rbVoteAverage.setRating(voteAverage / 2.0f);\r\n\r\n        ivPoster = (ImageView) findViewById(R.id.ivPoster);\r\n        Glide.with(this)\r\n                .load(movie.getPosterPath())\r\n                .placeholder(R.drawable.flicks_movie_placeholder)\r\n                .error(R.drawable.flicks_movie_placeholder)\r\n                .into(ivPoster);\r\n\r\n\r\n\r\n\r\n        Log.i(\"id\", tempID);\r\n        GAME_URL = GAME_URL + tempID + \"?key=63502b95db9f41c99bb3d0ecf77aa811\";\r\n        Log.i(\"id\", GAME_URL);\r\n        String favPath = movie.getPosterPath();\r\n\r\n        ParseUser currentUser = ParseUser.getCurrentUser();\r\n        String currentUserID = currentUser.getObjectId();\r\n\r\n\r\n        AsyncHttpClient client = new AsyncHttpClient();\r\n\r\n\r\n        client.get(GAME_URL , new JsonHttpResponseHandler() {\r\n            @Override\r\n            public void onSuccess(int statusCode, Headers headers, JSON json) {\r\n                Log.d(\"sucess\", \"onSucess\");\r\n                JSONObject jsonObject = json.jsonObject;\r\n                try {\r\n                    Log.i(\"id\", jsonObject.getString(\"description_raw\"));\r\n                    tvDesc.setText(jsonObject.getString(\"description_raw\"));\r\n\r\n\r\n\r\n                } catch (JSONException e) {\r\n                    throw new RuntimeException(e);\r\n                }\r\n                try{\r\n                    JSONArray results = jsonObject.getJSONArray(\"results\");\r\n                    Log.i(\"RETURN results\", \"Results\" + results.toString());\r\n                    game.addAll(Game.fromJSONArray(results));\r\n                    Log.i(\"return list\", \"Movies\" + game.toString());\r\n\r\n                } catch(JSONException e){\r\n                    Log.e(\"error\", \"hit json expception\", e);\r\n                }\r\n            }\r\n\r\n            @Override\r\n            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {\r\n                Log.d(\"fail\", \"onFailure\");\r\n            }\r\n        });\r\n\r\n\r\n\r\n\r\n        checkMovieID(currentUserID, tempID, new QueryCheckCallback() {\r\n            @Override\r\n            public void onResult(boolean isEmpty) {\r\n                heartButton.setChecked(!isEmpty);\r\n            }\r\n        });\r\n\r\n        heartButton.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                if(heartButton.isChecked()){\r\n                    addFavoriteGame(currentUserID, tempID, favPath);\r\n                }\r\n                else{\r\n                    removeFavoriteGame(currentUserID, tempID);\r\n                }\r\n            }\r\n        });\r\n\r\n\r\n        enter.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                String text = favPath;\r\n                addListGame(currentUserID, tempID, favPath);\r\n            }\r\n        });\r\n\r\n\r\n\r\n\r\n\r\n        spinnerTextSize = findViewById(R.id.spinnerTextSize);\r\n\r\n        spinnerTextSize.setOnItemSelectedListener(this);\r\n\r\n        String[] textSizes = getResources().getStringArray(R.array.font_sizes);\r\n        ArrayAdapter adapter = new ArrayAdapter(this,\r\n                android.R.layout.simple_spinner_item, textSizes);\r\n        adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);\r\n        spinnerTextSize.setAdapter(adapter);\r\n\r\n\r\n    }\r\n\r\n    public void addFavoriteGame(String UserID, String gameID, String path){\r\n        ParseObject object = new ParseObject(\"FavoriteGames\");\r\n        object.put(\"user_id\", UserID);\r\n        object.put(\"game_id\", gameID);\r\n        object.put(\"picture_uri\", path);\r\n        object.saveInBackground();\r\n\r\n    }\r\n\r\n    public void addListGame(String UserID, String gameID, String path){\r\n        ParseObject object = new ParseObject(\"ListGames\");\r\n        object.put(\"user_id\", UserID);\r\n        object.put(\"game_id\", gameID);\r\n        object.put(\"picture_uri\", path);\r\n        object.saveInBackground();\r\n\r\n    }\r\n\r\n    public void addReview(String UserID, String username, String reviewText){\r\n\r\n        ParseObject object = new ParseObject(\"Review\");\r\n        object.put(\"ReviewUser\", UserID);\r\n        object.put(\"ReviewUsername\", username);\r\n        object.put(\"ReviewText\", reviewText);\r\n        object.put(\"GameID\", tempID);\r\n        object.saveInBackground();\r\n\r\n        addGame(tempID, object);\r\n\r\n\r\n\r\n    }\r\n\r\n\r\n\r\n    public void displayReviews(){\r\n\r\n        try {\r\n            ParseQuery<ParseObject> query = ParseQuery.getQuery(\"Review\");\r\n            Log.i(\"temp ID\", tempID);\r\n            query.whereEqualTo(\"GameID\", tempID);\r\n\r\n            query.findInBackground(new FindCallback<ParseObject>() {\r\n                @Override\r\n                public void done(List<ParseObject> objects, ParseException e) {\r\n                    if (e == null){\r\n\r\n\r\n//                        Log.i(\"review exists\", objects.get(0).getString(\"ReviewText\") + \"size\");\r\n                        int i = 0;\r\n\r\n                        recyclerView = (RecyclerView) findViewById(R.id.rvReviews);\r\n                        recyclerView.setLayoutManager(new LinearLayoutManager(GameDetailsActivity.this, LinearLayoutManager.HORIZONTAL, false));\r\n                        ReviewAdapter adapter = new ReviewAdapter(objects, GameDetailsActivity.this);\r\n                        Log.i(\"adapter rsult\", adapter.toString());\r\n                        recyclerView.setAdapter(adapter);\r\n\r\n                        for (ParseObject item : objects) {\r\n                            Log.i(\"review exists\", objects.get(i).getString(\"ReviewText\") + \"size\");\r\n                            i += 1;\r\n                        }\r\n\r\n\r\n                    }\r\n                    else {\r\n                    }\r\n\r\n                }\r\n            });\r\n\r\n        }catch (Exception e){\r\n            System.out.println(\"Parse Error Getting Reviews\");\r\n            Log.e(\"MYAPP\", \"exception\", e);\r\n        }\r\n\r\n\r\n    }\r\n\r\n    public void addGame(String GameID, ParseObject review){\r\n\r\n        try {\r\n            ParseQuery<ParseObject> query = ParseQuery.getQuery(\"Game\");\r\n            query.whereEqualTo(\"GameID\", GameID);\r\n            query.getFirstInBackground(new GetCallback<ParseObject>() {\r\n                @Override\r\n                public void done(ParseObject object, ParseException e) {\r\n                    if (e == null){\r\n                        Log.i(\"game exists\", \"arready exists\");\r\n                        object.add(\"ReviewArray\", review);\r\n                        object.saveInBackground();\r\n                    }\r\n                    else {\r\n                        ParseObject game = new ParseObject(\"Game\");\r\n                        game.put(\"GameID\", tempID);\r\n                        game.add(\"ReviewArray\", review);\r\n                        game.saveInBackground();\r\n                    }\r\n                }\r\n            });\r\n\r\n        }catch (Exception e){\r\n            System.out.println(\"Parse Error in Saving\");\r\n        }\r\n\r\n\r\n    }\r\n\r\n    public void removeFavoriteGame(String UserID, String gameID){\r\n        try {\r\n            ParseQuery<ParseObject> query = ParseQuery.getQuery(\"FavoriteGames\");\r\n            query.whereEqualTo(\"user_id\", UserID);\r\n            query.whereEqualTo(\"game_id\", gameID);\r\n            query.getFirstInBackground(new GetCallback<ParseObject>() {\r\n                @Override\r\n                public void done(ParseObject object, ParseException e) {\r\n                    if (e == null){\r\n                        object.deleteInBackground();\r\n                    }\r\n                    else System.out.println(\"cannot find to delete\");\r\n                }\r\n            });\r\n\r\n        }catch (Exception e){\r\n            System.out.println(\"Parse Problem deleting\");\r\n        }\r\n    }\r\n    public void checkMovieID(String userID, String gameID, QueryCheckCallback callback){\r\n        try {\r\n            ParseQuery<ParseObject> query = ParseQuery.getQuery(\"FavoriteGames\");\r\n            query.whereEqualTo(\"user_id\", userID);\r\n            query.whereEqualTo(\"game_id\", gameID);\r\n\r\n            query.countInBackground(new CountCallback() {\r\n                @Override\r\n                public void done(int count, ParseException e) {\r\n                    if (e == null) {\r\n                        callback.onResult(count == 0);\r\n                    } else callback.onResult(false);\r\n\r\n                }\r\n            });\r\n        } catch (Exception e){\r\n            System.out.println(\"Parse problem checking\");\r\n        }\r\n\r\n    }\r\n\r\n    private void  showWriteReview(){\r\n        reviewButton.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View view) {\r\n\r\n                AlertDialog.Builder builder = new AlertDialog.Builder( GameDetailsActivity.this );\r\n                builder.setTitle(\"Write Review\");\r\n                EditText etReview = new EditText(GameDetailsActivity.this);\r\n                builder.setView(etReview);\r\n\r\n                ParseUser currentUser = ParseUser.getCurrentUser();\r\n                String currentUserObjectID = currentUser.getObjectId();\r\n                ParseQuery<ParseObject> query = ParseQuery.getQuery(\"_User\");\r\n\r\n                query.getInBackground(currentUserObjectID, new GetCallback<ParseObject>() {\r\n                    @Override\r\n                    public void done(ParseObject object, ParseException e) {\r\n                        if (e==null){\r\n                             UserID = object.getObjectId().toString();\r\n                             Username = object.getString(\"username\");\r\n                             Log.i(\"userID\", UserID);\r\n                             Log.i(\"userID\", Username);\r\n                        }\r\n                    }\r\n                });\r\n\r\n                builder.setPositiveButton(\"Submit\", new DialogInterface.OnClickListener() {\r\n                    @Override\r\n                    public void onClick(DialogInterface dialogInterface, int i) {\r\n                        String reviewText = etReview.getText().toString();\r\n                        addReview(UserID, Username, reviewText);\r\n                        Toast.makeText(GameDetailsActivity.this, \"Review: \" + reviewText, Toast.LENGTH_LONG).show();\r\n                    }\r\n                });\r\n\r\n                builder.setNegativeButton(\"Cancel\", new DialogInterface.OnClickListener() {\r\n                    @Override\r\n                    public void onClick(DialogInterface dialogInterface, int i) {\r\n                        dialogInterface.cancel();\r\n                    }\r\n                });\r\n\r\n                builder.show();\r\n            }\r\n        });\r\n    }\r\n\r\n    @Override\r\n    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {\r\n\r\n    }\r\n\r\n    @Override\r\n    public void onNothingSelected(AdapterView<?> adapterView) {\r\n\r\n    }\r\n\r\n    public interface QueryCheckCallback {\r\n        void onResult(boolean isEmpty);\r\n    }\r\n\r\n    @Override\r\n    protected void onPause() {\r\n        super.onPause();\r\n\r\n\r\n\r\n    }\r\n\r\n\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/rebootapp/GameDetailsActivity.java b/app/src/main/java/com/example/rebootapp/GameDetailsActivity.java
+--- a/app/src/main/java/com/example/rebootapp/GameDetailsActivity.java	(revision 56c4e84700c03b6f5f13e3765dd2b479645d6000)
++++ b/app/src/main/java/com/example/rebootapp/GameDetailsActivity.java	(date 1708702010000)
+@@ -1,13 +1,13 @@
+ package com.example.rebootapp;
+ 
+-import android.content.Context;
+ import android.content.DialogInterface;
+-import android.content.Intent;
+ import android.os.Bundle;
+ import android.util.Log;
++import android.view.LayoutInflater;
+ import android.view.View;
+ import android.widget.AdapterView;
+ import android.widget.ArrayAdapter;
++import android.widget.Button;
+ import android.widget.EditText;
+ import android.widget.ImageButton;
+ import android.widget.ImageView;
+@@ -26,6 +26,8 @@
+ import com.codepath.asynchttpclient.AsyncHttpClient;
+ import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
+ import com.colormoon.readmoretextview.ReadMoreTextView;
++import com.example.rebootapp.AwoApp.UserListModel;
++import com.example.rebootapp.AwoApp.UserListNamesAdapter;
+ import com.parse.CountCallback;
+ import com.parse.FindCallback;
+ import com.parse.GetCallback;
+@@ -33,12 +35,14 @@
+ import com.parse.ParseObject;
+ import com.parse.ParseQuery;
+ import com.parse.ParseUser;
++import com.parse.SaveCallback;
+ 
+ import org.json.JSONArray;
+ import org.json.JSONException;
+ import org.json.JSONObject;
+ import org.parceler.Parcels;
+ 
++import java.util.ArrayList;
+ import java.util.List;
+ 
+ import okhttp3.Headers;
+@@ -103,6 +107,10 @@
+ 
+                 movie = (Game) Parcels.unwrap(getIntent().getParcelableExtra(Game.class.getSimpleName()));
+         Log.d("MovieDetailsActivity", String.format("Showing details for '%s'", movie.getTitle()));
++        Log.i("MARDUK",
++                "Tıtle: "+movie.getTitle()+"\nOverView: "+movie.getOverview()+"\n ID: "+movie.getID()+
++                        "\nBackgropPath: "+movie.getBackdropPath()+
++                        "\nPosterPath: "+movie.getPosterPath()+"\nVote: "+movie.getVoteAverage());
+         tempID = movie.getID();
+         displayReviews();
+         tvTitle.setText(movie.getTitle());
+@@ -137,7 +145,7 @@
+         client.get(GAME_URL , new JsonHttpResponseHandler() {
+             @Override
+             public void onSuccess(int statusCode, Headers headers, JSON json) {
+-                Log.d("sucess", "onSucess");
++                Log.d("sucess", "");
+                 JSONObject jsonObject = json.jsonObject;
+                 try {
+                     Log.i("id", jsonObject.getString("description_raw"));
+@@ -191,8 +199,10 @@
+         enter.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View v) {
+-                String text = favPath;
+-                addListGame(currentUserID, tempID, favPath);
++                addToUserListDialog();
++//                String text = favPath;
++//                addListGame(currentUserID, tempID, favPath);
++
+             }
+         });
+ 
+@@ -212,7 +222,153 @@
+ 
+ 
+     }
++    public void addToUserListDialog() {
++        // Inflate the custom layout using layout inflater
++        LayoutInflater inflater = LayoutInflater.from(this);
++        View customView = inflater.inflate(R.layout.layout_user_list, null);
++
++        // Apply the custom style to the AlertDialog
++        AlertDialog.Builder listDialog = new AlertDialog.Builder(
++                new androidx.appcompat.view.ContextThemeWrapper(this, R.style.AlertDialogCustom));
++
++        listDialog.setView(customView); // Set the custom view for the dialog
++        AlertDialog userListDialogBuilder = listDialog.create();
++
++        Button btnAddNewList=customView.findViewById(R.id.btnNewList);
++        Button btnClose=customView.findViewById(R.id.btnClose);
++        RecyclerView recyclerView=customView.findViewById(R.id.recyclerView);
++        btnAddNewList.setOnClickListener(new View.OnClickListener() {
++            @Override
++            public void onClick(View view) {
++                userListDialogBuilder.dismiss();
++                createNewList();
++            }
++        });
++        btnClose.setOnClickListener(new View.OnClickListener() {
++            @Override
++            public void onClick(View view) {
++            userListDialogBuilder.dismiss();
++            }
++        });
++        ParseUser currentUser = ParseUser.getCurrentUser();
++        String userId = currentUser.getObjectId();
++                ParseQuery<ParseObject> query = ParseQuery.getQuery("CustomUserList");
++                query.whereEqualTo("userID", userId); // objectId'ler içinde sorgula
++                query.findInBackground(new FindCallback<ParseObject>() {
++                    @Override
++                    public void done(List<ParseObject> customUserLists, ParseException e) {
++                        if (e == null) {
++                            // Sorgu başarılı, listName'leri çekiyoruz
++                            ArrayList<UserListModel> userListModelArrayList = new ArrayList<>();
++                            for (ParseObject object : customUserLists) {
++                                String listName = object.getString("listName");
++                                List<String> gameName = object.getList("gameName");
++                                List<String> gamePreviewLink = object.getList("gamePreviewLink");
++                                String userID = object.getString("userID");
++                                List<String> gameID = object.getList("gameID");
++                                String objectID = object.getObjectId(); // ParseObject'in kendine özgü ID'si
++
++                                // Model nesnesini oluştur ve listeye ekle
++                                UserListModel model = new UserListModel(listName, gameName,
++                                        gamePreviewLink,gameID, userID, objectID);
++                                userListModelArrayList.add(model);
++                            }
++                            // TODO: Burada RecyclerView Adapter'ını güncelle veya başka bir işlem yap
++                            UserListNamesAdapter userListNamesAdapter=
++                                    new UserListNamesAdapter(GameDetailsActivity.this,
++                                            userListModelArrayList,movie.getID(),movie.getTitle()
++                                            ,movie.getPosterPath());
++                            recyclerView.setAdapter(userListNamesAdapter);
++                            recyclerView.setLayoutManager(new LinearLayoutManager(GameDetailsActivity.this));
++                        } else {
++                            // Sorgu sırasında hata oluştu, hata mesajını logla veya göster
++                            Log.e("ParseError", "Error retrieving CustomUserList: " + e.getMessage());
++                        }
++                    }
++                });
++
++
++
++        userListDialogBuilder.show();
++    }
++    public void createNewList() {
++        // Inflate the custom layout using layout inflater
++        LayoutInflater inflater = LayoutInflater.from(this);
++        View customView = inflater.inflate(R.layout.layout_new_list, null);
+ 
++        // Apply the custom style to the AlertDialog
++        AlertDialog.Builder createNewListDialog = new AlertDialog.Builder(
++                new androidx.appcompat.view.ContextThemeWrapper(this, R.style.AlertDialogCustom));
++
++        createNewListDialog.setView(customView); // Set the custom view for the dialog
++        EditText etListName= customView.findViewById(R.id.etListName);
++        final AlertDialog createNewListBuilder = createNewListDialog.create();
++
++        Button btnAdd= customView.findViewById(R.id.btnAdd);
++        btnAdd.setOnClickListener(new View.OnClickListener() {
++            @Override
++            public void onClick(View view) {
++                ParseUser currentUser = ParseUser.getCurrentUser();
++                String listName = etListName.getText().toString();
++
++                if (!listName.isEmpty()) {
++                    // Check if the list name already exists
++                    ParseQuery<ParseObject> query = ParseQuery.getQuery("CustomUserList");
++                    query.whereEqualTo("listName", listName);
++                    query.findInBackground(new FindCallback<ParseObject>() {
++                        @Override
++                        public void done(List<ParseObject> lists, ParseException e) {
++                            if (e == null && lists.isEmpty()) {
++                                // List name doesn't exist, create new list
++                                ParseObject customUserList = new ParseObject("CustomUserList");
++                                customUserList.put("listName", listName);
++                                customUserList.put("userID", currentUser.getObjectId());
++                                // Save the new list asynchronously
++                                customUserList.saveInBackground(new SaveCallback() {
++                                    @Override
++                                    public void done(ParseException e) {
++                                        if (e == null) {
++                                            createNewListBuilder.dismiss();
++                                            Toast.makeText(GameDetailsActivity.this, "The list has been created successfully: " + listName, Toast.LENGTH_SHORT).show();
++                                            currentUser.add("userList", customUserList); // Add the new object to the user list
++                                            addToUserListDialog();
++                                            // Update the user
++                                            currentUser.saveInBackground(e1 -> {
++                                                if (e1 == null) {
++                                                    // User updated successfully
++                                                } else {
++                                                    // Error updating the user
++                                                }
++                                            });
++                                        } else {
++                                            createNewListBuilder.dismiss();
++                                            Toast.makeText(GameDetailsActivity.this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
++                                            Log.i("YARDUK",e.getMessage().toString());
++                                        }
++                                    }
++                                });
++                            } else if (e == null) {
++                                // List name exists, show a toast message
++                                Toast.makeText(GameDetailsActivity.this, "A list with this name already exists.", Toast.LENGTH_SHORT).show();
++                            } else {
++                                // An error occurred during the query
++                                Toast.makeText(GameDetailsActivity.this,
++                                        "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
++
++                            }
++                        }
++                    });
++                } else {
++                    Toast.makeText(GameDetailsActivity.this, "Please enter a list name!", Toast.LENGTH_SHORT).show();
++                }
++            }
++        });
++
++
++
++
++        createNewListBuilder.show();
++    }
+     public void addFavoriteGame(String UserID, String gameID, String path){
+         ParseObject object = new ParseObject("FavoriteGames");
+         object.put("user_id", UserID);
+@@ -294,7 +450,7 @@
+     public void addGame(String GameID, ParseObject review){
+ 
+         try {
+-            ParseQuery<ParseObject> query = ParseQuery.getQuery("Game");
++            ParseQuery<ParseObject> query = ParseQuery.getQuery("GameModel");
+             query.whereEqualTo("GameID", GameID);
+             query.getFirstInBackground(new GetCallback<ParseObject>() {
+                 @Override
+@@ -305,7 +461,7 @@
+                         object.saveInBackground();
+                     }
+                     else {
+-                        ParseObject game = new ParseObject("Game");
++                        ParseObject game = new ParseObject("GameModel");
+                         game.put("GameID", tempID);
+                         game.add("ReviewArray", review);
+                         game.saveInBackground();
+Index: app/src/main/java/com/example/rebootapp/FavoriteGamesActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.rebootapp;\r\n\r\nimport androidx.appcompat.app.AppCompatActivity;\r\nimport android.os.Bundle;\r\nimport android.util.Log;\r\nimport android.view.View;\r\nimport android.widget.ImageView;\r\nimport android.widget.RatingBar;\r\nimport android.widget.TextView;\r\nimport android.widget.Button;\r\nimport android.widget.ToggleButton;\r\n\r\nimport androidx.recyclerview.widget.GridLayoutManager;\r\nimport androidx.recyclerview.widget.LinearLayoutManager;\r\nimport androidx.recyclerview.widget.RecyclerView;\r\n\r\n\r\nimport com.bumptech.glide.Glide;\r\nimport com.parse.CountCallback;\r\nimport com.parse.FindCallback;\r\nimport com.parse.GetCallback;\r\nimport com.parse.ParseObject;\r\nimport com.parse.ParseException;\r\nimport com.parse.ParseFile;\r\nimport com.parse.ParseQuery;\r\nimport com.parse.ParseUser;\r\n\r\nimport org.parceler.Parcels;\r\n\r\nimport java.util.ArrayList;\r\nimport java.util.List;\r\n\r\npublic class FavoriteGamesActivity extends AppCompatActivity {\r\n\r\n    RecyclerView games;\r\n    FavoriteGamesAdapter favoriteGamesAdapter;\r\n    List<String> gamePhotoUris;\r\n    Button btn_Favorite_Done;\r\n\r\n\r\n\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState){\r\n        super.onCreate(savedInstanceState);\r\n        setContentView(R.layout.activity_favorite_games);\r\n\r\n        games = findViewById(R.id.rv_games_list);\r\n        games.setLayoutManager(new GridLayoutManager(this, 3));\r\n        btn_Favorite_Done = findViewById(R.id.btn_Favorite_Done);\r\n\r\n        gamePhotoUris = new ArrayList<>();\r\n        favoriteGamesAdapter = new FavoriteGamesAdapter(gamePhotoUris);\r\n\r\n        games.setAdapter(favoriteGamesAdapter);\r\n\r\n//        fillPhotos();\r\n\r\n\r\n        btn_Favorite_Done.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                finish();\r\n            }\r\n        });\r\n\r\n    }\r\n\r\n    public void fillPhotos(){\r\n        ParseQuery<ParseObject> gamesQuery = ParseQuery.getQuery(\"FavoriteGames\");\r\n        ParseUser currentUser = ParseUser.getCurrentUser();\r\n        String currentUserID = currentUser.getObjectId();\r\n        gamesQuery.whereEqualTo(\"user_id\", currentUserID);\r\n\r\n        gamesQuery.findInBackground(new FindCallback<ParseObject>() {\r\n            @Override\r\n            public void done(List<ParseObject> objects, ParseException e) {\r\n                if(e == null){\r\n                    for(ParseObject object : objects) {\r\n                        String uri = object.getString(\"picture_uri\");\r\n                        if(uri != null && !uri.isEmpty()) {\r\n                            gamePhotoUris.add(uri);\r\n                        }\r\n                    }\r\n                    favoriteGamesAdapter.notifyDataSetChanged();\r\n\r\n                }\r\n                else{\r\n                    System.out.println(\"Parse query error\");\r\n                }\r\n            }\r\n        });\r\n\r\n    }\r\n    @Override\r\n    protected void onStart(){\r\n        super.onStart();\r\n        gamePhotoUris.clear();\r\n        fillPhotos();\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/rebootapp/FavoriteGamesActivity.java b/app/src/main/java/com/example/rebootapp/FavoriteGamesActivity.java
+--- a/app/src/main/java/com/example/rebootapp/FavoriteGamesActivity.java	(revision 56c4e84700c03b6f5f13e3765dd2b479645d6000)
++++ b/app/src/main/java/com/example/rebootapp/FavoriteGamesActivity.java	(date 1708329488000)
+@@ -97,4 +97,4 @@
+         gamePhotoUris.clear();
+         fillPhotos();
+     }
+-}
++}
+\ No newline at end of file
+Index: app/src/main/res/values-night/themes.xml
+===================================================================
+diff --git a/app/src/main/res/values-night/themes.xml b/app/src/main/res/values-night/themes.xml
+deleted file mode 100644
+--- a/app/src/main/res/values-night/themes.xml	(revision 56c4e84700c03b6f5f13e3765dd2b479645d6000)
++++ /dev/null	(revision 56c4e84700c03b6f5f13e3765dd2b479645d6000)
+@@ -1,7 +0,0 @@
+-<resources xmlns:tools="http://schemas.android.com/tools">
+-    <!-- Base application theme. -->
+-    <style name="Base.Theme.ReBootApp" parent="Theme.Material3.DayNight.NoActionBar">
+-        <!-- Customize your dark theme here. -->
+-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+-    </style>
+-</resources>
+\ No newline at end of file
+Index: app/src/main/res/layout/activity_detail.xml
+===================================================================
+diff --git a/app/src/main/res/layout/activity_detail.xml b/app/src/main/res/layout/activity_detail.xml
+deleted file mode 100644
+--- a/app/src/main/res/layout/activity_detail.xml	(revision 56c4e84700c03b6f5f13e3765dd2b479645d6000)
++++ /dev/null	(revision 56c4e84700c03b6f5f13e3765dd2b479645d6000)
+@@ -1,9 +0,0 @@
+-<?xml version="1.0" encoding="utf-8"?>
+-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+-    android:layout_width="match_parent"
+-    android:layout_height="match_parent"
+-    android:background="@color/aqua">
+-
+-
+-
+-</androidx.constraintlayout.widget.ConstraintLayout>
+\ No newline at end of file
+Index: .idea/androidTestResultsUserPreferences.xml
+===================================================================
+diff --git a/.idea/androidTestResultsUserPreferences.xml b/.idea/androidTestResultsUserPreferences.xml
+deleted file mode 100644
+--- a/.idea/androidTestResultsUserPreferences.xml	(revision 56c4e84700c03b6f5f13e3765dd2b479645d6000)
++++ /dev/null	(revision 56c4e84700c03b6f5f13e3765dd2b479645d6000)
+@@ -1,37 +0,0 @@
+-<?xml version="1.0" encoding="UTF-8"?>
+-<project version="4">
+-  <component name="AndroidTestResultsUserPreferences">
+-    <option name="androidTestResultsTableState">
+-      <map>
+-        <entry key="-658802048">
+-          <value>
+-            <AndroidTestResultsTableState>
+-              <option name="preferredColumnWidths">
+-                <map>
+-                  <entry key="Duration" value="90" />
+-                  <entry key="Pixel_3a_API_34_extension_level_7_x86_64" value="120" />
+-                  <entry key="Tests" value="360" />
+-                </map>
+-              </option>
+-            </AndroidTestResultsTableState>
+-          </value>
+-        </entry>
+-        <entry key="28629151">
+-          <value>
+-            <AndroidTestResultsTableState>
+-              <option name="preferredColumnWidths">
+-                <map>
+-                  <entry key="Duration" value="90" />
+-                  <entry key="Medium_Phone_API_30" value="120" />
+-                  <entry key="Medium_Phone_API_33" value="120" />
+-                  <entry key="Pixel_3a_API_34_extension_level_7_x86_64" value="120" />
+-                  <entry key="Tests" value="360" />
+-                </map>
+-              </option>
+-            </AndroidTestResultsTableState>
+-          </value>
+-        </entry>
+-      </map>
+-    </option>
+-  </component>
+-</project>
+\ No newline at end of file
+Index: .idea/.gitignore
+===================================================================
+diff --git a/.idea/.gitignore b/.idea/.gitignore
+deleted file mode 100644
+--- a/.idea/.gitignore	(revision 56c4e84700c03b6f5f13e3765dd2b479645d6000)
++++ /dev/null	(revision 56c4e84700c03b6f5f13e3765dd2b479645d6000)
+@@ -1,3 +0,0 @@
+-# Default ignored files
+-/shelf/
+-/workspace.xml
+Index: app/src/main/res/layout/fragment_profile.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<RelativeLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    android:layout_width=\"wrap_content\"\r\n    android:layout_height=\"wrap_content\"\r\n    android:layout_alignParentBottom=\"false\"\r\n    android:background=\"@color/white\"\r\n    android:visibility=\"visible\"\r\n    tools:context=\".ProfileFragment\">\r\n\r\n    <!-- TODO: Update blank fragment layout -->\r\n\r\n    <Button\r\n        android:id=\"@+id/btnSignOut\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_alignParentBottom=\"true\"\r\n        android:layout_centerHorizontal=\"true\"\r\n        android:layout_marginBottom=\"50dp\"\r\n        android:text=\"Sign Out\" />\r\n\r\n    <TextView\r\n        android:id=\"@+id/tvUser_Username\"\r\n        android:layout_width=\"218dp\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_alignBaseline=\"@id/tv_Username\"\r\n        android:layout_marginLeft=\"35dp\"\r\n        android:layout_marginRight=\"375dp\"\r\n        android:layout_toRightOf=\"@id/tv_Username\"\r\n        android:textAlignment=\"textEnd\"\r\n        android:textSize=\"20sp\" />\r\n\r\n    <TextView\r\n        android:id=\"@+id/tv_Username\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_marginLeft=\"25dp\"\r\n        android:layout_marginTop=\"175dp\"\r\n        android:text=\"Username: \"\r\n        android:textSize=\"24sp\" />\r\n\r\n    <ImageView\r\n        android:id=\"@+id/ProfilePic\"\r\n        android:layout_width=\"150dp\"\r\n        android:layout_height=\"150dp\"\r\n        android:layout_centerHorizontal=\"true\"\r\n        android:layout_marginTop=\"0dp\"\r\n        android:scaleType=\"fitCenter\"\r\n        android:src=\"?attr/selectableItemBackground\"\r\n        android:visibility=\"visible\"\r\n        app:srcCompat=\"@drawable/baseline_person_24\" />\r\n\r\n    <TextView\r\n        android:id=\"@+id/textView3\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_marginLeft=\"25dp\"\r\n        android:layout_marginTop=\"225dp\"\r\n        android:text=\"Email:\"\r\n        android:textSize=\"24sp\" />\r\n\r\n    <TextView\r\n        android:id=\"@+id/tvUser_Email\"\r\n        android:layout_width=\"219dp\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_alignBaseline=\"@id/textView3\"\r\n        android:layout_alignLeft=\"@id/tvUser_Username\"\r\n        android:textAlignment=\"textEnd\"\r\n        android:textSize=\"20sp\" />\r\n\r\n    <TextView\r\n        android:id=\"@+id/textView6\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_centerHorizontal=\"true\"\r\n        android:layout_marginTop=\"275dp\"\r\n        android:text=\"Bio\"\r\n        android:textSize=\"24sp\" />\r\n\r\n    <TextView\r\n        android:id=\"@+id/textView7\"\r\n        android:layout_width=\"350dp\"\r\n        android:layout_height=\"160dp\"\r\n        android:layout_below=\"@id/textView6\"\r\n        android:layout_centerHorizontal=\"true\"\r\n        android:textSize=\"16sp\"\r\n        android:background=\"@color/white\"/>\r\n\r\n    <ImageButton\r\n        android:id=\"@+id/Friends\"\r\n        android:layout_width=\"50dp\"\r\n        android:layout_height=\"50dp\"\r\n        android:layout_marginLeft=\"50dp\"\r\n        android:layout_marginTop=\"500dp\"\r\n        android:scaleType=\"fitCenter\"\r\n        android:outlineAmbientShadowColor=\"@color/blueberry\"\r\n        android:outlineSpotShadowColor=\"@color/blueberry\"\r\n        android:src=\"@drawable/friends\" />\r\n\r\n    <TextView\r\n        android:id=\"@+id/textView8\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_alignParentTop=\"false\"\r\n        android:layout_marginLeft=\"50dp\"\r\n        android:layout_marginTop=\"475dp\"\r\n        android:text=\"Friends\"\r\n        android:textSize=\"20sp\" />\r\n\r\n    <ImageButton\r\n        android:id=\"@+id/Starred\"\r\n        android:layout_width=\"50dp\"\r\n        android:layout_height=\"50dp\"\r\n        android:layout_marginLeft=\"175dp\"\r\n        android:layout_marginTop=\"500dp\"\r\n        android:scaleType=\"fitCenter\"\r\n        android:src=\"@drawable/star\" />\r\n\r\n    <ImageButton\r\n        android:id=\"@+id/EditProfile\"\r\n        android:layout_width=\"50dp\"\r\n        android:layout_height=\"50dp\"\r\n        android:layout_marginLeft=\"300dp\"\r\n        android:layout_marginTop=\"500dp\"\r\n        android:scaleType=\"fitCenter\"\r\n        android:src=\"@drawable/edit_profile\" />\r\n\r\n    <TextView\r\n        android:id=\"@+id/textView9\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_marginLeft=\"175dp\"\r\n        android:layout_marginTop=\"475dp\"\r\n        android:text=\"Starred\"\r\n        android:textSize=\"20sp\" />\r\n\r\n    <TextView\r\n        android:id=\"@+id/textView10\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_marginLeft=\"295dp\"\r\n        android:layout_marginTop=\"475dp\"\r\n        android:text=\"EditProfile\"\r\n        android:textSize=\"20sp\" />\r\n\r\n\r\n</RelativeLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/fragment_profile.xml b/app/src/main/res/layout/fragment_profile.xml
+--- a/app/src/main/res/layout/fragment_profile.xml	(revision 56c4e84700c03b6f5f13e3765dd2b479645d6000)
++++ b/app/src/main/res/layout/fragment_profile.xml	(date 1708653166000)
+@@ -7,7 +7,7 @@
+     android:layout_alignParentBottom="false"
+     android:background="@color/white"
+     android:visibility="visible"
+-    tools:context=".ProfileFragment">
++    tools:context=".AwoApp.ProfileFragment">
+ 
+     <!-- TODO: Update blank fragment layout -->
+ 
+@@ -144,5 +144,14 @@
+         android:text="EditProfile"
+         android:textSize="20sp" />
+ 
++    <ImageButton
++        android:id="@+id/customList"
++        android:layout_width="50dp"
++        android:layout_height="50dp"
++        android:layout_above="@+id/btnSignOut"
++        android:layout_marginLeft="175dp"
++        android:layout_marginTop="500dp"
++        android:scaleType="fitCenter"
++        android:src="@drawable/baseline_playlist_add_check_24" />
+ 
+ </RelativeLayout>
+\ No newline at end of file
+Index: app/src/main/res/layout/layout_new_list.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/layout_new_list.xml b/app/src/main/res/layout/layout_new_list.xml
+new file mode 100644
+--- /dev/null	(date 1708577852000)
++++ b/app/src/main/res/layout/layout_new_list.xml	(date 1708577852000)
+@@ -0,0 +1,25 @@
++<?xml version="1.0" encoding="utf-8"?>
++<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
++    android:layout_width="match_parent"
++    android:layout_height="wrap_content"
++    android:layout_margin="10dp"
++    android:background="@color/white"
++    android:orientation="vertical">
++
++    <EditText
++        android:id="@+id/etListName"
++        android:layout_width="match_parent"
++        android:layout_height="wrap_content"
++        android:ems="10"
++        android:hint="Enter list name"
++        android:inputType="text"
++        android:textColor="@color/black"
++        android:textColorHint="@color/black" />
++
++    <Button
++        android:id="@+id/btnAdd"
++        android:layout_width="match_parent"
++        android:layout_height="wrap_content"
++        android:layout_marginTop="10dp"
++        android:text="Add" />
++</LinearLayout>
+\ No newline at end of file
+Index: app/src/main/java/com/example/rebootapp/SearchFragment.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.rebootapp;\r\n\r\nimport static com.parse.Parse.getApplicationContext;\r\nimport static java.sql.DriverManager.println;\r\n\r\nimport android.os.Bundle;\r\nimport android.util.Log;\r\nimport android.view.LayoutInflater;\r\nimport android.view.MenuItem;\r\nimport android.view.View;\r\nimport android.view.ViewGroup;\r\nimport android.widget.SearchView;\r\n\r\nimport androidx.fragment.app.Fragment;\r\nimport androidx.recyclerview.widget.LinearLayoutManager;\r\nimport androidx.recyclerview.widget.RecyclerView;\r\n\r\nimport com.codepath.asynchttpclient.AsyncHttpClient;\r\nimport com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;\r\n\r\nimport org.json.JSONArray;\r\nimport org.json.JSONException;\r\nimport org.json.JSONObject;\r\n\r\nimport java.util.ArrayList;\r\nimport java.util.List;\r\n\r\nimport okhttp3.Headers;\r\n\r\n\r\npublic class SearchFragment extends Fragment {\r\n\r\n    List<GameSearch> searchGames; //Game Model List for RecyclerView&Adapter\r\n\r\n    String search_term = \"\";//\"spiderman\" + \"&ordering=-added\"; //Test String\r\n    private MenuItem menuItem;\r\n    private SearchView searchView;\r\n\r\n    private SearchView svSearch;\r\n    String SEARCH_QUERY = \"https://api.rawg.io/api/games?key=63502b95db9f41c99bb3d0ecf77aa811\" + search_term;\r\n\r\n    private static final String ARG_PARAM1 = \"param1\";\r\n    private static final String ARG_PARAM2 = \"param2\";\r\n\r\n\r\n    private String mParam1;\r\n    private String mParam2;\r\n\r\n    public SearchFragment() {\r\n        // Required empty public constructor\r\n    }\r\n\r\n    /**\r\n     * Use this factory method to create a new instance of\r\n     * this fragment using the provided parameters.\r\n     *\r\n     * @param param1 Parameter 1.\r\n     * @param param2 Parameter 2.\r\n     * @return A new instance of fragment HomeFragment.\r\n     */\r\n    // TODO: Rename and change types and number of parameters\r\n    public static SearchFragment newInstance(String param1, String param2) {\r\n        SearchFragment fragment = new SearchFragment();\r\n        Bundle args = new Bundle();\r\n        args.putString(ARG_PARAM1, param1);\r\n        args.putString(ARG_PARAM2, param2);\r\n        fragment.setArguments(args);\r\n        return fragment;\r\n    }\r\n\r\n\r\n    @Override\r\n    public void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        if (getArguments() != null) {\r\n            mParam1 = getArguments().getString(ARG_PARAM1);\r\n            mParam2 = getArguments().getString(ARG_PARAM2);\r\n        }\r\n    }\r\n\r\n    @Override\r\n    public View onCreateView(LayoutInflater inflater, ViewGroup container,\r\n                             Bundle savedInstanceState) {\r\n        View view = inflater.inflate(R.layout.fragment_search, container, false);\r\n        //Set up RecyclerView, Apadpter, and Layout Manager to format scroll view\r\n//        RecyclerView searchRecyclerView = view.findViewById(R.id.searchRecyclerView);\r\n//        Games = new ArrayList<>();\r\n//        GameAdapter searchGameAdapter = new GameAdapter(getContext(), Games);\r\n//        searchRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));\r\n//        searchRecyclerView.setAdapter(searchGameAdapter);\r\n//\r\n//        //Create request client\r\n//        AsyncHttpClient client = new AsyncHttpClient();\r\n//        //Http Query\r\n//        client.get(SEARCH_QUERY, new JsonHttpResponseHandler() {\r\n//\r\n//            @Override\r\n//            public void onSuccess(int statusCode, Headers headers, JSON json) {\r\n//                //Log.d(TAG, \"onSucess\");\r\n//                JSONObject jsonObject = json.jsonObject;\r\n//                try {\r\n//                    JSONArray results = jsonObject.getJSONArray(\"results\");\r\n//                    //Log.i(TAG, \"Results\" + results.toString());\r\n//                    Games.addAll(Game.fromJSONArray(results));\r\n//                    searchGameAdapter.notifyDataSetChanged();\r\n//                    println(\"hello\");\r\n//                    //Log.i(TAG, \"Movies\" + searchGame.size());\r\n//                } catch (JSONException e) {\r\n//                    //Log.e(TAG, \"hit json expception\", e);\r\n//                }\r\n//            }\r\n//\r\n//\r\n//            @Override\r\n//            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {\r\n//                //Log.d(TAG, \"onFailure\");\r\n//                println(\"hello\");\r\n//            }\r\n//        });\r\n\r\n        return view;\r\n    }\r\n\r\n    @Override\r\n    public void onViewCreated(View view, Bundle savedInstanceState) {\r\n\r\n        AsyncHttpClient client = new AsyncHttpClient();\r\n        super.onViewCreated(view, savedInstanceState);\r\n        svSearch = view.findViewById(R.id.svSearch);\r\n        RecyclerView searchRecyclerView = view.findViewById(R.id.searchRecyclerView);\r\n        searchGames = new ArrayList<>();\r\n        GameSearchAdapter gameSearchAdapter = new GameSearchAdapter(getApplicationContext(), searchGames);\r\n        searchRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));\r\n        searchRecyclerView.setAdapter(gameSearchAdapter);\r\n        String search = \"https://api.rawg.io/api/games?key=63502b95db9f41c99bb3d0ecf77aa811&&search_precise&search=\";\r\n\r\n        //Create request client\r\n\r\n\r\n        //Http Query\r\n        client.get(SEARCH_QUERY, new JsonHttpResponseHandler() {\r\n\r\n            @Override\r\n            public void onSuccess(int statusCode, Headers headers, JSON json) {\r\n                //Log.d(TAG, \"onSucess\");\r\n                JSONObject jsonObject = json.jsonObject;\r\n                try {\r\n                    JSONArray results = jsonObject.getJSONArray(\"results\");\r\n                    //Log.i(TAG, \"Results\" + results.toString());\r\n                    searchGames.addAll(GameSearch.fromJSONArray(results));\r\n                    gameSearchAdapter.notifyDataSetChanged();\r\n                    println(\"hello\");\r\n                    //Log.i(TAG, \"Movies\" + searchGame.size());\r\n                } catch (JSONException e) {\r\n                    //Log.e(TAG, \"hit json expception\", e);\r\n                }\r\n            }\r\n\r\n\r\n            @Override\r\n            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {\r\n                //Log.d(TAG, \"onFailure\");\r\n                println(\"hello\");\r\n            }\r\n        });\r\n\r\n\r\n\r\n        svSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {\r\n            @Override\r\n            public boolean onQueryTextSubmit(String query) {\r\n                Log.i(\"new\", query);\r\n\r\n                svSearch = view.findViewById(R.id.svSearch);\r\n                RecyclerView searchRecyclerView = view.findViewById(R.id.searchRecyclerView);\r\n                searchGames = new ArrayList<>();\r\n                GameSearchAdapter gameSearchAdapter = new GameSearchAdapter(getContext(), searchGames);\r\n                searchRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));\r\n                searchRecyclerView.setAdapter(gameSearchAdapter);\r\n                String search = \"https://api.rawg.io/api/games?key=63502b95db9f41c99bb3d0ecf77aa811&&search_precise&search=\" + query + \"&ordering=-added\";\r\n                client.get(search, new JsonHttpResponseHandler() {\r\n                    @Override\r\n                    public void onSuccess(int statusCode, Headers headers, JSON json) {\r\n                        JSONObject jsonObject = json.jsonObject;\r\n                        try{\r\n                            JSONArray results = jsonObject.getJSONArray(\"results\");\r\n                            //Log.i(TAG, \"Results\" + results.toString());\r\n                            searchGames.addAll(GameSearch.fromJSONArray(results));\r\n                            gameSearchAdapter.notifyDataSetChanged();\r\n                            println(\"hello\");\r\n                            //Log.i(TAG, \"Movies\" + searchGame.size());\r\n                        } catch(JSONException e){\r\n                            //Log.e(TAG, \"hit json expception\", e);\r\n                        }\r\n\r\n                    }\r\n\r\n                    @Override\r\n                    public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {\r\n\r\n                    }\r\n                });\r\n\r\n                return false;\r\n            }\r\n\r\n            @Override\r\n            public boolean onQueryTextChange(String newText) {\r\n                svSearch = view.findViewById(R.id.svSearch);\r\n                RecyclerView searchRecyclerView = view.findViewById(R.id.searchRecyclerView);\r\n                searchGames = new ArrayList<>();\r\n                GameSearchAdapter gameSearchAdapter = new GameSearchAdapter(getContext(), searchGames);\r\n                searchRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));\r\n                searchRecyclerView.setAdapter(gameSearchAdapter);\r\n                String search = \"https://api.rawg.io/api/games?key=63502b95db9f41c99bb3d0ecf77aa811&&search_precise&search=\" + newText + \"&ordering=-added\";\r\n                client.get(search, new JsonHttpResponseHandler() {\r\n                    @Override\r\n                    public void onSuccess(int statusCode, Headers headers, JSON json) {\r\n                        JSONObject jsonObject = json.jsonObject;\r\n                        try{\r\n                            JSONArray results = jsonObject.getJSONArray(\"results\");\r\n                            Log.i(\"Results\", \"Results\" + results.toString());\r\n                            searchGames.addAll(GameSearch.fromJSONArray(results));\r\n                            gameSearchAdapter.notifyDataSetChanged();\r\n                            println(\"hello\");\r\n                            Log.i(\"Movies\", \"Movies\" + searchGames.size());\r\n                        } catch(JSONException e){\r\n                            Log.e(\"json\", \"hit json expception\", e);\r\n                        }\r\n\r\n                    }\r\n\r\n                    @Override\r\n                    public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {\r\n\r\n                    }\r\n                });\r\n\r\n                return false;\r\n            }\r\n        });\r\n\r\n\r\n    }\r\n\r\n\r\n    }\r\n\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/rebootapp/SearchFragment.java b/app/src/main/java/com/example/rebootapp/SearchFragment.java
+--- a/app/src/main/java/com/example/rebootapp/SearchFragment.java	(revision 56c4e84700c03b6f5f13e3765dd2b479645d6000)
++++ b/app/src/main/java/com/example/rebootapp/SearchFragment.java	(date 1708581154000)
+@@ -30,7 +30,7 @@
+ 
+ public class SearchFragment extends Fragment {
+ 
+-    List<GameSearch> searchGames; //Game Model List for RecyclerView&Adapter
++    List<GameSearch> searchGames; //GameModel Model List for RecyclerView&Adapter
+ 
+     String search_term = "";//"spiderman" + "&ordering=-added"; //Test String
+     private MenuItem menuItem;
+@@ -101,7 +101,7 @@
+ //                try {
+ //                    JSONArray results = jsonObject.getJSONArray("results");
+ //                    //Log.i(TAG, "Results" + results.toString());
+-//                    Games.addAll(Game.fromJSONArray(results));
++//                    Games.addAll(GameModel.fromJSONArray(results));
+ //                    searchGameAdapter.notifyDataSetChanged();
+ //                    println("hello");
+ //                    //Log.i(TAG, "Movies" + searchGame.size());
+Index: app/src/main/java/com/example/rebootapp/GameReview.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.rebootapp;\r\n\r\nimport android.util.Log;\r\n\r\nimport org.json.JSONArray;\r\nimport org.json.JSONException;\r\nimport org.json.JSONObject;\r\nimport org.parceler.Parcel;\r\n\r\nimport java.util.ArrayList;\r\nimport java.util.List;\r\n\r\n@Parcel\r\n\r\npublic class GameReview {\r\n    String title;\r\n    String id;\r\n    String date;\r\n    String posterPath;\r\n    String backdropPath;\r\n    Double voteAverage;\r\n\r\n\r\n    // no-arg, empty constructor required for Parceler\r\n    public GameReview() {}\r\n\r\n\r\n    public GameReview(JSONObject game) throws JSONException {\r\n        Log.i(\"search\", \"searching\");\r\n        title = game.getString(\"name\");\r\n        Log.i(\"Game Name\", title);\r\n        id = game.getString(\"id\");\r\n        Log.i(\"Game ID\", id);\r\n        String decName = game.getString(\"metacritic\");\r\n        Log.i(\"name\", decName);\r\n        date = game.getString(\"released\");\r\n        posterPath = game.getString(\"background_image\");\r\n//        backdropPath = movie.getString(\"backdrop_path\");\r\n//        voteAverage = movie.getDouble(\"vote_average\");\r\n    }\r\n\r\n    public static List<GameReview> fromJSONArray(JSONArray gameJSONArray) throws JSONException{\r\n        List<GameReview> reviews = new ArrayList<>();\r\n        for(int i =0; i < gameJSONArray.length(); i++){\r\n            reviews.add(new GameReview(gameJSONArray.getJSONObject(i)));\r\n        }\r\n        return reviews;\r\n    }\r\n\r\n    public String getPosterPath() {\r\n        return posterPath;\r\n    }\r\n    public String getBackdropPath(){\r\n        return \"https://image.tmdb.org/t/p/w342\" + backdropPath;\r\n    }\r\n\r\n    public String getTitle() {\r\n        return title;\r\n    }\r\n\r\n    public String getOverview() {\r\n        return date;\r\n    }\r\n    public Double getVoteAverage() {\r\n        return voteAverage;\r\n    }\r\n\r\n    public String getId() {return id;}\r\n\r\n\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/rebootapp/GameReview.java b/app/src/main/java/com/example/rebootapp/GameReview.java
+--- a/app/src/main/java/com/example/rebootapp/GameReview.java	(revision 56c4e84700c03b6f5f13e3765dd2b479645d6000)
++++ b/app/src/main/java/com/example/rebootapp/GameReview.java	(date 1708581154000)
+@@ -28,9 +28,9 @@
+     public GameReview(JSONObject game) throws JSONException {
+         Log.i("search", "searching");
+         title = game.getString("name");
+-        Log.i("Game Name", title);
++        Log.i("GameModel Name", title);
+         id = game.getString("id");
+-        Log.i("Game ID", id);
++        Log.i("GameModel ID", id);
+         String decName = game.getString("metacritic");
+         Log.i("name", decName);
+         date = game.getString("released");
+Index: app/src/main/java/com/example/rebootapp/ReviewFragment.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.rebootapp;\r\n\r\nimport static java.sql.DriverManager.println;\r\n\r\nimport android.os.Bundle;\r\nimport android.util.Log;\r\nimport android.view.LayoutInflater;\r\nimport android.view.MenuItem;\r\nimport android.view.View;\r\nimport android.view.ViewGroup;\r\nimport android.widget.SearchView;\r\n\r\nimport androidx.annotation.NonNull;\r\nimport androidx.annotation.Nullable;\r\nimport androidx.fragment.app.Fragment;\r\nimport androidx.recyclerview.widget.LinearLayoutManager;\r\nimport androidx.recyclerview.widget.RecyclerView;\r\n\r\nimport com.codepath.asynchttpclient.AsyncHttpClient;\r\nimport com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;\r\n\r\nimport org.json.JSONArray;\r\nimport org.json.JSONException;\r\nimport org.json.JSONObject;\r\n\r\nimport java.util.ArrayList;\r\nimport java.util.List;\r\n\r\nimport okhttp3.Headers;\r\n\r\n\r\npublic class ReviewFragment extends Fragment {\r\n\r\n    List<GameReview> Reviews; //Game Model List for RecyclerView&Adapter\r\n    String search_term = \"\";//\"spiderman\" + \"&ordering=-added\"; //Test String\r\n    private MenuItem menuItem;\r\n    private SearchView svSearchGame;\r\n    String SEARCH_QUERY = \"https://api.rawg.io/api/games?key=63502b95db9f41c99bb3d0ecf77aa811\" + search_term + \"&ordering=-added\";\r\n\r\n    private static final String ARG_PARAM1 = \"param1\";\r\n    private static final String ARG_PARAM2 = \"param2\";\r\n\r\n\r\n    private String mParam1;\r\n    private String mParam2;\r\n\r\n    public ReviewFragment() {\r\n        // Required empty public constructor\r\n    }\r\n\r\n    /**\r\n     * Use this factory method to create a new instance of\r\n     * this fragment using the provided parameters.\r\n     *\r\n     * @param param1 Parameter 1.\r\n     * @param param2 Parameter 2.\r\n     * @return A new instance of fragment HomeFragment.\r\n     */\r\n    // TODO: Rename and change types and number of parameters\r\n    public static ReviewFragment newInstance(String param1, String param2) {\r\n        ReviewFragment fragment = new ReviewFragment();\r\n        Bundle args = new Bundle();\r\n        args.putString(ARG_PARAM1, param1);\r\n        args.putString(ARG_PARAM2, param2);\r\n        fragment.setArguments(args);\r\n        return fragment;\r\n    }\r\n\r\n    @Override\r\n    public void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        if (getArguments() != null) {\r\n            mParam1 = getArguments().getString(ARG_PARAM1);\r\n            mParam2 = getArguments().getString(ARG_PARAM2);\r\n        }\r\n    }\r\n\r\n    @Override\r\n    public View onCreateView(LayoutInflater inflater, ViewGroup container,\r\n                             Bundle savedInstanceState) {\r\n        // Inflate the layout for this fragment\r\n        return inflater.inflate(R.layout.fragment_review, container, false);\r\n    }\r\n\r\n    @Override\r\n    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {\r\n        super.onViewCreated(view, savedInstanceState);\r\n        svSearchGame = view.findViewById(R.id.svSearchGame);\r\n        RecyclerView reviewRecyclerView = view.findViewById(R.id.reviewRecyclerView);\r\n        Reviews = new ArrayList<>();\r\n        GameReviewAdapter GameReviewAdapter = new GameReviewAdapter(getContext(), Reviews);\r\n        reviewRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));\r\n        reviewRecyclerView.setAdapter(GameReviewAdapter);\r\n\r\n        //Create request client\r\n        AsyncHttpClient client = new AsyncHttpClient();\r\n\r\n        //Http Query\r\n        client.get(SEARCH_QUERY, new JsonHttpResponseHandler() {\r\n\r\n            @Override\r\n            public void onSuccess(int statusCode, Headers headers, JSON json) {\r\n                //Log.d(TAG, \"onSucess\");\r\n                JSONObject jsonObject = json.jsonObject;\r\n                try {\r\n                    JSONArray results = jsonObject.getJSONArray(\"results\");\r\n                    //Log.i(TAG, \"Results\" + results.toString());\r\n                    Reviews.addAll(GameReview.fromJSONArray(results));\r\n                    GameReviewAdapter.notifyDataSetChanged();\r\n                    println(\"hello\");\r\n                    //Log.i(TAG, \"Movies\" + searchGame.size());\r\n                } catch (JSONException e) {\r\n                    //Log.e(TAG, \"hit json expception\", e);\r\n                }\r\n            }\r\n\r\n\r\n            @Override\r\n            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {\r\n                //Log.d(TAG, \"onFailure\");\r\n                println(\"hello\");\r\n            }\r\n        });\r\n\r\n\r\n\r\n        svSearchGame.setOnQueryTextListener(new SearchView.OnQueryTextListener() {\r\n            @Override\r\n            public boolean onQueryTextSubmit(String query) {\r\n                Log.i(\"new\", query);\r\n\r\n                svSearchGame = view.findViewById(R.id.svSearchGame);\r\n                RecyclerView reviewRecyclerView = view.findViewById(R.id.reviewRecyclerView);\r\n                Reviews = new ArrayList<>();\r\n                GameReviewAdapter GameReviewAdapter = new GameReviewAdapter(getContext(), Reviews);\r\n                reviewRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));\r\n                reviewRecyclerView.setAdapter(GameReviewAdapter);\r\n                String search = \"https://api.rawg.io/api/games?key=63502b95db9f41c99bb3d0ecf77aa811&&search_precise&search=\" + query + \"&ordering=-added\";\r\n                client.get(search, new JsonHttpResponseHandler() {\r\n                    @Override\r\n                    public void onSuccess(int statusCode, Headers headers, JSON json) {\r\n                        JSONObject jsonObject = json.jsonObject;\r\n                        try{\r\n                            JSONArray results = jsonObject.getJSONArray(\"results\");\r\n                            //Log.i(TAG, \"Results\" + results.toString());\r\n                            Reviews.addAll(GameReview.fromJSONArray(results));\r\n                            GameReviewAdapter.notifyDataSetChanged();\r\n                            println(\"hello\");\r\n                            //Log.i(TAG, \"Movies\" + searchGame.size());\r\n                        } catch(JSONException e){\r\n                            //Log.e(TAG, \"hit json expception\", e);\r\n                        }\r\n\r\n                    }\r\n\r\n                    @Override\r\n                    public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {\r\n\r\n                    }\r\n                });\r\n\r\n                return false;\r\n            }\r\n\r\n            @Override\r\n            public boolean onQueryTextChange(String newText) {\r\n                svSearchGame = view.findViewById(R.id.svSearch);\r\n                RecyclerView reviewRecyclerView = view.findViewById(R.id.reviewRecyclerView);\r\n                Reviews = new ArrayList<>();\r\n                GameReviewAdapter GameReviewAdapter = new GameReviewAdapter(getContext(), Reviews);\r\n                reviewRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));\r\n                reviewRecyclerView.setAdapter(GameReviewAdapter);\r\n                String search = \"https://api.rawg.io/api/games?key=63502b95db9f41c99bb3d0ecf77aa811&&search_precise&search=\" + newText + \"&ordering=-added\";\r\n                client.get(search, new JsonHttpResponseHandler() {\r\n                    @Override\r\n                    public void onSuccess(int statusCode, Headers headers, JSON json) {\r\n                        JSONObject jsonObject = json.jsonObject;\r\n                        try{\r\n                            JSONArray results = jsonObject.getJSONArray(\"results\");\r\n                            //Log.i(TAG, \"Results\" + results.toString());\r\n                            Reviews.addAll(GameReview.fromJSONArray(results));\r\n                            GameReviewAdapter.notifyDataSetChanged();\r\n                            println(\"hello\");\r\n                            //Log.i(TAG, \"Movies\" + searchGame.size());\r\n                        } catch(JSONException e){\r\n                            //Log.e(TAG, \"hit json expception\", e);\r\n                        }\r\n\r\n                    }\r\n\r\n                    @Override\r\n                    public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {\r\n\r\n                    }\r\n                });\r\n\r\n                return false;\r\n            }\r\n        });\r\n\r\n\r\n    }\r\n\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/rebootapp/ReviewFragment.java b/app/src/main/java/com/example/rebootapp/ReviewFragment.java
+--- a/app/src/main/java/com/example/rebootapp/ReviewFragment.java	(revision 56c4e84700c03b6f5f13e3765dd2b479645d6000)
++++ b/app/src/main/java/com/example/rebootapp/ReviewFragment.java	(date 1708581154000)
+@@ -31,7 +31,7 @@
+ 
+ public class ReviewFragment extends Fragment {
+ 
+-    List<GameReview> Reviews; //Game Model List for RecyclerView&Adapter
++    List<GameReview> Reviews; //GameModel Model List for RecyclerView&Adapter
+     String search_term = "";//"spiderman" + "&ordering=-added"; //Test String
+     private MenuItem menuItem;
+     private SearchView svSearchGame;
+Index: app/src/main/res/layout/layout_user_list.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/layout_user_list.xml b/app/src/main/res/layout/layout_user_list.xml
+new file mode 100644
+--- /dev/null	(date 1708653166000)
++++ b/app/src/main/res/layout/layout_user_list.xml	(date 1708653166000)
+@@ -0,0 +1,37 @@
++<?xml version="1.0" encoding="utf-8"?>
++<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
++    android:layout_width="match_parent"
++    android:layout_height="match_parent"
++    android:background="@color/white"
++    android:orientation="vertical">
++
++    <TextView
++        android:id="@+id/tvTitleList"
++        android:layout_width="match_parent"
++        android:layout_height="wrap_content"
++        android:padding="10dp"
++        android:text="Add to list"
++        android:textColor="@color/black"
++        android:textSize="20sp"
++        android:textStyle="bold" />
++
++    <androidx.recyclerview.widget.RecyclerView
++        android:id="@+id/recyclerView"
++        android:layout_width="match_parent"
++        android:layout_height="350dp"
++        android:padding="10dp">
++
++    </androidx.recyclerview.widget.RecyclerView>
++
++    <Button
++        android:id="@+id/btnClose"
++        android:layout_width="match_parent"
++        android:layout_height="wrap_content"
++        android:text="Close" />
++
++    <Button
++        android:id="@+id/btnNewList"
++        android:layout_width="match_parent"
++        android:layout_height="wrap_content"
++        android:text="Add New List" />
++</LinearLayout>
+\ No newline at end of file
+Index: app/src/main/res/layout/activity_wishlist_games.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/activity_wishlist_games.xml b/app/src/main/res/layout/activity_wishlist_games.xml
+new file mode 100644
+--- /dev/null	(date 1708306878000)
++++ b/app/src/main/res/layout/activity_wishlist_games.xml	(date 1708306878000)
+@@ -0,0 +1,37 @@
++<?xml version="1.0" encoding="utf-8"?>
++<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
++    xmlns:app="http://schemas.android.com/apk/res-auto"
++    xmlns:tools="http://schemas.android.com/tools"
++    android:layout_width="match_parent"
++    android:layout_height="match_parent"
++    android:layout_alignParentBottom="false"
++    android:background="@color/white"
++    android:visibility="visible"
++    tools:context=".WishListActivity">
++
++    <TextView
++        android:id="@+id/tv_wishlistTitle"
++        android:layout_width="425dp"
++        android:layout_height="wrap_content"
++        android:layout_alignParentTop="true"
++        android:text="WishList Games"
++        android:textAlignment="center"
++        android:textSize="34sp"
++        android:textColor="@color/aqua"/>
++
++    <androidx.recyclerview.widget.RecyclerView
++        android:id="@+id/rv_wishlist_list"
++        android:layout_width="wrap_content"
++        android:layout_height="wrap_content"
++        android:layout_marginTop="50dp"
++        android:scrollbars="vertical" />
++
++    <Button
++        android:id="@+id/btn_WishList_Done"
++        android:layout_width="wrap_content"
++        android:layout_height="wrap_content"
++        android:layout_marginLeft="150dp"
++        android:layout_marginTop="600dp"
++        android:text="Done" />
++
++</RelativeLayout>
+\ No newline at end of file
+Index: app/src/main/java/com/example/rebootapp/ReviewActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.rebootapp;\r\n\r\nimport android.content.Intent;\r\nimport android.os.Bundle;\r\nimport android.util.Log;\r\nimport android.view.View;\r\nimport android.widget.Button;\r\nimport android.widget.EditText;\r\nimport android.widget.ImageView;\r\nimport android.widget.TextView;\r\nimport android.widget.Toast;\r\n\r\nimport androidx.appcompat.app.AppCompatActivity;\r\n\r\nimport com.bumptech.glide.Glide;\r\nimport com.parse.GetCallback;\r\nimport com.parse.ParseException;\r\nimport com.parse.ParseObject;\r\nimport com.parse.ParseQuery;\r\nimport com.parse.ParseUser;\r\n\r\nimport org.parceler.Parcels;\r\n\r\npublic class ReviewActivity extends AppCompatActivity {\r\n\r\n    GameReview review;\r\n\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        setContentView(R.layout.activity_review);\r\n\r\n        TextView gameTitle = findViewById(R.id.tvTitleR);\r\n        Button btnSubmit = (Button) findViewById(R.id.btnSubmit);\r\n\r\n\r\n\r\n        ImageView gamePoster = (ImageView) findViewById(R.id.ivPosterR);\r\n\r\n\r\n\r\n        //Use the context from previous page to access game data\r\n        review = (GameReview) Parcels.unwrap(getIntent().getParcelableExtra(GameReview.class.getSimpleName()));\r\n        gameTitle.setText(review.getTitle());\r\n        Glide.with(this)\r\n                .load(review.getPosterPath())\r\n                .placeholder(R.drawable.flicks_movie_placeholder)\r\n                .error(R.drawable.flicks_movie_placeholder)\r\n                .into(gamePoster);\r\n        String id = review.getId(); //Review ID? Maybe this is created upon creating new object\r\n\r\n        ParseUser currentUser = ParseUser.getCurrentUser();\r\n        btnSubmit.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                EditText reviewText = findViewById(R.id.etReviewTextR);\r\n                String text = reviewText.getText().toString();\r\n                String userID = currentUser.getObjectId();\r\n                String username = currentUser.getUsername();\r\n                Log.i(\"Review\", reviewText.getText().toString());\r\n                addReview(userID, username, text, id);\r\n                Toast.makeText(getApplicationContext(), \"Review Submitted\", Toast.LENGTH_SHORT).show();\r\n\r\n                Intent intent = new Intent(ReviewActivity.this, GameReviewDetailsActivity.class);\r\n                startActivity(intent);\r\n            }\r\n        });\r\n\r\n    }\r\n    public void addReview(String UserID, String username, String reviewText, String id){\r\n\r\n        ParseObject object = new ParseObject(\"Review\");\r\n        object.put(\"ReviewUser\", UserID);\r\n        object.put(\"ReviewUsername\", username);\r\n        object.put(\"ReviewText\", reviewText);\r\n        object.put(\"GameID\", id);\r\n        object.saveInBackground();\r\n\r\n        addGame(id, object);\r\n\r\n    }\r\n\r\n    public void addGame(String GameID, ParseObject review ){\r\n\r\n        try {\r\n            ParseQuery<ParseObject> query = ParseQuery.getQuery(\"Game\");\r\n            query.whereEqualTo(\"GameID\", GameID);\r\n            query.getFirstInBackground(new GetCallback<ParseObject>() {\r\n                @Override\r\n                public void done(ParseObject object, ParseException e) {\r\n                    if (e == null){\r\n                        Log.i(\"game exists\", \"already exists\");\r\n                        object.add(\"ReviewArray\", review);\r\n                        object.saveInBackground();\r\n                    }\r\n                    else {\r\n                        ParseObject game = new ParseObject(\"Game\");\r\n                        game.put(\"GameID\", GameID);\r\n                        game.add(\"ReviewArray\", review);\r\n                        game.saveInBackground();\r\n                    }\r\n                }\r\n            });\r\n\r\n        }catch (Exception e){\r\n            System.out.println(\"Parse Error in Saving\");\r\n        }\r\n\r\n\r\n    }\r\n\r\n\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/rebootapp/ReviewActivity.java b/app/src/main/java/com/example/rebootapp/ReviewActivity.java
+--- a/app/src/main/java/com/example/rebootapp/ReviewActivity.java	(revision 56c4e84700c03b6f5f13e3765dd2b479645d6000)
++++ b/app/src/main/java/com/example/rebootapp/ReviewActivity.java	(date 1708581154000)
+@@ -83,7 +83,7 @@
+     public void addGame(String GameID, ParseObject review ){
+ 
+         try {
+-            ParseQuery<ParseObject> query = ParseQuery.getQuery("Game");
++            ParseQuery<ParseObject> query = ParseQuery.getQuery("GameModel");
+             query.whereEqualTo("GameID", GameID);
+             query.getFirstInBackground(new GetCallback<ParseObject>() {
+                 @Override
+@@ -94,7 +94,7 @@
+                         object.saveInBackground();
+                     }
+                     else {
+-                        ParseObject game = new ParseObject("Game");
++                        ParseObject game = new ParseObject("GameModel");
+                         game.put("GameID", GameID);
+                         game.add("ReviewArray", review);
+                         game.saveInBackground();
+Index: .idea/gradle.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"GradleMigrationSettings\" migrationVersion=\"1\" />\r\n  <component name=\"GradleSettings\">\r\n    <option name=\"linkedExternalProjectsSettings\">\r\n      <GradleProjectSettings>\r\n        <option name=\"testRunner\" value=\"GRADLE\" />\r\n        <option name=\"externalProjectPath\" value=\"$PROJECT_DIR$\" />\r\n        <option name=\"gradleJvm\" value=\"#GRADLE_LOCAL_JAVA_HOME\" />\r\n        <option name=\"modules\">\r\n          <set>\r\n            <option value=\"$PROJECT_DIR$\" />\r\n            <option value=\"$PROJECT_DIR$/app\" />\r\n          </set>\r\n        </option>\r\n        <option name=\"resolveExternalAnnotations\" value=\"false\" />\r\n      </GradleProjectSettings>\r\n    </option>\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/gradle.xml b/.idea/gradle.xml
+--- a/.idea/gradle.xml	(revision 56c4e84700c03b6f5f13e3765dd2b479645d6000)
++++ b/.idea/gradle.xml	(date 1708809349108)
+@@ -1,10 +1,8 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <project version="4">
+-  <component name="GradleMigrationSettings" migrationVersion="1" />
+   <component name="GradleSettings">
+     <option name="linkedExternalProjectsSettings">
+       <GradleProjectSettings>
+-        <option name="testRunner" value="GRADLE" />
+         <option name="externalProjectPath" value="$PROJECT_DIR$" />
+         <option name="gradleJvm" value="#GRADLE_LOCAL_JAVA_HOME" />
+         <option name="modules">
+Index: app/src/main/res/values/themes.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><resources xmlns:tools=\"http://schemas.android.com/tools\">\r\n    <!-- Base application theme. -->\r\n    <style name=\"Base.Theme.ReBoot3\" parent=\"Theme.AppCompat.Light\">\r\n        <item name=\"colorPrimary\">@color/white</item>\r\n    </style>\r\n    <style name=\"btnSignUpLink.\">\r\n        <item name=\"background\">@color/black</item>\r\n        <item name=\"android:background\">@color/black</item>\r\n        <item name=\"backgroundColor\">@color/black</item>\r\n    </style>\r\n\r\n    <style name=\"Theme.ReBootApp\" parent=\"Base.Theme.ReBootApp\" />\r\n</resources>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/values/themes.xml b/app/src/main/res/values/themes.xml
+--- a/app/src/main/res/values/themes.xml	(revision 56c4e84700c03b6f5f13e3765dd2b479645d6000)
++++ b/app/src/main/res/values/themes.xml	(date 1708565900000)
+@@ -8,6 +8,11 @@
+         <item name="android:background">@color/black</item>
+         <item name="backgroundColor">@color/black</item>
+     </style>
+-
+-    <style name="Theme.ReBootApp" parent="Base.Theme.ReBootApp" />
++    <style name="AlertDialogCustom">
++        <item name="android:textColor">@color/black</item>
++        <item name="android:textColorPrimary">@color/black</item>
++        <item name="android:textSize">18sp</item>
++        <item name="android:background">@drawable/dialog_background</item>
++    </style>
++    <style name="Theme.ReBootApp" parent="Base.Theme.ReBoot3" />
+ </resources>
+\ No newline at end of file
+Index: .idea/misc.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><project version=\"4\">\r\n  <component name=\"ExternalStorageConfigurationManager\" enabled=\"true\" />\r\n  <component name=\"ProjectRootManager\" version=\"2\" languageLevel=\"JDK_17\" default=\"true\" project-jdk-name=\"jbr-17\" project-jdk-type=\"JavaSDK\">\r\n    <output url=\"file://$PROJECT_DIR$/build/classes\" />\r\n  </component>\r\n  <component name=\"ProjectType\">\r\n    <option name=\"id\" value=\"Android\" />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/misc.xml b/.idea/misc.xml
+--- a/.idea/misc.xml	(revision 56c4e84700c03b6f5f13e3765dd2b479645d6000)
++++ b/.idea/misc.xml	(date 1708809447076)
+@@ -1,3 +1,4 @@
++<?xml version="1.0" encoding="UTF-8"?>
+ <project version="4">
+   <component name="ExternalStorageConfigurationManager" enabled="true" />
+   <component name="ProjectRootManager" version="2" languageLevel="JDK_17" default="true" project-jdk-name="jbr-17" project-jdk-type="JavaSDK">
+Index: app/src/main/java/com/example/rebootapp/HomeActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.rebootapp;\r\n\r\nimport android.os.Bundle;\r\nimport android.util.Log;\r\n\r\nimport androidx.annotation.Nullable;\r\nimport androidx.appcompat.app.AppCompatActivity;\r\nimport androidx.recyclerview.widget.LinearLayoutManager;\r\nimport androidx.recyclerview.widget.RecyclerView;\r\n\r\nimport com.codepath.asynchttpclient.AsyncHttpClient;\r\nimport com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;\r\n\r\nimport org.json.JSONArray;\r\nimport org.json.JSONException;\r\nimport org.json.JSONObject;\r\n\r\nimport java.util.ArrayList;\r\nimport java.util.List;\r\n\r\nimport okhttp3.Headers;\r\n\r\n\r\n\r\npublic class HomeActivity extends AppCompatActivity {\r\n\r\n    public static final String POPULAR_GAMES_URL = \"https://api.rawg.io/api/games?key=63502b95db9f41c99bb3d0ecf77aa811\";\r\n    public static final String NEW_GAMES_URL = \"https://api.rawg.io/api/games?key=63502b95db9f41c99bb3d0ecf77aa811&dates=2023-01-01,2023-11-01&ordering=-added\";\r\n    public static final String YOUR_GAMES_URL = \"https://api.rawg.io/api/games?key=63502b95db9f41c99bb3d0ecf77aa811&dates=2023-12-01,2024-11-01\";\r\n    public static final String TAG = \"HomeAct\";\r\n\r\n    List<Game> game;\r\n    List<Game> newGames;\r\n\r\n    List<Game> yourGames;\r\n    @Override\r\n    protected void onCreate(@Nullable Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n//        setContentView(R.layout.activity_home);\r\n//        RecyclerView rvGames = findViewById(R.id.hzRecyclerView);\r\n//        RecyclerView rvNewGames = findViewById(R.id.newGamesRV);\r\n//        RecyclerView rvYourGames = findViewById(R.id.rvYourGames);\r\n//\r\n//\r\n//        game = new ArrayList<>();\r\n//        newGames = new ArrayList<>();\r\n//        yourGames = new ArrayList<>();\r\n//\r\n//        GameAdapter gameAdapter =  new GameAdapter(this , game);\r\n//        GameAdapter newGameAdapter = new GameAdapter(this, newGames);\r\n//        GameAdapter yourGamesAapter = new GameAdapter(this, yourGames);\r\n//\r\n//        rvGames.setAdapter(gameAdapter);\r\n//        rvNewGames.setAdapter(newGameAdapter);\r\n//        rvYourGames.setAdapter(yourGamesAapter);\r\n//\r\n//        rvGames.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));\r\n//        rvNewGames.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));\r\n//        rvYourGames.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));\r\n//\r\n//        AsyncHttpClient client = new AsyncHttpClient();\r\n//\r\n//        client.get(POPULAR_GAMES_URL , new JsonHttpResponseHandler() {\r\n//            @Override\r\n//            public void onSuccess(int statusCode, Headers headers, JSON json) {\r\n//                Log.d(TAG, \"onSucess\");\r\n//                JSONObject jsonObject = json.jsonObject;\r\n//                try{\r\n//                    JSONArray results = jsonObject.getJSONArray(\"results\");\r\n//                    Log.i(TAG, \"Results\" + results.toString());\r\n//                    game.addAll(Game.fromJSONArray(results));\r\n//                    gameAdapter.notifyDataSetChanged();\r\n//                    Log.i(TAG, \"Movies\" + game.size());\r\n//                } catch(JSONException e){\r\n//                    Log.e(TAG, \"hit json expception\", e);\r\n//                }\r\n//            }\r\n//\r\n//            @Override\r\n//            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {\r\n//                Log.d(TAG, \"onFailure\");\r\n//            }\r\n//        });\r\n//\r\n//        client.get(NEW_GAMES_URL, new JsonHttpResponseHandler() {\r\n//            @Override\r\n//            public void onSuccess(int statusCode, Headers headers, JSON json) {\r\n//                JSONObject jsonObject = json.jsonObject;\r\n//                try{\r\n//                    JSONArray results = jsonObject.getJSONArray(\"results\");\r\n//                    Log.i(TAG, \"Results\" + results.toString());\r\n//                    newGames.addAll(Game.fromJSONArray(results));\r\n//                    newGameAdapter.notifyDataSetChanged();\r\n//                    Log.i(TAG, \"Movies\" + newGames.size());\r\n//                } catch(JSONException e){\r\n//                    Log.e(TAG, \"hit json expception\", e);\r\n//                }\r\n//            }\r\n//\r\n//            @Override\r\n//            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {\r\n//                Log.d(TAG, \"onFailure\");\r\n//            }\r\n//        });\r\n//\r\n//        client.get(YOUR_GAMES_URL, new JsonHttpResponseHandler() {\r\n//            @Override\r\n//            public void onSuccess(int statusCode, Headers headers, JSON json) {\r\n//                JSONObject jsonObject = json.jsonObject;\r\n//                try{\r\n//                    JSONArray results = jsonObject.getJSONArray(\"results\");\r\n//                    Log.i(TAG, \"Results\" + results.toString());\r\n//                    yourGames.addAll(Game.fromJSONArray(results));\r\n//                    yourGamesAapter.notifyDataSetChanged();\r\n//                    Log.i(TAG, \"Movies\" + yourGames.size());\r\n//                } catch(JSONException e){\r\n//                    Log.e(TAG, \"hit json expception\", e);\r\n//                }\r\n//            }\r\n//\r\n//            @Override\r\n//            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {\r\n//\r\n//            }\r\n//        });\r\n//\r\n//\r\n//\r\n//    }\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/rebootapp/HomeActivity.java b/app/src/main/java/com/example/rebootapp/HomeActivity.java
+--- a/app/src/main/java/com/example/rebootapp/HomeActivity.java	(revision 56c4e84700c03b6f5f13e3765dd2b479645d6000)
++++ b/app/src/main/java/com/example/rebootapp/HomeActivity.java	(date 1708581154000)
+@@ -68,7 +68,7 @@
+ //                try{
+ //                    JSONArray results = jsonObject.getJSONArray("results");
+ //                    Log.i(TAG, "Results" + results.toString());
+-//                    game.addAll(Game.fromJSONArray(results));
++//                    game.addAll(GameModel.fromJSONArray(results));
+ //                    gameAdapter.notifyDataSetChanged();
+ //                    Log.i(TAG, "Movies" + game.size());
+ //                } catch(JSONException e){
+@@ -89,7 +89,7 @@
+ //                try{
+ //                    JSONArray results = jsonObject.getJSONArray("results");
+ //                    Log.i(TAG, "Results" + results.toString());
+-//                    newGames.addAll(Game.fromJSONArray(results));
++//                    newGames.addAll(GameModel.fromJSONArray(results));
+ //                    newGameAdapter.notifyDataSetChanged();
+ //                    Log.i(TAG, "Movies" + newGames.size());
+ //                } catch(JSONException e){
+@@ -110,7 +110,7 @@
+ //                try{
+ //                    JSONArray results = jsonObject.getJSONArray("results");
+ //                    Log.i(TAG, "Results" + results.toString());
+-//                    yourGames.addAll(Game.fromJSONArray(results));
++//                    yourGames.addAll(GameModel.fromJSONArray(results));
+ //                    yourGamesAapter.notifyDataSetChanged();
+ //                    Log.i(TAG, "Movies" + yourGames.size());
+ //                } catch(JSONException e){
+Index: app/src/main/java/com/example/rebootapp/Login.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.rebootapp;\r\n\r\nimport android.content.ContentValues;\r\nimport android.content.Intent;\r\nimport android.os.Bundle;\r\nimport android.text.TextUtils;\r\nimport android.util.Log;\r\nimport android.view.View;\r\nimport android.widget.Button;\r\nimport android.widget.EditText;\r\nimport android.widget.ImageView;\r\nimport android.widget.TextView;\r\nimport android.widget.Toast;\r\n\r\nimport androidx.appcompat.app.AppCompatActivity;\r\n\r\nimport com.google.android.gms.auth.api.signin.GoogleSignIn;\r\nimport com.google.android.gms.auth.api.signin.GoogleSignInAccount;\r\nimport com.google.android.gms.auth.api.signin.GoogleSignInClient;\r\nimport com.google.android.gms.auth.api.signin.GoogleSignInOptions;\r\nimport com.google.android.gms.common.api.ApiException;\r\nimport com.google.android.gms.tasks.Task;\r\nimport com.parse.LogInCallback;\r\nimport com.parse.ParseException;\r\nimport com.parse.ParseUser;\r\n\r\n\r\npublic class Login extends AppCompatActivity {\r\n    GoogleSignInOptions gso;\r\n    GoogleSignInClient gsc;\r\n    ImageView googleImage;\r\n    GoogleSignInAccount account;\r\n\r\n    Button btnLogin;\r\n    TextView btnSignUp;\r\n    EditText edtEmail;\r\n    EditText edtPassword;\r\n\r\n    @Override\r\n    protected void onCreate (Bundle savedInstanceState){\r\n        super.onCreate(savedInstanceState);\r\n        setContentView(R.layout.activity_login);\r\n\r\n        btnLogin = findViewById(R.id.btnLogin); //Login Button\r\n        btnSignUp = findViewById(R.id.btnSignUpLink); //Sign Up Link\r\n        googleImage = findViewById(R.id.google_img_login); //Google Login\r\n\r\n        //Create Google Client\r\n        gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();\r\n        gsc = GoogleSignIn.getClient(this, gso);\r\n        \r\n        //User info for Manual Setup\r\n        edtEmail = findViewById(R.id.edtEmail);\r\n        edtPassword = findViewById(R.id.edtPassword);\r\n\r\n        //Manual Login Button onClickListener\r\n        btnLogin.setOnClickListener(new View.OnClickListener() {\r\n\r\n            @Override\r\n            public void onClick(View v) {\r\n                String username = edtEmail.getText().toString();\r\n                String password = edtPassword.getText().toString();\r\n                if(TextUtils.isEmpty(username)){\r\n                    Toast.makeText(getApplicationContext(), \"Username is Required.\", Toast.LENGTH_LONG).show();\r\n                }\r\n                else if(TextUtils.isEmpty(password)){\r\n                    Toast.makeText(getApplicationContext(), \"Password is Required.\", Toast.LENGTH_LONG).show();\r\n\r\n                }\r\n                else if(TextUtils.isEmpty(username)&TextUtils.isEmpty(password)){\r\n                    Toast.makeText(getApplicationContext(), \"Username and Password is Required.\", Toast.LENGTH_LONG).show();\r\n                }\r\n                else{\r\n                    logInManual(username, password);\r\n                }\r\n\r\n            }\r\n        });\r\n\r\n        //SignUp Link\r\n        btnSignUp.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                Intent intent = new Intent(Login.this, SignUp.class);\r\n                startActivity(intent);\r\n            }\r\n\r\n        });\r\n\r\n\r\n        googleImage.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                logIn();\r\n            }\r\n        });\r\n\r\n    }\r\n\r\n    @Override\r\n    protected void onStart() {\r\n        super.onStart();\r\n        account = GoogleSignIn.getLastSignedInAccount(this);\r\n        if(account == null){\r\n            //If GoogleSignIn.getLastSignedInAccount returns null, the user has not yet signed in to your app with Google. Update your UI to display the Google Sign-in button.\r\n            //updateUI(account);\r\n            //Go to SignUp\r\n        } else{\r\n            //Update your UI accordingly—that is, hide the sign-in button, launch your main activity, or whatever is appropriate for your app.\r\n            //updateUI(account);\r\n        }\r\n\r\n    }\r\n\r\n    void logIn(){\r\n        Intent intent = gsc.getSignInIntent();\r\n        startActivityForResult(intent, 1000);\r\n    }\r\n\r\n    boolean logInManual(String username, String password){\r\n\r\n        Log.i(\"Before Login\", \"Attempting to log in user \" + username);\r\n        ParseUser.logInInBackground(username, password, new LogInCallback() {\r\n            @Override\r\n            public void done(ParseUser user, ParseException e) {\r\n                if(e != null){\r\n                    Log.e(\"After Login\", \"Error with Login\");\r\n                    System.out.println(e.toString());\r\n                    return;\r\n                }\r\n                else{\r\n                    //System.out.println(e.toString());\r\n                }\r\n                navigateToHomePage();\r\n                Toast.makeText(Login.this, \"Sucess\", Toast.LENGTH_SHORT).show();\r\n            }\r\n        });\r\n        return true;\r\n    }\r\n\r\n\r\n    @Override\r\n    protected void onActivityResult(int requestCode, int resultCode, Intent data) {\r\n        super.onActivityResult(requestCode, resultCode, data);\r\n        if(requestCode == 1000) {\r\n            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);\r\n            handleSignInResult(task);\r\n        }\r\n    }\r\n\r\n\r\n    private void handleSignInResult(Task<GoogleSignInAccount> task) {\r\n        try {\r\n            GoogleSignInAccount account = task.getResult(ApiException.class);\r\n\r\n            // Signed in successfully, show authenticated UI.\r\n            GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(this);\r\n            //Get Current User Information\r\n            String email = acct.getGivenName();\r\n            String password = acct.getId();\r\n            Log.i(\"Google Email\", email);\r\n            Log.i(\"Google Password\", password);\r\n            logInManual(email, password);\r\n           // navigateToHomePage();\r\n        } catch (ApiException e) {\r\n            // The ApiException status code indicates the detailed failure reason.\r\n            // Please refer to the GoogleSignInStatusCodes class reference for more information.\r\n            Log.w(ContentValues.TAG, \"signInResult:failed code=\" + e.getStatusCode());\r\n            Toast.makeText(getApplicationContext(), \"Something went wrong\", Toast.LENGTH_SHORT).show();\r\n            //updateUI(null);\r\n        }\r\n    }\r\n\r\n    void navigateToHomePage(){\r\n        finish();\r\n        Intent intent = new Intent(Login.this, SplashScreenActivity.class);\r\n        startActivity(intent);\r\n    }\r\n\r\n\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/rebootapp/Login.java b/app/src/main/java/com/example/rebootapp/Login.java
+--- a/app/src/main/java/com/example/rebootapp/Login.java	(revision 56c4e84700c03b6f5f13e3765dd2b479645d6000)
++++ b/app/src/main/java/com/example/rebootapp/Login.java	(date 1708568310000)
+@@ -35,7 +35,17 @@
+     TextView btnSignUp;
+     EditText edtEmail;
+     EditText edtPassword;
+-
++    @Override
++    protected void onStart() {
++        super.onStart();
++
++        // Check if the current user is already logged in
++        if (ParseUser.getCurrentUser() != null) {
++            // User is logged in, navigate to the MainActivity
++            navigateToHomePage();
++        }
++        // No else part needed, if no user is logged in, stay on the Login screen
++    }
+     @Override
+     protected void onCreate (Bundle savedInstanceState){
+         super.onCreate(savedInstanceState);
+@@ -97,20 +107,20 @@
+ 
+     }
+ 
+-    @Override
+-    protected void onStart() {
+-        super.onStart();
+-        account = GoogleSignIn.getLastSignedInAccount(this);
+-        if(account == null){
+-            //If GoogleSignIn.getLastSignedInAccount returns null, the user has not yet signed in to your app with Google. Update your UI to display the Google Sign-in button.
+-            //updateUI(account);
+-            //Go to SignUp
+-        } else{
+-            //Update your UI accordingly—that is, hide the sign-in button, launch your main activity, or whatever is appropriate for your app.
+-            //updateUI(account);
+-        }
+-
+-    }
++//    @Override
++//    protected void onStart() {
++//        super.onStart();
++//        account = GoogleSignIn.getLastSignedInAccount(this);
++//        if(account == null){
++//            //If GoogleSignIn.getLastSignedInAccount returns null, the user has not yet signed in to your app with Google. Update your UI to display the Google Sign-in button.
++//            //updateUI(account);
++//            //Go to SignUp
++//        } else{
++//            //Update your UI accordingly—that is, hide the sign-in button, launch your main activity, or whatever is appropriate for your app.
++//            //updateUI(account);
++//        }
++//
++//    }
+ 
+     void logIn(){
+         Intent intent = gsc.getSignInIntent();
+Index: test.json
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/test.json b/test.json
+new file mode 100644
+--- /dev/null	(date 1708581266000)
++++ b/test.json	(date 1708581266000)
+@@ -0,0 +1,382 @@
++{
++  "id": 58386,
++  "slug": "stalker-2",
++  "name": "S.T.A.L.K.E.R. 2: Heart of Chornobyl",
++  "name_original": "S.T.A.L.K.E.R. 2: Heart of Chornobyl",
++  "description": "<p>S.T.A.L.K.E.R. 2 is a brand-new entry in the legendary series, enjoyed by millions of players worldwide. </p>\n<p>The explosive combination of first-person shooter, immersive sim and horror is back. It’s the ultimate S.T.A.L.K.E.R. experience of unprecedented scale, advanced graphics, freedom of choices and the thickest atmosphere of a deadly adventure.</p>\n<p>Welcome to The Zone — an area of exclusion around the Chernobyl Nuclear Power Plant. Full of radiation, mutants and anomalies, it keeps drawing adventurers from beyond the perimeter.</p>\n<p>Bounty hunters dwell deep into the Zone, driven by its treasures and mysteries. These people are known as stalkers.</p>\n<p>Are you ready to become one of them?</p>",
++  "metacritic": null,
++  "metacritic_platforms": [],
++  "released": "2024-09-05",
++  "tba": false,
++  "updated": "2024-02-16T19:38:36",
++  "background_image": "https://media.rawg.io/media/games/3e8/3e81585ecda204d4f4b80a041b069adb.jpg",
++  "background_image_additional": "https://media.rawg.io/media/screenshots/ac3/ac3319acb18072d3f98cddf6c077f0ad.jpg",
++  "website": "https://www.stalker2.com/",
++  "rating": 3.97,
++  "rating_top": 5,
++  "ratings": [
++    {
++      "id": 5,
++      "title": "exceptional",
++      "count": 87,
++      "percent": 55.41
++    },
++    {
++      "id": 4,
++      "title": "recommended",
++      "count": 33,
++      "percent": 21.02
++    },
++    {
++      "id": 1,
++      "title": "skip",
++      "count": 27,
++      "percent": 17.2
++    },
++    {
++      "id": 3,
++      "title": "meh",
++      "count": 10,
++      "percent": 6.37
++    }
++  ],
++  "reactions": {},
++  "added": 1680,
++  "added_by_status": {
++    "yet": 285,
++    "owned": 378,
++    "beaten": 20,
++    "toplay": 984,
++    "dropped": 6,
++    "playing": 7
++  },
++  "playtime": 0,
++  "screenshots_count": 13,
++  "movies_count": 0,
++  "creators_count": 1,
++  "achievements_count": 0,
++  "parent_achievements_count": 0,
++  "reddit_url": "",
++  "reddit_name": "S.T.A.L.K.E.R 2",
++  "reddit_description": "Subreddit for the upcoming game S.T.A.L.K.E.R. 2 by GSC Game World",
++  "reddit_logo": "",
++  "reddit_count": 0,
++  "twitch_count": 0,
++  "youtube_count": 1000000,
++  "reviews_text_count": 3,
++  "ratings_count": 154,
++  "suggestions_count": 472,
++  "alternative_names": [],
++  "metacritic_url": "https://www.metacritic.com/game/xbox-series-x/stalker-2-heart-of-chernobyl",
++  "parents_count": 0,
++  "additions_count": 0,
++  "game_series_count": 3,
++  "user_game": null,
++  "reviews_count": 157,
++  "saturated_color": "0f0f0f",
++  "dominant_color": "0f0f0f",
++  "parent_platforms": [
++    {
++      "platform": {
++        "id": 1,
++        "name": "PC",
++        "slug": "pc"
++      }
++    },
++    {
++      "platform": {
++        "id": 3,
++        "name": "Xbox",
++        "slug": "xbox"
++      }
++    }
++  ],
++  "platforms": [
++    {
++      "platform": {
++        "id": 4,
++        "name": "PC",
++        "slug": "pc",
++        "image": null,
++        "year_end": null,
++        "year_start": null,
++        "games_count": 525904,
++        "image_background": "https://media.rawg.io/media/games/d58/d588947d4286e7b5e0e12e1bea7d9844.jpg"
++      },
++      "released_at": "2024-09-05",
++      "requirements": {
++        "minimum": "Minimum:\r\n\r\nOS: Windows 10\r\n\r\nProcessor: AMD Ryzen 5 1600X / Intel Core i5-7600K\r\n\r\nMemory: 8 GB RAM\r\n\r\nGraphics: AMD Radeon RX 580 8GB / NVIDIA GeForce GTX 1060 6GB\r\n\r\nStorage: 150 GB available space\r\n\r\nAdditional Notes: SSD",
++        "recommended": "Recommended:\r\n\r\nOS: Windows 10\r\n\r\nProcessor: AMD Ryzen 7 3700X / Intel Core i7-9700K\r\n\r\nMemory: 16 GB RAM\r\n\r\nGraphics: AMD Radeon RX 5700 XT 8GB / NVIDIA GeForce RTX 2070 SUPER 8GB / NVIDIA GeForce GTX 1080 Ti 11GB\r\n\r\nStorage: 150 GB available space\r\n\r\nAdditional Notes: SSD"
++      }
++    },
++    {
++      "platform": {
++        "id": 186,
++        "name": "Xbox Series S/X",
++        "slug": "xbox-series-x",
++        "image": null,
++        "year_end": null,
++        "year_start": 2020,
++        "games_count": 881,
++        "image_background": "https://media.rawg.io/media/games/b29/b294fdd866dcdb643e7bab370a552855.jpg"
++      },
++      "released_at": "2024-09-05",
++      "requirements": {}
++    }
++  ],
++  "stores": [
++    {
++      "id": 899774,
++      "url": "",
++      "store": {
++        "id": 5,
++        "name": "GOG",
++        "slug": "gog",
++        "domain": "gog.com",
++        "games_count": 5817,
++        "image_background": "https://media.rawg.io/media/games/310/3106b0e012271c5ffb16497b070be739.jpg"
++      }
++    },
++    {
++      "id": 611296,
++      "url": "",
++      "store": {
++        "id": 1,
++        "name": "Steam",
++        "slug": "steam",
++        "domain": "store.steampowered.com",
++        "games_count": 89063,
++        "image_background": "https://media.rawg.io/media/games/f87/f87457e8347484033cb34cde6101d08d.jpg"
++      }
++    },
++    {
++      "id": 611297,
++      "url": "",
++      "store": {
++        "id": 11,
++        "name": "Epic Games",
++        "slug": "epic-games",
++        "domain": "epicgames.com",
++        "games_count": 1319,
++        "image_background": "https://media.rawg.io/media/games/4be/4be6a6ad0364751a96229c56bf69be59.jpg"
++      }
++    },
++    {
++      "id": 611330,
++      "url": "",
++      "store": {
++        "id": 2,
++        "name": "Xbox Store",
++        "slug": "xbox-store",
++        "domain": "microsoft.com",
++        "games_count": 4813,
++        "image_background": "https://media.rawg.io/media/games/26d/26d4437715bee60138dab4a7c8c59c92.jpg"
++      }
++    }
++  ],
++  "developers": [
++    {
++      "id": 3864,
++      "name": "GSC Game World",
++      "slug": "gsc-game-world",
++      "games_count": 22,
++      "image_background": "https://media.rawg.io/media/games/5ad/5adab016a307c2902a82b60d487fe287.jpg"
++    }
++  ],
++  "genres": [
++    {
++      "id": 4,
++      "name": "Action",
++      "slug": "action",
++      "games_count": 178358,
++      "image_background": "https://media.rawg.io/media/games/120/1201a40e4364557b124392ee50317b99.jpg"
++    },
++    {
++      "id": 2,
++      "name": "Shooter",
++      "slug": "shooter",
++      "games_count": 59459,
++      "image_background": "https://media.rawg.io/media/games/736/73619bd336c894d6941d926bfd563946.jpg"
++    },
++    {
++      "id": 3,
++      "name": "Adventure",
++      "slug": "adventure",
++      "games_count": 137936,
++      "image_background": "https://media.rawg.io/media/games/0af/0af85e8edddfa55368e47c539914a220.jpg"
++    },
++    {
++      "id": 5,
++      "name": "RPG",
++      "slug": "role-playing-games-rpg",
++      "games_count": 55107,
++      "image_background": "https://media.rawg.io/media/games/618/618c2031a07bbff6b4f611f10b6bcdbc.jpg"
++    }
++  ],
++  "tags": [
++    {
++      "id": 13,
++      "name": "Atmospheric",
++      "slug": "atmospheric",
++      "language": "eng",
++      "games_count": 32044,
++      "image_background": "https://media.rawg.io/media/games/2ba/2bac0e87cf45e5b508f227d281c9252a.jpg"
++    },
++    {
++      "id": 24,
++      "name": "RPG",
++      "slug": "rpg",
++      "language": "eng",
++      "games_count": 19865,
++      "image_background": "https://media.rawg.io/media/games/995/9951d9d55323d08967640f7b9ab3e342.jpg"
++    },
++    {
++      "id": 118,
++      "name": "Story Rich",
++      "slug": "story-rich",
++      "language": "eng",
++      "games_count": 20561,
++      "image_background": "https://media.rawg.io/media/games/fc1/fc1307a2774506b5bd65d7e8424664a7.jpg"
++    },
++    {
++      "id": 36,
++      "name": "Open World",
++      "slug": "open-world",
++      "language": "eng",
++      "games_count": 7102,
++      "image_background": "https://media.rawg.io/media/games/00d/00d374f12a3ab5f96c500a2cfa901e15.jpg"
++    },
++    {
++      "id": 8,
++      "name": "First-Person",
++      "slug": "first-person",
++      "language": "eng",
++      "games_count": 30626,
++      "image_background": "https://media.rawg.io/media/games/34b/34b1f1850a1c06fd971bc6ab3ac0ce0e.jpg"
++    },
++    {
++      "id": 32,
++      "name": "Sci-fi",
++      "slug": "sci-fi",
++      "language": "eng",
++      "games_count": 18535,
++      "image_background": "https://media.rawg.io/media/games/587/587588c64afbff80e6f444eb2e46f9da.jpg"
++    },
++    {
++      "id": 30,
++      "name": "FPS",
++      "slug": "fps",
++      "language": "eng",
++      "games_count": 12893,
++      "image_background": "https://media.rawg.io/media/games/49c/49c3dfa4ce2f6f140cc4825868e858cb.jpg"
++    },
++    {
++      "id": 6,
++      "name": "Exploration",
++      "slug": "exploration",
++      "language": "eng",
++      "games_count": 21834,
++      "image_background": "https://media.rawg.io/media/games/d82/d82990b9c67ba0d2d09d4e6fa88885a7.jpg"
++    },
++    {
++      "id": 1,
++      "name": "Survival",
++      "slug": "survival",
++      "language": "eng",
++      "games_count": 8231,
++      "image_background": "https://media.rawg.io/media/games/476/476178ef18ab0534771d099f51cdc694.jpg"
++    },
++    {
++      "id": 62,
++      "name": "Moddable",
++      "slug": "moddable",
++      "language": "eng",
++      "games_count": 880,
++      "image_background": "https://media.rawg.io/media/games/c22/c22d804ac753c72f2617b3708a625dec.jpg"
++    },
++    {
++      "id": 43,
++      "name": "Post-apocalyptic",
++      "slug": "post-apocalyptic",
++      "language": "eng",
++      "games_count": 3777,
++      "image_background": "https://media.rawg.io/media/games/d58/d588947d4286e7b5e0e12e1bea7d9844.jpg"
++    },
++    {
++      "id": 145,
++      "name": "Choices Matter",
++      "slug": "choices-matter",
++      "language": "eng",
++      "games_count": 4817,
++      "image_background": "https://media.rawg.io/media/games/883/883bc3050f9a4115d1968ece56bddfc2.jpg"
++    },
++    {
++      "id": 110,
++      "name": "Cinematic",
++      "slug": "cinematic",
++      "language": "eng",
++      "games_count": 1881,
++      "image_background": "https://media.rawg.io/media/games/9aa/9aa42d16d425fa6f179fc9dc2f763647.jpg"
++    },
++    {
++      "id": 77,
++      "name": "Realistic",
++      "slug": "realistic",
++      "language": "eng",
++      "games_count": 5148,
++      "image_background": "https://media.rawg.io/media/games/e44/e445335e611b4ccf03af71fffcbd30a4.jpg"
++    },
++    {
++      "id": 218,
++      "name": "Multiple Endings",
++      "slug": "multiple-endings",
++      "language": "eng",
++      "games_count": 8219,
++      "image_background": "https://media.rawg.io/media/games/951/951572a3dd1e42544bd39a5d5b42d234.jpg"
++    },
++    {
++      "id": 205,
++      "name": "Lore-Rich",
++      "slug": "lore-rich",
++      "language": "eng",
++      "games_count": 1145,
++      "image_background": "https://media.rawg.io/media/games/c24/c24f4434882ae9c2c8d9d38de82cb7a5.jpg"
++    },
++    {
++      "id": 42473,
++      "name": "Immersive Sim",
++      "slug": "immersive-sim-2",
++      "language": "eng",
++      "games_count": 2423,
++      "image_background": "https://media.rawg.io/media/screenshots/4c7/4c717d1808ea116b8c938189432a7c4c.jpg"
++    },
++    {
++      "id": 146,
++      "name": "Nonlinear",
++      "slug": "nonlinear",
++      "language": "eng",
++      "games_count": 1619,
++      "image_background": "https://media.rawg.io/media/games/5f2/5f25cf08217b40b9d8f02f95db1fdc1d.jpg"
++    },
++    {
++      "id": 87543,
++      "name": "choices matter ",
++      "slug": "choices-matter-3",
++      "language": "eng",
++      "games_count": 1,
++      "image_background": "https://media.rawg.io/media/games/3e8/3e81585ecda204d4f4b80a041b069adb.jpg"
++    }
++  ],
++  "publishers": [
++    {
++      "id": 3527,
++      "name": "GSC Game World",
++      "slug": "gsc-game-world",
++      "games_count": 15,
++      "image_background": "https://media.rawg.io/media/games/3e8/3e81585ecda204d4f4b80a041b069adb.jpg"
++    }
++  ],
++  "esrb_rating": null,
++  "clip": null,
++  "description_raw": "S.T.A.L.K.E.R. 2 is a brand-new entry in the legendary series, enjoyed by millions of players worldwide. \r\n\r\nThe explosive combination of first-person shooter, immersive sim and horror is back. It’s the ultimate S.T.A.L.K.E.R. experience of unprecedented scale, advanced graphics, freedom of choices and the thickest atmosphere of a deadly adventure.\r\n\r\nWelcome to The Zone — an area of exclusion around the Chernobyl Nuclear Power Plant. Full of radiation, mutants and anomalies, it keeps drawing adventurers from beyond the perimeter.\r\n\r\nBounty hunters dwell deep into the Zone, driven by its treasures and mysteries. These people are known as stalkers.\r\n\r\nAre you ready to become one of them?"
++}
+\ No newline at end of file
+Index: app/src/main/java/com/example/rebootapp/MainActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.rebootapp;\r\n\r\nimport android.content.Intent;\r\nimport android.content.res.Resources;\r\nimport android.graphics.Color;\r\nimport android.os.Bundle;\r\nimport android.util.Log;\r\nimport android.view.MenuItem;\r\nimport android.view.Window;\r\nimport android.view.WindowManager;\r\n\r\nimport androidx.annotation.NonNull;\r\nimport androidx.appcompat.app.ActionBar;\r\nimport androidx.appcompat.app.AppCompatActivity;\r\nimport androidx.fragment.app.Fragment;\r\nimport androidx.fragment.app.FragmentManager;\r\n\r\nimport com.google.android.material.bottomnavigation.BottomNavigationView;\r\nimport com.google.android.material.navigation.NavigationBarView;\r\n\r\nimport java.util.List;\r\n\r\npublic class MainActivity extends AppCompatActivity {\r\n\r\n    public static final String NOW_PLAYING_URL = \"https://api.rawg.io/api/games?key=63502b95db9f41c99bb3d0ecf77aa811\";\r\n    public static final String TAG = \"MainActivity\";\r\n\r\n    List<Movie> movie;\r\n\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        setContentView(R.layout.activity_main);\r\n        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);\r\n        Resources.Theme theme = this.getTheme();\r\n        bottomNavigationView.setBackgroundColor(getResources().getColor(R.color.aqua));\r\n\r\n        Window window = getWindow();\r\n        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);\r\n        int colorCodeDark = Color.parseColor(\"#2B3743\");\r\n        window.setStatusBarColor(colorCodeDark);\r\n\r\n        ActionBar actionBar;\r\n        actionBar= getSupportActionBar();\r\n        assert actionBar != null;\r\n        actionBar.setBackgroundDrawable(bottomNavigationView.getBackground());\r\n\r\n        final FragmentManager fragmentManager = getSupportFragmentManager();\r\n\r\n        Intent intent = getIntent();\r\n        Log.i(\"fileName1\", \"waiting\");\r\n        if (getIntent().hasExtra(\"jsonArray\")) {\r\n            Log.i(\"fileName1\", \"\" + getIntent().getStringExtra(\"jsonArray\"));\r\n        }\r\n\r\n\r\n            bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {\r\n                @Override\r\n                public boolean onNavigationItemSelected(@NonNull MenuItem item) {\r\n                    Fragment fragment;\r\n                    switch (item.getItemId()) {\r\n                        case R.id.mHome:\r\n                            HomeFragment homeFragment = new HomeFragment();\r\n//                        Bundle bundle = new Bundle();\r\n//                       Intent intent = getIntent();\r\n//                        Log.i(\"fileName1\", \"waiting\" );\r\n//                        if (getIntent().hasExtra(\"jsonArray\")){\r\n//                            Log.i(\"fileName1\", \"it exists\" );\r\n//                        }\r\n//                        String result = intent.getStringExtra(\"jsonArray\");\r\n//                        JSONArray jsonArray = null;\r\n//                        try {\r\n//                            jsonArray = new JSONArray(result);\r\n//                        } catch (JSONException e) {\r\n//                            throw new RuntimeException(e);\r\n//                        }\r\n//                        Log.i(\"fileName1\", \"\" + jsonArray);\r\n//                        bundle.putString(\"result\", result );\r\n//                        homeFragment.setArguments(bundle);\r\n                            fragment = homeFragment;\r\n                            break;\r\n                        case R.id.mSearch:\r\n                            fragment = new SearchFragment();\r\n                            break;\r\n                        case R.id.mEvents:\r\n                            fragment = new ReviewFragment();\r\n                            break;\r\n                        case R.id.mCart:\r\n                        default:\r\n                            fragment = new ProfileFragment();\r\n                            break;\r\n                    }\r\n                    fragmentManager.beginTransaction().replace(R.id.fLayoutContainer, fragment).commit();\r\n                    return true;\r\n                }\r\n            });\r\n            bottomNavigationView.setSelectedItemId(R.id.mHome);\r\n        }\r\n\r\n\r\n//        RecyclerView rvMovies = findViewById(R.id.rvYourGames);\r\n//        movie = new ArrayList<>();\r\n//\r\n//        MovieAdapter movieAdapter =  new MovieAdapter(this , movie);\r\n//        rvMovies.setAdapter(movieAdapter);\r\n//        rvMovies.setLayoutManager(new LinearLayoutManager(this ));\r\n//\r\n//        AsyncHttpClient client = new AsyncHttpClient();\r\n//\r\n//        client.get(NOW_PLAYING_URL, new JsonHttpResponseHandler() {\r\n//            @Override\r\n//            public void onSuccess(int statusCode, Headers headers, JSON json) {\r\n//                Log.d(TAG, \"onSucess\");\r\n//                JSONObject jsonObject = json.jsonObject;\r\n//                try{\r\n//                    JSONArray results = jsonObject.getJSONArray(\"results\");\r\n//                    Log.i(TAG, \"Results\" + results.toString());\r\n//                    movie.addAll(Movie.fromJSONArray(results));\r\n//                    movieAdapter.notifyDataSetChanged();\r\n//                    Log.i(TAG, \"Movies\" + movie.size());\r\n//                } catch(JSONException e){\r\n//                    Log.e(TAG, \"hit json expception\", e);\r\n//                }\r\n//            }\r\n//\r\n//            @Override\r\n//            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {\r\n//                Log.d(TAG, \"onFailure\");\r\n//            }\r\n//        });\r\n//\r\n    }\r\n\r\n\r\n\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/rebootapp/MainActivity.java b/app/src/main/java/com/example/rebootapp/MainActivity.java
+--- a/app/src/main/java/com/example/rebootapp/MainActivity.java	(revision 56c4e84700c03b6f5f13e3765dd2b479645d6000)
++++ b/app/src/main/java/com/example/rebootapp/MainActivity.java	(date 1708653166000)
+@@ -15,6 +15,7 @@
+ import androidx.fragment.app.Fragment;
+ import androidx.fragment.app.FragmentManager;
+ 
++import com.example.rebootapp.AwoApp.ProfileFragment;
+ import com.google.android.material.bottomnavigation.BottomNavigationView;
+ import com.google.android.material.navigation.NavigationBarView;
+ 
+Index: app/src/main/java/com/example/rebootapp/GameSearch.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.rebootapp;\r\n\r\n\r\nimport android.util.Log;\r\n\r\nimport org.json.JSONArray;\r\nimport org.json.JSONException;\r\nimport org.json.JSONObject;\r\nimport org.parceler.Parcel;\r\n\r\nimport java.util.ArrayList;\r\nimport java.util.List;\r\n\r\n@Parcel\r\n\r\npublic class GameSearch {\r\n\r\n\r\n    String title;\r\n    String id;\r\n    String date;\r\n    String posterPath;\r\n    String backdropPath;\r\n    Double voteAverage;\r\n\r\n\r\n\r\n    public Double getVoteAverage() {\r\n        return voteAverage;\r\n    }\r\n\r\n\r\n\r\n\r\n    // no-arg, empty constructor required for Parceler\r\n    public GameSearch() {}\r\n\r\n    public GameSearch(JSONObject game) throws JSONException {\r\n        Log.i(\"search\", \"searching\");\r\n        title = game.getString(\"name\");\r\n        Log.i(\"Game Name\", title);\r\n        id = game.getString(\"id\");\r\n        String decName = game.getString(\"metacritic\");\r\n        Log.i(\"name\", decName);\r\n        date = game.getString(\"released\");\r\n        posterPath = game.getString(\"background_image\");\r\n//        backdropPath = movie.getString(\"backdrop_path\");\r\n//        voteAverage = movie.getDouble(\"vote_average\");\r\n    }\r\n//\r\n//    public Movie(JSONObject jsonObject){\r\n//        try {\r\n////            backdropPath = jsonObject.getString(\"backdrop_path\");\r\n//            posterPath = jsonObject.getString(\"background_image\");\r\n//        } catch (JSONException e) {\r\n//            e.printStackTrace();\r\n//        }\r\n//        try {\r\n//            title = jsonObject.getString(\"name\");\r\n//        } catch (JSONException e) {\r\n//            e.printStackTrace();\r\n//        }\r\n//        try {\r\n//            overview = jsonObject.getString(\"description\");\r\n//        } catch (JSONException e) {\r\n//            e.printStackTrace();\r\n//        }\r\n//    }\r\n\r\n    public static List<GameSearch> fromJSONArray(JSONArray gameJSONArray) throws JSONException{\r\n        List<GameSearch> games = new ArrayList<>();\r\n        for(int i =0; i < gameJSONArray.length(); i++){\r\n            games.add(new GameSearch(gameJSONArray.getJSONObject(i)));\r\n        }\r\n        return games;\r\n    }\r\n\r\n    public String getPosterPath() {\r\n        return posterPath;\r\n    }\r\n\r\n    public String getBackdropPath(){\r\n        return \"https://image.tmdb.org/t/p/w342\" + backdropPath;\r\n    }\r\n\r\n    public String getTitle() {\r\n        return title;\r\n    }\r\n\r\n    public String getOverview() {\r\n        return date;\r\n    }\r\n\r\n    public String getID() {return id;}\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/rebootapp/GameSearch.java b/app/src/main/java/com/example/rebootapp/GameSearch.java
+--- a/app/src/main/java/com/example/rebootapp/GameSearch.java	(revision 56c4e84700c03b6f5f13e3765dd2b479645d6000)
++++ b/app/src/main/java/com/example/rebootapp/GameSearch.java	(date 1708581154000)
+@@ -38,7 +38,7 @@
+     public GameSearch(JSONObject game) throws JSONException {
+         Log.i("search", "searching");
+         title = game.getString("name");
+-        Log.i("Game Name", title);
++        Log.i("GameModel Name", title);
+         id = game.getString("id");
+         String decName = game.getString("metacritic");
+         Log.i("name", decName);
+Index: app/src/main/java/com/example/rebootapp/WishListActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/rebootapp/WishListActivity.java b/app/src/main/java/com/example/rebootapp/WishListActivity.java
+new file mode 100644
+--- /dev/null	(date 1708309098000)
++++ b/app/src/main/java/com/example/rebootapp/WishListActivity.java	(date 1708309098000)
+@@ -0,0 +1,100 @@
++package com.example.rebootapp;
++
++
++
++import androidx.appcompat.app.AppCompatActivity;
++import android.os.Bundle;
++import android.util.Log;
++import android.view.View;
++import android.widget.ImageView;
++import android.widget.RatingBar;
++import android.widget.TextView;
++import android.widget.Button;
++import android.widget.ToggleButton;
++
++import androidx.recyclerview.widget.GridLayoutManager;
++import androidx.recyclerview.widget.LinearLayoutManager;
++import androidx.recyclerview.widget.RecyclerView;
++
++
++import com.bumptech.glide.Glide;
++import com.parse.CountCallback;
++import com.parse.FindCallback;
++import com.parse.GetCallback;
++import com.parse.ParseObject;
++import com.parse.ParseException;
++import com.parse.ParseFile;
++import com.parse.ParseQuery;
++import com.parse.ParseUser;
++
++import org.parceler.Parcels;
++
++import java.util.ArrayList;
++import java.util.List;
++
++public class WishListActivity extends AppCompatActivity {
++
++    RecyclerView games;
++    WishListAdapter wishListAdapter;
++    List<String> gamePhotoUris;
++    Button btn_WishList_Done; //Favorite
++
++
++
++    @Override
++    protected void onCreate(Bundle savedInstanceState){
++        super.onCreate(savedInstanceState);
++        setContentView(R.layout.activity_wishlist_games); //activity_favorite_game
++
++        games = findViewById(R.id.rv_wishlist_list); //fix this
++        games.setLayoutManager(new GridLayoutManager(this, 3));
++        btn_WishList_Done = findViewById(R.id.btn_WishList_Done);
++
++        gamePhotoUris = new ArrayList<>();
++        wishListAdapter = new WishListAdapter(gamePhotoUris);
++
++        games.setAdapter(wishListAdapter);
++
++
++        btn_WishList_Done.setOnClickListener(new View.OnClickListener() {
++            @Override
++            public void onClick(View v) {
++                finish();
++            }
++        });
++
++    }
++
++    public void fillPhotos(){
++        ParseQuery<ParseObject> gamesQuery = ParseQuery.getQuery("WishListGames");
++        ParseUser currentUser = ParseUser.getCurrentUser();
++        String currentUserID = currentUser.getObjectId();
++        gamesQuery.whereEqualTo("user_id", currentUserID);
++
++        gamesQuery.findInBackground(new FindCallback<ParseObject>() {
++            @Override
++            public void done(List<ParseObject> objects, ParseException e) {
++                if(e == null){
++                    for(ParseObject object : objects) {
++                        String uri = object.getString("picture_uri");
++                        if(uri != null && !uri.isEmpty()) {
++                            gamePhotoUris.add(uri);
++                        }
++                    }
++                    wishListAdapter.notifyDataSetChanged();
++
++                }
++                else{
++                    System.out.println("Parse query error");
++                }
++            }
++        });
++
++    }
++    @Override
++    protected void onStart(){
++        super.onStart();
++        gamePhotoUris.clear();
++        fillPhotos();
++    }
++}
+Index: app/src/main/res/drawable/baseline_delete_24.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/drawable/baseline_delete_24.xml b/app/src/main/res/drawable/baseline_delete_24.xml
+new file mode 100644
+--- /dev/null	(date 1708653136000)
++++ b/app/src/main/res/drawable/baseline_delete_24.xml	(date 1708653136000)
+@@ -0,0 +1,5 @@
++<vector android:height="24dp" android:tint="#000000"
++    android:viewportHeight="24" android:viewportWidth="24"
++    android:width="24dp" xmlns:android="http://schemas.android.com/apk/res/android">
++    <path android:fillColor="@android:color/white" android:pathData="M6,19c0,1.1 0.9,2 2,2h8c1.1,0 2,-0.9 2,-2V7H6v12zM19,4h-3.5l-1,-1h-5l-1,1H5v2h14V4z"/>
++</vector>
+Index: app/src/main/java/com/example/rebootapp/WishListAdapter.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/rebootapp/WishListAdapter.java b/app/src/main/java/com/example/rebootapp/WishListAdapter.java
+new file mode 100644
+--- /dev/null	(date 1708307624000)
++++ b/app/src/main/java/com/example/rebootapp/WishListAdapter.java	(date 1708307624000)
+@@ -0,0 +1,139 @@
++package com.example.rebootapp;
++
++import androidx.annotation.NonNull;
++import androidx.appcompat.app.AppCompatActivity;
++
++import android.content.Context;
++import android.content.Intent;
++import android.os.Bundle;
++import android.util.Log;
++import android.view.LayoutInflater;
++import android.view.View;
++import android.view.ViewGroup;
++import android.widget.ImageView;
++import android.widget.RatingBar;
++import android.widget.TextView;
++import android.widget.Button;
++import android.widget.ToggleButton;
++import androidx.recyclerview.widget.LinearLayoutManager;
++import androidx.recyclerview.widget.RecyclerView;
++
++
++import com.bumptech.glide.Glide;
++import com.codepath.asynchttpclient.AsyncHttpClient;
++import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
++import com.parse.CountCallback;
++import com.parse.GetCallback;
++import com.parse.ParseObject;
++import com.parse.ParseException;
++import com.parse.ParseFile;
++import com.parse.ParseQuery;
++import com.parse.ParseUser;
++
++import org.json.JSONArray;
++import org.json.JSONException;
++import org.json.JSONObject;
++import org.parceler.Parcels;
++
++import java.util.List;
++
++import okhttp3.Headers;
++
++public class WishListAdapter extends RecyclerView.Adapter<WishListAdapter .ViewHolder>{
++    private List<String> photoUris;
++    public static class ViewHolder extends RecyclerView.ViewHolder {
++        ImageView imageViewGamePhoto;
++        Context context;
++
++        public ViewHolder(View view) {
++            super(view);
++            imageViewGamePhoto = view.findViewById(R.id.imageViewGame);
++
++        }
++
++
++    }
++
++    public WishListAdapter (List<String> photoUris){
++
++        this.photoUris = photoUris;
++    }
++
++    @NonNull
++    @Override
++    public WishListAdapter .ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
++        View view = LayoutInflater.from(parent.getContext())
++                .inflate(R.layout.item_gamephoto, parent, false);
++        return new ViewHolder(view);
++    }
++
++    @Override
++    public void onBindViewHolder(ViewHolder holder, int position) {
++        String uri = photoUris.get(position);
++        int tempPos = position;
++        // Using Glide to load the image from the URI
++        Glide.with(holder.imageViewGamePhoto.getContext()).load(uri).into(holder.imageViewGamePhoto);
++        holder.imageViewGamePhoto.setOnClickListener(new View.OnClickListener() {
++            @Override
++            public void onClick(View v) {
++                ParseQuery<ParseObject> gamesQuery = ParseQuery.getQuery("WishListGames");
++                ParseUser currentUser = ParseUser.getCurrentUser();
++                String currentUserID = currentUser.getObjectId();
++                gamesQuery.whereEqualTo("user_id", currentUserID);
++                gamesQuery.whereEqualTo("picture_uri", photoUris.get(tempPos));
++                gamesQuery.getFirstInBackground(new GetCallback<ParseObject>() {
++                    @Override
++                    public void done(ParseObject object, ParseException e) {
++                        if (e == null){
++                            String id = object.getString("game_id");
++                            System.out.println(id);
++
++                            String search = "https://api.rawg.io/api/games/" + id + "?key=63502b95db9f41c99bb3d0ecf77aa811";
++                            AsyncHttpClient client = new AsyncHttpClient();
++                            client.get(search, new JsonHttpResponseHandler() {
++                                @Override
++                                public void onSuccess(int statusCode, Headers headers, JSON json) {
++                                    JSONObject jsonobject = json.jsonObject;
++                                    try {
++                                        System.out.println("line 1");
++//                                        JSONArray results = jsonobject.getJSONArray("results");
++//                                        System.out.println("count: " + results);
++                                        Game game = new Game((jsonobject));
++                                        System.out.println("line 2");
++                                        Intent intent = new Intent(holder.imageViewGamePhoto.getContext(), GameDetailsActivity.class);
++                                        System.out.println("line 3");
++                                        intent.putExtra(Game.class.getSimpleName(), Parcels.wrap(game));
++                                        System.out.println("line 4");
++                                        holder.imageViewGamePhoto.getContext().startActivity(intent);
++                                        System.out.println("line 5");
++
++                                    } catch (JSONException ex) {
++                                        System.out.println("almost");
++                                        throw new RuntimeException(ex);
++
++                                    }
++                                }
++
++                                @Override
++                                public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
++                                    System.out.println("oops");
++                                }
++                            });
++                        }
++                    }
++                });
++
++
++            }
++        });
++
++
++
++    }
++
++    @Override
++    public int getItemCount() {
++        return photoUris.size();
++    }
++
++}
+Index: app/src/main/java/com/example/rebootapp/AwoApp/ManageListAdapter.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/rebootapp/AwoApp/ManageListAdapter.java b/app/src/main/java/com/example/rebootapp/AwoApp/ManageListAdapter.java
+new file mode 100644
+--- /dev/null	(date 1708831382000)
++++ b/app/src/main/java/com/example/rebootapp/AwoApp/ManageListAdapter.java	(date 1708831382000)
+@@ -0,0 +1,163 @@
++package com.example.rebootapp.AwoApp;
++
++import android.content.Context;
++import android.content.DialogInterface;
++import android.util.Log;
++import android.view.LayoutInflater;
++import android.view.View;
++import android.view.ViewGroup;
++import android.widget.Button;
++import android.widget.ImageView;
++import android.widget.TextView;
++import android.widget.Toast;
++
++import androidx.appcompat.app.AlertDialog;
++import androidx.cardview.widget.CardView;
++import androidx.recyclerview.widget.LinearLayoutManager;
++import androidx.recyclerview.widget.RecyclerView;
++
++import com.example.rebootapp.GameDetailsActivity;
++import com.example.rebootapp.R;
++import com.parse.FindCallback;
++import com.parse.GetCallback;
++import com.parse.ParseException;
++import com.parse.ParseObject;
++import com.parse.ParseQuery;
++import com.parse.ParseUser;
++import com.parse.SaveCallback;
++
++import java.util.ArrayList;
++import java.util.List;
++
++public class ManageListAdapter extends RecyclerView.Adapter<ManageListAdapter.ViewHolder> {
++
++    private ArrayList<UserListModel> userListModelArrayList;
++    private LayoutInflater mInflater;
++    private Context context;
++    // Veriler ve Context ile constructor
++    public ManageListAdapter(Context context, ArrayList<UserListModel> data) {
++        this.mInflater = LayoutInflater.from(context);
++
++        this.userListModelArrayList = data;
++        this.context = context;
++    }
++
++    // ViewHolder'ı inflate et
++    @Override
++    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
++        View view = mInflater.inflate(R.layout.row_userlist, parent, false);
++        return new ViewHolder(view);
++    }
++
++    // Veriyi bağla
++    @Override
++    public void onBindViewHolder(ManageListAdapter.ViewHolder holder, int position) {
++        String listName = userListModelArrayList.get(position).getListName();
++        holder.tvListName.setText(listName);
++        holder.imgAdd.setImageResource(R.drawable.baseline_delete_24);
++
++            holder.imgAdd.setOnClickListener(new View.OnClickListener() {
++                @Override
++                public void onClick(View view) {
++                    UserListModel userModel = userListModelArrayList.get(position);
++                    String objectId = userModel.getObjectID(); // Silinecek CustomUserList nesnesinin objectId'i
++
++                    // AlertDialog ile kullanıcıdan silme işlemi için onay iste
++                    new AlertDialog.Builder(mInflater.getContext())
++                            .setTitle("Delete List") // Dialog başlığı
++                            .setMessage("Are you sure you want to delete this list?") // Dialog mesajı
++                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
++                                public void onClick(DialogInterface dialog, int which) {
++                                    // Kullanıcı "Yes" dediğinde, silme işlemi yap
++                                    ParseQuery<ParseObject> query = ParseQuery.getQuery("CustomUserList");
++                                    query.getInBackground(objectId, new GetCallback<ParseObject>() {
++                                        @Override
++                                        public void done(ParseObject object, ParseException e) {
++                                            if (e == null && object != null) {
++                                                // Nesneyi sil
++                                                object.deleteInBackground(e1 -> {
++                                                    if (e1 == null) {
++                                                        // Silme işlemi başarılı, listeyi güncelle
++                                                        userListModelArrayList.remove(position);
++                                                        notifyItemRemoved(position);
++                                                        notifyItemRangeChanged(position, userListModelArrayList.size());
++                                                        Toast.makeText(mInflater.getContext(), "List successfully deleted", Toast.LENGTH_SHORT).show();
++                                                    } else {
++                                                        // Silme işlemi sırasında hata oluştu
++                                                        Toast.makeText(mInflater.getContext(), "Error deleting list: " + e1.getMessage(), Toast.LENGTH_SHORT).show();
++                                                    }
++                                                });
++                                            } else {
++                                                // Sorgu sırasında hata oluştu
++                                                Toast.makeText(mInflater.getContext(), "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
++                                            }
++                                        }
++                                    });
++                                }
++                            })
++                            .setNegativeButton(android.R.string.no, null) // Kullanıcı "No" dediğinde hiçbir şey yapma
++                            .setIcon(android.R.drawable.ic_dialog_alert)
++                            .show();
++                }
++            });
++            holder.cardView.setOnClickListener(new View.OnClickListener() {
++                @Override
++                public void onClick(View view) {
++                gameListDialog(position);
++                }
++            });
++    }
++    public void gameListDialog(int position) {
++        // Inflate the custom layout using layout inflater
++        LayoutInflater inflater = LayoutInflater.from(context);
++        View customView = inflater.inflate(R.layout.layout_user_list, null);
++
++        // Apply the custom style to the AlertDialog
++        AlertDialog.Builder listDialog = new AlertDialog.Builder(
++                new androidx.appcompat.view.ContextThemeWrapper(context, R.style.AlertDialogCustom));
++
++        listDialog.setView(customView); // Set the custom view for the dialog
++        AlertDialog userListDialogBuilder = listDialog.create();
++
++        Button btnAddNewList=customView.findViewById(R.id.btnNewList);
++        TextView tvTitleList=customView.findViewById(R.id.tvTitleList);
++        tvTitleList.setText("Manage Games");
++        btnAddNewList.setVisibility(View.GONE);
++        Button btnClose=customView.findViewById(R.id.btnClose);
++        RecyclerView recyclerView=customView.findViewById(R.id.recyclerView);
++
++        btnClose.setOnClickListener(new View.OnClickListener() {
++            @Override
++            public void onClick(View view) {
++                userListDialogBuilder.dismiss();
++            }
++        });
++
++                    GameListAdapter gameListAdapter=
++                            new GameListAdapter(context,
++                                    userListModelArrayList.get(position));
++                    recyclerView.setAdapter(gameListAdapter);
++                    recyclerView.setLayoutManager(new LinearLayoutManager(context));
++
++
++        userListDialogBuilder.show();
++    }
++    // Toplam öğe sayısı
++    @Override
++    public int getItemCount() {
++        return userListModelArrayList.size();
++    }
++
++    // Veri ile doldurulacak row'u tutacak ViewHolder
++    public class ViewHolder extends RecyclerView.ViewHolder {
++        TextView tvListName;
++        ImageView imgAdd;
++        CardView cardView;
++        ViewHolder(View itemView) {
++            super(itemView);
++            tvListName = itemView.findViewById(R.id.tvListName);
++            imgAdd = itemView.findViewById(R.id.imgAdd);
++            cardView = itemView.findViewById(R.id.cardView);
++        }
++    }
++}
+Index: app/src/main/java/com/example/rebootapp/AwoApp/GameModel.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/rebootapp/AwoApp/GameModel.java b/app/src/main/java/com/example/rebootapp/AwoApp/GameModel.java
+new file mode 100644
+--- /dev/null	(date 1708581154000)
++++ b/app/src/main/java/com/example/rebootapp/AwoApp/GameModel.java	(date 1708581154000)
+@@ -0,0 +1,95 @@
++package com.example.rebootapp.AwoApp;
++
++
++import android.util.Log;
++
++import org.json.JSONArray;
++import org.json.JSONException;
++import org.json.JSONObject;
++import org.parceler.Parcel;
++
++import java.util.ArrayList;
++import java.util.List;
++
++@Parcel
++
++public class GameModel {
++
++
++    String title;
++    String id;
++
++    String overview;
++    String posterPath;
++    String backdropPath;
++    Double voteAverage;
++
++
++
++    public Double getVoteAverage() {
++        return voteAverage;
++    }
++
++
++
++
++    // no-arg, empty constructor required for Parceler
++    public GameModel() {}
++
++    public GameModel(JSONObject game) throws JSONException {
++        title = game.getString("name");
++        id = game.getString("id");
++        String decName = game.getString("metacritic");
++        Log.i("name", decName);
++        overview = game.getString("released");
++        posterPath = game.getString("background_image");
++//        backdropPath = movie.getString("backdrop_path");
++//        voteAverage = movie.getDouble("vote_average");
++    }
++//
++//    public Movie(JSONObject jsonObject){
++//        try {
++////            backdropPath = jsonObject.getString("backdrop_path");
++//            posterPath = jsonObject.getString("background_image");
++//        } catch (JSONException e) {
++//            e.printStackTrace();
++//        }
++//        try {
++//            title = jsonObject.getString("name");
++//        } catch (JSONException e) {
++//            e.printStackTrace();
++//        }
++//        try {
++//            overview = jsonObject.getString("description");
++//        } catch (JSONException e) {
++//            e.printStackTrace();
++//        }
++//    }
++
++    public static List<GameModel> fromJSONArray(JSONArray gameJSONArray) throws JSONException{
++        List<GameModel> gameModels = new ArrayList<>();
++        for(int i =0; i < gameJSONArray.length(); i++){
++            gameModels.add(new GameModel(gameJSONArray.getJSONObject(i)));
++        }
++        return gameModels;
++    }
++
++    public String getPosterPath() {
++        return posterPath;
++    }
++
++    public String getBackdropPath(){
++        return "https://image.tmdb.org/t/p/w342" + backdropPath;
++    }
++
++    public String getTitle() {
++        return title;
++    }
++
++    public String getOverview() {
++        return overview;
++    }
++
++    public String getID() { return id; }
++
++}
+Index: app/src/main/res/drawable/baseline_playlist_add_check_24.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/drawable/baseline_playlist_add_check_24.xml b/app/src/main/res/drawable/baseline_playlist_add_check_24.xml
+new file mode 100644
+--- /dev/null	(date 1708579060000)
++++ b/app/src/main/res/drawable/baseline_playlist_add_check_24.xml	(date 1708579060000)
+@@ -0,0 +1,8 @@
++<vector android:autoMirrored="true" android:height="24dp"
++    android:tint="#000000" android:viewportHeight="24"
++    android:viewportWidth="24" android:width="24dp" xmlns:android="http://schemas.android.com/apk/res/android">
++    <path android:fillColor="@android:color/white" android:pathData="M3,10h11v2h-11z"/>
++    <path android:fillColor="@android:color/white" android:pathData="M3,6h11v2h-11z"/>
++    <path android:fillColor="@android:color/white" android:pathData="M3,14h7v2h-7z"/>
++    <path android:fillColor="@android:color/white" android:pathData="M20.59,11.93l-4.25,4.24l-2.12,-2.12l-1.41,1.41l3.53,3.54l5.66,-5.66z"/>
++</vector>
+Index: app/src/main/java/com/example/rebootapp/AwoApp/UserListModel.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/rebootapp/AwoApp/UserListModel.java b/app/src/main/java/com/example/rebootapp/AwoApp/UserListModel.java
+new file mode 100644
+--- /dev/null	(date 1708650594000)
++++ b/app/src/main/java/com/example/rebootapp/AwoApp/UserListModel.java	(date 1708650594000)
+@@ -0,0 +1,69 @@
++package com.example.rebootapp.AwoApp;
++
++import java.util.List;
++
++public class UserListModel {
++    String listName;
++    List<String> gameName;
++    List<String>  gamePreviewLink;
++    List<String>  gameID;
++    String userID;
++    String objectID;
++
++    public UserListModel(String listName, List<String> gameName, List<String> gamePreviewLink, List<String> gameID, String userID, String objectID) {
++        this.listName = listName;
++        this.gameName = gameName;
++        this.gamePreviewLink = gamePreviewLink;
++        this.gameID = gameID;
++        this.userID = userID;
++        this.objectID = objectID;
++    }
++
++    public String getListName() {
++        return listName;
++    }
++
++    public void setListName(String listName) {
++        this.listName = listName;
++    }
++
++    public List<String> getGameName() {
++        return gameName;
++    }
++
++    public void setGameName(List<String> gameName) {
++        this.gameName = gameName;
++    }
++
++    public List<String> getGamePreviewLink() {
++        return gamePreviewLink;
++    }
++
++    public void setGamePreviewLink(List<String> gamePreviewLink) {
++        this.gamePreviewLink = gamePreviewLink;
++    }
++
++    public List<String> getGameID() {
++        return gameID;
++    }
++
++    public void setGameID(List<String> gameID) {
++        this.gameID = gameID;
++    }
++
++    public String getUserID() {
++        return userID;
++    }
++
++    public void setUserID(String userID) {
++        this.userID = userID;
++    }
++
++    public String getObjectID() {
++        return objectID;
++    }
++
++    public void setObjectID(String objectID) {
++        this.objectID = objectID;
++    }
++}
+Index: app/src/main/java/com/example/rebootapp/AwoApp/GameListAdapter.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/rebootapp/AwoApp/GameListAdapter.java b/app/src/main/java/com/example/rebootapp/AwoApp/GameListAdapter.java
+new file mode 100644
+--- /dev/null	(date 1708832368000)
++++ b/app/src/main/java/com/example/rebootapp/AwoApp/GameListAdapter.java	(date 1708832368000)
+@@ -0,0 +1,132 @@
++package com.example.rebootapp.AwoApp;
++
++import android.content.Context;
++import android.content.DialogInterface;
++import android.util.Log;
++import android.view.LayoutInflater;
++import android.view.View;
++import android.view.ViewGroup;
++import android.widget.ImageView;
++import android.widget.TextView;
++import android.widget.Toast;
++
++import androidx.appcompat.app.AlertDialog;
++import androidx.cardview.widget.CardView;
++import androidx.recyclerview.widget.RecyclerView;
++
++import com.bumptech.glide.Glide;
++import com.example.rebootapp.R;
++import com.parse.GetCallback;
++import com.parse.ParseException;
++import com.parse.ParseObject;
++import com.parse.ParseQuery;
++
++import java.util.ArrayList;
++import java.util.List;
++
++public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHolder> {
++
++//    private ArrayList<UserListModel> userListModelArrayList;
++    private UserListModel userListModel;
++    private LayoutInflater mInflater;
++    // Veriler ve Context ile constructor
++    public GameListAdapter(Context context,UserListModel userListModel) {
++        this.mInflater = LayoutInflater.from(context);
++
++        this.userListModel = userListModel;
++    }
++
++    // ViewHolder'ı inflate et
++    @Override
++    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
++        View view = mInflater.inflate(R.layout.row_userlist, parent, false);
++        return new ViewHolder(view);
++    }
++
++    // Veriyi bağla
++    @Override
++    public void onBindViewHolder(GameListAdapter.ViewHolder holder, int position) {
++        String listName = userListModel.getGameName().get(position);
++        holder.tvListName.setText(listName);
++        holder.imgAdd.setImageResource(R.drawable.baseline_delete_24);
++        Glide.with(holder.itemView.getContext()).load(userListModel.getGamePreviewLink().get(position)).into(holder.imgPreview);
++        holder.imgAdd.setOnClickListener(new View.OnClickListener() {
++            @Override
++            public void onClick(View view) {
++                String objectId = userListModel.getObjectID(); // Güncellenecek CustomUserList nesnesinin objectId'i
++
++                // AlertDialog ile kullanıcıdan oyunu silme işlemi için onay iste
++                new AlertDialog.Builder(mInflater.getContext())
++                        .setTitle("Delete Game") // Dialog başlığı
++                        .setMessage("Are you sure you want to delete this game from the list?") // Dialog mesajı
++                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
++                            public void onClick(DialogInterface dialog, int which) {
++                                // Kullanıcı "Yes" dediğinde, oyunu silme işlemi yap
++                                ParseQuery<ParseObject> query = ParseQuery.getQuery("CustomUserList");
++                                query.getInBackground(objectId, new GetCallback<ParseObject>() {
++                                    @Override
++                                    public void done(ParseObject customUserList, ParseException e) {
++                                        if (e == null && customUserList != null) {
++                                            // İlgili listelerden oyun bilgilerini çıkar
++                                            List<String> gameIDs = customUserList.getList("gameID");
++                                            List<String> gameNames = customUserList.getList("gameName");
++                                            List<String> gamePreviewLinks = customUserList.getList("gamePreviewLink");
++
++                                            if (gameIDs != null) gameIDs.remove(userListModel.getGameID().get(position));
++                                            if (gameNames != null) gameNames.remove(userListModel.getGameName().get(position));
++                                            if (gamePreviewLinks != null) gamePreviewLinks.remove(userListModel.getGamePreviewLink().get(position));
++
++                                            customUserList.put("gameID", gameIDs);
++                                            customUserList.put("gameName", gameNames);
++                                            customUserList.put("gamePreviewLink", gamePreviewLinks);
++
++                                            // Güncellemeleri Parse'a kaydet
++                                            customUserList.saveInBackground(e1 -> {
++                                                if (e1 == null) {
++                                                    // Oyun silme işlemi başarılı
++                                                    userListModel.getGameID().remove(position);
++                                                    userListModel.getGameName().remove(position);
++                                                    userListModel.getGamePreviewLink().remove(position);
++                                                    notifyDataSetChanged();
++                                                    Toast.makeText(mInflater.getContext(), "Game successfully deleted from the list", Toast.LENGTH_SHORT).show();
++                                                } else {
++                                                    // Silme işlemi sırasında hata oluştu
++                                                    Toast.makeText(mInflater.getContext(), "Error deleting game: " + e1.getMessage(), Toast.LENGTH_SHORT).show();
++                                                }
++                                            });
++                                        } else {
++                                            // Sorgu sırasında hata oluştu
++                                            Toast.makeText(mInflater.getContext(), "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
++                                        }
++                                    }
++                                });
++                            }
++                        })
++                        .setNegativeButton(android.R.string.no, null) // Kullanıcı "No" dediğinde hiçbir şey yapma
++                        .setIcon(android.R.drawable.ic_dialog_alert)
++                        .show();
++            }
++        });
++
++    }
++
++    // Toplam öğe sayısı
++    @Override
++    public int getItemCount() {
++        return userListModel.getGameID().size();
++    }
++
++    // Veri ile doldurulacak row'u tutacak ViewHolder
++    public class ViewHolder extends RecyclerView.ViewHolder {
++        TextView tvListName;
++        ImageView imgAdd,imgPreview;
++        CardView cardView;
++        ViewHolder(View itemView) {
++            super(itemView);
++            tvListName = itemView.findViewById(R.id.tvListName);
++            imgAdd = itemView.findViewById(R.id.imgAdd);
++            cardView = itemView.findViewById(R.id.cardView);
++            imgPreview = itemView.findViewById(R.id.imgPreview);
++        }
++    }
++}
+Index: app/src/main/java/com/example/rebootapp/ProfileFragment.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/rebootapp/ProfileFragment.java b/app/src/main/java/com/example/rebootapp/AwoApp/ProfileFragment.java
+rename from app/src/main/java/com/example/rebootapp/ProfileFragment.java
+rename to app/src/main/java/com/example/rebootapp/AwoApp/ProfileFragment.java
+--- a/app/src/main/java/com/example/rebootapp/ProfileFragment.java	(revision 56c4e84700c03b6f5f13e3765dd2b479645d6000)
++++ b/app/src/main/java/com/example/rebootapp/AwoApp/ProfileFragment.java	(date 1708831214000)
+@@ -1,4 +1,4 @@
+-package com.example.rebootapp;
++package com.example.rebootapp.AwoApp;
+ 
+ import static com.parse.Parse.getApplicationContext;
+ 
+@@ -7,8 +7,8 @@
+ import android.content.SharedPreferences;
+ import android.net.Uri;
+ import android.os.Bundle;
+-import android.provider.MediaStore;
+ import android.se.omapi.Session;
++import android.util.Log;
+ import android.view.LayoutInflater;
+ import android.view.View;
+ import android.view.ViewGroup;
+@@ -23,14 +23,22 @@
+ import androidx.activity.result.ActivityResultLauncher;
+ import androidx.activity.result.contract.ActivityResultContracts;
+ import androidx.annotation.NonNull;
++import androidx.appcompat.app.AlertDialog;
+ import androidx.fragment.app.Fragment;
++import androidx.recyclerview.widget.LinearLayoutManager;
++import androidx.recyclerview.widget.RecyclerView;
+ 
++import com.example.rebootapp.EditProfileActivity;
++import com.example.rebootapp.FavoriteGamesActivity;
++import com.example.rebootapp.Login;
++import com.example.rebootapp.R;
+ import com.google.android.gms.auth.api.signin.GoogleSignIn;
+ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+ import com.google.android.gms.tasks.OnCompleteListener;
+ import com.google.android.gms.tasks.Task;
++import com.parse.FindCallback;
+ import com.parse.GetCallback;
+ import com.parse.ParseException;
+ import com.parse.ParseFile;
+@@ -40,8 +48,8 @@
+ 
+ import com.squareup.picasso.Picasso;
+ 
+-
+-
++import java.util.ArrayList;
++import java.util.List;
+ 
+ 
+ public class ProfileFragment extends Fragment {
+@@ -104,7 +112,12 @@
+ 
+         refreshProfile();
+ 
+-
++        view.findViewById(R.id.customList).setOnClickListener(new View.OnClickListener() {
++            @Override
++            public void onClick(View view) {
++                manageCustomListDialog();
++            }
++        });
+         btnSignOut.setOnClickListener(new View.OnClickListener() {
+ 
+             @Override
+@@ -149,7 +162,70 @@
+         // Inflate the layout for this fragment
+         return view;
+     }
++    public void manageCustomListDialog() {
++        // Inflate the custom layout using layout inflater
++        LayoutInflater inflater = LayoutInflater.from(getActivity());
++        View customView = inflater.inflate(R.layout.layout_user_list, null);
++
++        // Apply the custom style to the AlertDialog
++        AlertDialog.Builder listDialog = new AlertDialog.Builder(
++                new androidx.appcompat.view.ContextThemeWrapper(getActivity(), R.style.AlertDialogCustom));
++
++        listDialog.setView(customView); // Set the custom view for the dialog
++        AlertDialog userListDialogBuilder = listDialog.create();
++
++        Button btnAddNewList=customView.findViewById(R.id.btnNewList);
++        TextView tvTitleList=customView.findViewById(R.id.tvTitleList);
++        tvTitleList.setText("Manage List");
++        btnAddNewList.setVisibility(View.GONE);
++        Button btnClose=customView.findViewById(R.id.btnClose);
++        RecyclerView recyclerView=customView.findViewById(R.id.recyclerView);
++
++        btnClose.setOnClickListener(new View.OnClickListener() {
++            @Override
++            public void onClick(View view) {
++                userListDialogBuilder.dismiss();
++            }
++        });
++        ParseUser currentUser = ParseUser.getCurrentUser();
++        String userId = currentUser.getObjectId();
++        ParseQuery<ParseObject> query = ParseQuery.getQuery("CustomUserList");
++        query.whereEqualTo("userID", userId); // objectId'ler içinde sorgula
++        query.findInBackground(new FindCallback<ParseObject>() {
++            @Override
++            public void done(List<ParseObject> customUserLists, ParseException e) {
++                if (e == null) {
++                    // Sorgu başarılı, listName'leri çekiyoruz
++                    ArrayList<UserListModel> userListModelArrayList = new ArrayList<>();
++                    for (ParseObject object : customUserLists) {
++                        String listName = object.getString("listName");
++                        List<String> gameName = object.getList("gameName");
++                        List<String> gamePreviewLink = object.getList("gamePreviewLink");
++                        String userID = object.getString("userID");
++                        List<String> gameID = object.getList("gameID");
++                        String objectID = object.getObjectId(); // ParseObject'in kendine özgü ID'si
++                        // Model nesnesini oluştur ve listeye ekle
++                        UserListModel model = new UserListModel(listName, gameName,
++                                gamePreviewLink,gameID, userID, objectID);
++                        userListModelArrayList.add(model);
++                    }
++                    // TODO: Burada RecyclerView Adapter'ını güncelle veya başka bir işlem yap
++                   ManageListAdapter manageListAdapter=
++                            new ManageListAdapter(getActivity(),
++                                    userListModelArrayList);
++                    recyclerView.setAdapter(manageListAdapter);
++                    recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
++                } else {
++                    // Sorgu sırasında hata oluştu, hata mesajını logla veya göster
++                    Log.e("ParseError", "Error retrieving CustomUserList: " + e.getMessage());
++                }
++            }
++        });
+ 
++
++
++        userListDialogBuilder.show();
++    }
+     @Override
+     public void onViewCreated(View view, Bundle savedInstanceState) {
+         super.onViewCreated(view, savedInstanceState);
+Index: app/src/main/java/com/example/rebootapp/AwoApp/UserListNamesAdapter.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/rebootapp/AwoApp/UserListNamesAdapter.java b/app/src/main/java/com/example/rebootapp/AwoApp/UserListNamesAdapter.java
+new file mode 100644
+--- /dev/null	(date 1708832442000)
++++ b/app/src/main/java/com/example/rebootapp/AwoApp/UserListNamesAdapter.java	(date 1708832442000)
+@@ -0,0 +1,167 @@
++package com.example.rebootapp.AwoApp;
++
++import android.content.Context;
++import android.util.Log;
++import android.view.LayoutInflater;
++import android.view.View;
++import android.view.ViewGroup;
++import android.widget.ImageView;
++import android.widget.TextView;
++import android.widget.Toast;
++
++import androidx.recyclerview.widget.RecyclerView;
++
++import com.example.rebootapp.R;
++import com.parse.GetCallback;
++import com.parse.ParseException;
++import com.parse.ParseObject;
++import com.parse.ParseQuery;
++import com.parse.SaveCallback;
++
++import java.util.ArrayList;
++import java.util.Arrays;
++import java.util.List;
++
++public class UserListNamesAdapter extends RecyclerView.Adapter<UserListNamesAdapter.ViewHolder> {
++
++    private ArrayList<UserListModel> userListModelArrayList;
++    private LayoutInflater mInflater;
++    String gameID;
++    String gamePreviewLink;
++    String gameName;
++    // Veriler ve Context ile constructor
++    public UserListNamesAdapter(Context context, ArrayList<UserListModel> data,String gameID,
++                                String gameName,String gamePreviewLink) {
++        this.mInflater = LayoutInflater.from(context);
++        this.gameName = gameName;
++        this.gamePreviewLink = gamePreviewLink;
++        this.gameID = gameID;
++        this.userListModelArrayList = data;
++    }
++
++    // ViewHolder'ı inflate et
++    @Override
++    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
++        View view = mInflater.inflate(R.layout.row_userlist, parent, false);
++        return new ViewHolder(view);
++    }
++
++    // Veriyi bağla
++    @Override
++    public void onBindViewHolder(UserListNamesAdapter.ViewHolder holder, int position) {
++        String listName = userListModelArrayList.get(position).getListName();
++        holder.tvListName.setText(listName);
++        // Oyun ID'leri listesini al
++        List<String> gameIDs = userListModelArrayList.get(position).getGameID();
++
++// gameIDs null değilse ve gameID içeriyorsa, check icon'u göster
++        if (gameIDs != null && gameIDs.contains(gameID)) {
++            holder.imgAdd.setImageResource(R.drawable.baseline_playlist_add_check_24);
++        } else {
++            // Aksi takdirde, add icon'u göster
++            holder.imgAdd.setImageResource(R.drawable.baseline_add_24);
++        }
++            holder.imgAdd.setOnClickListener(new View.OnClickListener() {
++            @Override
++            public void onClick(View view) {
++                // Mevcut UserListModel al
++                UserListModel model = userListModelArrayList.get(position);
++                String listObjectId = model.getObjectID(); // Güncellenecek CustomUserList nesnesinin objectId'i
++
++                // CustomUserList sınıfından ilgili listeyi al
++                ParseQuery<ParseObject> query = ParseQuery.getQuery("CustomUserList");
++                query.getInBackground(listObjectId, new GetCallback<ParseObject>() {
++                    @Override
++                    public void done(ParseObject customUserList, ParseException e) {
++                        if (e == null && customUserList != null) {
++                            List<String> gameIDs = customUserList.getList("gameID");
++                            List<String> gameNames = customUserList.getList("gameName");
++                            List<String> gamePreviewLinks = customUserList.getList(
++                                    "gamePreviewLink");
++                            if (gameNames==null){
++                                gameNames=new ArrayList<>();
++                            }
++                            if (gamePreviewLinks==null){
++                                gamePreviewLinks=new ArrayList<>();
++                            }
++                            if (gameIDs==null){
++                                gameIDs=new ArrayList<>();
++                                // Oyun listede değilse, listeye ekle
++                                gameIDs.add(gameID);
++                                gameNames.add(gameName);
++                                gamePreviewLinks.add(gamePreviewLink);
++                                customUserList.put("gameID", gameIDs);
++                                customUserList.put("gameName", gameNames);
++                                customUserList.put("gamePreviewLink",gamePreviewLinks);
++
++
++
++                                holder.imgAdd.setImageResource(R.drawable.baseline_playlist_add_check_24);
++                            }else {
++                                // Oyunun zaten listede olup olmadığını kontrol et
++                                if (gameIDs.contains(gameID)) {
++                                    // Oyun listedeyse, listeden kaldır
++                                    gameIDs.remove(gameID);
++                                    gameNames.remove(gameName);
++                                    gamePreviewLinks.remove(gamePreviewLink);
++                                    customUserList.put("gameID", gameIDs);
++                                    customUserList.put("gameName", gameNames);
++                                    customUserList.put("gamePreviewLink",gamePreviewLinks);
++
++
++                                    holder.imgAdd.setImageResource(R.drawable.baseline_add_24);
++                                } else {
++                                    // Oyun listede değilse, listeye ekle
++                                    gameIDs.add(gameID);
++                                    gameNames.add(gameName);
++                                    gamePreviewLinks.add(gamePreviewLink);
++                                    customUserList.put("gameID", gameIDs);
++                                    customUserList.put("gameName", gameNames);
++                                    customUserList.put("gamePreviewLink",gamePreviewLinks);
++                                    holder.imgAdd.setImageResource(R.drawable.baseline_playlist_add_check_24);
++                                }
++                            }
++
++
++                            // Güncellemeleri Parse'a kaydet
++                            customUserList.saveInBackground(new SaveCallback() {
++                                @Override
++                                public void done(ParseException e1) {
++                                    if (e1 == null) {
++                                        // Başarılı güncelleme
++                                        Toast.makeText(view.getContext(), "List updated successfully.", Toast.LENGTH_SHORT).show();
++                                    } else {
++                                        // Güncelleme hatası
++                                        Toast.makeText(view.getContext(), "Error updating list: " + e1.getMessage(), Toast.LENGTH_SHORT).show();
++
++                                    }
++                                }
++                            });
++                        } else {
++                            // Sorgu hatası
++                            Toast.makeText(view.getContext(), "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
++                        }
++                    }
++                });
++            }
++        });
++
++    }
++
++    // Toplam öğe sayısı
++    @Override
++    public int getItemCount() {
++        return userListModelArrayList.size();
++    }
++
++    // Veri ile doldurulacak row'u tutacak ViewHolder
++    public class ViewHolder extends RecyclerView.ViewHolder {
++        TextView tvListName;
++        ImageView imgAdd;
++        ViewHolder(View itemView) {
++            super(itemView);
++            tvListName = itemView.findViewById(R.id.tvListName);
++            imgAdd = itemView.findViewById(R.id.imgAdd);
++        }
++    }
++}
+Index: app/src/main/res/layout/row_userlist.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/row_userlist.xml b/app/src/main/res/layout/row_userlist.xml
+new file mode 100644
+--- /dev/null	(date 1708831586000)
++++ b/app/src/main/res/layout/row_userlist.xml	(date 1708831586000)
+@@ -0,0 +1,45 @@
++<?xml version="1.0" encoding="utf-8"?>
++<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
++    xmlns:app="http://schemas.android.com/apk/res-auto"
++    android:id="@+id/cardView"
++    android:layout_width="match_parent"
++    android:layout_height="wrap_content"
++    android:layout_margin="10dp"
++    app:cardBackgroundColor="@color/white"
++    app:cardCornerRadius="10dp">
++
++    <LinearLayout
++        android:layout_width="match_parent"
++        android:layout_height="match_parent"
++        android:gravity="center"
++        android:orientation="horizontal">
++
++        <ImageView
++            android:id="@+id/imgPreview"
++            android:layout_width="60dp"
++            android:layout_height="60dp"
++            android:layout_weight="0"
++            android:scaleType="centerCrop"
++            android:src="@mipmap/ic_launcher" />
++
++        <TextView
++            android:id="@+id/tvListName"
++            android:layout_width="wrap_content"
++            android:layout_height="wrap_content"
++            android:layout_marginLeft="5dp"
++            android:layout_marginRight="5dp"
++            android:layout_weight="1"
++            android:text="TextView"
++            android:textColor="@color/black"
++            android:textSize="16sp" />
++
++        <ImageView
++            android:id="@+id/imgAdd"
++            android:layout_width="36dp"
++            android:layout_height="36dp"
++            android:layout_marginLeft="5dp"
++            android:layout_marginRight="5dp"
++            android:layout_weight="0"
++            android:src="@drawable/baseline_add_24" />
++    </LinearLayout>
++</androidx.cardview.widget.CardView>
+\ No newline at end of file
