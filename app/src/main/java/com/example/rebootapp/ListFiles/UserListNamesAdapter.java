@@ -1,7 +1,6 @@
-package com.example.rebootapp.AwoApp;
+package com.example.rebootapp.ListFiles;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +18,6 @@ import com.parse.ParseQuery;
 import com.parse.SaveCallback;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class UserListNamesAdapter extends RecyclerView.Adapter<UserListNamesAdapter.ViewHolder> {
