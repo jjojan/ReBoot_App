@@ -55,7 +55,7 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHo
 
 
                 new AlertDialog.Builder(mInflater.getContext())
-                        .setTitle("Delete Game") // Dialog başlığı
+                        .setTitle("Delete Game")
                         .setMessage("Are you sure you want to delete this game from the list?")
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {

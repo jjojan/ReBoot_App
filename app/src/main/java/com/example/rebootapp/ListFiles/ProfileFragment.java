@@ -139,18 +139,18 @@ public class ProfileFragment extends Fragment {
                         }
                     });
                 } else {
-                    //Get current Parse User
+
                     ParseUser currentUser = ParseUser.getCurrentUser();
                     if (currentUser != null) {
                         ParseUser.logOutInBackground(e -> {
-                            //progressDialog.dismiss();
+
                             if (e == null)
-                                //showAlert("So, you're going...", "Ok...Bye-bye then");
+
                                 Toast.makeText(getApplicationContext(), "User Logged Out", Toast.LENGTH_SHORT).show();
 
                         });
                     } else {
-                        // show the signup or login screen
+
                     }
 
                 }
@@ -159,19 +159,19 @@ public class ProfileFragment extends Fragment {
         });
 
 
-        // Inflate the layout for this fragment
+
         return view;
     }
     public void manageCustomListDialog() {
-        // Inflate the custom layout using layout inflater
+
         LayoutInflater inflater = LayoutInflater.from(getActivity());
         View customView = inflater.inflate(R.layout.layout_user_list, null);
 
-        // Apply the custom style to the AlertDialog
+
         AlertDialog.Builder listDialog = new AlertDialog.Builder(
                 new androidx.appcompat.view.ContextThemeWrapper(getActivity(), R.style.AlertDialogCustom));
 
-        listDialog.setView(customView); // Set the custom view for the dialog
+        listDialog.setView(customView);
         AlertDialog userListDialogBuilder = listDialog.create();
 
         Button btnAddNewList=customView.findViewById(R.id.btnNewList);
@@ -190,12 +190,11 @@ public class ProfileFragment extends Fragment {
         ParseUser currentUser = ParseUser.getCurrentUser();
         String userId = currentUser.getObjectId();
         ParseQuery<ParseObject> query = ParseQuery.getQuery("CustomUserList");
-        query.whereEqualTo("userID", userId); // objectId'ler içinde sorgula
+        query.whereEqualTo("userID", userId);
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> customUserLists, ParseException e) {
                 if (e == null) {
-                    // Sorgu başarılı, listName'leri çekiyoruz
                     ArrayList<UserListModel> userListModelArrayList = new ArrayList<>();
                     for (ParseObject object : customUserLists) {
                         String listName = object.getString("listName");
@@ -203,20 +202,20 @@ public class ProfileFragment extends Fragment {
                         List<String> gamePreviewLink = object.getList("gamePreviewLink");
                         String userID = object.getString("userID");
                         List<String> gameID = object.getList("gameID");
-                        String objectID = object.getObjectId(); // ParseObject'in kendine özgü ID'si
-                        // Model nesnesini oluştur ve listeye ekle
+                        String objectID = object.getObjectId();
+
                         UserListModel model = new UserListModel(listName, gameName,
                                 gamePreviewLink,gameID, userID, objectID);
                         userListModelArrayList.add(model);
                     }
-                    // TODO: Burada RecyclerView Adapter'ını güncelle veya başka bir işlem yap
+
                    ManageListAdapter manageListAdapter=
                             new ManageListAdapter(getActivity(),
                                     userListModelArrayList);
                     recyclerView.setAdapter(manageListAdapter);
                     recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
                 } else {
-                    // Sorgu sırasında hata oluştu, hata mesajını logla veya göster
+
                     Log.e("ParseError", "Error retrieving CustomUserList: " + e.getMessage());
                 }
             }

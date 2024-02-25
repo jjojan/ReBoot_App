@@ -28,7 +28,7 @@ public class ManageListAdapter extends RecyclerView.Adapter<ManageListAdapter.Vi
     private ArrayList<UserListModel> userListModelArrayList;
     private LayoutInflater mInflater;
     private Context context;
-    // Veriler ve Context ile constructor
+
     public ManageListAdapter(Context context, ArrayList<UserListModel> data) {
         this.mInflater = LayoutInflater.from(context);
 
