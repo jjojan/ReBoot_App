@@ -68,7 +68,7 @@ public class HomeActivity extends AppCompatActivity {
 //                try{
 //                    JSONArray results = jsonObject.getJSONArray("results");
 //                    Log.i(TAG, "Results" + results.toString());
-//                    game.addAll(Game.fromJSONArray(results));
+//                    game.addAll(GameModel.fromJSONArray(results));
 //                    gameAdapter.notifyDataSetChanged();
 //                    Log.i(TAG, "Movies" + game.size());
 //                } catch(JSONException e){
@@ -89,7 +89,7 @@ public class HomeActivity extends AppCompatActivity {
 //                try{
 //                    JSONArray results = jsonObject.getJSONArray("results");
 //                    Log.i(TAG, "Results" + results.toString());
-//                    newGames.addAll(Game.fromJSONArray(results));
+//                    newGames.addAll(GameModel.fromJSONArray(results));
 //                    newGameAdapter.notifyDataSetChanged();
 //                    Log.i(TAG, "Movies" + newGames.size());
 //                } catch(JSONException e){
@@ -110,7 +110,7 @@ public class HomeActivity extends AppCompatActivity {
 //                try{
 //                    JSONArray results = jsonObject.getJSONArray("results");
 //                    Log.i(TAG, "Results" + results.toString());
-//                    yourGames.addAll(Game.fromJSONArray(results));
+//                    yourGames.addAll(GameModel.fromJSONArray(results));
 //                    yourGamesAapter.notifyDataSetChanged();
 //                    Log.i(TAG, "Movies" + yourGames.size());
 //                } catch(JSONException e){

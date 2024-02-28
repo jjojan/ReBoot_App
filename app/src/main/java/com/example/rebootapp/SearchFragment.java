@@ -30,9 +30,9 @@ import okhttp3.Headers;
 
 public class SearchFragment extends Fragment {
 
-    List<GameSearch> searchGames; //Game Model List for RecyclerView&Adapter
+    List<GameSearch> searchGames; //GameModel Model List for RecyclerView&Adapter
 
-    String search_term = "";//"spiderman" + "&ordering=-added"; //Test String
+    String search_term = "";
     private MenuItem menuItem;
     private SearchView searchView;
 
@@ -58,7 +58,7 @@ public class SearchFragment extends Fragment {
      * @param param2 Parameter 2.
      * @return A new instance of fragment HomeFragment.
      */
-    // TODO: Rename and change types and number of parameters
+
     public static SearchFragment newInstance(String param1, String param2) {
         SearchFragment fragment = new SearchFragment();
         Bundle args = new Bundle();
@@ -101,7 +101,7 @@ public class SearchFragment extends Fragment {
 //                try {
 //                    JSONArray results = jsonObject.getJSONArray("results");
 //                    //Log.i(TAG, "Results" + results.toString());
-//                    Games.addAll(Game.fromJSONArray(results));
+//                    Games.addAll(GameModel.fromJSONArray(results));
 //                    searchGameAdapter.notifyDataSetChanged();
 //                    println("hello");
 //                    //Log.i(TAG, "Movies" + searchGame.size());

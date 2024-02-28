@@ -8,6 +8,11 @@
         <item name="android:background">@color/black</item>
         <item name="backgroundColor">@color/black</item>
     </style>
-
-    <style name="Theme.ReBootApp" parent="Base.Theme.ReBootApp" />
+    <style name="AlertDialogCustom">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textColorPrimary">@color/black</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:background">@drawable/dialog_background</item>
+    </style>
+    <style name="Theme.ReBootApp" parent="Base.Theme.ReBoot3" />
 </resources>

@@ -39,8 +39,8 @@ import java.util.List;
 
 import okhttp3.Headers;
 
-public class FavoriteGamesAdapter extends RecyclerView.Adapter<FavoriteGamesAdapter.ViewHolder>{
-    private List<String> photoUris; // List of URIs as strings
+public class WishListAdapter extends RecyclerView.Adapter<WishListAdapter .ViewHolder>{
+    private List<String> photoUris;
     public static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView imageViewGamePhoto;
         Context context;
@@ -49,27 +49,19 @@ public class FavoriteGamesAdapter extends RecyclerView.Adapter<FavoriteGamesAdap
             super(view);
             imageViewGamePhoto = view.findViewById(R.id.imageViewGame);
 
-
-//            imageViewGamePhoto.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    //start details activity
-////                    Intent intent = new Intent(getActivity(), )
-//                }
-//            });
         }
 
 
     }
 
-    public FavoriteGamesAdapter(List<String> photoUris){
+    public WishListAdapter (List<String> photoUris){
 
         this.photoUris = photoUris;
     }
 
     @NonNull
     @Override
-    public FavoriteGamesAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public WishListAdapter .ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_gamephoto, parent, false);
         return new ViewHolder(view);
@@ -84,10 +76,7 @@ public class FavoriteGamesAdapter extends RecyclerView.Adapter<FavoriteGamesAdap
         holder.imageViewGamePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                //GameSearch game = new GameSearch()
-
-                ParseQuery<ParseObject> gamesQuery = ParseQuery.getQuery("FavoriteGames");
+                ParseQuery<ParseObject> gamesQuery = ParseQuery.getQuery("WishListGames");
                 ParseUser currentUser = ParseUser.getCurrentUser();
                 String currentUserID = currentUser.getObjectId();
                 gamesQuery.whereEqualTo("user_id", currentUserID);

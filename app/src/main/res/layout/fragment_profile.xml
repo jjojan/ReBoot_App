@@ -7,7 +7,7 @@
     android:layout_alignParentBottom="false"
     android:background="@color/white"
     android:visibility="visible"
-    tools:context=".ProfileFragment">
+    tools:context=".ListFiles.ProfileFragment">
 
     <!-- TODO: Update blank fragment layout -->
 
@@ -144,5 +144,14 @@
         android:text="EditProfile"
         android:textSize="20sp" />
 
+    <ImageButton
+        android:id="@+id/customList"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_above="@+id/btnSignOut"
+        android:layout_marginLeft="175dp"
+        android:layout_marginTop="500dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/baseline_playlist_add_check_24" />
 
 </RelativeLayout>
