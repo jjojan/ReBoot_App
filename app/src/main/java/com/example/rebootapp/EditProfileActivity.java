@@ -92,12 +92,12 @@ public class EditProfileActivity extends AppCompatActivity {
         edt_bio.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                //do nothing
+
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                //do nothing
+
             }
 
             @Override
@@ -273,8 +273,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
     ActivityResultLauncher<PickVisualMediaRequest> pickMedia =
             registerForActivityResult(new PickVisualMedia(), uri -> {
-                // Callback is invoked after the user selects a media item or closes the
-                // photo picker.
+
                 if (uri != null) {
                     Log.d("PhotoPicker", "Selected URI: " + uri);
                     uploadImage(uri);

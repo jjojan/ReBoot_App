@@ -36,7 +36,7 @@ public class GameSearchDetailsActivity extends AppCompatActivity {
 
     List<Game> game;
 
-    // the view objects
+
     TextView tvTitle;
     TextView tvOverview;
     RatingBar rbVoteAverage;
@@ -109,9 +109,6 @@ public class GameSearchDetailsActivity extends AppCompatActivity {
         });
 
 
-
-//        float voteAverage = movie.getVoteAverage().floatValue();
-//        rbVoteAverage.setRating(voteAverage / 2.0f);
 
         ivPoster = (ImageView) findViewById(R.id.ivPoster);
         Glide.with(this)

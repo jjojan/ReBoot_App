@@ -21,7 +21,7 @@ public class GameReview {
     Double voteAverage;
 
 
-    // no-arg, empty constructor required for Parceler
+
     public GameReview() {}
 
 
@@ -35,8 +35,7 @@ public class GameReview {
         Log.i("name", decName);
         date = game.getString("released");
         posterPath = game.getString("background_image");
-//        backdropPath = movie.getString("backdrop_path");
-//        voteAverage = movie.getDouble("vote_average");
+
     }
 
     public static List<GameReview> fromJSONArray(JSONArray gameJSONArray) throws JSONException{
