@@ -31,8 +31,8 @@ import okhttp3.Headers;
 
 public class ReviewFragment extends Fragment {
 
-    List<GameReview> Reviews; //Game Model List for RecyclerView&Adapter
-    String search_term = "";//"spiderman" + "&ordering=-added"; //Test String
+    List<GameReview> Reviews; //GameModel Model List for RecyclerView&Adapter
+    String search_term = "";
     private MenuItem menuItem;
     private SearchView svSearchGame;
     String SEARCH_QUERY = "https://api.rawg.io/api/games?key=63502b95db9f41c99bb3d0ecf77aa811" + search_term + "&ordering=-added";

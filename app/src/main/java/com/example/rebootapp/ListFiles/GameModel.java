@@ -1,4 +1,4 @@
-package com.example.rebootapp;
+package com.example.rebootapp.ListFiles;
 
 
 import android.util.Log;
@@ -13,12 +13,13 @@ import java.util.List;
 
 @Parcel
 
-public class GameSearch {
+public class GameModel {
 
 
     String title;
     String id;
-    String date;
+
+    String overview;
     String posterPath;
     String backdropPath;
     Double voteAverage;
@@ -33,16 +34,14 @@ public class GameSearch {
 
 
     // no-arg, empty constructor required for Parceler
-    public GameSearch() {}
+    public GameModel() {}
 
-    public GameSearch(JSONObject game) throws JSONException {
-        Log.i("search", "searching");
+    public GameModel(JSONObject game) throws JSONException {
         title = game.getString("name");
-        Log.i("GameModel Name", title);
         id = game.getString("id");
         String decName = game.getString("metacritic");
         Log.i("name", decName);
-        date = game.getString("released");
+        overview = game.getString("released");
         posterPath = game.getString("background_image");
 //        backdropPath = movie.getString("backdrop_path");
 //        voteAverage = movie.getDouble("vote_average");
@@ -67,12 +66,12 @@ public class GameSearch {
 //        }
 //    }
 
-    public static List<GameSearch> fromJSONArray(JSONArray gameJSONArray) throws JSONException{
-        List<GameSearch> games = new ArrayList<>();
+    public static List<GameModel> fromJSONArray(JSONArray gameJSONArray) throws JSONException{
+        List<GameModel> gameModels = new ArrayList<>();
         for(int i =0; i < gameJSONArray.length(); i++){
-            games.add(new GameSearch(gameJSONArray.getJSONObject(i)));
+            gameModels.add(new GameModel(gameJSONArray.getJSONObject(i)));
         }
-        return games;
+        return gameModels;
     }
 
     public String getPosterPath() {
@@ -88,9 +87,9 @@ public class GameSearch {
     }
 
     public String getOverview() {
-        return date;
+        return overview;
     }
 
-    public String getID() {return id;}
+    public String getID() { return id; }
 
 }

@@ -1,5 +1,7 @@
 package com.example.rebootapp;
 
+
+
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -30,33 +32,31 @@ import org.parceler.Parcels;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FavoriteGamesActivity extends AppCompatActivity {
+public class WishListActivity extends AppCompatActivity {
 
     RecyclerView games;
-    FavoriteGamesAdapter favoriteGamesAdapter;
+    WishListAdapter wishListAdapter;
     List<String> gamePhotoUris;
-    Button btn_Favorite_Done;
+    Button btn_WishList_Done; //Favorite
 
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_favorite_games);
+        setContentView(R.layout.activity_wishlist_games); //activity_favorite_game
 
-        games = findViewById(R.id.rv_games_list);
+        games = findViewById(R.id.rv_wishlist_list); //fix this
         games.setLayoutManager(new GridLayoutManager(this, 3));
-        btn_Favorite_Done = findViewById(R.id.btn_Favorite_Done);
+        btn_WishList_Done = findViewById(R.id.btn_WishList_Done);
 
         gamePhotoUris = new ArrayList<>();
-        favoriteGamesAdapter = new FavoriteGamesAdapter(gamePhotoUris);
+        wishListAdapter = new WishListAdapter(gamePhotoUris);
 
-        games.setAdapter(favoriteGamesAdapter);
-
-//        fillPhotos();
+        games.setAdapter(wishListAdapter);
 
 
-        btn_Favorite_Done.setOnClickListener(new View.OnClickListener() {
+        btn_WishList_Done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
@@ -66,7 +66,7 @@ public class FavoriteGamesActivity extends AppCompatActivity {
     }
 
     public void fillPhotos(){
-        ParseQuery<ParseObject> gamesQuery = ParseQuery.getQuery("FavoriteGames");
+        ParseQuery<ParseObject> gamesQuery = ParseQuery.getQuery("WishListGames");
         ParseUser currentUser = ParseUser.getCurrentUser();
         String currentUserID = currentUser.getObjectId();
         gamesQuery.whereEqualTo("user_id", currentUserID);
@@ -81,7 +81,7 @@ public class FavoriteGamesActivity extends AppCompatActivity {
                             gamePhotoUris.add(uri);
                         }
                     }
-                    favoriteGamesAdapter.notifyDataSetChanged();
+                    wishListAdapter.notifyDataSetChanged();
 
                 }
                 else{
