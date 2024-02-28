@@ -39,7 +39,7 @@ public class ReviewActivity extends AppCompatActivity {
 
 
 
-        //Use the context from previous page to access game data
+
         review = (GameReview) Parcels.unwrap(getIntent().getParcelableExtra(GameReview.class.getSimpleName()));
         gameTitle.setText(review.getTitle());
         Glide.with(this)
@@ -47,7 +47,7 @@ public class ReviewActivity extends AppCompatActivity {
                 .placeholder(R.drawable.flicks_movie_placeholder)
                 .error(R.drawable.flicks_movie_placeholder)
                 .into(gamePoster);
-        String id = review.getId(); //Review ID? Maybe this is created upon creating new object
+        String id = review.getId();
 
         ParseUser currentUser = ParseUser.getCurrentUser();
         btnSubmit.setOnClickListener(new View.OnClickListener() {

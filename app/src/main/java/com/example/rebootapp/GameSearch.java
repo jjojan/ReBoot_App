@@ -32,7 +32,7 @@ public class GameSearch {
 
 
 
-    // no-arg, empty constructor required for Parceler
+
     public GameSearch() {}
 
     public GameSearch(JSONObject game) throws JSONException {
@@ -44,8 +44,7 @@ public class GameSearch {
         Log.i("name", decName);
         date = game.getString("released");
         posterPath = game.getString("background_image");
-//        backdropPath = movie.getString("backdrop_path");
-//        voteAverage = movie.getDouble("vote_average");
+
     }
 //
 //    public Movie(JSONObject jsonObject){

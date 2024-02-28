@@ -31,8 +31,8 @@ import okhttp3.Headers;
 
 public class ReviewFragment extends Fragment {
 
-    List<GameReview> Reviews; //GameModel Model List for RecyclerView&Adapter
-    String search_term = "";//"spiderman" + "&ordering=-added"; //Test String
+    List<GameReview> Reviews;
+    String search_term = "";
     private MenuItem menuItem;
     private SearchView svSearchGame;
     String SEARCH_QUERY = "https://api.rawg.io/api/games?key=63502b95db9f41c99bb3d0ecf77aa811" + search_term + "&ordering=-added";
@@ -45,18 +45,10 @@ public class ReviewFragment extends Fragment {
     private String mParam2;
 
     public ReviewFragment() {
-        // Required empty public constructor
+
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment HomeFragment.
-     */
-    // TODO: Rename and change types and number of parameters
+
     public static ReviewFragment newInstance(String param1, String param2) {
         ReviewFragment fragment = new ReviewFragment();
         Bundle args = new Bundle();
@@ -78,7 +70,7 @@ public class ReviewFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+
         return inflater.inflate(R.layout.fragment_review, container, false);
     }
 
@@ -92,32 +84,32 @@ public class ReviewFragment extends Fragment {
         reviewRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         reviewRecyclerView.setAdapter(GameReviewAdapter);
 
-        //Create request client
+
         AsyncHttpClient client = new AsyncHttpClient();
 
-        //Http Query
+
         client.get(SEARCH_QUERY, new JsonHttpResponseHandler() {
 
             @Override
             public void onSuccess(int statusCode, Headers headers, JSON json) {
-                //Log.d(TAG, "onSucess");
+
                 JSONObject jsonObject = json.jsonObject;
                 try {
                     JSONArray results = jsonObject.getJSONArray("results");
-                    //Log.i(TAG, "Results" + results.toString());
+
                     Reviews.addAll(GameReview.fromJSONArray(results));
                     GameReviewAdapter.notifyDataSetChanged();
                     println("hello");
-                    //Log.i(TAG, "Movies" + searchGame.size());
+
                 } catch (JSONException e) {
-                    //Log.e(TAG, "hit json expception", e);
+
                 }
             }
 
 
             @Override
             public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
-                //Log.d(TAG, "onFailure");
+
                 println("hello");
             }
         });
@@ -142,13 +134,13 @@ public class ReviewFragment extends Fragment {
                         JSONObject jsonObject = json.jsonObject;
                         try{
                             JSONArray results = jsonObject.getJSONArray("results");
-                            //Log.i(TAG, "Results" + results.toString());
+
                             Reviews.addAll(GameReview.fromJSONArray(results));
                             GameReviewAdapter.notifyDataSetChanged();
                             println("hello");
-                            //Log.i(TAG, "Movies" + searchGame.size());
+
                         } catch(JSONException e){
-                            //Log.e(TAG, "hit json expception", e);
+
                         }
 
                     }
@@ -177,13 +169,13 @@ public class ReviewFragment extends Fragment {
                         JSONObject jsonObject = json.jsonObject;
                         try{
                             JSONArray results = jsonObject.getJSONArray("results");
-                            //Log.i(TAG, "Results" + results.toString());
+
                             Reviews.addAll(GameReview.fromJSONArray(results));
                             GameReviewAdapter.notifyDataSetChanged();
                             println("hello");
-                            //Log.i(TAG, "Movies" + searchGame.size());
+
                         } catch(JSONException e){
-                            //Log.e(TAG, "hit json expception", e);
+
                         }
 
                     }

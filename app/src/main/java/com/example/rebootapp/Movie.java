@@ -31,7 +31,7 @@ public class Movie {
 
 
 
-    // no-arg, empty constructor required for Parceler
+
     public Movie() {}
 
     public Movie(JSONObject movie) throws JSONException {
@@ -40,8 +40,7 @@ public class Movie {
         Log.i("name", decName);
         overview = movie.getString("released");
         posterPath = movie.getString("background_image");
-//        backdropPath = movie.getString("backdrop_path");
-//        voteAverage = movie.getDouble("vote_average");
+
     }
 //
 //    public Movie(JSONObject jsonObject){

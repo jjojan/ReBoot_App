@@ -80,8 +80,7 @@ public class SignUp extends AppCompatActivity {
 
                 }
 
-                //signInManual(username, email, password);
-                //navigateToHomePage();
+
             }
 
         });
@@ -109,10 +108,10 @@ public class SignUp extends AppCompatActivity {
         super.onStart();
         account = GoogleSignIn.getLastSignedInAccount(this);
         if(account == null){
-            //If GoogleSignIn.getLastSignedInAccount returns null, the user has not yet signed in to your app with Google. Update your UI to display the Google Sign-in button.
+
             updateUI(account);
         } else{
-            //Update your UI accordingly—that is, hide the sign-in button, launch your main activity, or whatever is appropriate for your app.
+
             Toast.makeText(getApplicationContext(), "Users Google info has been saved.", Toast.LENGTH_SHORT).show();
             updateUI(account);
         }
@@ -167,7 +166,6 @@ public class SignUp extends AppCompatActivity {
             GoogleSignInAccount account = task.getResult(ApiException.class);
             Log.i("sign", String.valueOf(account));
 
-            // Signed in successfully, show authenticated UI.
             GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(this);
 
             if(account != null){
@@ -202,8 +200,6 @@ public class SignUp extends AppCompatActivity {
             }
         } catch (ApiException e) {
             Log.i("sign", "error");
-            // The ApiException status code indicates the detailed failure reason.
-            // Please refer to the GoogleSignInStatusCodes class reference for more information.
             Log.w(ContentValues.TAG, "signInResult:failed code=" + e.getStatusCode());
             Toast.makeText(getApplicationContext(), "Something went wrong", Toast.LENGTH_SHORT).show();
             updateUI(null);
