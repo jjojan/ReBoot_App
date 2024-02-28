@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
@@ -118,47 +119,64 @@ public class ProfileFragment extends Fragment {
             }
         });
         btnSignOut.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
 
-                gsc.signOut().addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        ParseUser.logOutInBackground(e -> {
-                            if (e == null) {
-                                SharedPreferences getUser = getActivity().getSharedPreferences("user info", Context.MODE_PRIVATE);
-                                SharedPreferences.Editor ed = getUser.edit();
-                                ed.remove("username");
-                                ed.apply();
-                                Intent intent = new Intent(getApplicationContext(), Login.class);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                                startActivity(intent);
-                            } else {
+                if (gsc != null) {
+                    gsc.signOut().addOnCompleteListener(getActivity(), new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            SharedPreferences getUser = getActivity().getSharedPreferences("user info", getActivity().MODE_PRIVATE);
+                            SharedPreferences.Editor ed = getUser.edit();
+                            ed.putString("username", null);
+                            ed.commit();
+                            Toast.makeText(getApplicationContext(), "User Logged Out", Toast.LENGTH_SHORT).show();
 
-                                Log.e("LogoutError", "Parse logout failed", e);
-                            }
+                            Intent intent = new Intent(getActivity(), Login.class);
+                            startActivity(intent);
+
+                        }
+                    });
+                } else {
+
+                    ParseUser currentUser = ParseUser.getCurrentUser();
+                    if (currentUser != null) {
+                        ParseUser.logOutInBackground(e -> {
+
+                            if (e == null)
+
+                                Toast.makeText(getApplicationContext(), "User Logged Out", Toast.LENGTH_SHORT).show();
+
                         });
+                    } else {
+
                     }
-                });
-            }});
-        // Inflate the layout for this fragment
+
+                }
+            }
+
+        });
+
+
+
         return view;
     }
     public void manageCustomListDialog() {
-        // Inflate the custom layout using layout inflater
+
         LayoutInflater inflater = LayoutInflater.from(getActivity());
         View customView = inflater.inflate(R.layout.layout_user_list, null);
 
-        // Apply the custom style to the AlertDialog
+
         AlertDialog.Builder listDialog = new AlertDialog.Builder(
                 new androidx.appcompat.view.ContextThemeWrapper(getActivity(), R.style.AlertDialogCustom));
 
-        listDialog.setView(customView); // Set the custom view for the dialog
+        listDialog.setView(customView);
         AlertDialog userListDialogBuilder = listDialog.create();
 
         Button btnAddNewList=customView.findViewById(R.id.btnNewList);
         TextView tvTitleList=customView.findViewById(R.id.tvTitleList);
-        tvTitleList.setText("Manage Lists");
+        tvTitleList.setText("Manage List");
         btnAddNewList.setVisibility(View.GONE);
         Button btnClose=customView.findViewById(R.id.btnClose);
         RecyclerView recyclerView=customView.findViewById(R.id.recyclerView);
@@ -177,7 +195,6 @@ public class ProfileFragment extends Fragment {
             @Override
             public void done(List<ParseObject> customUserLists, ParseException e) {
                 if (e == null) {
-
                     ArrayList<UserListModel> userListModelArrayList = new ArrayList<>();
                     for (ParseObject object : customUserLists) {
                         String listName = object.getString("listName");

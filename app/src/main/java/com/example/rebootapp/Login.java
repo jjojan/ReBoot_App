@@ -163,21 +163,20 @@ public class Login extends AppCompatActivity {
         try {
             GoogleSignInAccount account = task.getResult(ApiException.class);
 
-            // Signed in successfully, show authenticated UI.
+
             GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(this);
-            //Get Current User Information
+
             String email = acct.getGivenName();
             String password = acct.getId();
             Log.i("Google Email", email);
             Log.i("Google Password", password);
             logInManual(email, password);
-           // navigateToHomePage();
+
         } catch (ApiException e) {
-            // The ApiException status code indicates the detailed failure reason.
-            // Please refer to the GoogleSignInStatusCodes class reference for more information.
+
             Log.w(ContentValues.TAG, "signInResult:failed code=" + e.getStatusCode());
             Toast.makeText(getApplicationContext(), "Something went wrong", Toast.LENGTH_SHORT).show();
-            //updateUI(null);
+
         }
     }
 

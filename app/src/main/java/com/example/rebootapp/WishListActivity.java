@@ -37,16 +37,16 @@ public class WishListActivity extends AppCompatActivity {
     RecyclerView games;
     WishListAdapter wishListAdapter;
     List<String> gamePhotoUris;
-    Button btn_WishList_Done; //Favorite
+    Button btn_WishList_Done;
 
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_wishlist_games); //activity_favorite_game
+        setContentView(R.layout.activity_wishlist_games);
 
-        games = findViewById(R.id.rv_wishlist_list); //fix this
+        games = findViewById(R.id.rv_wishlist_list);
         games.setLayoutManager(new GridLayoutManager(this, 3));
         btn_WishList_Done = findViewById(R.id.btn_WishList_Done);
 

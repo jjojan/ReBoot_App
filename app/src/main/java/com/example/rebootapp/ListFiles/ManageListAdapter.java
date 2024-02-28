@@ -102,15 +102,15 @@ public class ManageListAdapter extends RecyclerView.Adapter<ManageListAdapter.Vi
             });
     }
     public void gameListDialog(int position) {
-        // Inflate the custom layout using layout inflater
+
         LayoutInflater inflater = LayoutInflater.from(context);
         View customView = inflater.inflate(R.layout.layout_user_list, null);
 
-        // Apply the custom style to the AlertDialog
+
         AlertDialog.Builder listDialog = new AlertDialog.Builder(
                 new androidx.appcompat.view.ContextThemeWrapper(context, R.style.AlertDialogCustom));
 
-        listDialog.setView(customView); // Set the custom view for the dialog
+        listDialog.setView(customView);
         AlertDialog userListDialogBuilder = listDialog.create();
 
         Button btnAddNewList=customView.findViewById(R.id.btnNewList);
@@ -141,6 +141,7 @@ public class ManageListAdapter extends RecyclerView.Adapter<ManageListAdapter.Vi
     public int getItemCount() {
         return userListModelArrayList.size();
     }
+
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView tvListName;

@@ -24,7 +24,7 @@ import java.util.List;
 
 public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHolder> {
 
-//    private ArrayList<UserListModel> userListModelArrayList;
+
     private UserListModel userListModel;
     private LayoutInflater mInflater;
 
@@ -111,18 +111,8 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHo
 
     @Override
     public int getItemCount() {
-
-        List<String> gameIDs = userListModel.getGameID();
-
-
-        if (gameIDs == null) {
-            return 0;
-        }
-
-
-        return gameIDs.size();
+        return userListModel.getGameID().size();
     }
-
 
 
     public class ViewHolder extends RecyclerView.ViewHolder {

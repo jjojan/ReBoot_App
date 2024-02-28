@@ -30,7 +30,7 @@ import okhttp3.Headers;
 
 public class SearchFragment extends Fragment {
 
-    List<GameSearch> searchGames; //GameModel Model List for RecyclerView&Adapter
+    List<GameSearch> searchGames;
 
     String search_term = "";
     private MenuItem menuItem;
@@ -47,17 +47,8 @@ public class SearchFragment extends Fragment {
     private String mParam2;
 
     public SearchFragment() {
-        // Required empty public constructor
-    }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment HomeFragment.
-     */
+    }
 
     public static SearchFragment newInstance(String param1, String param2) {
         SearchFragment fragment = new SearchFragment();
@@ -134,32 +125,32 @@ public class SearchFragment extends Fragment {
         searchRecyclerView.setAdapter(gameSearchAdapter);
         String search = "https://api.rawg.io/api/games?key=63502b95db9f41c99bb3d0ecf77aa811&&search_precise&search=";
 
-        //Create request client
 
 
-        //Http Query
+
+
         client.get(SEARCH_QUERY, new JsonHttpResponseHandler() {
 
             @Override
             public void onSuccess(int statusCode, Headers headers, JSON json) {
-                //Log.d(TAG, "onSucess");
+
                 JSONObject jsonObject = json.jsonObject;
                 try {
                     JSONArray results = jsonObject.getJSONArray("results");
-                    //Log.i(TAG, "Results" + results.toString());
+
                     searchGames.addAll(GameSearch.fromJSONArray(results));
                     gameSearchAdapter.notifyDataSetChanged();
                     println("hello");
-                    //Log.i(TAG, "Movies" + searchGame.size());
+
                 } catch (JSONException e) {
-                    //Log.e(TAG, "hit json expception", e);
+
                 }
             }
 
 
             @Override
             public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
-                //Log.d(TAG, "onFailure");
+
                 println("hello");
             }
         });
@@ -184,13 +175,13 @@ public class SearchFragment extends Fragment {
                         JSONObject jsonObject = json.jsonObject;
                         try{
                             JSONArray results = jsonObject.getJSONArray("results");
-                            //Log.i(TAG, "Results" + results.toString());
+
                             searchGames.addAll(GameSearch.fromJSONArray(results));
                             gameSearchAdapter.notifyDataSetChanged();
                             println("hello");
-                            //Log.i(TAG, "Movies" + searchGame.size());
+
                         } catch(JSONException e){
-                            //Log.e(TAG, "hit json expception", e);
+
                         }
 
                     }

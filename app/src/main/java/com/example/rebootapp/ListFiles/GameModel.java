@@ -33,7 +33,7 @@ public class GameModel {
 
 
 
-    // no-arg, empty constructor required for Parceler
+
     public GameModel() {}
 
     public GameModel(JSONObject game) throws JSONException {
@@ -43,8 +43,7 @@ public class GameModel {
         Log.i("name", decName);
         overview = game.getString("released");
         posterPath = game.getString("background_image");
-//        backdropPath = movie.getString("backdrop_path");
-//        voteAverage = movie.getDouble("vote_average");
+
     }
 //
 //    public Movie(JSONObject jsonObject){

@@ -121,7 +121,6 @@ public class UserListNamesAdapter extends RecyclerView.Adapter<UserListNamesAdap
                             }
 
 
-
                             customUserList.saveInBackground(new SaveCallback() {
                                 @Override
                                 public void done(ParseException e1) {

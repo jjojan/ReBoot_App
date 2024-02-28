@@ -55,7 +55,6 @@ public class GameDetailsActivity extends AppCompatActivity implements AdapterVie
 
     List<ParseObject> adapterObjects;
 
-    // the view objects
     TextView tvTitle;
     TextView tvOverview;
     RatingBar rbVoteAverage;
@@ -116,9 +115,6 @@ public class GameDetailsActivity extends AppCompatActivity implements AdapterVie
         tvTitle.setText(movie.getTitle());
         tvOverview.setText(movie.getOverview());
 
-
-//        float voteAverage = movie.getVoteAverage().floatValue();
-//        rbVoteAverage.setRating(voteAverage / 2.0f);
 
         ivPoster = (ImageView) findViewById(R.id.ivPoster);
         Glide.with(this)
@@ -223,15 +219,13 @@ public class GameDetailsActivity extends AppCompatActivity implements AdapterVie
 
     }
     public void addToUserListDialog() {
-        // Inflate the custom layout using layout inflater
         LayoutInflater inflater = LayoutInflater.from(this);
         View customView = inflater.inflate(R.layout.layout_user_list, null);
 
-        // Apply the custom style to the AlertDialog
         AlertDialog.Builder listDialog = new AlertDialog.Builder(
                 new androidx.appcompat.view.ContextThemeWrapper(this, R.style.AlertDialogCustom));
 
-        listDialog.setView(customView); // Set the custom view for the dialog
+        listDialog.setView(customView);
         AlertDialog userListDialogBuilder = listDialog.create();
 
         Button btnAddNewList=customView.findViewById(R.id.btnNewList);
@@ -312,18 +306,18 @@ public class GameDetailsActivity extends AppCompatActivity implements AdapterVie
                 String listName = etListName.getText().toString();
 
                 if (!listName.isEmpty()) {
-                    // Check if the list name already exists
+
                     ParseQuery<ParseObject> query = ParseQuery.getQuery("CustomUserList");
                     query.whereEqualTo("listName", listName);
                     query.findInBackground(new FindCallback<ParseObject>() {
                         @Override
                         public void done(List<ParseObject> lists, ParseException e) {
                             if (e == null && lists.isEmpty()) {
-                                // List name doesn't exist, create new list
+
                                 ParseObject customUserList = new ParseObject("CustomUserList");
                                 customUserList.put("listName", listName);
                                 customUserList.put("userID", currentUser.getObjectId());
-                                // Save the new list asynchronously
+
                                 customUserList.saveInBackground(new SaveCallback() {
                                     @Override
                                     public void done(ParseException e) {
@@ -348,10 +342,10 @@ public class GameDetailsActivity extends AppCompatActivity implements AdapterVie
                                     }
                                 });
                             } else if (e == null) {
-                                // List name exists, show a toast message
+
                                 Toast.makeText(GameDetailsActivity.this, "A list with this name already exists.", Toast.LENGTH_SHORT).show();
                             } else {
-                                // An error occurred during the query
+
                                 Toast.makeText(GameDetailsActivity.this,
                                         "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
 
@@ -417,7 +411,6 @@ public class GameDetailsActivity extends AppCompatActivity implements AdapterVie
                     if (e == null){
 
 
-//                        Log.i("review exists", objects.get(0).getString("ReviewText") + "size");
                         int i = 0;
 
                         recyclerView = (RecyclerView) findViewById(R.id.rvReviews);
