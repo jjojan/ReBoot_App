@@ -38,7 +38,7 @@ public class GameReviewDetailsActivity extends AppCompatActivity {
         review = (GameReview) Parcels.unwrap(getIntent().getParcelableExtra(GameReview.class.getSimpleName()));
         Log.d("MovieDetailsActivity", String.format("Showing details for '%s'", review.getTitle()));
 
-        //
+
         tvTitle.setText(review.getTitle().toString());
         Log.i("Title", tvTitle.getText().toString());
 
