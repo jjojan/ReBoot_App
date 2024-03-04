@@ -14,6 +14,5 @@ public class ViewHolder extends RecyclerView.ViewHolder {
         super(view);
         imageViewProfilePhoto = view.findViewById(R.id.imageViewProfile);
         tv_username = view.findViewById(R.id.tv_FriendUsername);
-        // You might set the click listener here or in onBindViewHolder
     }
 }

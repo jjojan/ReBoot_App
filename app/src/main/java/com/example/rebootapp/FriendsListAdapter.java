@@ -42,7 +42,7 @@ import java.util.List;
 
 import okhttp3.Headers;
 public class FriendsListAdapter extends RecyclerView.Adapter<FriendsListAdapter.ViewHolder>{
-    private List<String> photoUris; // List of URIs as strings
+    private List<String> photoUris;
     private List<String> photoUsernames;
     private List<Friend> friends;
     Context context;
@@ -148,9 +148,7 @@ public class FriendsListAdapter extends RecyclerView.Adapter<FriendsListAdapter.
 
 
         holder.itemView.setOnClickListener(v -> {
-            // Intent to start FriendProfileActivity, passing the friend's user ID
             Intent intent = new Intent(v.getContext(), FriendProfileActivity.class);
-            // Assuming you have a method or a way to get the friend's ParseUser objectId
             intent.putExtra("FRIEND_ID", friend.getObjectId());
             v.getContext().startActivity(intent);
         });

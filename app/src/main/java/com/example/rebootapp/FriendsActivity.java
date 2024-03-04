@@ -216,7 +216,6 @@ public class FriendsActivity extends AppCompatActivity {
             ParseQuery<ParseUser> query = ParseUser.getQuery();
             query.getInBackground(friendId, (friend, e) -> {
                 if (e == null) {
-                    // Assuming 'username' and 'profilePic' are the keys
                     String id = friend.getObjectId();
                     String username = friend.getString("username");
                     ParseFile profilePic = friend.getParseFile("profile_pic");
@@ -227,7 +226,6 @@ public class FriendsActivity extends AppCompatActivity {
                 }
 
                 if (counter.decrementAndGet() == 0) {
-                    // All fetches are complete, update UI
                     runOnUiThread(() -> {
                         friendsListAdapter.updateData(fetchedFriends);
                     });
