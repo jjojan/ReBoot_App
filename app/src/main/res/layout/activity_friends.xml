@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_alignParentBottom="false"
+    android:background="@color/white"
+    android:visibility="visible"
+    tools:context=".FavoriteGamesActivity">
+
+    <TextView
+        android:id="@+id/tv_FriendsTitle"
+        android:layout_width="425dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:text="Friends"
+        android:textAlignment="center"
+        android:textSize="34sp"
+        android:textColor="@color/aqua"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_Friends_list"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:scrollbars="vertical" />
+
+    <Button
+        android:id="@+id/btn_Friends_Done"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="150dp"
+        android:layout_marginTop="600dp"
+        android:text="Done" />
+
+    <EditText
+        android:id="@+id/et_addFriend"
+        android:layout_width="match_parent"
+        android:layout_height="25dp"
+        android:layout_marginLeft="28dp"
+        android:layout_marginTop="550dp"
+        android:layout_marginRight="140dp"
+        android:background="@drawable/edt_background"
+        android:hint="Add Friend"
+        android:paddingLeft="13dp"
+        android:textColorHint="@color/black" />
+
+    <ImageButton
+        android:id="@+id/btn_addFriend"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginLeft="275dp"
+        android:layout_marginTop="540dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/baseline_add_24" />
+
+</RelativeLayout>

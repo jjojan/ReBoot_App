@@ -29,6 +29,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.rebootapp.EditProfileActivity;
 import com.example.rebootapp.FavoriteGamesActivity;
+import com.example.rebootapp.FriendsActivity;
 import com.example.rebootapp.Login;
 import com.example.rebootapp.R;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -58,6 +59,7 @@ public class ProfileFragment extends Fragment {
     ImageButton Friends;
     ImageButton Starred;
     ImageButton EditProfile;
+    ImageButton CustomLists;
     GoogleSignInAccount account;
     Session session;
     TextView tvUser_Username;
@@ -104,6 +106,7 @@ public class ProfileFragment extends Fragment {
         Starred = view.findViewById(R.id.Starred);
         EditProfile = view.findViewById(R.id.EditProfile);
         bio = view.findViewById(R.id.textView7);
+        CustomLists = view.findViewById(R.id.customList);
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail().build();
@@ -111,7 +114,8 @@ public class ProfileFragment extends Fragment {
 
         refreshProfile();
 
-        view.findViewById(R.id.customList).setOnClickListener(new View.OnClickListener() {
+//        view.findViewById(R.id.customList).setOnClickListener(new View.OnClickListener() {
+            CustomLists.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 manageCustomListDialog();
@@ -228,13 +232,14 @@ public class ProfileFragment extends Fragment {
                 Intent intent = new Intent(getActivity(), FavoriteGamesActivity.class);
                 getActivity().startActivity(intent);
 
+            }
+        });
 
-
-
-
-
-
-
+        Friends.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), FriendsActivity.class);
+                getActivity().startActivity(intent);
             }
         });
 
