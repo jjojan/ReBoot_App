@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentBottom="false"
+    android:background="@color/white"
+    android:visibility="visible"
+    tools:context=".FriendProfileActivity">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <Button
+        android:id="@+id/btn_Friend_Profile_Done"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="50dp"
+        android:text="Done" />
+
+    <TextView
+        android:id="@+id/tvFriend_Friend_Username"
+        android:layout_width="218dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/tv_Friend_Username"
+        android:layout_marginLeft="35dp"
+        android:layout_marginRight="375dp"
+        android:layout_toRightOf="@id/tv_Friend_Username"
+        android:textAlignment="textEnd"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/tv_Friend_Username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="25dp"
+        android:layout_marginTop="175dp"
+        android:text="Username: "
+        android:textSize="24sp" />
+
+    <ImageView
+        android:id="@+id/Friend_ProfilePic"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="0dp"
+        android:scaleType="fitCenter"
+        android:src="?attr/selectableItemBackground"
+        android:visibility="visible"
+        app:srcCompat="@drawable/baseline_person_24" />
+
+
+
+
+    <TextView
+        android:id="@+id/tv_tv1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="275dp"
+        android:text="Bio"
+        android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/friend_bio"
+        android:layout_width="350dp"
+        android:layout_height="160dp"
+        android:layout_below="@id/tv_tv1"
+        android:layout_centerHorizontal="true"
+        android:textSize="16sp"
+        android:background="@color/white"/>
+
+    <ImageButton
+        android:id="@+id/Friend_friends"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="500dp"
+        android:scaleType="fitCenter"
+        android:outlineAmbientShadowColor="@color/blueberry"
+        android:outlineSpotShadowColor="@color/blueberry"
+        android:src="@drawable/friends" />
+
+    <TextView
+        android:id="@+id/textView8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="false"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="475dp"
+        android:text="Friends"
+        android:textSize="20sp" />
+
+    <ImageButton
+        android:id="@+id/friend_Starred"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginLeft="175dp"
+        android:layout_marginTop="500dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/star" />
+
+
+
+    <TextView
+        android:id="@+id/textView9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="175dp"
+        android:layout_marginTop="475dp"
+        android:text="Starred"
+        android:textSize="20sp" />
+
+
+
+    <ImageButton
+        android:id="@+id/friend_customList"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginLeft="175dp"
+        android:layout_marginTop="550dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/baseline_playlist_add_check_24" />
+
+</RelativeLayout>
