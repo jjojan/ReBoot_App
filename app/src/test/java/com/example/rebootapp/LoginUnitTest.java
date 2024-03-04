@@ -14,4 +14,10 @@ public class ExampleUnitTest {
     public void addition_isCorrect() {
         assertEquals(4, 2 + 2);
     }
+
+    public void loginTest() {
+        Login test = new Login();
+        boolean result = test.logInManual("default@gmail.com", "12345");
+        assertEquals(true, result);
+    }
 }
