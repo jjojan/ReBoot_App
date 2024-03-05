@@ -73,7 +73,7 @@ public class ProfileFragment extends Fragment {
 
     //RecyclerView for Favorite Games
     RecyclerView favoritesRv, friendsRV;
-    List<String> favoritesUris, friendsUris, friendUserNames;
+    List<String> favoritesUris, friendsUris, friendsUsernames;
     List<Friend> friendsList = new ArrayList<>();
     FavoriteGamesAdapter favoritesAdapter;
     FriendsListAdapter friendsListAdapter;
@@ -234,6 +234,7 @@ public class ProfileFragment extends Fragment {
 
         // User Friends
         friendsUris = new ArrayList<>();
+        friendsUsernames = new ArrayList<>();
         friendsListAdapter = new FriendsListAdapter(friendsList);
         friendsRV = view.findViewById(R.id.friendsRecyclerView);
         friendsRV.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
@@ -305,7 +306,7 @@ public class ProfileFragment extends Fragment {
         List<String> friendIds = currentUser.getList("friend_list");
         if (friendIds == null) return;
 
-        //List<Friend> fetchedFriends = new ArrayList<>();
+        List<Friend> fetchedFriends = new ArrayList<>();
         AtomicInteger counter = new AtomicInteger(friendIds.size());
 
         for (String friendId : friendIds) {
@@ -316,18 +317,22 @@ public class ProfileFragment extends Fragment {
                     String username = friend.getString("username");
                     ParseFile profilePic = friend.getParseFile("profile_pic");
                     String profilePicUrl = profilePic != null ? profilePic.getUrl() : null;
-                    friendsList.add(new Friend(username, profilePicUrl, id));
+                    fetchedFriends.add(new Friend(username, profilePicUrl, id));
                 } else {
                     Log.e("fetchFriends", "Error fetching friend data: " + e.getMessage(), e);
                 }
 
                 if (counter.decrementAndGet() == 0) {
                     getActivity().runOnUiThread(() -> {
-                        friendsListAdapter.updateData(friendsList);
+                        friendsListAdapter.updateData(fetchedFriends);
                     });
                 }
             });
         }
+    }
+
+    public interface FriendUpdateCallback {
+        void onFriendListUpdated();
     }
 
     public void refreshProfile() {
@@ -367,7 +372,7 @@ public class ProfileFragment extends Fragment {
         refreshProfile();
         favoritesUris.clear();
         friendsUris.clear();
-        //friendsUsernames.clear();
+        friendsUsernames.clear();
         fetchFriendsAndUpdateUI();
         fillPhotos();
 //        ParseUser currentUser = ParseUser.getCurrentUser();
