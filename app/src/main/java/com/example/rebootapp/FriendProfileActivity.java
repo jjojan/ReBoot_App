@@ -109,11 +109,14 @@ public class FriendProfileActivity extends AppCompatActivity {
 
     }
 
-    public void fillPhotos(){
+    public void fillPhotos(String id){
+//        ParseQuery<ParseObject> gamesQuery = ParseQuery.getQuery("FavoriteGames");
+//        ParseUser currentUser = ParseUser.getCurrentUser();
+//        String currentUserID = currentUser.getObjectId();
+//        gamesQuery.whereEqualTo("user_id", currentUserID);
+
         ParseQuery<ParseObject> gamesQuery = ParseQuery.getQuery("FavoriteGames");
-        ParseUser currentUser = ParseUser.getCurrentUser();
-        String currentUserID = currentUser.getObjectId();
-        gamesQuery.whereEqualTo("user_id", currentUserID);
+        gamesQuery.whereEqualTo("user_id", friendUserID);
 
         //Adds images of favorites to ArrayList of photo uris defined earlier
         gamesQuery.findInBackground(new FindCallback<ParseObject>() {
@@ -140,7 +143,7 @@ public class FriendProfileActivity extends AppCompatActivity {
     protected void onStart(){
         super.onStart();
         friendFavoritesUris.clear();
-        fillPhotos();
+        fillPhotos(friendUserID);
     }
 
 
