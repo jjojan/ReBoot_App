@@ -1,5 +1,6 @@
 package com.example.rebootapp.ListFiles;
 
+import android.app.Instrumentation;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.view.LayoutInflater;
@@ -32,6 +33,9 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHo
         this.mInflater = LayoutInflater.from(context);
 
         this.userListModel = userListModel;
+    }
+
+    public GameListAdapter(Instrumentation context, UserListModel testList) {
     }
 
 
