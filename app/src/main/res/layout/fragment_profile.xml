@@ -91,7 +91,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/friendsRecyclerView"
         android:layout_width="wrap_content"
-        android:layout_height="10dp"
+        android:layout_height="125dp"
         android:layout_below="@+id/friendsHeader"
         android:scrollbars="horizontal"
         android:outlineAmbientShadowColor="@color/aqua"/>
@@ -169,16 +169,6 @@
         android:layout_marginLeft="25dp"
         android:scaleType="fitCenter"
         android:src="@drawable/baseline_playlist_add_check_24" />
-
-    <!-- Custom Lists Preview - RecyclerView -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/customListRecyclerView"
-        android:layout_width="wrap_content"
-        android:layout_height="100dp"
-        android:clipToPadding="false"
-        android:layout_below="@+id/customListHeader"
-        android:scrollbars="horizontal"
-        android:outlineAmbientShadowColor="@color/aqua"/>
 
 
     <Button
