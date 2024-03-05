@@ -39,6 +39,9 @@ public class FavoriteGamesActivity extends AppCompatActivity {
 
 
 
+    //assign XML components to their variables
+    //create new arrray list to store photo uris
+    //define favorite games adapter to format images
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -65,12 +68,15 @@ public class FavoriteGamesActivity extends AppCompatActivity {
 
     }
 
+    //Query to Parse database to identify the favorites of the current user
+    //"gamesQuery" is a ParseQuery object that is used to request info
     public void fillPhotos(){
         ParseQuery<ParseObject> gamesQuery = ParseQuery.getQuery("FavoriteGames");
         ParseUser currentUser = ParseUser.getCurrentUser();
         String currentUserID = currentUser.getObjectId();
         gamesQuery.whereEqualTo("user_id", currentUserID);
 
+        //Adds images of favorites to ArrayList of photo uris defined earlier
         gamesQuery.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> objects, ParseException e) {

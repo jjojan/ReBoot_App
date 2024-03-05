@@ -1,5 +1,7 @@
 package com.example.rebootapp;
 
+import static java.security.AccessController.getContext;
+
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -37,10 +39,10 @@ public class FriendProfileActivity extends AppCompatActivity {
     ImageButton starred, friends, lists;
     String friendUserID;
 
-
-
-
-
+    //RecyclerView for Favorite Games
+    RecyclerView friendFavoritesRv;
+    List<String> friendFavoritesUris;
+    FavoriteGamesAdapter friendFavoritesAdapter;
 
 
     @Override
@@ -54,7 +56,19 @@ public class FriendProfileActivity extends AppCompatActivity {
         username = findViewById(R.id.tvFriend_Friend_Username);
         bio = findViewById(R.id.friend_bio);
         starred = findViewById(R.id.friend_Starred);
-        friends = findViewById(R.id.Friend_friends);
+
+        //Friends Favorites
+        friendFavoritesUris = new ArrayList<>();
+        friendFavoritesAdapter = new FavoriteGamesAdapter(friendFavoritesUris);
+        friendFavoritesRv = findViewById(R.id.favoritesRecyclerView);
+        friendFavoritesRv.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        friendFavoritesRv.setAdapter(friendFavoritesAdapter);
+
+
+        //Friends Friends
+        friends = findViewById(R.id.Friends_friends);
+
+        //Friends Collections
         lists = findViewById(R.id.friend_customList);
 
         ParseQuery<ParseUser> query = ParseUser.getQuery();
@@ -91,6 +105,42 @@ public class FriendProfileActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+
+    }
+
+    public void fillPhotos(){
+        ParseQuery<ParseObject> gamesQuery = ParseQuery.getQuery("FavoriteGames");
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        String currentUserID = currentUser.getObjectId();
+        gamesQuery.whereEqualTo("user_id", currentUserID);
+
+        //Adds images of favorites to ArrayList of photo uris defined earlier
+        gamesQuery.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> objects, ParseException e) {
+                if(e == null){
+                    for(ParseObject object : objects) {
+                        String uri = object.getString("picture_uri");
+                        if(uri != null && !uri.isEmpty()) {
+                            friendFavoritesUris.add(uri);
+                        }
+                    }
+                    friendFavoritesAdapter.notifyDataSetChanged();
+
+                }
+                else{
+                    System.out.println("Parse query error");
+                }
+            }
+        });
+
+    }
+    @Override
+    protected void onStart(){
+        super.onStart();
+        friendFavoritesUris.clear();
+        fillPhotos();
     }
 
 

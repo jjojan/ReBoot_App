@@ -73,8 +73,10 @@ public class GameDetailsActivity extends AppCompatActivity implements AdapterVie
     RecyclerView recyclerView;
 
 
-
-    ReadMoreTextView tvDesc;
+    //Previous Type: ReadMoreTextView
+    TextView tvDesc;
+    ExpandableTextView expTV;
+    //ImageView expandCollapse;
     int saveFavoriteQueue = 0;
 
     public Spinner spinnerTextSize;
@@ -95,7 +97,10 @@ public class GameDetailsActivity extends AppCompatActivity implements AdapterVie
         tvOverview = (TextView) findViewById(R.id.tvOverview);
         rbVoteAverage = (RatingBar) findViewById(R.id.rbVoteAverage);
         heartButton = findViewById(R.id.toggleButton);
+        //Error here
         tvDesc = findViewById(R.id.tvDesc);
+        //expTV = findViewById(R.id.expTV);
+
         reviewButton = findViewById(R.id.reviewButton);
         enter = findViewById(R.id.add);
 
@@ -105,7 +110,7 @@ public class GameDetailsActivity extends AppCompatActivity implements AdapterVie
 
 
 
-                movie = (Game) Parcels.unwrap(getIntent().getParcelableExtra(Game.class.getSimpleName()));
+        movie = (Game) Parcels.unwrap(getIntent().getParcelableExtra(Game.class.getSimpleName()));
         Log.d("MovieDetailsActivity", String.format("Showing details for '%s'", movie.getTitle()));
         Log.i("MARDUK",
                 "Tıtle: "+movie.getTitle()+"\nOverView: "+movie.getOverview()+"\n ID: "+movie.getID()+
@@ -195,6 +200,12 @@ public class GameDetailsActivity extends AppCompatActivity implements AdapterVie
             }
         });
 
+        /*expTV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                expTV.getTrimLength();
+            }
+        });*/
 
         enter.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -210,15 +221,16 @@ public class GameDetailsActivity extends AppCompatActivity implements AdapterVie
 
 
 
-        spinnerTextSize = findViewById(R.id.spinnerTextSize);
 
-        spinnerTextSize.setOnItemSelectedListener(this);
+        //spinnerTextSize = findViewById(R.id.spinnerTextSize);
 
-        String[] textSizes = getResources().getStringArray(R.array.font_sizes);
+        //spinnerTextSize.setOnItemSelectedListener(this);
+
+       /* String[] textSizes = getResources().getStringArray(R.array.font_sizes);
         ArrayAdapter adapter = new ArrayAdapter(this,
                 android.R.layout.simple_spinner_item, textSizes);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
-        spinnerTextSize.setAdapter(adapter);
+        spinnerTextSize.setAdapter(adapter);*/
 
 
     }
@@ -534,10 +546,10 @@ public class GameDetailsActivity extends AppCompatActivity implements AdapterVie
                     @Override
                     public void done(ParseObject object, ParseException e) {
                         if (e==null){
-                             UserID = object.getObjectId().toString();
-                             Username = object.getString("username");
-                             Log.i("userID", UserID);
-                             Log.i("userID", Username);
+                            UserID = object.getObjectId().toString();
+                            Username = object.getString("username");
+                            Log.i("userID", UserID);
+                            Log.i("userID", Username);
                         }
                     }
                 });
@@ -584,6 +596,8 @@ public class GameDetailsActivity extends AppCompatActivity implements AdapterVie
 
 
     }
+
+
 
 
 }

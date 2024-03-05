@@ -1,30 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:background="@color/aqua">
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
         android:id="@+id/mHome"
         android:icon="@drawable/baseline_home_24"
-        android:iconTint="@color/white"
         android:title="Home"
         app:showAsAction="always" />
     <item
         android:id="@+id/mSearch"
         android:icon="@drawable/baseline_search_24"
-        android:iconTint="@color/white"
         android:title="Search"
         app:showAsAction="always" />
     <item
         android:id="@+id/mEvents"
         android:icon="@drawable/baseline_create_24"
-        android:iconTint="@color/white"
         android:title="Review"
         app:showAsAction="always" />
     <item
         android:id="@+id/mCart"
         android:icon="@drawable/baseline_person_24"
-        android:iconTint="@color/white"
         android:title="Profile"
         app:showAsAction="always" />
 </menu>

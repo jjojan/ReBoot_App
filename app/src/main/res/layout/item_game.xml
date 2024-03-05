@@ -10,11 +10,10 @@
 
         <ImageView
             android:id="@+id/gamePoster"
-            android:layout_width="110dp"
-            android:layout_height="151dp"
+            android:layout_width="125dp"
+            android:layout_height="200dp"
             android:scaleType="centerCrop"
             tools:srcCompat="@tools:sample/avatars"
-            android:background="#000000"
             android:padding="5dp"
             android:cropToPadding="true"/>
     </RelativeLayout>

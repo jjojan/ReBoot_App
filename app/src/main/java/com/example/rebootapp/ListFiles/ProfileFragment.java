@@ -2,6 +2,8 @@ package com.example.rebootapp.ListFiles;
 
 import static com.parse.Parse.getApplicationContext;
 
+import static java.sql.DriverManager.println;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -29,6 +31,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.rebootapp.EditProfileActivity;
 import com.example.rebootapp.FavoriteGamesActivity;
+import com.example.rebootapp.FavoriteGamesAdapter;
 import com.example.rebootapp.FriendsActivity;
 import com.example.rebootapp.Login;
 import com.example.rebootapp.R;
@@ -55,20 +58,20 @@ import java.util.List;
 public class ProfileFragment extends Fragment {
 
     Context context;
-    Button btnSignOut;
-    ImageButton Friends;
-    ImageButton Starred;
-    ImageButton EditProfile;
-    ImageButton CustomLists;
     GoogleSignInAccount account;
     Session session;
-    TextView tvUser_Username;
-    TextView tvUser_Email;
-    TextView bio;
+    Button btnSignOut;
+    ImageButton Friends, Starred, EditProfileButton, CustomLists;
+    TextView tvUser_Username, tvUser_Email, bio;
     ImageView ProfilePic;
     private static final int PICK_IMAGE_REQUEST = 1;
     ActivityResultLauncher<Intent> resultLauncher;
     Uri profile_Uri;
+
+    //RecyclerView for Favorite Games
+    RecyclerView favoritesRv;
+    List<String> favoritesUris;
+    FavoriteGamesAdapter favoritesAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -102,10 +105,10 @@ public class ProfileFragment extends Fragment {
         tvUser_Username = view.findViewById(R.id.tvUser_Username);
         tvUser_Email = view.findViewById(R.id.tvUser_Email);
         ProfilePic = view.findViewById(R.id.ProfilePic);
-        Friends = view.findViewById(R.id.Friends);
+        Friends = view.findViewById(R.id.friendsButton);
         Starred = view.findViewById(R.id.Starred);
-        EditProfile = view.findViewById(R.id.EditProfile);
-        bio = view.findViewById(R.id.textView7);
+        //EditProfileButton = view.findViewById(R.id.EditProfileButton);
+        bio = view.findViewById(R.id.bioContent);
         CustomLists = view.findViewById(R.id.customList);
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -147,6 +150,7 @@ public class ProfileFragment extends Fragment {
             }});
         // Inflate the layout for this fragment
         return view;
+
     }
     public void manageCustomListDialog() {
         // Inflate the custom layout using layout inflater
@@ -216,8 +220,17 @@ public class ProfileFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        EditProfile = view.findViewById(R.id.EditProfile);
-        EditProfile.setOnClickListener(new View.OnClickListener() {
+        //Friends Favorites - Cannot call this function in a fragment
+        favoritesUris = new ArrayList<>();
+        favoritesAdapter = new FavoriteGamesAdapter(favoritesUris);
+        favoritesRv = view.findViewById(R.id.favoritesRecyclerView);
+        favoritesRv.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+        favoritesRv.setAdapter(favoritesAdapter);
+
+
+
+        EditProfileButton = view.findViewById(R.id.EditProfileButton);
+        EditProfileButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), EditProfileActivity.class);
@@ -246,6 +259,35 @@ public class ProfileFragment extends Fragment {
 
     }
 
+    public void fillPhotos(){
+        ParseQuery<ParseObject> gamesQuery = ParseQuery.getQuery("FavoriteGames");
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        String currentUserID = currentUser.getObjectId();
+        gamesQuery.whereEqualTo("user_id", currentUserID);
+
+        //Adds images of favorites to ArrayList of photo uris defined earlier
+        gamesQuery.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> objects, ParseException e) {
+                if(e == null){
+                    for(ParseObject object : objects) {
+                        String uri = object.getString("picture_uri");
+                        if(uri != null && !uri.isEmpty()) {
+                            println(uri);
+                            System.out.println(uri);
+                            favoritesUris.add(uri);
+                        }
+                    }
+                    favoritesAdapter.notifyDataSetChanged();
+
+                }
+                else{
+                    System.out.println("Parse query error");
+                }
+            }
+        });
+
+    }
 
 
     public void refreshProfile() {
@@ -283,6 +325,8 @@ public class ProfileFragment extends Fragment {
     public void onStart() {
         super.onStart();
         refreshProfile();
+        favoritesUris.clear();
+        fillPhotos();
 //        ParseUser currentUser = ParseUser.getCurrentUser();
 //        String currentUserObjectID = currentUser.getObjectId();
 //        ParseQuery<ParseObject> query = ParseQuery.getQuery("_User");

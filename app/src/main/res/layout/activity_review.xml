@@ -18,7 +18,7 @@
         android:layout_marginTop="14dp"
         android:layout_marginEnd="13dp"
         android:text="Movie Title"
-        android:textColor="@color/white"
+        android:textColor="@color/aqua"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
         android:gravity="center"/>
     <ImageView
@@ -55,6 +55,7 @@
         android:id="@+id/btnSubmit"
         android:layout_below="@+id/etReviewTextR"
         android:text="Submit"
+        android:textColor="@color/aqua"
         android:layout_centerHorizontal="true"
         />
 

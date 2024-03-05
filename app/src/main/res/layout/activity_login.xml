@@ -70,9 +70,9 @@
         android:layout_below="@+id/btnLogin"
         android:layout_centerHorizontal="true"
         android:linksClickable="true"
-        android:textSize="18dp"
-        android:textColor="@color/white"
-        android:layout_marginTop="35pt" />
+        android:textSize="13dp"
+        android:textColor="@color/aqua"
+        android:layout_marginTop="20dp" />
 
     <ImageView
         android:layout_width="79dp"
@@ -92,7 +92,8 @@
         android:textColor="@color/aqua"
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="13dp"/>
+        android:layout_below="@+id/google_img_login"
+        android:layout_marginBottom="10dp"/>
 
     <EditText
         android:id="@+id/edtPassword"

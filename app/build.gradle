@@ -5,6 +5,7 @@ plugins {
 
 android {
     namespace 'com.example.rebootapp'
+    //Previous SDk version 34
     compileSdk 34
 
     defaultConfig {
@@ -72,5 +73,11 @@ dependencies {
     implementation 'com.github.colourmoon:readmore-textview:v1.0.2'
     implementation "androidx.compose.material3:material3:1.1.2"
     implementation "androidx.compose.material3:material3-window-size-class:1.1.2"
+
+    //Expandable TextView Library
+    implementation 'at.blogc:expandabletextview:1.0.5'
+    implementation 'com.ms-square:expandableTextView:0.1.4'
+
+    implementation "androidx.cardview:cardview:1.0.0"
 
 }

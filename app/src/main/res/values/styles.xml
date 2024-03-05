@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <style name="RatingBar" parent="Theme.AppCompat">
         <item name="colorControlNormal">@color/yellow</item>
         <item name="colorControlActivated">@color/black</item>
@@ -7,20 +8,20 @@
 
     <style name="svSearch" parent="AppTheme">
         <!--This line changes the color of text in Toolbar-->
-        <item name="android:textColorPrimary">@color/white</item>
+        <item name="colorPrimary">@color/white</item>
+        <item name="colorSecondary">@color/aqua</item>
+        <item name="android:textColorPrimary">@color/black</item>
         <!--This line changes the color of icons in toolbar (back, overflow menu icons)-->
-        <item name="android:textColorSecondary">@color/gray</item>
-        <item name="android:background">@color/black</item>
+        <item name="android:textColorSecondary">@color/aqua</item>
     </style>
 
-    <style name="Theme.MaterialComponents.DayNight" parent="Theme.MaterialComponents">
-        <item name="colorPrimary">@color/gray</item>
-        <item name="colorSecondary">@color/blueberry</item>
-        <item name="android:textColor">@color/black</item>
-        <item name="hintTextColor">@color/black</item>
-
-    </style>
     <style name="btnSignUpLink" parent="android:Widget.Button">
         <item name="android:background">@color/black</item>
     </style>
+
+    <style name="menu_toolbar" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:navigationBarColor">@color/aqua</item>
+        <item name="navigationIcon">@color/white</item>
+    </style>
+
 </resources>
