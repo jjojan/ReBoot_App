@@ -22,6 +22,7 @@ import com.bumptech.glide.Glide;
 import com.parse.CountCallback;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
+import com.parse.Parse;
 import com.parse.ParseObject;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -32,6 +33,8 @@ import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+
 public class FriendProfileActivity extends AppCompatActivity {
     Button done;
     ImageView profile_pic;
@@ -40,9 +43,11 @@ public class FriendProfileActivity extends AppCompatActivity {
     String friendUserID;
 
     //RecyclerView for Favorite Games
-    RecyclerView friendFavoritesRv;
+    RecyclerView friendFavoritesRv, friendsRV;
     List<String> friendFavoritesUris;
+    List<Friend> friendsList = new ArrayList<>();
     FavoriteGamesAdapter friendFavoritesAdapter;
+    FriendsListAdapter friendsListAdapter;
 
 
     @Override
@@ -60,10 +65,16 @@ public class FriendProfileActivity extends AppCompatActivity {
         //Friends Favorites
         friendFavoritesUris = new ArrayList<>();
         friendFavoritesAdapter = new FavoriteGamesAdapter(friendFavoritesUris);
-//        friendFavoritesAdapter = new FriendsListAdapter(friendFavoritesUris);
+        friendsListAdapter = new FriendsListAdapter(friendsList);
+
+
         friendFavoritesRv = findViewById(R.id.favoritesRecyclerView);
         friendFavoritesRv.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         friendFavoritesRv.setAdapter(friendFavoritesAdapter);
+
+        friendsRV = findViewById(R.id.friendsRecyclerView);
+        friendsRV.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        friendsRV.setAdapter(friendsListAdapter);
 
 
         //Friends Friends
@@ -140,11 +151,62 @@ public class FriendProfileActivity extends AppCompatActivity {
         });
 
     }
+
+    public void nestedFetchFriendsAndUpdateUI() {
+//        ParseUser currentUser = ParseUser.getCurrentUser();
+//        List<String> friendIds = currentUser.getList("friend_list");
+        System.out.println("Got to nestedFetch");
+        ParseQuery<ParseUser> userQuery = ParseUser.getQuery();
+        userQuery.getInBackground(friendUserID, (parseUser, e1) -> { // first Parse Call
+            System.out.println("Got to first parse call");
+            if (e1 == null) {
+                List<String> friendIds = parseUser.getList("friend_list");
+
+                if (friendIds == null || friendIds.isEmpty()) {
+                    runOnUiThread(() -> {
+                        System.out.println("empty or null");
+                        friendsListAdapter.updateData(new ArrayList<Friend>());
+                    });
+                    return;
+                }
+
+                List<Friend> fetchedFriends = new ArrayList<>();
+                AtomicInteger counter = new AtomicInteger(friendIds.size());
+
+                for (String friendId : friendIds) {
+                    ParseQuery<ParseUser> query = ParseUser.getQuery();
+                    query.getInBackground(friendId, (friend, e2) -> { // second Parse Call
+                        if (e2 == null) {
+                            String id = friend.getObjectId();
+                            String username = friend.getString("username");
+                            ParseFile profilePic = friend.getParseFile("profile_pic");
+                            String profilePicUrl = profilePic != null ? profilePic.getUrl() : null;
+                            fetchedFriends.add(new Friend(username, profilePicUrl, id));
+                        } else {
+                            Log.e("fetchFriends", "Error fetching friend data: " + e2.getMessage(), e2);
+                        }
+
+                        if (counter.decrementAndGet() == 0) {
+                            runOnUiThread(() -> {
+                                System.out.println("Somehow got here?");
+                                friendsListAdapter.updateData(fetchedFriends);
+                            });
+                        }
+                    });
+                }
+            }
+            else {
+                Log.e("fetchFriends", "Error fetching friend data: " + e1.getMessage(), e1);
+            }
+        });
+    }
+
     @Override
     protected void onStart(){
         super.onStart();
         friendFavoritesUris.clear();
         fillPhotos(friendUserID);
+        nestedFetchFriendsAndUpdateUI();
     }
 
 

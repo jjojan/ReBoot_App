@@ -286,7 +286,7 @@ public class ProfileFragment extends Fragment {
                         String uri = object.getString("picture_uri");
                         if(uri != null && !uri.isEmpty()) {
                             println(uri);
-                            System.out.println(uri);
+//                            System.out.println(uri);
                             favoritesUris.add(uri);
                         }
                     }
