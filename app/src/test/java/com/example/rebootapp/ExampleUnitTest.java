@@ -25,7 +25,7 @@ public class ExampleUnitTest {
         @Test
         public void emailValidator_CorrectEmailSimple_ReturnsTrue() {
             boolean result = SignUp.isValidEmail("name@email.com");
-            assertTrue(result);
+            assertEquals(true, result);
         }
     }
 }
