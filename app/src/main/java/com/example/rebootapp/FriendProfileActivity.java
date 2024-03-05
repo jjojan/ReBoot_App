@@ -60,6 +60,7 @@ public class FriendProfileActivity extends AppCompatActivity {
         //Friends Favorites
         friendFavoritesUris = new ArrayList<>();
         friendFavoritesAdapter = new FavoriteGamesAdapter(friendFavoritesUris);
+//        friendFavoritesAdapter = new FriendsListAdapter(friendFavoritesUris);
         friendFavoritesRv = findViewById(R.id.favoritesRecyclerView);
         friendFavoritesRv.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         friendFavoritesRv.setAdapter(friendFavoritesAdapter);
