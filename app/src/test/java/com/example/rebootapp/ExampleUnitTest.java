@@ -20,4 +20,12 @@ public class ExampleUnitTest {
         boolean result = test.logInManual("default@gmail.com", "12345");
         assertEquals(true, result);
     }
+
+    class EmailValidatorTest {
+        @Test
+        public void emailValidator_CorrectEmailSimple_ReturnsTrue() {
+            boolean result = SignUp.isValidEmail("name@email.com");
+            assertTrue(result);
+        }
+    }
 }

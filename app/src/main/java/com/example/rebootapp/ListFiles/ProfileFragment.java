@@ -32,7 +32,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.rebootapp.EditProfileActivity;
 import com.example.rebootapp.FavoriteGamesActivity;
 import com.example.rebootapp.FavoriteGamesAdapter;
+import com.example.rebootapp.Friend;
 import com.example.rebootapp.FriendsActivity;
+import com.example.rebootapp.FriendsListAdapter;
 import com.example.rebootapp.Login;
 import com.example.rebootapp.R;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -53,6 +55,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 
 public class ProfileFragment extends Fragment {
@@ -69,9 +72,11 @@ public class ProfileFragment extends Fragment {
     Uri profile_Uri;
 
     //RecyclerView for Favorite Games
-    RecyclerView favoritesRv;
-    List<String> favoritesUris;
+    RecyclerView favoritesRv, friendsRV;
+    List<String> favoritesUris, friendsUris, friendUserNames;
+    List<Friend> friendsList = new ArrayList<>();
     FavoriteGamesAdapter favoritesAdapter;
+    FriendsListAdapter friendsListAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -220,13 +225,19 @@ public class ProfileFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        //Friends Favorites - Cannot call this function in a fragment
+        // User Favorites
         favoritesUris = new ArrayList<>();
         favoritesAdapter = new FavoriteGamesAdapter(favoritesUris);
         favoritesRv = view.findViewById(R.id.favoritesRecyclerView);
         favoritesRv.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         favoritesRv.setAdapter(favoritesAdapter);
 
+        // User Friends
+        friendsUris = new ArrayList<>();
+        friendsListAdapter = new FriendsListAdapter(friendsList);
+        friendsRV = view.findViewById(R.id.friendsRecyclerView);
+        friendsRV.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+        friendsRV.setAdapter(friendsListAdapter);
 
 
         EditProfileButton = view.findViewById(R.id.EditProfileButton);
@@ -289,6 +300,35 @@ public class ProfileFragment extends Fragment {
 
     }
 
+    public void fetchFriendsAndUpdateUI() {
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        List<String> friendIds = currentUser.getList("friend_list");
+        if (friendIds == null) return;
+
+        //List<Friend> fetchedFriends = new ArrayList<>();
+        AtomicInteger counter = new AtomicInteger(friendIds.size());
+
+        for (String friendId : friendIds) {
+            ParseQuery<ParseUser> query = ParseUser.getQuery();
+            query.getInBackground(friendId, (friend, e) -> {
+                if (e == null) {
+                    String id = friend.getObjectId();
+                    String username = friend.getString("username");
+                    ParseFile profilePic = friend.getParseFile("profile_pic");
+                    String profilePicUrl = profilePic != null ? profilePic.getUrl() : null;
+                    friendsList.add(new Friend(username, profilePicUrl, id));
+                } else {
+                    Log.e("fetchFriends", "Error fetching friend data: " + e.getMessage(), e);
+                }
+
+                if (counter.decrementAndGet() == 0) {
+                    getActivity().runOnUiThread(() -> {
+                        friendsListAdapter.updateData(friendsList);
+                    });
+                }
+            });
+        }
+    }
 
     public void refreshProfile() {
         ParseUser currentUser = ParseUser.getCurrentUser();
@@ -326,6 +366,9 @@ public class ProfileFragment extends Fragment {
         super.onStart();
         refreshProfile();
         favoritesUris.clear();
+        friendsUris.clear();
+        //friendsUsernames.clear();
+        fetchFriendsAndUpdateUI();
         fillPhotos();
 //        ParseUser currentUser = ParseUser.getCurrentUser();
 //        String currentUserObjectID = currentUser.getObjectId();
