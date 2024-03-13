@@ -6,9 +6,9 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-//import com.cometchat.chat.core.AppSettings;
-//import com.cometchat.chat.core.CometChat;
-//import com.cometchat.chat.exceptions.CometChatException;
+import com.cometchat.chat.core.AppSettings;
+import com.cometchat.chat.core.CometChat;
+import com.cometchat.chat.exceptions.CometChatException;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -29,29 +29,29 @@ public class FriendsMessageActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friendsmessaging);
 
-//        initChat();
+        initChat();
     }
 
-//    private void initChat() {
-//
-//
-//        AppSettings appSettings=new AppSettings.AppSettingsBuilder()
-//                .subscribePresenceForAllUsers()
-//                .setRegion(region)
-//                .autoEstablishSocketConnection(true)
-//                .build();
-//
-//        CometChat.init(this, appID,appSettings, new CometChat.CallbackListener<String>() {
-//            @Override
-//            public void onSuccess(String successMessage) {
-//                Log.d("MessageTag", "Initialization completed successfully");
-//            }
-//            @Override
-//            public void onError(CometChatException e) {
-//                Log.d("MessageTag", "Initialization failed with exception: " + e.getMessage());
-//            }
-//        });
-//    }
+    private void initChat() {
+
+
+        AppSettings appSettings=new AppSettings.AppSettingsBuilder()
+                .subscribePresenceForAllUsers()
+                .setRegion(region)
+                .autoEstablishSocketConnection(true)
+                .build();
+
+        CometChat.init(this, appID,appSettings, new CometChat.CallbackListener<String>() {
+            @Override
+            public void onSuccess(String successMessage) {
+                Log.d("MessageTag", "Initialization completed successfully");
+            }
+            @Override
+            public void onError(CometChatException e) {
+                Log.d("MessageTag", "Initialization failed with exception: " + e.getMessage());
+            }
+        });
+    }
 
     public void refreshProfile() {
         ParseUser currentUser = ParseUser.getCurrentUser();
