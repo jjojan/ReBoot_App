@@ -1,6 +1,10 @@
 package com.example.rebootapp;
 
+import static androidx.test.InstrumentationRegistry.getContext;
+
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;

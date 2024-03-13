@@ -1,35 +1,28 @@
 package com.example.rebootapp;
 
-import static java.security.AccessController.getContext;
-
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Button;
-import android.widget.ToggleButton;
 
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 
 import com.bumptech.glide.Glide;
-import com.parse.CountCallback;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
-import com.parse.Parse;
 import com.parse.ParseObject;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
-
-import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +30,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class FriendProfileActivity extends AppCompatActivity {
     Button done;
+
+    Button btn_message;
     ImageView profile_pic;
     TextView username, bio;
     ImageButton starred, friends, lists;
@@ -61,6 +56,7 @@ public class FriendProfileActivity extends AppCompatActivity {
         username = findViewById(R.id.tvFriend_Friend_Username);
         bio = findViewById(R.id.friend_bio);
         starred = findViewById(R.id.friend_Starred);
+        btn_message = findViewById(R.id.messageButton);
 
         //Friends Favorites
         friendFavoritesUris = new ArrayList<>();
@@ -115,6 +111,14 @@ public class FriendProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 finish();
+            }
+        });
+
+        btn_message.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(FriendProfileActivity.this, FriendsMessageActivity.class);
+                FriendProfileActivity.this.startActivity(intent);
             }
         });
 

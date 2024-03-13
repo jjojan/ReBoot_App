@@ -67,6 +67,9 @@
         <activity
             android:name=".FriendProfileActivity"
             android:exported="true" />
+        <activity
+            android:name=".FriendsMessageActivity"
+            android:exported="true"></activity>
 
         <meta-data
             android:name="com.parse.SERVER_URL"
