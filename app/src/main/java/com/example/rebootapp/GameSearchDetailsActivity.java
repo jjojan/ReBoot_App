@@ -34,7 +34,7 @@ public class GameSearchDetailsActivity extends AppCompatActivity {
 
     GameSearch movie;
 
-    List<Game> game;
+    List<GameModel> game;
 
 
     TextView tvTitle;
@@ -94,7 +94,7 @@ public class GameSearchDetailsActivity extends AppCompatActivity {
                 try{
                     JSONArray results = jsonObject.getJSONArray("results");
                     Log.i("RETURN results", "Results" + results.toString());
-                    game.addAll(Game.fromJSONArray(results));
+                    game.addAll(GameModel.fromJSONArray(results));
                     Log.i("return list", "Movies" + game.toString());
 
                 } catch(JSONException e){

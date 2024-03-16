@@ -14,8 +14,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.codepath.asynchttpclient.AsyncHttpClient;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
-import com.example.rebootapp.Game;
-import com.example.rebootapp.GameAdapter;
+import com.example.rebootapp.GameModel;
+import com.example.rebootapp.Adapters.GameAdapter;
 import com.example.rebootapp.R;
 
 import org.json.JSONArray;
@@ -41,10 +41,10 @@ public class HomeFragment extends Fragment {
     public static final String YOUR_GAMES_URL = "https://api.rawg.io/api/games?key=63502b95db9f41c99bb3d0ecf77aa811&dates=2023-12-01,2024-11-01&page_size=40";
     public static final String TAG = "HomeAct";
 
-    List<Game> game;
-    List<Game> newGames;
+    List<GameModel> game;
+    List<GameModel> newGames;
 
-    List<Game> yourGames;
+    List<GameModel> yourGames;
 
     JSONObject result;
 
@@ -134,7 +134,7 @@ public class HomeFragment extends Fragment {
                 try{
                     JSONArray results = jsonObject.getJSONArray("results");
                     Log.i(TAG, "Results" + results.toString());
-                    game.addAll(Game.fromJSONArray(results));
+                    game.addAll(GameModel.fromJSONArray(results));
                     gameAdapter.notifyDataSetChanged();
                     Log.i(TAG, "Movies" + game.size());
                 } catch(JSONException e){
@@ -155,7 +155,7 @@ public class HomeFragment extends Fragment {
                 try{
                     JSONArray results = jsonObject.getJSONArray("results");
                     Log.i(TAG, "Results" + results.toString());
-                    newGames.addAll(Game.fromJSONArray(results));
+                    newGames.addAll(GameModel.fromJSONArray(results));
                     newGameAdapter.notifyDataSetChanged();
                     Log.i(TAG, "Movies" + newGames.size());
                 } catch(JSONException e){
@@ -176,7 +176,7 @@ public class HomeFragment extends Fragment {
                 try{
                     JSONArray results = jsonObject.getJSONArray("results");
                     Log.i(TAG, "Results" + results.toString());
-                    yourGames.addAll(Game.fromJSONArray(results));
+                    yourGames.addAll(GameModel.fromJSONArray(results));
                     yourGamesAapter.notifyDataSetChanged();
                     Log.i(TAG, "Movies" + yourGames.size());
                 } catch(JSONException e){

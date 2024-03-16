@@ -24,8 +24,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.codepath.asynchttpclient.AsyncHttpClient;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
-import com.example.rebootapp.ListFiles.UserListModel;
-import com.example.rebootapp.ListFiles.UserListNamesAdapter;
+import com.example.rebootapp.Adapters.ReviewAdapter;
+import com.example.rebootapp.Adapters.UserListModel;
+import com.example.rebootapp.Adapters.UserListNamesAdapter;
 import com.example.rebootapp.Utilities.ExpandableTextView;
 import com.parse.CountCallback;
 import com.parse.FindCallback;
@@ -48,9 +49,9 @@ import okhttp3.Headers;
 
 public class GameDetailsActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
-    Game movie;
+    GameModel movie;
 
-    List<Game> game;
+    List<GameModel> game;
 
     List<ParseObject> adapterObjects;
 
@@ -109,7 +110,7 @@ public class GameDetailsActivity extends AppCompatActivity implements AdapterVie
 
 
 
-        movie = (Game) Parcels.unwrap(getIntent().getParcelableExtra(Game.class.getSimpleName()));
+        movie = (GameModel) Parcels.unwrap(getIntent().getParcelableExtra(GameModel.class.getSimpleName()));
         Log.d("MovieDetailsActivity", String.format("Showing details for '%s'", movie.getTitle()));
         Log.i("MARDUK",
                 "Tıtle: "+movie.getTitle()+"\nOverView: "+movie.getOverview()+"\n ID: "+movie.getID()+
@@ -163,7 +164,7 @@ public class GameDetailsActivity extends AppCompatActivity implements AdapterVie
                 try{
                     JSONArray results = jsonObject.getJSONArray("results");
                     Log.i("RETURN results", "Results" + results.toString());
-                    game.addAll(Game.fromJSONArray(results));
+                    game.addAll(GameModel.fromJSONArray(results));
                     Log.i("return list", "Movies" + game.toString());
 
                 } catch(JSONException e){

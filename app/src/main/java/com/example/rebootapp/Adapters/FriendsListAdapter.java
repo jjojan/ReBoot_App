@@ -1,46 +1,27 @@
-package com.example.rebootapp;
+package com.example.rebootapp.Adapters;
 
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RatingBar;
 import android.widget.TextView;
-import android.widget.Button;
-import android.widget.ToggleButton;
-import androidx.recyclerview.widget.LinearLayoutManager;
+
 import androidx.recyclerview.widget.RecyclerView;
 
 
 import com.bumptech.glide.Glide;
-import com.codepath.asynchttpclient.AsyncHttpClient;
-import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
-import com.parse.CountCallback;
-import com.parse.GetCallback;
-import com.parse.ParseObject;
-import com.parse.ParseException;
-import com.parse.ParseFile;
-import com.parse.ParseQuery;
-import com.parse.ParseUser;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.parceler.Parcels;
-import org.w3c.dom.Text;
+import com.example.rebootapp.Friend;
+import com.example.rebootapp.FriendProfileActivity;
+import com.example.rebootapp.R;
 
 import java.util.List;
 
-import okhttp3.Headers;
 public class FriendsListAdapter extends RecyclerView.Adapter<FriendsListAdapter.ViewHolder>{
     private List<String> photoUris;
     private List<String> photoUsernames;

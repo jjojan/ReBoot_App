@@ -1,4 +1,4 @@
-package com.example.rebootapp;
+package com.example.rebootapp.Adapters;
 
 import android.content.Context;
 import android.content.Intent;
@@ -14,69 +14,66 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.rebootapp.GameDetailsActivity;
+import com.example.rebootapp.Movie;
+import com.example.rebootapp.R;
 
 import org.parceler.Parcels;
 
 import java.util.List;
 
-public class GameReviewAdapter extends RecyclerView.Adapter<GameReviewAdapter.ViewHolder> {
+public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> {
 
     Context context;
-    List<GameReview> reviews;
+    List<Movie> movies;
 
-    public GameReviewAdapter(Context context, List<GameReview> reviews){
+    public MovieAdapter(Context context, List<Movie> movies){
         this.context = context;
-        this.reviews = reviews;
+        this.movies = movies;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View gameView = LayoutInflater.from(context).inflate(R.layout.item_gamereview, parent, false); //?
-        return new ViewHolder(gameView);
+        View movieView = LayoutInflater.from(context).inflate(R.layout.item_game, parent, false);
+        return new ViewHolder(movieView);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        GameReview review = reviews.get(position);
-        holder.bind(review);
+        Movie movie = movies.get(position);
+        holder.bind(movie);
     }
 
     @Override
     public int getItemCount() {
-        return reviews.size();
+        return movies.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         TextView tvTitle;
-        TextView tvDate;
-
-        String tvID;
+        TextView tvOverview;
         ImageView tvPoster;
 
         public ViewHolder(@NonNull View itemView){
             super(itemView);
-            tvTitle = itemView.findViewById(R.id.tvGameTitle);
-            tvDate = itemView.findViewById(R.id.tvDate);
+            tvTitle = itemView.findViewById(R.id.tvTitle);
+            tvOverview = itemView.findViewById(R.id.tvOverview);
             tvPoster = itemView.findViewById(R.id.gamePoster);
-
         }
 
-        public void bind(GameReview review) {
-            String id = review.getId();
-            String date = review.getOverview();
-            String[] arrOfStr = date.split("-", 2);
-            tvTitle.setText(review.getTitle());
-            tvDate.setText(arrOfStr[0]);
+        public void bind(Movie movie) {
+            tvTitle.setText(movie.getTitle());
+            tvOverview.setText(movie.getOverview());
             String imageUrl;
 
 
             if(context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
                 Log.i("movieAdapter", "We are in landscape");
-                imageUrl = review.getPosterPath();
+                imageUrl = movie.getBackdropPath();
             }
             else {
-                imageUrl = review.getPosterPath();
+                imageUrl = movie.getPosterPath();
             }
 
             Glide.with(context).load(imageUrl).into(tvPoster);
@@ -86,15 +83,12 @@ public class GameReviewAdapter extends RecyclerView.Adapter<GameReviewAdapter.Vi
                     .placeholder(R.drawable.flicks_movie_placeholder)
                     .error(R.drawable.flicks_movie_placeholder)
                     .into(tvPoster);
-            tvPoster.setOnClickListener(new View.OnClickListener() {
+            tvOverview.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //int position = getAdapterPosition();
-                    //GameReview game = reviews.get(position);
-                    Intent intent = new Intent(context, ReviewActivity.class);
+                    Intent intent = new Intent(context, GameDetailsActivity.class);
 
-                    intent.putExtra(GameReview.class.getSimpleName(), Parcels.wrap(review));
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.putExtra(Movie.class.getSimpleName(), Parcels.wrap(movie));
 
                     context.startActivity(intent);
                 }
@@ -106,12 +100,11 @@ public class GameReviewAdapter extends RecyclerView.Adapter<GameReviewAdapter.Vi
 
             if (position != RecyclerView.NO_POSITION) {
 
-                GameReview game = reviews.get(position); //?
+                Movie movie = movies.get(position);
 
-                Intent intent = new Intent(context, GameReviewDetailsActivity.class);
+                Intent intent = new Intent(context, GameDetailsActivity.class);
 
-                intent.putExtra(GameReview.class.getSimpleName(), Parcels.wrap(game));
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.putExtra(Movie.class.getSimpleName(), Parcels.wrap(movie));
 
                 context.startActivity(intent);
             }
@@ -121,7 +114,7 @@ public class GameReviewAdapter extends RecyclerView.Adapter<GameReviewAdapter.Vi
 
 
 
-    }
+}
 
 
 }

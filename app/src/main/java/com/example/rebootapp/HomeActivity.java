@@ -1,25 +1,11 @@
 package com.example.rebootapp;
 
 import android.os.Bundle;
-import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import com.codepath.asynchttpclient.AsyncHttpClient;
-import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
 import java.util.List;
-
-import okhttp3.Headers;
-
 
 
 public class HomeActivity extends AppCompatActivity {
@@ -29,10 +15,10 @@ public class HomeActivity extends AppCompatActivity {
     public static final String YOUR_GAMES_URL = "https://api.rawg.io/api/games?key=63502b95db9f41c99bb3d0ecf77aa811&dates=2023-12-01,2024-11-01";
     public static final String TAG = "HomeAct";
 
-    List<Game> game;
-    List<Game> newGames;
+    List<GameModel> game;
+    List<GameModel> newGames;
 
-    List<Game> yourGames;
+    List<GameModel> yourGames;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

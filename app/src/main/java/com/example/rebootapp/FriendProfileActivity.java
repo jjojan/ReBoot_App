@@ -16,6 +16,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 
 import com.bumptech.glide.Glide;
+import com.example.rebootapp.Adapters.FavoriteGamesAdapter;
+import com.example.rebootapp.Adapters.FriendsListAdapter;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseObject;

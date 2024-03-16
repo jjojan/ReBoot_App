@@ -1,4 +1,4 @@
-package com.example.rebootapp;
+package com.example.rebootapp.Adapters;
 
 import android.content.Context;
 import android.content.Intent;
@@ -14,61 +14,73 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.rebootapp.GameReview;
+import com.example.rebootapp.GameReviewDetailsActivity;
+import com.example.rebootapp.R;
+import com.example.rebootapp.ReviewActivity;
 
 import org.parceler.Parcels;
 
 import java.util.List;
 
-public class GameAdapter extends RecyclerView.Adapter<GameAdapter.ViewHolder> {
+public class GameReviewAdapter extends RecyclerView.Adapter<GameReviewAdapter.ViewHolder> {
 
     Context context;
-    List<Game> games;
+    List<GameReview> reviews;
 
-    public GameAdapter(Context context, List<Game> games){
+    public GameReviewAdapter(Context context, List<GameReview> reviews){
         this.context = context;
-        this.games = games;
+        this.reviews = reviews;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View gameView = LayoutInflater.from(context).inflate(R.layout.item_game, parent, false);
+        View gameView = LayoutInflater.from(context).inflate(R.layout.item_gamereview, parent, false); //?
         return new ViewHolder(gameView);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Game game = games.get(position);
-        holder.bind(game);
+        GameReview review = reviews.get(position);
+        holder.bind(review);
     }
 
     @Override
     public int getItemCount() {
-        return games.size();
+        return reviews.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         TextView tvTitle;
-        TextView tvOverview;
+        TextView tvDate;
 
-        TextView tvID;
+        String tvID;
         ImageView tvPoster;
 
         public ViewHolder(@NonNull View itemView){
             super(itemView);
+            tvTitle = itemView.findViewById(R.id.tvGameTitle);
+            tvDate = itemView.findViewById(R.id.tvDate);
             tvPoster = itemView.findViewById(R.id.gamePoster);
+
         }
 
-        public void bind(Game game) {
+        public void bind(GameReview review) {
+            String id = review.getId();
+            String date = review.getOverview();
+            String[] arrOfStr = date.split("-", 2);
+            tvTitle.setText(review.getTitle());
+            tvDate.setText(arrOfStr[0]);
             String imageUrl;
 
 
             if(context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
                 Log.i("movieAdapter", "We are in landscape");
-                imageUrl = game.getPosterPath();
+                imageUrl = review.getPosterPath();
             }
             else {
-                imageUrl = game.getPosterPath();
+                imageUrl = review.getPosterPath();
             }
 
             Glide.with(context).load(imageUrl).into(tvPoster);
@@ -81,9 +93,12 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.ViewHolder> {
             tvPoster.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(context, GameDetailsActivity.class);
+                    //int position = getAdapterPosition();
+                    //GameReview game = reviews.get(position);
+                    Intent intent = new Intent(context, ReviewActivity.class);
 
-                    intent.putExtra(Game.class.getSimpleName(), Parcels.wrap(game));
+                    intent.putExtra(GameReview.class.getSimpleName(), Parcels.wrap(review));
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
                     context.startActivity(intent);
                 }
@@ -95,11 +110,12 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.ViewHolder> {
 
             if (position != RecyclerView.NO_POSITION) {
 
-                Game game = games.get(position);
+                GameReview game = reviews.get(position); //?
 
-                Intent intent = new Intent(context, GameDetailsActivity.class);
+                Intent intent = new Intent(context, GameReviewDetailsActivity.class);
 
-                intent.putExtra(Game.class.getSimpleName(), Parcels.wrap(game));
+                intent.putExtra(GameReview.class.getSimpleName(), Parcels.wrap(game));
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
                 context.startActivity(intent);
             }

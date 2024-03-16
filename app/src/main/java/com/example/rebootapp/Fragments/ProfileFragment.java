@@ -31,12 +31,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.rebootapp.EditProfileActivity;
 import com.example.rebootapp.FavoriteGamesActivity;
-import com.example.rebootapp.FavoriteGamesAdapter;
+import com.example.rebootapp.Adapters.FavoriteGamesAdapter;
 import com.example.rebootapp.Friend;
 import com.example.rebootapp.FriendsActivity;
-import com.example.rebootapp.FriendsListAdapter;
-import com.example.rebootapp.ListFiles.ManageListAdapter;
-import com.example.rebootapp.ListFiles.UserListModel;
+import com.example.rebootapp.Adapters.FriendsListAdapter;
+import com.example.rebootapp.Adapters.ManageListAdapter;
+import com.example.rebootapp.Adapters.UserListModel;
 import com.example.rebootapp.Login;
 import com.example.rebootapp.R;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;

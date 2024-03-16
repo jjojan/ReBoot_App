@@ -1,4 +1,4 @@
-package com.example.rebootapp;
+package com.example.rebootapp.Adapters;
 
 import android.content.Context;
 import android.content.Intent;
@@ -14,63 +14,64 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.rebootapp.GameDetailsActivity;
+import com.example.rebootapp.GameModel;
+import com.example.rebootapp.R;
 
 import org.parceler.Parcels;
 
 import java.util.List;
 
-public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> {
+public class GameAdapter extends RecyclerView.Adapter<GameAdapter.ViewHolder> {
 
     Context context;
-    List<Movie> movies;
+    List<com.example.rebootapp.GameModel> games;
 
-    public MovieAdapter(Context context, List<Movie> movies){
+    public GameAdapter(Context context, List<com.example.rebootapp.GameModel> games){
         this.context = context;
-        this.movies = movies;
+        this.games = games;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View movieView = LayoutInflater.from(context).inflate(R.layout.item_game, parent, false);
-        return new ViewHolder(movieView);
+        View gameView = LayoutInflater.from(context).inflate(R.layout.item_game, parent, false);
+        return new ViewHolder(gameView);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Movie movie = movies.get(position);
-        holder.bind(movie);
+        com.example.rebootapp.GameModel game = games.get(position);
+        holder.bind(game);
     }
 
     @Override
     public int getItemCount() {
-        return movies.size();
+        return games.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         TextView tvTitle;
         TextView tvOverview;
+
+        TextView tvID;
         ImageView tvPoster;
 
         public ViewHolder(@NonNull View itemView){
             super(itemView);
-            tvTitle = itemView.findViewById(R.id.tvTitle);
-            tvOverview = itemView.findViewById(R.id.tvOverview);
             tvPoster = itemView.findViewById(R.id.gamePoster);
         }
 
-        public void bind(Movie movie) {
-            tvTitle.setText(movie.getTitle());
-            tvOverview.setText(movie.getOverview());
+        public void bind(com.example.rebootapp.GameModel game) {
             String imageUrl;
 
 
             if(context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
                 Log.i("movieAdapter", "We are in landscape");
-                imageUrl = movie.getBackdropPath();
+                imageUrl = game.getPosterPath();
             }
             else {
-                imageUrl = movie.getPosterPath();
+                imageUrl = game.getPosterPath();
             }
 
             Glide.with(context).load(imageUrl).into(tvPoster);
@@ -80,12 +81,12 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
                     .placeholder(R.drawable.flicks_movie_placeholder)
                     .error(R.drawable.flicks_movie_placeholder)
                     .into(tvPoster);
-            tvOverview.setOnClickListener(new View.OnClickListener() {
+            tvPoster.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(context, GameDetailsActivity.class);
 
-                    intent.putExtra(Movie.class.getSimpleName(), Parcels.wrap(movie));
+                    intent.putExtra(com.example.rebootapp.GameModel.class.getSimpleName(), Parcels.wrap(game));
 
                     context.startActivity(intent);
                 }
@@ -97,11 +98,11 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
 
             if (position != RecyclerView.NO_POSITION) {
 
-                Movie movie = movies.get(position);
+                com.example.rebootapp.GameModel game = games.get(position);
 
                 Intent intent = new Intent(context, GameDetailsActivity.class);
 
-                intent.putExtra(Movie.class.getSimpleName(), Parcels.wrap(movie));
+                intent.putExtra(GameModel.class.getSimpleName(), Parcels.wrap(game));
 
                 context.startActivity(intent);
             }
@@ -111,7 +112,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
 
 
 
-}
+    }
 
 
 }

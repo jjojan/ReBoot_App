@@ -1,24 +1,17 @@
-package com.example.rebootapp;
+package com.example.rebootapp.Adapters;
 
-import android.content.Context;
-import android.content.Intent;
-import android.content.res.Configuration;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
+import com.example.rebootapp.GameDetailsActivity;
+import com.example.rebootapp.R;
 import com.parse.ParseObject;
 
-import org.parceler.Parcels;
-
-import java.util.ArrayList;
 import java.util.List;
 
 public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewViewHolder>{

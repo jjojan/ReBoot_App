@@ -19,7 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.codepath.asynchttpclient.AsyncHttpClient;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 import com.example.rebootapp.GameReview;
-import com.example.rebootapp.GameReviewAdapter;
+import com.example.rebootapp.Adapters.GameReviewAdapter;
 import com.example.rebootapp.R;
 
 import org.json.JSONArray;

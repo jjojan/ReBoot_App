@@ -1,36 +1,29 @@
-package com.example.rebootapp;
+package com.example.rebootapp.Adapters;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RatingBar;
-import android.widget.TextView;
-import android.widget.Button;
-import android.widget.ToggleButton;
-import androidx.recyclerview.widget.LinearLayoutManager;
+
 import androidx.recyclerview.widget.RecyclerView;
 
 
 import com.bumptech.glide.Glide;
 import com.codepath.asynchttpclient.AsyncHttpClient;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
-import com.parse.CountCallback;
+import com.example.rebootapp.GameDetailsActivity;
+import com.example.rebootapp.GameModel;
+import com.example.rebootapp.R;
 import com.parse.GetCallback;
 import com.parse.ParseObject;
 import com.parse.ParseException;
-import com.parse.ParseFile;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.parceler.Parcels;
@@ -98,11 +91,11 @@ public class WishListAdapter extends RecyclerView.Adapter<WishListAdapter .ViewH
                                         System.out.println("line 1");
 //                                        JSONArray results = jsonobject.getJSONArray("results");
 //                                        System.out.println("count: " + results);
-                                        Game game = new Game((jsonobject));
+                                        com.example.rebootapp.GameModel game = new com.example.rebootapp.GameModel((jsonobject));
                                         System.out.println("line 2");
                                         Intent intent = new Intent(holder.imageViewGamePhoto.getContext(), GameDetailsActivity.class);
                                         System.out.println("line 3");
-                                        intent.putExtra(Game.class.getSimpleName(), Parcels.wrap(game));
+                                        intent.putExtra(GameModel.class.getSimpleName(), Parcels.wrap(game));
                                         System.out.println("line 4");
                                         holder.imageViewGamePhoto.getContext().startActivity(intent);
                                         System.out.println("line 5");
