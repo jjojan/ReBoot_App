@@ -15,7 +15,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
-import com.example.rebootapp.ListFiles.ProfileFragment;
+import com.example.rebootapp.Fragments.HomeFragment;
+import com.example.rebootapp.Fragments.ReviewFragment;
+import com.example.rebootapp.Fragments.SearchFragment;
+import com.example.rebootapp.Fragments.ProfileFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 

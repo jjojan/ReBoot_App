@@ -1,4 +1,4 @@
-package com.example.rebootapp;
+package com.example.rebootapp.Utilities;
 
 import android.widget.TextView;
 import android.content.Context;
@@ -6,6 +6,8 @@ import android.content.res.TypedArray;
 import android.text.SpannableStringBuilder;
 import android.util.AttributeSet;
 import android.view.View;
+
+import com.example.rebootapp.R;
 
 public class ExpandableTextView extends androidx.appcompat.widget.AppCompatTextView {
 

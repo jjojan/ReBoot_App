@@ -1,4 +1,4 @@
-package com.example.rebootapp;
+package com.example.rebootapp.Fragments;
 
 import static com.parse.Parse.getApplicationContext;
 import static java.sql.DriverManager.println;
@@ -17,6 +17,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.codepath.asynchttpclient.AsyncHttpClient;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
+import com.example.rebootapp.GameSearch;
+import com.example.rebootapp.GameSearchAdapter;
+import com.example.rebootapp.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;

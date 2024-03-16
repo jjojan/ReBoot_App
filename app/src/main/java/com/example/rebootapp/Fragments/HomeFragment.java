@@ -1,8 +1,5 @@
-package com.example.rebootapp;
+package com.example.rebootapp.Fragments;
 
-import static android.content.Intent.getIntent;
-
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,11 +14,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.codepath.asynchttpclient.AsyncHttpClient;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
+import com.example.rebootapp.Game;
+import com.example.rebootapp.GameAdapter;
+import com.example.rebootapp.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.List;

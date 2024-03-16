@@ -1,4 +1,4 @@
-package com.example.rebootapp.ListFiles;
+package com.example.rebootapp.Fragments;
 
 import static com.parse.Parse.getApplicationContext;
 
@@ -35,6 +35,8 @@ import com.example.rebootapp.FavoriteGamesAdapter;
 import com.example.rebootapp.Friend;
 import com.example.rebootapp.FriendsActivity;
 import com.example.rebootapp.FriendsListAdapter;
+import com.example.rebootapp.ListFiles.ManageListAdapter;
+import com.example.rebootapp.ListFiles.UserListModel;
 import com.example.rebootapp.Login;
 import com.example.rebootapp.R;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
