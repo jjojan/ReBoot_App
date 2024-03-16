@@ -1,4 +1,4 @@
-package com.example.rebootapp;
+package com.example.rebootapp.Activities;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.cometchat.chat.core.AppSettings;
 import com.cometchat.chat.core.CometChat;
 import com.cometchat.chat.exceptions.CometChatException;
+import com.example.rebootapp.R;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;

@@ -29,15 +29,15 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.rebootapp.EditProfileActivity;
-import com.example.rebootapp.FavoriteGamesActivity;
+import com.example.rebootapp.Activities.EditProfileActivity;
+import com.example.rebootapp.Activities.FavoriteGamesActivity;
 import com.example.rebootapp.Adapters.FavoriteGamesAdapter;
-import com.example.rebootapp.Friend;
-import com.example.rebootapp.FriendsActivity;
+import com.example.rebootapp.Models.FriendModel;
+import com.example.rebootapp.Activities.FriendsActivity;
 import com.example.rebootapp.Adapters.FriendsListAdapter;
 import com.example.rebootapp.Adapters.ManageListAdapter;
-import com.example.rebootapp.Adapters.UserListModel;
-import com.example.rebootapp.Login;
+import com.example.rebootapp.Models.UserListModel;
+import com.example.rebootapp.LoginActivity;
 import com.example.rebootapp.R;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -76,7 +76,7 @@ public class ProfileFragment extends Fragment {
     //RecyclerView for Favorite Games
     RecyclerView favoritesRv, friendsRV;
     List<String> favoritesUris, friendsUris, friendsUsernames;
-    List<Friend> friendsList = new ArrayList<>();
+    List<FriendModel> friendsList = new ArrayList<>();
     FavoriteGamesAdapter favoritesAdapter;
     FriendsListAdapter friendsListAdapter;
 
@@ -144,7 +144,7 @@ public class ProfileFragment extends Fragment {
                                 SharedPreferences.Editor ed = getUser.edit();
                                 ed.remove("username");
                                 ed.apply();
-                                Intent intent = new Intent(getApplicationContext(), Login.class);
+                                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                                 startActivity(intent);
                             } else {
@@ -308,7 +308,7 @@ public class ProfileFragment extends Fragment {
         List<String> friendIds = currentUser.getList("friend_list");
         if (friendIds == null) return;
 
-        List<Friend> fetchedFriends = new ArrayList<>();
+        List<FriendModel> fetchedFriends = new ArrayList<>();
         AtomicInteger counter = new AtomicInteger(friendIds.size());
 
         for (String friendId : friendIds) {
@@ -319,7 +319,7 @@ public class ProfileFragment extends Fragment {
                     String username = friend.getString("username");
                     ParseFile profilePic = friend.getParseFile("profile_pic");
                     String profilePicUrl = profilePic != null ? profilePic.getUrl() : null;
-                    fetchedFriends.add(new Friend(username, profilePicUrl, id));
+                    fetchedFriends.add(new FriendModel(username, profilePicUrl, id));
                 } else {
                     Log.e("fetchFriends", "Error fetching friend data: " + e.getMessage(), e);
                 }

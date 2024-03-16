@@ -16,8 +16,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 
 import com.bumptech.glide.Glide;
-import com.example.rebootapp.Friend;
-import com.example.rebootapp.FriendProfileActivity;
+import com.example.rebootapp.Models.FriendModel;
+import com.example.rebootapp.Activities.FriendProfileActivity;
 import com.example.rebootapp.R;
 
 import java.util.List;
@@ -25,7 +25,7 @@ import java.util.List;
 public class FriendsListAdapter extends RecyclerView.Adapter<FriendsListAdapter.ViewHolder>{
     private List<String> photoUris;
     private List<String> photoUsernames;
-    private List<Friend> friends;
+    private List<FriendModel> friends;
     Context context;
     public static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView imageViewProfilePhoto;
@@ -46,7 +46,7 @@ public class FriendsListAdapter extends RecyclerView.Adapter<FriendsListAdapter.
         this.photoUsernames = Usernames;
     }
 
-    public FriendsListAdapter(List<Friend> friends){
+    public FriendsListAdapter(List<FriendModel> friends){
         this.friends = friends;
     }
 
@@ -117,7 +117,7 @@ public class FriendsListAdapter extends RecyclerView.Adapter<FriendsListAdapter.
 
     @Override
     public void onBindViewHolder(FriendsListAdapter.ViewHolder holder, int position){
-        Friend friend = friends.get(position);
+        FriendModel friend = friends.get(position);
         String uri = friend.getProfilePicUrl();
         if (uri != null) {
             Glide.with(holder.imageViewProfilePhoto.getContext()).load(uri).into(holder.imageViewProfilePhoto);
@@ -142,7 +142,7 @@ public class FriendsListAdapter extends RecyclerView.Adapter<FriendsListAdapter.
 
 
 
-    public void updateData(List<Friend> newFriends) {
+    public void updateData(List<FriendModel> newFriends) {
         this.friends.clear();
         this.friends.addAll(newFriends);
         notifyDataSetChanged();

@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.codepath.asynchttpclient.AsyncHttpClient;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
-import com.example.rebootapp.GameSearch;
+import com.example.rebootapp.GameSearchModel;
 import com.example.rebootapp.Adapters.GameSearchAdapter;
 import com.example.rebootapp.R;
 
@@ -33,7 +33,7 @@ import okhttp3.Headers;
 
 public class SearchFragment extends Fragment {
 
-    List<GameSearch> searchGames; //GameModel Model List for RecyclerView&Adapter
+    List<GameSearchModel> searchGames; //GameModel Model List for RecyclerView&Adapter
 
     String search_term = "";
     private MenuItem menuItem;
@@ -150,7 +150,7 @@ public class SearchFragment extends Fragment {
                 try {
                     JSONArray results = jsonObject.getJSONArray("results");
                     //Log.i(TAG, "Results" + results.toString());
-                    searchGames.addAll(GameSearch.fromJSONArray(results));
+                    searchGames.addAll(GameSearchModel.fromJSONArray(results));
                     gameSearchAdapter.notifyDataSetChanged();
                     println("hello");
                     //Log.i(TAG, "Movies" + searchGame.size());
@@ -188,7 +188,7 @@ public class SearchFragment extends Fragment {
                         try{
                             JSONArray results = jsonObject.getJSONArray("results");
                             //Log.i(TAG, "Results" + results.toString());
-                            searchGames.addAll(GameSearch.fromJSONArray(results));
+                            searchGames.addAll(GameSearchModel.fromJSONArray(results));
                             gameSearchAdapter.notifyDataSetChanged();
                             println("hello");
                             //Log.i(TAG, "Movies" + searchGame.size());
@@ -223,7 +223,7 @@ public class SearchFragment extends Fragment {
                         try{
                             JSONArray results = jsonObject.getJSONArray("results");
                             Log.i("Results", "Results" + results.toString());
-                            searchGames.addAll(GameSearch.fromJSONArray(results));
+                            searchGames.addAll(GameSearchModel.fromJSONArray(results));
                             gameSearchAdapter.notifyDataSetChanged();
                             println("hello");
                             Log.i("Movies", "Movies" + searchGames.size());

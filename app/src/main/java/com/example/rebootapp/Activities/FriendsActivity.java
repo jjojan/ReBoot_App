@@ -1,4 +1,4 @@
-package com.example.rebootapp;
+package com.example.rebootapp.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -15,6 +15,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 
 import com.example.rebootapp.Adapters.FriendsListAdapter;
+import com.example.rebootapp.Models.FriendModel;
+import com.example.rebootapp.R;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -35,7 +37,7 @@ public class FriendsActivity extends AppCompatActivity {
     List<String> friendUsernames;
     FriendsListAdapter friendsListAdapter;
 
-    List<Friend> friendsList = new ArrayList<>();
+    List<FriendModel> friendsList = new ArrayList<>();
 
     private final FriendUpdateCallback friendUpdateCallback = this::fetchFriendsAndUpdateUI;
 
@@ -199,7 +201,7 @@ public class FriendsActivity extends AppCompatActivity {
         List<String> friendIds = currentUser.getList("friend_list");
         if (friendIds == null) return;
 
-        List<Friend> fetchedFriends = new ArrayList<>();
+        List<FriendModel> fetchedFriends = new ArrayList<>();
         AtomicInteger counter = new AtomicInteger(friendIds.size());
 
         for (String friendId : friendIds) {
@@ -210,7 +212,7 @@ public class FriendsActivity extends AppCompatActivity {
                     String username = friend.getString("username");
                     ParseFile profilePic = friend.getParseFile("profile_pic");
                     String profilePicUrl = profilePic != null ? profilePic.getUrl() : null;
-                    fetchedFriends.add(new Friend(username, profilePicUrl, id));
+                    fetchedFriends.add(new FriendModel(username, profilePicUrl, id));
                 } else {
                     Log.e("fetchFriends", "Error fetching friend data: " + e.getMessage(), e);
                 }

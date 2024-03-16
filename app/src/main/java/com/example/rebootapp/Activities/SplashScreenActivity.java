@@ -1,23 +1,17 @@
-package com.example.rebootapp;
+package com.example.rebootapp.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.codepath.asynchttpclient.AsyncHttpClient;
-import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
+import com.example.rebootapp.R;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
-import org.parceler.Parcels;
-
-import okhttp3.Headers;
 
 public class SplashScreenActivity extends AppCompatActivity {
 

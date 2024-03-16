@@ -1,4 +1,4 @@
-package com.example.rebootapp;
+package com.example.rebootapp.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,6 +13,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
+import com.example.rebootapp.GameReviewModel;
+import com.example.rebootapp.R;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -23,7 +25,7 @@ import org.parceler.Parcels;
 
 public class ReviewActivity extends AppCompatActivity {
 
-    GameReview review;
+    GameReviewModel review;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +42,7 @@ public class ReviewActivity extends AppCompatActivity {
 
 
 
-        review = (GameReview) Parcels.unwrap(getIntent().getParcelableExtra(GameReview.class.getSimpleName()));
+        review = (GameReviewModel) Parcels.unwrap(getIntent().getParcelableExtra(GameReviewModel.class.getSimpleName()));
         gameTitle.setText(review.getTitle());
         Glide.with(this)
                 .load(review.getPosterPath())

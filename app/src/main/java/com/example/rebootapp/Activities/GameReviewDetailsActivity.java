@@ -1,4 +1,4 @@
-package com.example.rebootapp;
+package com.example.rebootapp.Activities;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -9,12 +9,14 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
+import com.example.rebootapp.GameReviewModel;
+import com.example.rebootapp.R;
 
 import org.parceler.Parcels;
 
 public class GameReviewDetailsActivity extends AppCompatActivity {
 
-    GameReview review;
+    GameReviewModel review;
 
 
     TextView tvTitle = findViewById(R.id.tvTitle);
@@ -35,7 +37,7 @@ public class GameReviewDetailsActivity extends AppCompatActivity {
         rbVoteAverage = (RatingBar) findViewById(R.id.rbVoteAverage);
 
 
-        review = (GameReview) Parcels.unwrap(getIntent().getParcelableExtra(GameReview.class.getSimpleName()));
+        review = (GameReviewModel) Parcels.unwrap(getIntent().getParcelableExtra(GameReviewModel.class.getSimpleName()));
         Log.d("MovieDetailsActivity", String.format("Showing details for '%s'", review.getTitle()));
 
 

@@ -8,7 +8,7 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.rebootapp.GameDetailsActivity;
+import com.example.rebootapp.Activities.GameDetailsActivity;
 import com.example.rebootapp.R;
 import com.parse.ParseObject;
 

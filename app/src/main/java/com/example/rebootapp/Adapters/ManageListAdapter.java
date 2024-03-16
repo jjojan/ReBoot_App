@@ -15,6 +15,7 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.rebootapp.Models.UserListModel;
 import com.example.rebootapp.R;
 import com.parse.GetCallback;
 import com.parse.ParseException;

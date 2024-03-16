@@ -1,4 +1,4 @@
-package com.example.rebootapp;
+package com.example.rebootapp.Activities;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -25,8 +25,10 @@ import com.bumptech.glide.Glide;
 import com.codepath.asynchttpclient.AsyncHttpClient;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 import com.example.rebootapp.Adapters.ReviewAdapter;
-import com.example.rebootapp.Adapters.UserListModel;
+import com.example.rebootapp.Models.UserListModel;
 import com.example.rebootapp.Adapters.UserListNamesAdapter;
+import com.example.rebootapp.GameModel;
+import com.example.rebootapp.R;
 import com.example.rebootapp.Utilities.ExpandableTextView;
 import com.parse.CountCallback;
 import com.parse.FindCallback;

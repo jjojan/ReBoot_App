@@ -18,7 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.codepath.asynchttpclient.AsyncHttpClient;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
-import com.example.rebootapp.GameReview;
+import com.example.rebootapp.GameReviewModel;
 import com.example.rebootapp.Adapters.GameReviewAdapter;
 import com.example.rebootapp.R;
 
@@ -34,7 +34,7 @@ import okhttp3.Headers;
 
 public class ReviewFragment extends Fragment {
 
-    List<GameReview> Reviews; //GameModel Model List for RecyclerView&Adapter
+    List<GameReviewModel> Reviews; //GameModel Model List for RecyclerView&Adapter
     String search_term = "";
     private MenuItem menuItem;
     private SearchView svSearchGame;
@@ -108,7 +108,7 @@ public class ReviewFragment extends Fragment {
                 try {
                     JSONArray results = jsonObject.getJSONArray("results");
                     //Log.i(TAG, "Results" + results.toString());
-                    Reviews.addAll(GameReview.fromJSONArray(results));
+                    Reviews.addAll(GameReviewModel.fromJSONArray(results));
                     GameReviewAdapter.notifyDataSetChanged();
                     println("hello");
                     //Log.i(TAG, "Movies" + searchGame.size());
@@ -146,7 +146,7 @@ public class ReviewFragment extends Fragment {
                         try{
                             JSONArray results = jsonObject.getJSONArray("results");
                             //Log.i(TAG, "Results" + results.toString());
-                            Reviews.addAll(GameReview.fromJSONArray(results));
+                            Reviews.addAll(GameReviewModel.fromJSONArray(results));
                             GameReviewAdapter.notifyDataSetChanged();
                             println("hello");
                             //Log.i(TAG, "Movies" + searchGame.size());
@@ -181,7 +181,7 @@ public class ReviewFragment extends Fragment {
                         try{
                             JSONArray results = jsonObject.getJSONArray("results");
                             //Log.i(TAG, "Results" + results.toString());
-                            Reviews.addAll(GameReview.fromJSONArray(results));
+                            Reviews.addAll(GameReviewModel.fromJSONArray(results));
                             GameReviewAdapter.notifyDataSetChanged();
                             println("hello");
                             //Log.i(TAG, "Movies" + searchGame.size());

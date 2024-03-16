@@ -1,11 +1,11 @@
-package com.example.rebootapp;
+package com.example.rebootapp.Models;
 
-public class Friend {
+public class FriendModel {
     private String username;
     private String profilePicUrl;
     private String objectId;
 
-    public Friend(String username, String profilePicUrl, String objectId) {
+    public FriendModel(String username, String profilePicUrl, String objectId) {
         this.username = username;
         this.profilePicUrl = profilePicUrl;
         this.objectId = objectId;

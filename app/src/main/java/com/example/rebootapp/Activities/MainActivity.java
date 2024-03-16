@@ -1,4 +1,4 @@
-package com.example.rebootapp;
+package com.example.rebootapp.Activities;
 
 import android.content.Intent;
 import android.content.res.Resources;
@@ -19,6 +19,8 @@ import com.example.rebootapp.Fragments.HomeFragment;
 import com.example.rebootapp.Fragments.ReviewFragment;
 import com.example.rebootapp.Fragments.SearchFragment;
 import com.example.rebootapp.Fragments.ProfileFragment;
+import com.example.rebootapp.MovieModel;
+import com.example.rebootapp.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
@@ -29,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String NOW_PLAYING_URL = "https://api.rawg.io/api/games?key=63502b95db9f41c99bb3d0ecf77aa811";
     public static final String TAG = "MainActivity";
 
-    List<Movie> movie;
+    List<MovieModel> movie;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

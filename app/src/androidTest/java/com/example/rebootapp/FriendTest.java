@@ -2,8 +2,8 @@ package com.example.rebootapp;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+import com.example.rebootapp.Models.FriendModel;
 import com.parse.GetCallback;
-import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseQuery;
@@ -34,7 +34,7 @@ public class FriendTest {
                 String username = parseUser.getString("username");
                 ParseFile img = parseUser.getParseFile("profile_pic");
                 String img_url = img.getUrl().toString();
-                Friend f = new Friend(username, bio, img_url);
+                FriendModel f = new FriendModel(username, bio, img_url);
 
                 if (testString(f, test_usr) && testString(f, test_bio)   && testString(f, test_url)){
                     assertTrue(true);
@@ -46,7 +46,7 @@ public class FriendTest {
 
     }
 
-    public boolean testString(Friend f, String a){
+    public boolean testString(FriendModel f, String a){
         return f.getUsername().equals(a);
     }
 }

@@ -13,11 +13,12 @@ import java.util.List;
 
 @Parcel
 
-public class Movie {
+public class GameSearchModel {
 
 
     String title;
-    String overview;
+    String id;
+    String date;
     String posterPath;
     String backdropPath;
     Double voteAverage;
@@ -32,14 +33,17 @@ public class Movie {
 
 
 
-    public Movie() {}
+    public GameSearchModel() {}
 
-    public Movie(JSONObject movie) throws JSONException {
-        title = movie.getString("name");
-        String decName = movie.getString("metacritic");
+    public GameSearchModel(JSONObject game) throws JSONException {
+        Log.i("search", "searching");
+        title = game.getString("name");
+        Log.i("GameModel Name", title);
+        id = game.getString("id");
+        String decName = game.getString("metacritic");
         Log.i("name", decName);
-        overview = movie.getString("released");
-        posterPath = movie.getString("background_image");
+        date = game.getString("released");
+        posterPath = game.getString("background_image");
 
     }
 //
@@ -62,12 +66,12 @@ public class Movie {
 //        }
 //    }
 
-    public static List<Movie> fromJSONArray(JSONArray movieJSONArray) throws JSONException{
-        List<Movie> movies = new ArrayList<>();
-        for(int i =0; i < movieJSONArray.length(); i++){
-            movies.add(new Movie(movieJSONArray.getJSONObject(i)));
+    public static List<GameSearchModel> fromJSONArray(JSONArray gameJSONArray) throws JSONException{
+        List<GameSearchModel> games = new ArrayList<>();
+        for(int i =0; i < gameJSONArray.length(); i++){
+            games.add(new GameSearchModel(gameJSONArray.getJSONObject(i)));
         }
-        return movies;
+        return games;
     }
 
     public String getPosterPath() {
@@ -75,7 +79,7 @@ public class Movie {
     }
 
     public String getBackdropPath(){
-    return "https://image.tmdb.org/t/p/w342" + backdropPath;
+        return "https://image.tmdb.org/t/p/w342" + backdropPath;
     }
 
     public String getTitle() {
@@ -83,7 +87,9 @@ public class Movie {
     }
 
     public String getOverview() {
-        return overview;
+        return date;
     }
+
+    public String getID() {return id;}
 
 }

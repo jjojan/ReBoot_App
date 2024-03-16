@@ -1,6 +1,4 @@
-package com.example.rebootapp;
-
-
+package com.example.rebootapp.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,7 +9,8 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 
-import com.example.rebootapp.Adapters.WishListAdapter;
+import com.example.rebootapp.Adapters.FavoriteGamesAdapter;
+import com.example.rebootapp.R;
 import com.parse.FindCallback;
 import com.parse.ParseObject;
 import com.parse.ParseException;
@@ -21,31 +20,36 @@ import com.parse.ParseUser;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WishListActivity extends AppCompatActivity {
+public class FavoriteGamesActivity extends AppCompatActivity {
 
     RecyclerView games;
-    WishListAdapter wishListAdapter;
+    FavoriteGamesAdapter favoriteGamesAdapter;
     List<String> gamePhotoUris;
-    Button btn_WishList_Done; //Favorite
+    Button btn_Favorite_Done;
 
 
 
+    //assign XML components to their variables
+    //create new arrray list to store photo uris
+    //define favorite games adapter to format images
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_wishlist_games); //activity_favorite_game
+        setContentView(R.layout.activity_favorite_games);
 
-        games = findViewById(R.id.rv_wishlist_list); //fix this
+        games = findViewById(R.id.rv_games_list);
         games.setLayoutManager(new GridLayoutManager(this, 3));
-        btn_WishList_Done = findViewById(R.id.btn_WishList_Done);
+        btn_Favorite_Done = findViewById(R.id.btn_Favorite_Done);
 
         gamePhotoUris = new ArrayList<>();
-        wishListAdapter = new WishListAdapter(gamePhotoUris);
+        favoriteGamesAdapter = new FavoriteGamesAdapter(gamePhotoUris);
 
-        games.setAdapter(wishListAdapter);
+        games.setAdapter(favoriteGamesAdapter);
+
+//        fillPhotos();
 
 
-        btn_WishList_Done.setOnClickListener(new View.OnClickListener() {
+        btn_Favorite_Done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
@@ -54,12 +58,15 @@ public class WishListActivity extends AppCompatActivity {
 
     }
 
+    //Query to Parse database to identify the favorites of the current user
+    //"gamesQuery" is a ParseQuery object that is used to request info
     public void fillPhotos(){
-        ParseQuery<ParseObject> gamesQuery = ParseQuery.getQuery("WishListGames");
+        ParseQuery<ParseObject> gamesQuery = ParseQuery.getQuery("FavoriteGames");
         ParseUser currentUser = ParseUser.getCurrentUser();
         String currentUserID = currentUser.getObjectId();
         gamesQuery.whereEqualTo("user_id", currentUserID);
 
+        //Adds images of favorites to ArrayList of photo uris defined earlier
         gamesQuery.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> objects, ParseException e) {
@@ -70,7 +77,7 @@ public class WishListActivity extends AppCompatActivity {
                             gamePhotoUris.add(uri);
                         }
                     }
-                    wishListAdapter.notifyDataSetChanged();
+                    favoriteGamesAdapter.notifyDataSetChanged();
 
                 }
                 else{

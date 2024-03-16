@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.codepath.asynchttpclient.AsyncHttpClient;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
-import com.example.rebootapp.GameDetailsActivity;
+import com.example.rebootapp.Activities.GameDetailsActivity;
 import com.example.rebootapp.GameModel;
 import com.example.rebootapp.R;
 import com.parse.GetCallback;

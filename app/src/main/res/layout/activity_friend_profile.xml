@@ -7,7 +7,7 @@
     android:layout_alignParentBottom="false"
     android:background="@color/white"
     android:visibility="visible"
-    tools:context=".FriendProfileActivity">
+    tools:context=".Activities.FriendProfileActivity">
 
     <!-- TODO: Update blank fragment layout -->
 

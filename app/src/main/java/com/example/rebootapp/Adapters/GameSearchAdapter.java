@@ -14,8 +14,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.rebootapp.GameSearch;
-import com.example.rebootapp.GameSearchDetailsActivity;
+import com.example.rebootapp.GameSearchModel;
+import com.example.rebootapp.Activities.GameSearchDetailsActivity;
 import com.example.rebootapp.R;
 
 import org.parceler.Parcels;
@@ -25,9 +25,9 @@ import java.util.List;
 public class GameSearchAdapter extends RecyclerView.Adapter<GameSearchAdapter.ViewHolder> {
 
     Context context;
-    List<GameSearch> games;
+    List<GameSearchModel> games;
 
-    public GameSearchAdapter(Context context, List<GameSearch> games){
+    public GameSearchAdapter(Context context, List<GameSearchModel> games){
         this.context = context;
         this.games = games;
     }
@@ -41,7 +41,7 @@ public class GameSearchAdapter extends RecyclerView.Adapter<GameSearchAdapter.Vi
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        GameSearch game = games.get(position);
+        GameSearchModel game = games.get(position);
         holder.bind(game);
     }
 
@@ -64,7 +64,7 @@ public class GameSearchAdapter extends RecyclerView.Adapter<GameSearchAdapter.Vi
             tvPoster = itemView.findViewById(R.id.gamePoster);
         }
 
-        public void bind(GameSearch game) {
+        public void bind(GameSearchModel game) {
             String date = game.getOverview();
             String[] arrOfStr = date.split("-", 2);
             tvTitle.setText(game.getTitle());
@@ -92,7 +92,7 @@ public class GameSearchAdapter extends RecyclerView.Adapter<GameSearchAdapter.Vi
                 public void onClick(View v) {
                     Intent intent = new Intent(context, GameSearchDetailsActivity.class);
 
-                    intent.putExtra(GameSearch.class.getSimpleName(), Parcels.wrap(game));
+                    intent.putExtra(GameSearchModel.class.getSimpleName(), Parcels.wrap(game));
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
                     context.startActivity(intent);
@@ -105,11 +105,11 @@ public class GameSearchAdapter extends RecyclerView.Adapter<GameSearchAdapter.Vi
 
             if (position != RecyclerView.NO_POSITION) {
 
-                GameSearch game = games.get(position);
+                GameSearchModel game = games.get(position);
 
                 Intent intent = new Intent(context, GameSearchDetailsActivity.class);
 
-                intent.putExtra(GameSearch.class.getSimpleName(), Parcels.wrap(game));
+                intent.putExtra(GameSearchModel.class.getSimpleName(), Parcels.wrap(game));
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
                 context.startActivity(intent);

@@ -14,10 +14,10 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.rebootapp.GameReview;
-import com.example.rebootapp.GameReviewDetailsActivity;
+import com.example.rebootapp.GameReviewModel;
+import com.example.rebootapp.Activities.GameReviewDetailsActivity;
 import com.example.rebootapp.R;
-import com.example.rebootapp.ReviewActivity;
+import com.example.rebootapp.Activities.ReviewActivity;
 
 import org.parceler.Parcels;
 
@@ -26,9 +26,9 @@ import java.util.List;
 public class GameReviewAdapter extends RecyclerView.Adapter<GameReviewAdapter.ViewHolder> {
 
     Context context;
-    List<GameReview> reviews;
+    List<GameReviewModel> reviews;
 
-    public GameReviewAdapter(Context context, List<GameReview> reviews){
+    public GameReviewAdapter(Context context, List<GameReviewModel> reviews){
         this.context = context;
         this.reviews = reviews;
     }
@@ -42,7 +42,7 @@ public class GameReviewAdapter extends RecyclerView.Adapter<GameReviewAdapter.Vi
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        GameReview review = reviews.get(position);
+        GameReviewModel review = reviews.get(position);
         holder.bind(review);
     }
 
@@ -66,7 +66,7 @@ public class GameReviewAdapter extends RecyclerView.Adapter<GameReviewAdapter.Vi
 
         }
 
-        public void bind(GameReview review) {
+        public void bind(GameReviewModel review) {
             String id = review.getId();
             String date = review.getOverview();
             String[] arrOfStr = date.split("-", 2);
@@ -97,7 +97,7 @@ public class GameReviewAdapter extends RecyclerView.Adapter<GameReviewAdapter.Vi
                     //GameReview game = reviews.get(position);
                     Intent intent = new Intent(context, ReviewActivity.class);
 
-                    intent.putExtra(GameReview.class.getSimpleName(), Parcels.wrap(review));
+                    intent.putExtra(GameReviewModel.class.getSimpleName(), Parcels.wrap(review));
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
                     context.startActivity(intent);
@@ -110,11 +110,11 @@ public class GameReviewAdapter extends RecyclerView.Adapter<GameReviewAdapter.Vi
 
             if (position != RecyclerView.NO_POSITION) {
 
-                GameReview game = reviews.get(position); //?
+                GameReviewModel game = reviews.get(position); //?
 
                 Intent intent = new Intent(context, GameReviewDetailsActivity.class);
 
-                intent.putExtra(GameReview.class.getSimpleName(), Parcels.wrap(game));
+                intent.putExtra(GameReviewModel.class.getSimpleName(), Parcels.wrap(game));
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
                 context.startActivity(intent);

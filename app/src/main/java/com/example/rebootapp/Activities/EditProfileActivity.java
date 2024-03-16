@@ -1,4 +1,4 @@
-package com.example.rebootapp;
+package com.example.rebootapp.Activities;
 
 import android.app.Activity;
 import android.content.ContentValues;
@@ -31,6 +31,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 
+import com.example.rebootapp.R;
 import com.parse.CountCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;

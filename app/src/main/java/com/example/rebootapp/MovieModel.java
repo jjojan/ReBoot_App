@@ -1,4 +1,4 @@
-package com.example.rebootapp.Adapters;
+package com.example.rebootapp;
 
 
 import android.util.Log;
@@ -13,12 +13,10 @@ import java.util.List;
 
 @Parcel
 
-public class GameModel {
+public class MovieModel {
 
 
     String title;
-    String id;
-
     String overview;
     String posterPath;
     String backdropPath;
@@ -33,18 +31,16 @@ public class GameModel {
 
 
 
-    // no-arg, empty constructor required for Parceler
-    public GameModel() {}
 
-    public GameModel(JSONObject game) throws JSONException {
-        title = game.getString("name");
-        id = game.getString("id");
-        String decName = game.getString("metacritic");
+    public MovieModel() {}
+
+    public MovieModel(JSONObject movie) throws JSONException {
+        title = movie.getString("name");
+        String decName = movie.getString("metacritic");
         Log.i("name", decName);
-        overview = game.getString("released");
-        posterPath = game.getString("background_image");
-//        backdropPath = movie.getString("backdrop_path");
-//        voteAverage = movie.getDouble("vote_average");
+        overview = movie.getString("released");
+        posterPath = movie.getString("background_image");
+
     }
 //
 //    public Movie(JSONObject jsonObject){
@@ -66,12 +62,12 @@ public class GameModel {
 //        }
 //    }
 
-    public static List<GameModel> fromJSONArray(JSONArray gameJSONArray) throws JSONException{
-        List<GameModel> gameModels = new ArrayList<>();
-        for(int i =0; i < gameJSONArray.length(); i++){
-            gameModels.add(new GameModel(gameJSONArray.getJSONObject(i)));
+    public static List<MovieModel> fromJSONArray(JSONArray movieJSONArray) throws JSONException{
+        List<MovieModel> movies = new ArrayList<>();
+        for(int i =0; i < movieJSONArray.length(); i++){
+            movies.add(new MovieModel(movieJSONArray.getJSONObject(i)));
         }
-        return gameModels;
+        return movies;
     }
 
     public String getPosterPath() {
@@ -79,7 +75,7 @@ public class GameModel {
     }
 
     public String getBackdropPath(){
-        return "https://image.tmdb.org/t/p/w342" + backdropPath;
+    return "https://image.tmdb.org/t/p/w342" + backdropPath;
     }
 
     public String getTitle() {
@@ -89,7 +85,5 @@ public class GameModel {
     public String getOverview() {
         return overview;
     }
-
-    public String getID() { return id; }
 
 }

@@ -14,6 +14,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.rebootapp.Activities.SignUpActivity;
+import com.example.rebootapp.Activities.SplashScreenActivity;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -25,7 +27,7 @@ import com.parse.ParseException;
 import com.parse.ParseUser;
 
 
-public class Login extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity {
     GoogleSignInOptions gso;
     GoogleSignInClient gsc;
     ImageView googleImage;
@@ -91,7 +93,7 @@ public class Login extends AppCompatActivity {
         btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Login.this, SignUp.class);
+                Intent intent = new Intent(LoginActivity.this, SignUpActivity.class);
                 startActivity(intent);
             }
 
@@ -142,7 +144,7 @@ public class Login extends AppCompatActivity {
                     //System.out.println(e.toString());
                 }
                 navigateToHomePage();
-                Toast.makeText(Login.this, "Sucess", Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginActivity.this, "Sucess", Toast.LENGTH_SHORT).show();
             }
         });
         return true;
@@ -182,7 +184,7 @@ public class Login extends AppCompatActivity {
 
     void navigateToHomePage(){
         finish();
-        Intent intent = new Intent(Login.this, SplashScreenActivity.class);
+        Intent intent = new Intent(LoginActivity.this, SplashScreenActivity.class);
         startActivity(intent);
     }
 

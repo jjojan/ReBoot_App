@@ -12,7 +12,7 @@ import java.util.List;
 
 @Parcel
 
-public class GameReview {
+public class GameReviewModel {
     String title;
     String id;
     String date;
@@ -22,10 +22,10 @@ public class GameReview {
 
 
 
-    public GameReview() {}
+    public GameReviewModel() {}
 
 
-    public GameReview(JSONObject game) throws JSONException {
+    public GameReviewModel(JSONObject game) throws JSONException {
         Log.i("search", "searching");
         title = game.getString("name");
         Log.i("GameModel Name", title);
@@ -38,10 +38,10 @@ public class GameReview {
 
     }
 
-    public static List<GameReview> fromJSONArray(JSONArray gameJSONArray) throws JSONException{
-        List<GameReview> reviews = new ArrayList<>();
+    public static List<GameReviewModel> fromJSONArray(JSONArray gameJSONArray) throws JSONException{
+        List<GameReviewModel> reviews = new ArrayList<>();
         for(int i =0; i < gameJSONArray.length(); i++){
-            reviews.add(new GameReview(gameJSONArray.getJSONObject(i)));
+            reviews.add(new GameReviewModel(gameJSONArray.getJSONObject(i)));
         }
         return reviews;
     }

@@ -1,4 +1,4 @@
-package com.example.rebootapp.Adapters;
+package com.example.rebootapp.Models;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package com.example.rebootapp;
+package com.example.rebootapp.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -18,6 +18,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.rebootapp.Adapters.FavoriteGamesAdapter;
 import com.example.rebootapp.Adapters.FriendsListAdapter;
+import com.example.rebootapp.Models.FriendModel;
+import com.example.rebootapp.R;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseObject;
@@ -42,7 +44,7 @@ public class FriendProfileActivity extends AppCompatActivity {
     //RecyclerView for Favorite Games
     RecyclerView friendFavoritesRv, friendsRV;
     List<String> friendFavoritesUris;
-    List<Friend> friendsList = new ArrayList<>();
+    List<FriendModel> friendsList = new ArrayList<>();
     FavoriteGamesAdapter friendFavoritesAdapter;
     FriendsListAdapter friendsListAdapter;
 
@@ -171,12 +173,12 @@ public class FriendProfileActivity extends AppCompatActivity {
                 if (friendIds == null || friendIds.isEmpty()) {
                     runOnUiThread(() -> {
                         System.out.println("empty or null");
-                        friendsListAdapter.updateData(new ArrayList<Friend>());
+                        friendsListAdapter.updateData(new ArrayList<FriendModel>());
                     });
                     return;
                 }
 
-                List<Friend> fetchedFriends = new ArrayList<>();
+                List<FriendModel> fetchedFriends = new ArrayList<>();
                 AtomicInteger counter = new AtomicInteger(friendIds.size());
 
                 for (String friendId : friendIds) {
@@ -187,7 +189,7 @@ public class FriendProfileActivity extends AppCompatActivity {
                             String username = friend.getString("username");
                             ParseFile profilePic = friend.getParseFile("profile_pic");
                             String profilePicUrl = profilePic != null ? profilePic.getUrl() : null;
-                            fetchedFriends.add(new Friend(username, profilePicUrl, id));
+                            fetchedFriends.add(new FriendModel(username, profilePicUrl, id));
                         } else {
                             Log.e("fetchFriends", "Error fetching friend data: " + e2.getMessage(), e2);
                         }

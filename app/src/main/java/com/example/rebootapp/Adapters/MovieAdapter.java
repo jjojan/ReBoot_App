@@ -14,8 +14,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.rebootapp.GameDetailsActivity;
-import com.example.rebootapp.Movie;
+import com.example.rebootapp.Activities.GameDetailsActivity;
+import com.example.rebootapp.MovieModel;
 import com.example.rebootapp.R;
 
 import org.parceler.Parcels;
@@ -25,9 +25,9 @@ import java.util.List;
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> {
 
     Context context;
-    List<Movie> movies;
+    List<MovieModel> movies;
 
-    public MovieAdapter(Context context, List<Movie> movies){
+    public MovieAdapter(Context context, List<MovieModel> movies){
         this.context = context;
         this.movies = movies;
     }
@@ -41,7 +41,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Movie movie = movies.get(position);
+        MovieModel movie = movies.get(position);
         holder.bind(movie);
     }
 
@@ -62,7 +62,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
             tvPoster = itemView.findViewById(R.id.gamePoster);
         }
 
-        public void bind(Movie movie) {
+        public void bind(MovieModel movie) {
             tvTitle.setText(movie.getTitle());
             tvOverview.setText(movie.getOverview());
             String imageUrl;
@@ -88,7 +88,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
                 public void onClick(View v) {
                     Intent intent = new Intent(context, GameDetailsActivity.class);
 
-                    intent.putExtra(Movie.class.getSimpleName(), Parcels.wrap(movie));
+                    intent.putExtra(MovieModel.class.getSimpleName(), Parcels.wrap(movie));
 
                     context.startActivity(intent);
                 }
@@ -100,11 +100,11 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
 
             if (position != RecyclerView.NO_POSITION) {
 
-                Movie movie = movies.get(position);
+                MovieModel movie = movies.get(position);
 
                 Intent intent = new Intent(context, GameDetailsActivity.class);
 
-                intent.putExtra(Movie.class.getSimpleName(), Parcels.wrap(movie));
+                intent.putExtra(MovieModel.class.getSimpleName(), Parcels.wrap(movie));
 
                 context.startActivity(intent);
             }

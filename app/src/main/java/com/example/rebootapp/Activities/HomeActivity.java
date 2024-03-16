@@ -1,9 +1,11 @@
-package com.example.rebootapp;
+package com.example.rebootapp.Activities;
 
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.rebootapp.GameModel;
 
 import java.util.List;
 

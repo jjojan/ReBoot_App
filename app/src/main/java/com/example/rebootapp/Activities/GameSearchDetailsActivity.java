@@ -1,4 +1,4 @@
-package com.example.rebootapp;
+package com.example.rebootapp.Activities;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -14,6 +14,9 @@ import com.bumptech.glide.Glide;
 import com.codepath.asynchttpclient.AsyncHttpClient;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 import com.colormoon.readmoretextview.ReadMoreTextView;
+import com.example.rebootapp.GameModel;
+import com.example.rebootapp.GameSearchModel;
+import com.example.rebootapp.R;
 import com.parse.CountCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
@@ -32,7 +35,7 @@ import okhttp3.Headers;
 
 public class GameSearchDetailsActivity extends AppCompatActivity {
 
-    GameSearch movie;
+    GameSearchModel movie;
 
     List<GameModel> game;
 
@@ -62,7 +65,7 @@ public class GameSearchDetailsActivity extends AppCompatActivity {
         tvDesc = findViewById(R.id.tvDesc);
 
 
-        movie = (GameSearch) Parcels.unwrap(getIntent().getParcelableExtra(GameSearch.class.getSimpleName()));
+        movie = (GameSearchModel) Parcels.unwrap(getIntent().getParcelableExtra(GameSearchModel.class.getSimpleName()));
         Log.d("MovieDetailsActivity", String.format("Showing details for '%s'", movie.getTitle()));
 
         tvTitle.setText(movie.getTitle());
