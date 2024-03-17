@@ -7,7 +7,7 @@
     android:layout_alignParentBottom="false"
     android:background="@color/white"
     android:visibility="visible"
-    tools:context=".FavoriteGamesActivity">
+    tools:context=".Activities.FavoriteGamesActivity">
 
     <TextView
         android:id="@+id/tv_favoriteTitle"

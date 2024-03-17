@@ -7,11 +7,8 @@
     android:layout_alignParentBottom="false"
     android:background="@color/white"
     android:visibility="visible"
-    tools:context=".FriendProfileActivity">
+    tools:context=".Activities.FriendProfileActivity">
 
-    <!-- TODO: Update blank fragment layout -->
-
-    <!--  -->
 
     <!-- Profile Picture -->
     <ImageView
@@ -34,7 +31,7 @@
         android:layout_marginTop="100dp"
         android:textAlignment="textStart"
         android:textSize="20sp" />
-    <!-- Email (not in friend profile) -->
+    <!-- Email (not in friendModel profile) -->
     <TextView
         android:id="@+id/tvFriend_Email"
         android:layout_width="219dp"
@@ -104,7 +101,7 @@
         android:layout_marginLeft="13dp"
         android:textSize="30sp" />
 
-    <!-- Button Link to favorite games -->
+    <!-- Button Link to favorite customListGameModels -->
     <ImageButton
         android:id="@+id/friend_Starred"
         android:layout_width="50dp"
@@ -168,14 +165,5 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="50dp"
         android:text="Done" />
-
-    <Button
-        android:id="@+id/messageButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/Friend_ProfilePic"
-        android:layout_marginBottom="-587dp"
-        android:text="Message" />
-
 
 </RelativeLayout>

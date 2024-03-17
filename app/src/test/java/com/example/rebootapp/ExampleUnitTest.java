@@ -4,6 +4,8 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
+import com.example.rebootapp.Activities.SignUpActivity;
+
 /**
  * Example local unit test, which will execute on the development machine (host).
  *
@@ -16,7 +18,7 @@ public class ExampleUnitTest {
     }
 
     public void loginTest() {
-        Login test = new Login();
+        LoginActivity test = new LoginActivity();
         boolean result = test.logInManual("default@gmail.com", "12345");
         assertEquals(true, result);
     }
@@ -24,7 +26,7 @@ public class ExampleUnitTest {
     class EmailValidatorTest {
         @Test
         public void emailValidator_CorrectEmailSimple_ReturnsTrue() {
-            boolean result = SignUp.isValidEmail("name@email.com");
+            boolean result = SignUpActivity.isValidEmail("name@email.com");
             assertEquals(true, result);
         }
     }

@@ -5,8 +5,8 @@ import org.junit.Test;
 import androidx.test.platform.app.InstrumentationRegistry;
 import static org.junit.Assert.*;
 
-import com.example.rebootapp.ListFiles.GameListAdapter;
-import com.example.rebootapp.ListFiles.UserListModel;
+import com.example.rebootapp.Adapters.GameListAdapter;
+import com.example.rebootapp.Models.UserListModel;
 
 public class CustomListTest {
 

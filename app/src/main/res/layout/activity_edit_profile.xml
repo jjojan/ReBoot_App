@@ -7,7 +7,7 @@
     android:layout_alignParentBottom="false"
     android:background="@color/white"
     android:visibility="visible"
-    tools:context=".EditProfileActivity">
+    tools:context=".Activities.EditProfileActivity">
 
     <EditText
         android:id="@+id/et_editUsername"

@@ -7,7 +7,7 @@
     android:layout_alignParentBottom="false"
     android:background="@color/white"
     android:visibility="visible"
-    tools:context=".ListFiles.ProfileFragment">
+    tools:context=".Fragments.ProfileFragment">
 
     <!-- TODO: Update blank fragment layout -->
 
