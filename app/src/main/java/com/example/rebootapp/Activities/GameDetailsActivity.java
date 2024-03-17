@@ -1,17 +1,16 @@
 package com.example.rebootapp.Activities;
 
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RatingBar;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -25,11 +24,12 @@ import com.bumptech.glide.Glide;
 import com.codepath.asynchttpclient.AsyncHttpClient;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 import com.example.rebootapp.Adapters.ReviewAdapter;
-import com.example.rebootapp.Models.UserListModel;
 import com.example.rebootapp.Adapters.UserListNamesAdapter;
 import com.example.rebootapp.GameModel;
+import com.example.rebootapp.Models.ReviewModel;
+import com.example.rebootapp.Models.UserListModel;
 import com.example.rebootapp.R;
-import com.example.rebootapp.Utilities.ExpandableTextView;
+import com.example.rebootapp.databinding.ActivityGameDetailsBinding;
 import com.parse.CountCallback;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
@@ -48,14 +48,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.Headers;
-
 public class GameDetailsActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
-
+    ActivityGameDetailsBinding binding;
     GameModel movie;
 
-    List<GameModel> game;
+    List<GameModel> gameModel;
 
-    List<ParseObject> adapterObjects;
 
     // the view objects
     TextView tvTitle;
@@ -66,22 +64,17 @@ public class GameDetailsActivity extends AppCompatActivity implements AdapterVie
 
     ImageButton reviewButton;
 
-    String UserID;
+    String currentUserID;
 
-    String Username;
+    String userName;
 
-    String tempID;
+    String gameID;
 
     RecyclerView recyclerView;
 
 
     //Previous Type: ReadMoreTextView
     TextView tvDesc;
-    ExpandableTextView expTV;
-    //ImageView expandCollapse;
-    int saveFavoriteQueue = 0;
-
-    public Spinner spinnerTextSize;
 
     ImageView enter;
 
@@ -91,9 +84,9 @@ public class GameDetailsActivity extends AppCompatActivity implements AdapterVie
     protected void onCreate(Bundle savedInstanceState) {
 
 
-
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_game_details);
+        binding=ActivityGameDetailsBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         tvTitle = (TextView) findViewById(R.id.tvTitle);
         tvOverview = (TextView) findViewById(R.id.tvOverview);
@@ -107,24 +100,21 @@ public class GameDetailsActivity extends AppCompatActivity implements AdapterVie
         enter = findViewById(R.id.add);
 
 
-        showWriteReview();
-
 
 
 
         movie = (GameModel) Parcels.unwrap(getIntent().getParcelableExtra(GameModel.class.getSimpleName()));
         Log.d("MovieDetailsActivity", String.format("Showing details for '%s'", movie.getTitle()));
         Log.i("MARDUK",
-                "Tıtle: "+movie.getTitle()+"\nOverView: "+movie.getOverview()+"\n ID: "+movie.getID()+
-                        "\nBackgropPath: "+movie.getBackdropPath()+
-                        "\nPosterPath: "+movie.getPosterPath()+"\nVote: "+movie.getVoteAverage());
-        tempID = movie.getID();
-        displayReviews();
+                "Tıtle: " + movie.getTitle() + "\nOverView: " + movie.getOverview() + "\n ID: " + movie.getID() +
+                        "\nBackgropPath: " + movie.getBackdropPath() +
+                        "\nPosterPath: " + movie.getPosterPath() + "\nVote: " + movie.getVoteAverage());
+        gameID = movie.getID();
         tvTitle.setText(movie.getTitle());
         tvOverview.setText(movie.getOverview());
 
 
-//        float voteAverage = movie.getVoteAverage().floatValue();
+//        float voteAverage = movieModel.getVoteAverage().floatValue();
 //        rbVoteAverage.setRating(voteAverage / 2.0f);
 
         ivPoster = (ImageView) findViewById(R.id.ivPoster);
@@ -134,22 +124,40 @@ public class GameDetailsActivity extends AppCompatActivity implements AdapterVie
                 .error(R.drawable.flicks_movie_placeholder)
                 .into(ivPoster);
 
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        currentUserID = currentUser.getObjectId();
+
+        // Create a query for the _User table
+        ParseQuery<ParseUser> query = ParseUser.getQuery();
+
+        // Filter the query to find the user with a specific objectId
+        query.whereEqualTo("objectId", currentUserID);
+
+        // Execute the query and get the result
+        query.getFirstInBackground(new GetCallback<ParseUser>() {
+            @Override
+            public void done(ParseUser user, ParseException e) {
+                if (e == null) {
+                    // User found, get the username
+                    userName = user.getUsername();
+                    // Use the username (e.g., display it in a TextView)
+                    Log.d("userName", "userName: " + userName);
+                } else {
+                    // An error occurred, log the error message
+                    Log.e("ParseError", "User not found: " + e.getMessage());
+                }
+            }
+        });
 
 
-
-        Log.i("id", tempID);
-        GAME_URL = GAME_URL + tempID + "?key=63502b95db9f41c99bb3d0ecf77aa811";
+        Log.i("id", gameID);
+        GAME_URL = GAME_URL + gameID + "?key=63502b95db9f41c99bb3d0ecf77aa811";
         Log.i("id", GAME_URL);
         String favPath = movie.getPosterPath();
 
-        ParseUser currentUser = ParseUser.getCurrentUser();
-        String currentUserID = currentUser.getObjectId();
-
-
         AsyncHttpClient client = new AsyncHttpClient();
 
-
-        client.get(GAME_URL , new JsonHttpResponseHandler() {
+        client.get(GAME_URL, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Headers headers, JSON json) {
                 Log.d("sucess", "");
@@ -159,17 +167,16 @@ public class GameDetailsActivity extends AppCompatActivity implements AdapterVie
                     tvDesc.setText(jsonObject.getString("description_raw"));
 
 
-
                 } catch (JSONException e) {
                     throw new RuntimeException(e);
                 }
-                try{
+                try {
                     JSONArray results = jsonObject.getJSONArray("results");
                     Log.i("RETURN results", "Results" + results.toString());
-                    game.addAll(GameModel.fromJSONArray(results));
-                    Log.i("return list", "Movies" + game.toString());
+                    gameModel.addAll(GameModel.fromJSONArray(results));
+                    Log.i("return list", "Movies" + gameModel.toString());
 
-                } catch(JSONException e){
+                } catch (JSONException e) {
                     Log.e("error", "hit json expception", e);
                 }
             }
@@ -180,62 +187,70 @@ public class GameDetailsActivity extends AppCompatActivity implements AdapterVie
             }
         });
 
+        checkMovieID(currentUserID, gameID, isEmpty -> heartButton.setChecked(!isEmpty));
 
-
-
-        checkMovieID(currentUserID, tempID, new QueryCheckCallback() {
-            @Override
-            public void onResult(boolean isEmpty) {
-                heartButton.setChecked(!isEmpty);
-            }
-        });
-
-        heartButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(heartButton.isChecked()){
-                    addFavoriteGame(currentUserID, tempID, favPath);
-                }
-                else{
-                    removeFavoriteGame(currentUserID, tempID);
-                }
-            }
-        });
-
-        /*expTV.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                expTV.getTrimLength();
-            }
-        });*/
-
-        enter.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                addToUserListDialog();
-//                String text = favPath;
-//                addListGame(currentUserID, tempID, favPath);
-
+        heartButton.setOnClickListener(v -> {
+            if (heartButton.isChecked()) {
+                addFavoriteGame(currentUserID, gameID, favPath);
+            } else {
+                removeFavoriteGame(currentUserID, gameID);
             }
         });
 
 
-
-
-
-
-        //spinnerTextSize = findViewById(R.id.spinnerTextSize);
-
-        //spinnerTextSize.setOnItemSelectedListener(this);
-
-       /* String[] textSizes = getResources().getStringArray(R.array.font_sizes);
-        ArrayAdapter adapter = new ArrayAdapter(this,
-                android.R.layout.simple_spinner_item, textSizes);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
-        spinnerTextSize.setAdapter(adapter);*/
+        enter.setOnClickListener(v -> {addToUserListDialog();});
+        binding.reviewButton.setOnClickListener(view -> checkIfUserReviewed(currentUserID,gameID));
+        fetchReviews();
 
 
     }
+    public void fetchReviews() {
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Review");
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> reviews, ParseException e) {
+                if (e == null) {
+                    ArrayList<ReviewModel> reviewList = new ArrayList<>();
+                    for (ParseObject reviewObject : reviews) {
+                        String reviewUser = reviewObject.getString("ReviewUser") != null ? reviewObject.getString("ReviewUser") : "";
+                        String reviewUserName = reviewObject.getString("ReviewUsername") != null
+                                ? reviewObject.getString("ReviewUsername") : "";
+                        String reviewText = reviewObject.getString("ReviewText") != null ? reviewObject.getString("ReviewText") : "";
+                        String gameID = reviewObject.getString("GameID") != null ? reviewObject.getString("GameID") : "";
+                        String objectId = reviewObject.getObjectId();
+                        boolean isShowOnlyFriends = reviewObject.getBoolean("isShowOnlyFriends");
+                        // Number to float conversion with null check
+                        float ratingStar = reviewObject.getNumber("ratingStar") != null ? reviewObject.getNumber("ratingStar").floatValue() : 0;
+                        int upCount = reviewObject.has("upCount") ? reviewObject.getInt("upCount") : 0;
+                        int downCount = reviewObject.has("downCount") ? reviewObject.getInt("downCount") : 0;
+                        ReviewModel review = new ReviewModel(
+                                reviewUser,
+                                reviewUserName,
+                                reviewText,
+                                gameID,
+                                objectId,
+                                reviewObject.getCreatedAt(),
+                                reviewObject.getUpdatedAt(),
+                                isShowOnlyFriends,
+                                ratingStar,
+                                upCount,
+                                downCount
+                        );
+
+                        reviewList.add(review);
+                    }
+                    ReviewAdapter reviewAdapter = new ReviewAdapter(GameDetailsActivity.this, reviewList);
+                    binding.rvReviews.setAdapter(reviewAdapter);
+                    binding.rvReviews.setLayoutManager(new LinearLayoutManager(GameDetailsActivity.this, LinearLayoutManager.HORIZONTAL, false));
+
+                } else {
+                    Log.e("fetchReviews", "Error: " + e.getMessage());
+                }
+            }
+        });
+
+    }
+
     public void addToUserListDialog() {
         // Inflate the custom layout using layout inflater
         LayoutInflater inflater = LayoutInflater.from(this);
@@ -248,9 +263,9 @@ public class GameDetailsActivity extends AppCompatActivity implements AdapterVie
         listDialog.setView(customView); // Set the custom view for the dialog
         AlertDialog userListDialogBuilder = listDialog.create();
 
-        Button btnAddNewList=customView.findViewById(R.id.btnNewList);
-        Button btnClose=customView.findViewById(R.id.btnClose);
-        RecyclerView recyclerView=customView.findViewById(R.id.recyclerView);
+        Button btnAddNewList = customView.findViewById(R.id.btnNewList);
+        Button btnClose = customView.findViewById(R.id.btnClose);
+        RecyclerView recyclerView = customView.findViewById(R.id.recyclerView);
         btnAddNewList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -261,50 +276,50 @@ public class GameDetailsActivity extends AppCompatActivity implements AdapterVie
         btnClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-            userListDialogBuilder.dismiss();
+                userListDialogBuilder.dismiss();
             }
         });
         ParseUser currentUser = ParseUser.getCurrentUser();
         String userId = currentUser.getObjectId();
-                ParseQuery<ParseObject> query = ParseQuery.getQuery("CustomUserList");
-                query.whereEqualTo("userID", userId);
-                query.findInBackground(new FindCallback<ParseObject>() {
-                    @Override
-                    public void done(List<ParseObject> customUserLists, ParseException e) {
-                        if (e == null) {
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("CustomUserList");
+        query.whereEqualTo("userID", userId);
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> customUserLists, ParseException e) {
+                if (e == null) {
 
-                            ArrayList<UserListModel> userListModelArrayList = new ArrayList<>();
-                            for (ParseObject object : customUserLists) {
-                                String listName = object.getString("listName");
-                                List<String> gameName = object.getList("gameName");
-                                List<String> gamePreviewLink = object.getList("gamePreviewLink");
-                                String userID = object.getString("userID");
-                                List<String> gameID = object.getList("gameID");
-                                String objectID = object.getObjectId();
+                    ArrayList<UserListModel> userListModelArrayList = new ArrayList<>();
+                    for (ParseObject object : customUserLists) {
+                        String listName = object.getString("listName");
+                        List<String> gameName = object.getList("gameName");
+                        List<String> gamePreviewLink = object.getList("gamePreviewLink");
+                        String userID = object.getString("userID");
+                        List<String> gameID = object.getList("gameID");
+                        String objectID = object.getObjectId();
 
 
-                                UserListModel model = new UserListModel(listName, gameName,
-                                        gamePreviewLink,gameID, userID, objectID);
-                                userListModelArrayList.add(model);
-                            }
-
-                            UserListNamesAdapter userListNamesAdapter=
-                                    new UserListNamesAdapter(GameDetailsActivity.this,
-                                            userListModelArrayList,movie.getID(),movie.getTitle()
-                                            ,movie.getPosterPath());
-                            recyclerView.setAdapter(userListNamesAdapter);
-                            recyclerView.setLayoutManager(new LinearLayoutManager(GameDetailsActivity.this));
-                        } else {
-
-                            Log.e("ParseError", "Error retrieving CustomUserList: " + e.getMessage());
-                        }
+                        UserListModel model = new UserListModel(listName, gameName,
+                                gamePreviewLink, gameID, userID, objectID);
+                        userListModelArrayList.add(model);
                     }
-                });
 
+                    UserListNamesAdapter userListNamesAdapter =
+                            new UserListNamesAdapter(GameDetailsActivity.this,
+                                    userListModelArrayList, movie.getID(), movie.getTitle()
+                                    , movie.getPosterPath());
+                    recyclerView.setAdapter(userListNamesAdapter);
+                    recyclerView.setLayoutManager(new LinearLayoutManager(GameDetailsActivity.this));
+                } else {
+
+                    Log.e("ParseError", "Error retrieving CustomUserList: " + e.getMessage());
+                }
+            }
+        });
 
 
         userListDialogBuilder.show();
     }
+
     public void createNewList() {
         // Inflate the custom layout using layout inflater
         LayoutInflater inflater = LayoutInflater.from(this);
@@ -315,10 +330,10 @@ public class GameDetailsActivity extends AppCompatActivity implements AdapterVie
                 new androidx.appcompat.view.ContextThemeWrapper(this, R.style.AlertDialogCustom));
 
         createNewListDialog.setView(customView); // Set the custom view for the dialog
-        EditText etListName= customView.findViewById(R.id.etListName);
+        EditText etListName = customView.findViewById(R.id.etListName);
         final AlertDialog createNewListBuilder = createNewListDialog.create();
 
-        Button btnAdd= customView.findViewById(R.id.btnAdd);
+        Button btnAdd = customView.findViewById(R.id.btnAdd);
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -357,7 +372,7 @@ public class GameDetailsActivity extends AppCompatActivity implements AdapterVie
                                         } else {
                                             createNewListBuilder.dismiss();
                                             Toast.makeText(GameDetailsActivity.this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                                            Log.i("YARDUK",e.getMessage().toString());
+                                            Log.i("YARDUK", e.getMessage().toString());
                                         }
                                     }
                                 });
@@ -379,11 +394,10 @@ public class GameDetailsActivity extends AppCompatActivity implements AdapterVie
         });
 
 
-
-
         createNewListBuilder.show();
     }
-    public void addFavoriteGame(String UserID, String gameID, String path){
+
+    public void addFavoriteGame(String UserID, String gameID, String path) {
         ParseObject object = new ParseObject("FavoriteGames");
         object.put("user_id", UserID);
         object.put("game_id", gameID);
@@ -392,105 +406,37 @@ public class GameDetailsActivity extends AppCompatActivity implements AdapterVie
 
     }
 
-    public void addListGame(String UserID, String gameID, String path){
-        ParseObject object = new ParseObject("ListGames");
-        object.put("user_id", UserID);
-        object.put("game_id", gameID);
-        object.put("picture_uri", path);
-        object.saveInBackground();
-
-    }
-
-    public void addReview(String UserID, String username, String reviewText){
-
-        ParseObject object = new ParseObject("Review");
-        object.put("ReviewUser", UserID);
-        object.put("ReviewUsername", username);
-        object.put("ReviewText", reviewText);
-        object.put("GameID", tempID);
-        object.saveInBackground();
-
-        addGame(tempID, object);
 
 
-
-    }
-
-
-
-    public void displayReviews(){
+    public void addGame(String GameID, ParseObject review) {
 
         try {
-            ParseQuery<ParseObject> query = ParseQuery.getQuery("Review");
-            Log.i("temp ID", tempID);
-            query.whereEqualTo("GameID", tempID);
-
-            query.findInBackground(new FindCallback<ParseObject>() {
-                @Override
-                public void done(List<ParseObject> objects, ParseException e) {
-                    if (e == null){
-
-
-//                        Log.i("review exists", objects.get(0).getString("ReviewText") + "size");
-                        int i = 0;
-
-                        recyclerView = (RecyclerView) findViewById(R.id.rvReviews);
-                        recyclerView.setLayoutManager(new LinearLayoutManager(GameDetailsActivity.this, LinearLayoutManager.HORIZONTAL, false));
-                        ReviewAdapter adapter = new ReviewAdapter(objects, GameDetailsActivity.this);
-                        Log.i("adapter rsult", adapter.toString());
-                        recyclerView.setAdapter(adapter);
-
-                        for (ParseObject item : objects) {
-                            Log.i("review exists", objects.get(i).getString("ReviewText") + "size");
-                            i += 1;
-                        }
-
-
-                    }
-                    else {
-                    }
-
-                }
-            });
-
-        }catch (Exception e){
-            System.out.println("Parse Error Getting Reviews");
-            Log.e("MYAPP", "exception", e);
-        }
-
-
-    }
-
-    public void addGame(String GameID, ParseObject review){
-
-        try {
-            ParseQuery<ParseObject> query = ParseQuery.getQuery("GameModel");
+            ParseQuery<ParseObject> query = ParseQuery.getQuery("CustomListGameModel");
             query.whereEqualTo("GameID", GameID);
             query.getFirstInBackground(new GetCallback<ParseObject>() {
                 @Override
                 public void done(ParseObject object, ParseException e) {
-                    if (e == null){
-                        Log.i("game exists", "arready exists");
+                    if (e == null) {
+                        Log.i("gameModel exists", "arready exists");
                         object.add("ReviewArray", review);
                         object.saveInBackground();
-                    }
-                    else {
-                        ParseObject game = new ParseObject("GameModel");
-                        game.put("GameID", tempID);
+                    } else {
+                        ParseObject game = new ParseObject("CustomListGameModel");
+                        game.put("GameID", gameID);
                         game.add("ReviewArray", review);
                         game.saveInBackground();
                     }
                 }
             });
 
-        }catch (Exception e){
+        } catch (Exception e) {
             System.out.println("Parse Error in Saving");
         }
 
 
     }
 
-    public void removeFavoriteGame(String UserID, String gameID){
+    public void removeFavoriteGame(String UserID, String gameID) {
         try {
             ParseQuery<ParseObject> query = ParseQuery.getQuery("FavoriteGames");
             query.whereEqualTo("user_id", UserID);
@@ -498,18 +444,18 @@ public class GameDetailsActivity extends AppCompatActivity implements AdapterVie
             query.getFirstInBackground(new GetCallback<ParseObject>() {
                 @Override
                 public void done(ParseObject object, ParseException e) {
-                    if (e == null){
+                    if (e == null) {
                         object.deleteInBackground();
-                    }
-                    else System.out.println("cannot find to delete");
+                    } else System.out.println("cannot find to delete");
                 }
             });
 
-        }catch (Exception e){
+        } catch (Exception e) {
             System.out.println("Parse Problem deleting");
         }
     }
-    public void checkMovieID(String userID, String gameID, QueryCheckCallback callback){
+
+    public void checkMovieID(String userID, String gameID, QueryCheckCallback callback) {
         try {
             ParseQuery<ParseObject> query = ParseQuery.getQuery("FavoriteGames");
             query.whereEqualTo("user_id", userID);
@@ -524,57 +470,111 @@ public class GameDetailsActivity extends AppCompatActivity implements AdapterVie
 
                 }
             });
-        } catch (Exception e){
+        } catch (Exception e) {
             System.out.println("Parse problem checking");
         }
 
     }
 
-    private void  showWriteReview(){
-        reviewButton.setOnClickListener(new View.OnClickListener() {
+
+    public void checkIfUserReviewed(String userId, String gameId) {
+        // Create a query for the Review table
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Review");
+        // Filter for reviews made by the current user for the specific game
+        query.whereEqualTo("ReviewUser", userId);
+        query.whereEqualTo("GameID", gameId);
+
+        // Execute the query
+        query.findInBackground(new FindCallback<ParseObject>() {
             @Override
-            public void onClick(View view) {
-
-                AlertDialog.Builder builder = new AlertDialog.Builder( GameDetailsActivity.this );
-                builder.setTitle("Write Review");
-                EditText etReview = new EditText(GameDetailsActivity.this);
-                builder.setView(etReview);
-
-                ParseUser currentUser = ParseUser.getCurrentUser();
-                String currentUserObjectID = currentUser.getObjectId();
-                ParseQuery<ParseObject> query = ParseQuery.getQuery("_User");
-
-                query.getInBackground(currentUserObjectID, new GetCallback<ParseObject>() {
-                    @Override
-                    public void done(ParseObject object, ParseException e) {
-                        if (e==null){
-                            UserID = object.getObjectId().toString();
-                            Username = object.getString("username");
-                            Log.i("userID", UserID);
-                            Log.i("userID", Username);
-                        }
-                    }
-                });
-
-                builder.setPositiveButton("Submit", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        String reviewText = etReview.getText().toString();
-                        addReview(UserID, Username, reviewText);
-                        Toast.makeText(GameDetailsActivity.this, "Review: " + reviewText, Toast.LENGTH_LONG).show();
-                    }
-                });
-
-                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.cancel();
-                    }
-                });
-
-                builder.show();
+            public void done(List<ParseObject> reviews, ParseException e) {
+                if (e == null && !reviews.isEmpty()) {
+                    // User has already reviewed this game, show the existing review with an option to delete
+                    ParseObject review = reviews.get(0); // Assuming there's only one review per user per game
+                    AlertDialog.Builder builder = new AlertDialog.Builder(GameDetailsActivity.this);
+                    builder.setTitle("Your Review");
+                    String reviewText = review.getString("ReviewText");
+                    builder.setMessage(reviewText);
+                    builder.setPositiveButton("Delete", (dialog, which) -> {
+                        // Delete the review
+                        review.deleteInBackground(e1 -> {
+                            if (e1 == null) {
+                                Toast.makeText(GameDetailsActivity.this, "Review deleted successfully.", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(GameDetailsActivity.this, "Failed to delete review: " + e1.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    });
+                    builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                } else if (e != null) {
+                    // An error occurred
+                    Log.e("checkIfUserReviewed", "Error: " + e.getMessage());
+                } else {
+                    // User has not reviewed this game, show the review dialog
+                    writeReview();
+                }
             }
         });
+    }
+
+
+    public void writeReview() {
+        // Inflate the custom layout using layout inflater
+        LayoutInflater inflater = LayoutInflater.from(this);
+        View customView = inflater.inflate(R.layout.dialog_write_review, null);
+
+        // Apply the custom style to the AlertDialog
+        AlertDialog.Builder reviewDialog = new AlertDialog.Builder(
+                new androidx.appcompat.view.ContextThemeWrapper(this, R.style.AlertDialogCustom));
+        AlertDialog reviewDialogBuilder = reviewDialog.create();
+        reviewDialogBuilder.setView(customView);
+        EditText etReview = customView.findViewById(R.id.etReview);
+        RatingBar ratingBar = customView.findViewById(R.id.ratingBar);
+        customView.findViewById(R.id.btnCancel).setOnClickListener(view -> reviewDialogBuilder.dismiss());
+        CheckBox chckBoxPrivate = customView.findViewById(R.id.chckBoxPrivate);
+        customView.findViewById(R.id.btnSave).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String strReview = etReview.getText().toString();
+                float floRating = ratingBar.getRating();
+                boolean isShowOnlyFriend = chckBoxPrivate.isChecked();
+                if (strReview.isEmpty()) {
+                    Toast.makeText(GameDetailsActivity.this, "Please write a review!", Toast.LENGTH_SHORT).show();
+                    return;
+                } else if (floRating == 0) {
+                    Toast.makeText(GameDetailsActivity.this, "Please select a review!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                // create new parse objecet
+                ParseObject review = new ParseObject("Review");
+                review.put("ReviewUser", currentUserID);
+                review.put("ReviewUsername", userName);
+                review.put("GameID", gameID);
+                review.put("ReviewText", strReview);
+                review.put("isShowOnlyFriends", isShowOnlyFriend);
+                review.put("ratingStar", floRating);
+
+
+                // save to DB
+                review.saveInBackground(e -> {
+                    if (e == null) {
+                        // succesful
+                        Toast.makeText(GameDetailsActivity.this, "Review saved successfully!", Toast.LENGTH_SHORT).show();
+                        reviewDialogBuilder.dismiss(); // close dialog
+                    } else {
+                        // Error
+                        Toast.makeText(GameDetailsActivity.this, "Error saving review: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                });
+
+            }
+        });
+        Toast.makeText(this, "Showing!", Toast.LENGTH_SHORT).show();
+
+        reviewDialogBuilder.show();
     }
 
     @Override
@@ -596,10 +596,7 @@ public class GameDetailsActivity extends AppCompatActivity implements AdapterVie
         super.onPause();
 
 
-
     }
-
-
 
 
 }

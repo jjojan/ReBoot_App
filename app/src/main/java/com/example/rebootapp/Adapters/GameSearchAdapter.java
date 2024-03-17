@@ -14,8 +14,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.rebootapp.GameSearchModel;
 import com.example.rebootapp.Activities.GameSearchDetailsActivity;
+import com.example.rebootapp.GameSearchModel;
 import com.example.rebootapp.R;
 
 import org.parceler.Parcels;

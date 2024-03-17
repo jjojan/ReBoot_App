@@ -43,7 +43,7 @@ public class MovieModel {
 
     }
 //
-//    public Movie(JSONObject jsonObject){
+//    public MovieModel(JSONObject jsonObject){
 //        try {
 ////            backdropPath = jsonObject.getString("backdrop_path");
 //            posterPath = jsonObject.getString("background_image");
@@ -63,11 +63,11 @@ public class MovieModel {
 //    }
 
     public static List<MovieModel> fromJSONArray(JSONArray movieJSONArray) throws JSONException{
-        List<MovieModel> movies = new ArrayList<>();
+        List<MovieModel> movieModels = new ArrayList<>();
         for(int i =0; i < movieJSONArray.length(); i++){
-            movies.add(new MovieModel(movieJSONArray.getJSONObject(i)));
+            movieModels.add(new MovieModel(movieJSONArray.getJSONObject(i)));
         }
-        return movies;
+        return movieModels;
     }
 
     public String getPosterPath() {
@@ -75,7 +75,7 @@ public class MovieModel {
     }
 
     public String getBackdropPath(){
-    return "https://image.tmdb.org/t/p/w342" + backdropPath;
+        return "https://image.tmdb.org/t/p/w342" + backdropPath;
     }
 
     public String getTitle() {

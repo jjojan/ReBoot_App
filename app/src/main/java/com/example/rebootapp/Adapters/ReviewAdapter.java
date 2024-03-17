@@ -1,71 +1,251 @@
 package com.example.rebootapp.Adapters;
 
+import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.rebootapp.Activities.GameDetailsActivity;
+import com.example.rebootapp.Models.ReviewModel;
 import com.example.rebootapp.R;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
-public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewViewHolder>{
+public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder> {
 
-    List<ParseObject> objects;
-    GameDetailsActivity activity;
-    View selectReview;
+    private Context context;
+    private ArrayList<ReviewModel> reviewList;
 
-    public ReviewAdapter(List<ParseObject> objects, GameDetailsActivity activity) {
-        this.objects=objects;
-        this.activity=activity;
+    // Constructor
+    public ReviewAdapter(Context context, ArrayList<ReviewModel> reviewList) {
+        this.context = context;
+        this.reviewList = reviewList;
     }
 
+    // ViewHolder class
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        public TextView tvUserName, tvReviewText, tvUp, tvDown,tvDate;
+        View view;
 
-    @Override
-    public ReviewViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View bankListLayout = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_review, null);
-        ReviewViewHolder bankListViewHolder = new ReviewViewHolder(bankListLayout);
-        return bankListViewHolder;
-    }
-
-    @Override
-    public void onBindViewHolder(ReviewViewHolder holder, int position) {
-        Log.i("pos", "" + objects.size());
-        Log.i("pos", "" + position);
-        Log.i("pos", "" +  objects.get(position).getString("ReviewUser"));
-
-
-        holder.tvUsername.setText(objects.get(position).getString("ReviewUsername"));
-        holder.tvReview.setText(objects.get(position).getString("ReviewText"));
-
-    }
-
-    @Override
-    public int getItemCount() {
-        return objects.size();
-    }
-
-    public class ReviewViewHolder extends RecyclerView.ViewHolder {
-        TextView tvUsername;
-        TextView tvReview;
-
-        public ReviewViewHolder(View itemView) {
+        public ViewHolder(View itemView) {
             super(itemView);
-            tvUsername = (TextView) itemView.findViewById(R.id.tvReviewUser);
-            tvReview = (TextView) itemView.findViewById(R.id.tvReviewText);
 
-
-
+            tvUserName = itemView.findViewById(R.id.tvUserName);
+            tvReviewText = itemView.findViewById(R.id.tvReviewText);
+            tvUp = itemView.findViewById(R.id.tvUp); // ID should be unique for "up" TextView, assuming tvUp as ID here
+            tvDown = itemView.findViewById(R.id.tvDown);
+            tvDate = itemView.findViewById(R.id.tvDate);
+            view=itemView.getRootView();
         }
     }
 
+    @Override
+    public ReviewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_review, parent, false);
+        return new ViewHolder(v);
+    }
+
+    @Override
+    public void onBindViewHolder(ReviewAdapter.ViewHolder holder, int position) {
+        ReviewModel review = reviewList.get(position);
+        // Assuming you have a way to get user's profile image, or use a default one
+
+        holder.tvUserName.setText(review.getRatingStar()+" "+review.getReviewUserName());
+        holder.tvReviewText.setText(review.getReviewText());
+        holder.tvUp.setText(review.getUpCount()+"");
+        holder.tvDown.setText(review.getDownCount()+"");
+        holder.tvDate.setText(formatDate(review.getUpdatedAt()));
+        holder.tvUp.setOnClickListener(view -> sendUpVote(position));
+        holder.tvDown.setOnClickListener(view -> sendDownVote(position));
+        holder.view.setOnClickListener(view -> showDialog(position));
+    }
+    private void sendUpVote(int position) {
+        // Query the Review table for the specific review using the objectId
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Review");
+        query.getInBackground(reviewList.get(position).getObjectId(), (review, e) -> {
+            if (e == null) {
+                // Successfully retrieved the review
+                // Try to get the voterArrayList with the correct type
+                List<Object> rawList = review.getList("voterArrayList");
+                ArrayList<HashMap<String, Object>> voterArrayList = new ArrayList<>();
+                if (rawList != null) {
+                    for (Object item : rawList) {
+                        if (item instanceof HashMap) {
+                            HashMap<String, Object> voterMap = (HashMap<String, Object>) item;
+                            voterArrayList.add(voterMap);
+                        }
+                    }
+                }
+                String currentUserId = ParseUser.getCurrentUser().getObjectId();
+                boolean hasVoted = false;
+
+                // Check if the current user has already voted
+                if (voterArrayList != null) {
+                    for (HashMap<String, Object> voter : voterArrayList) {
+                        String userID = (String) voter.get("userID");
+                        String gameVote = (String) voter.get("gameVote");
+                        if (userID != null && userID.equals(currentUserId)) {
+                            hasVoted = true;
+                            if ("-1".equals(gameVote)) {
+                                // User has previously downvoted, allow upvote
+                                int upCount = review.getInt("upCount");
+                                int downCount = review.getInt("downCount");
+                                review.put("upCount", upCount + 1);
+                                review.put("downCount", downCount - 1);
+                                review.saveInBackground();
+                                reviewList.get(position).setUpCount(upCount + 1);
+                                reviewList.get(position).setDownCount(downCount - 1);
+                                notifyDataSetChanged();
+                                Toast.makeText(context, "Upvote successful!", Toast.LENGTH_SHORT).show();
+                            } else {
+                                // User has already voted, show a toast message
+                                Toast.makeText(context, "You have already voted.", Toast.LENGTH_SHORT).show();
+                            }
+                            break;
+                        }
+                    }
+                }
+
+                if (!hasVoted) {
+                    // User hasn't voted yet, proceed with upvote
+                    int upCount = review.getInt("upCount");
+                    int downCount = review.getInt("downCount");
+                    review.put("upCount", upCount + 1);
+                    reviewList.get(position).setUpCount(upCount + 1);
+                    notifyDataSetChanged();
+                    // Add the user to the voterArrayList with an upvote
+                    if (voterArrayList == null) voterArrayList = new ArrayList<>();
+                    HashMap<String, Object> voteInfo = new HashMap<>();
+                    voteInfo.put("userID", currentUserId);
+                    voteInfo.put("gameVote", "+1");
+                    voterArrayList.add(voteInfo);
+                    review.put("voterArrayList", voterArrayList);
+                    review.saveInBackground(e1 -> {
+                        if (e1 == null) {
+                            Toast.makeText(context, "Upvote successful!", Toast.LENGTH_SHORT).show();
+                        } else {
+                            // Handle error
+                            Toast.makeText(context, "Error saving upvote: " + e1.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            } else {
+                // Error retrieving the review
+                Toast.makeText(context, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+    private void sendDownVote(int position) {
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Review");
+        query.getInBackground(reviewList.get(position).getObjectId(), (review, e) -> {
+            if (e == null) {
+                List<Object> rawList = review.getList("voterArrayList");
+                ArrayList<HashMap<String, Object>> voterArrayList = new ArrayList<>();
+                if (rawList != null) {
+                    for (Object item : rawList) {
+                        if (item instanceof HashMap) {
+                            voterArrayList.add((HashMap<String, Object>) item);
+                        }
+                    }
+                }
+                String currentUserId = ParseUser.getCurrentUser().getObjectId();
+                boolean hasVoted = false;
+
+                for (HashMap<String, Object> voter : voterArrayList) {
+                    String userID = (String) voter.get("userID");
+                    String gameVote = (String) voter.get("gameVote");
+                    if (userID != null && userID.equals(currentUserId)) {
+                        hasVoted = true;
+                        if ("+1".equals(gameVote)) {
+                            int upCount = review.getInt("upCount");
+                            int downCount = review.getInt("downCount");
+                            review.put("upCount", upCount - 1);
+                            review.put("downCount", downCount + 1);
+                            HashMap<String, Object> updatedVoteInfo = new HashMap<>();
+                            updatedVoteInfo.put("userID", currentUserId);
+                            updatedVoteInfo.put("gameVote", "-1");
+                            voterArrayList.remove(voter);
+                            voterArrayList.add(updatedVoteInfo);
+                            review.put("voterArrayList", voterArrayList);
+                            review.saveInBackground();
+                            reviewList.get(position).setUpCount(upCount - 1);
+                            reviewList.get(position).setDownCount(downCount + 1);
+                            notifyDataSetChanged();
+                            Toast.makeText(context, "Downvote successful!", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(context, "You have already voted.", Toast.LENGTH_SHORT).show();
+                        }
+                        break;
+                    }
+                }
+
+                if (!hasVoted) {
+                    int downCount = review.getInt("downCount");
+                    review.put("downCount", downCount + 1);
+                    HashMap<String, Object> newVoteInfo = new HashMap<>();
+                    newVoteInfo.put("userID", currentUserId);
+                    newVoteInfo.put("gameVote", "-1");
+                    voterArrayList.add(newVoteInfo);
+                    review.put("voterArrayList", voterArrayList);
+                    review.saveInBackground(e1 -> {
+                        if (e1 == null) {
+                            reviewList.get(position).setDownCount(downCount + 1);
+                            notifyDataSetChanged();
+                            Toast.makeText(context, "Downvote successful!", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(context, "Error saving downvote: " + e1.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            } else {
+                Toast.makeText(context, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+    private void showDialog(int position) {
+        ReviewModel review = reviewList.get(position);
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
+        dialogBuilder.setTitle(review.getReviewUserName());
+
+
+
+
+        String message = "Date: " + formatDate(review.getUpdatedAt()) + "\n" +
+                "Total Upvotes: " + review.getUpCount() + "\n" +
+                "Total Downvotes: " + review.getDownCount() + "\n" +
+                "Rating: " + review.getRatingStar() + "\n" +
+                "Comment: " + review.getReviewText();
+
+        dialogBuilder.setMessage(message);
+
+        dialogBuilder.setPositiveButton("OK", (dialog, which) -> dialog.dismiss());
+
+        AlertDialog dialog = dialogBuilder.create();
+        dialog.show();
+    }
+
+    public  String formatDate(Date date) {
+        // SimpleDateFormat kullanarak istenilen formatı belirle
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MMMM/yyyy HH:mm",Locale.getDefault());
+        return formatter.format(date);
+    }
+    @Override
+    public int getItemCount() {
+        return reviewList.size();
+    }
 }
-
-
-
-

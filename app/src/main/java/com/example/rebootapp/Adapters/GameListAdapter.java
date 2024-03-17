@@ -26,7 +26,7 @@ import java.util.List;
 
 public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHolder> {
 
-//    private ArrayList<UserListModel> userListModelArrayList;
+    //    private ArrayList<UserListModel> userListModelArrayList;
     private UserListModel userListModel;
     private LayoutInflater mInflater;
 
@@ -60,7 +60,7 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHo
 
 
                 new AlertDialog.Builder(mInflater.getContext())
-                        .setTitle("Delete Game")
+                        .setTitle("Delete CustomListGameModel")
                         .setMessage("Are you sure you want to delete this game from the list?")
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
@@ -91,7 +91,7 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHo
                                                     userListModel.getGameName().remove(position);
                                                     userListModel.getGamePreviewLink().remove(position);
                                                     notifyDataSetChanged();
-                                                    Toast.makeText(mInflater.getContext(), "Game successfully deleted from the list", Toast.LENGTH_SHORT).show();
+                                                    Toast.makeText(mInflater.getContext(), "CustomListGameModel successfully deleted from the list", Toast.LENGTH_SHORT).show();
                                                 } else {
 
                                                     Toast.makeText(mInflater.getContext(), "Error deleting game: " + e1.getMessage(), Toast.LENGTH_SHORT).show();

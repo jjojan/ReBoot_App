@@ -34,8 +34,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class FriendProfileActivity extends AppCompatActivity {
     Button done;
-
-    Button btn_message;
     ImageView profile_pic;
     TextView username, bio;
     ImageButton starred, friends, lists;
@@ -60,7 +58,6 @@ public class FriendProfileActivity extends AppCompatActivity {
         username = findViewById(R.id.tvFriend_Friend_Username);
         bio = findViewById(R.id.friend_bio);
         starred = findViewById(R.id.friend_Starred);
-        btn_message = findViewById(R.id.messageButton);
 
         //Friends Favorites
         friendFavoritesUris = new ArrayList<>();
@@ -118,14 +115,6 @@ public class FriendProfileActivity extends AppCompatActivity {
             }
         });
 
-        btn_message.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(FriendProfileActivity.this, FriendsMessageActivity.class);
-                FriendProfileActivity.this.startActivity(intent);
-            }
-        });
-
 
     }
 
@@ -178,7 +167,7 @@ public class FriendProfileActivity extends AppCompatActivity {
                     return;
                 }
 
-                List<FriendModel> fetchedFriends = new ArrayList<>();
+                List<FriendModel> fetchedFriendModels = new ArrayList<>();
                 AtomicInteger counter = new AtomicInteger(friendIds.size());
 
                 for (String friendId : friendIds) {
@@ -189,7 +178,7 @@ public class FriendProfileActivity extends AppCompatActivity {
                             String username = friend.getString("username");
                             ParseFile profilePic = friend.getParseFile("profile_pic");
                             String profilePicUrl = profilePic != null ? profilePic.getUrl() : null;
-                            fetchedFriends.add(new FriendModel(username, profilePicUrl, id));
+                            fetchedFriendModels.add(new FriendModel(username, profilePicUrl, id));
                         } else {
                             Log.e("fetchFriends", "Error fetching friend data: " + e2.getMessage(), e2);
                         }
@@ -197,7 +186,7 @@ public class FriendProfileActivity extends AppCompatActivity {
                         if (counter.decrementAndGet() == 0) {
                             runOnUiThread(() -> {
                                 System.out.println("Somehow got here?");
-                                friendsListAdapter.updateData(fetchedFriends);
+                                friendsListAdapter.updateData(fetchedFriendModels);
                             });
                         }
                     });

@@ -38,7 +38,7 @@ public class GameSearchModel {
     public GameSearchModel(JSONObject game) throws JSONException {
         Log.i("search", "searching");
         title = game.getString("name");
-        Log.i("GameModel Name", title);
+        Log.i("CustomListGameModel Name", title);
         id = game.getString("id");
         String decName = game.getString("metacritic");
         Log.i("name", decName);
@@ -47,7 +47,7 @@ public class GameSearchModel {
 
     }
 //
-//    public Movie(JSONObject jsonObject){
+//    public MovieModel(JSONObject jsonObject){
 //        try {
 ////            backdropPath = jsonObject.getString("backdrop_path");
 //            posterPath = jsonObject.getString("background_image");

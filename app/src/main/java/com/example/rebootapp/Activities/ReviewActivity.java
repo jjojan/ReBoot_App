@@ -59,9 +59,9 @@ public class ReviewActivity extends AppCompatActivity {
                 String text = reviewText.getText().toString();
                 String userID = currentUser.getObjectId();
                 String username = currentUser.getUsername();
-                Log.i("Review", reviewText.getText().toString());
+                Log.i("ReviewModel", reviewText.getText().toString());
                 addReview(userID, username, text, id);
-                Toast.makeText(getApplicationContext(), "Review Submitted", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "ReviewModel Submitted", Toast.LENGTH_SHORT).show();
 
                 Intent intent = new Intent(ReviewActivity.this, GameReviewDetailsActivity.class);
                 startActivity(intent);
@@ -71,7 +71,7 @@ public class ReviewActivity extends AppCompatActivity {
     }
     public void addReview(String UserID, String username, String reviewText, String id){
 
-        ParseObject object = new ParseObject("Review");
+        ParseObject object = new ParseObject("ReviewModel");
         object.put("ReviewUser", UserID);
         object.put("ReviewUsername", username);
         object.put("ReviewText", reviewText);
@@ -85,18 +85,18 @@ public class ReviewActivity extends AppCompatActivity {
     public void addGame(String GameID, ParseObject review ){
 
         try {
-            ParseQuery<ParseObject> query = ParseQuery.getQuery("GameModel");
+            ParseQuery<ParseObject> query = ParseQuery.getQuery("CustomListGameModel");
             query.whereEqualTo("GameID", GameID);
             query.getFirstInBackground(new GetCallback<ParseObject>() {
                 @Override
                 public void done(ParseObject object, ParseException e) {
                     if (e == null){
-                        Log.i("game exists", "already exists");
+                        Log.i("gameModel exists", "already exists");
                         object.add("ReviewArray", review);
                         object.saveInBackground();
                     }
                     else {
-                        ParseObject game = new ParseObject("GameModel");
+                        ParseObject game = new ParseObject("CustomListGameModel");
                         game.put("GameID", GameID);
                         game.add("ReviewArray", review);
                         game.saveInBackground();

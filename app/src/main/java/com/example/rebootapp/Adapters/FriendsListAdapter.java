@@ -16,8 +16,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 
 import com.bumptech.glide.Glide;
-import com.example.rebootapp.Models.FriendModel;
 import com.example.rebootapp.Activities.FriendProfileActivity;
+import com.example.rebootapp.Models.FriendModel;
 import com.example.rebootapp.R;
 
 import java.util.List;
@@ -25,7 +25,7 @@ import java.util.List;
 public class FriendsListAdapter extends RecyclerView.Adapter<FriendsListAdapter.ViewHolder>{
     private List<String> photoUris;
     private List<String> photoUsernames;
-    private List<FriendModel> friends;
+    private List<FriendModel> friendModels;
     Context context;
     public static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView imageViewProfilePhoto;
@@ -46,8 +46,8 @@ public class FriendsListAdapter extends RecyclerView.Adapter<FriendsListAdapter.
         this.photoUsernames = Usernames;
     }
 
-    public FriendsListAdapter(List<FriendModel> friends){
-        this.friends = friends;
+    public FriendsListAdapter(List<FriendModel> friendModels){
+        this.friendModels = friendModels;
     }
 
     @NonNull
@@ -90,7 +90,7 @@ public class FriendsListAdapter extends RecyclerView.Adapter<FriendsListAdapter.
 //                        @Override
 //                        public void done(ParseUser friend, ParseException e) {
 //                            if (e == null && friend != null) {
-//                                Log.d("ClickedPosition", "Position: " + tposition + ", Friend ID: " + friendUserId);
+//                                Log.d("ClickedPosition", "Position: " + tposition + ", FriendModel ID: " + friendUserId);
 //                                String id = friend.getObjectId();
 //                                Intent intent = new Intent(holder.imageViewProfilePhoto.getContext(), FriendProfileActivity.class);
 //                                intent.putExtra("FRIEND_ID", id);
@@ -100,14 +100,14 @@ public class FriendsListAdapter extends RecyclerView.Adapter<FriendsListAdapter.
 //                                if (e != null) {
 //                                    Log.e("QueryFriendError", "Error: " + e.getMessage());
 //                                } else {
-//                                    Log.e("QueryFriendError", "Friend not found");
+//                                    Log.e("QueryFriendError", "FriendModel not found");
 //                                }
 //                            }
 //                        }
 //                    });
 //                } else {
 //                    // Handle cases where friendList is null, or the position is out of bounds
-//                    Log.e("FriendListError", "Friend list is null or position is out of bounds");
+//                    Log.e("FriendListError", "FriendModel list is null or position is out of bounds");
 //                }
 //
 //
@@ -117,34 +117,34 @@ public class FriendsListAdapter extends RecyclerView.Adapter<FriendsListAdapter.
 
     @Override
     public void onBindViewHolder(FriendsListAdapter.ViewHolder holder, int position){
-        FriendModel friend = friends.get(position);
-        String uri = friend.getProfilePicUrl();
+        FriendModel friendModel = friendModels.get(position);
+        String uri = friendModel.getProfilePicUrl();
         if (uri != null) {
             Glide.with(holder.imageViewProfilePhoto.getContext()).load(uri).into(holder.imageViewProfilePhoto);
         } else {
             holder.imageViewProfilePhoto.setBackgroundColor(Color.BLACK);
         }
 
-        holder.tv_username.setText(friend.getUsername());
+        holder.tv_username.setText(friendModel.getUsername());
 
 
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(v.getContext(), FriendProfileActivity.class);
-            intent.putExtra("FRIEND_ID", friend.getObjectId());
+            intent.putExtra("FRIEND_ID", friendModel.getObjectId());
             v.getContext().startActivity(intent);
         });
     }
 
     @Override
     public int getItemCount() {
-        return friends.size();
+        return friendModels.size();
     }
 
 
 
-    public void updateData(List<FriendModel> newFriends) {
-        this.friends.clear();
-        this.friends.addAll(newFriends);
+    public void updateData(List<FriendModel> newFriendModels) {
+        this.friendModels.clear();
+        this.friendModels.addAll(newFriendModels);
         notifyDataSetChanged();
     }
 

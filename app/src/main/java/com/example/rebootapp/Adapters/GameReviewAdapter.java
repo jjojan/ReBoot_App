@@ -14,10 +14,10 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.rebootapp.GameReviewModel;
 import com.example.rebootapp.Activities.GameReviewDetailsActivity;
-import com.example.rebootapp.R;
 import com.example.rebootapp.Activities.ReviewActivity;
+import com.example.rebootapp.GameReviewModel;
+import com.example.rebootapp.R;
 
 import org.parceler.Parcels;
 
@@ -94,7 +94,7 @@ public class GameReviewAdapter extends RecyclerView.Adapter<GameReviewAdapter.Vi
                 @Override
                 public void onClick(View v) {
                     //int position = getAdapterPosition();
-                    //GameReview game = reviews.get(position);
+                    //GameReviewModel game = reviews.get(position);
                     Intent intent = new Intent(context, ReviewActivity.class);
 
                     intent.putExtra(GameReviewModel.class.getSimpleName(), Parcels.wrap(review));

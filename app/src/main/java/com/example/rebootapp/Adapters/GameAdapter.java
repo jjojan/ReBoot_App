@@ -25,11 +25,11 @@ import java.util.List;
 public class GameAdapter extends RecyclerView.Adapter<GameAdapter.ViewHolder> {
 
     Context context;
-    List<com.example.rebootapp.GameModel> games;
+    List<GameModel> gameModels;
 
-    public GameAdapter(Context context, List<com.example.rebootapp.GameModel> games){
+    public GameAdapter(Context context, List<GameModel> gameModels){
         this.context = context;
-        this.games = games;
+        this.gameModels = gameModels;
     }
 
     @NonNull
@@ -41,13 +41,13 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        com.example.rebootapp.GameModel game = games.get(position);
-        holder.bind(game);
+        GameModel gameModel = gameModels.get(position);
+        holder.bind(gameModel);
     }
 
     @Override
     public int getItemCount() {
-        return games.size();
+        return gameModels.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
@@ -62,16 +62,16 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.ViewHolder> {
             tvPoster = itemView.findViewById(R.id.gamePoster);
         }
 
-        public void bind(com.example.rebootapp.GameModel game) {
+        public void bind(GameModel gameModel) {
             String imageUrl;
 
 
             if(context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
                 Log.i("movieAdapter", "We are in landscape");
-                imageUrl = game.getPosterPath();
+                imageUrl = gameModel.getPosterPath();
             }
             else {
-                imageUrl = game.getPosterPath();
+                imageUrl = gameModel.getPosterPath();
             }
 
             Glide.with(context).load(imageUrl).into(tvPoster);
@@ -86,7 +86,7 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.ViewHolder> {
                 public void onClick(View v) {
                     Intent intent = new Intent(context, GameDetailsActivity.class);
 
-                    intent.putExtra(com.example.rebootapp.GameModel.class.getSimpleName(), Parcels.wrap(game));
+                    intent.putExtra(GameModel.class.getSimpleName(), Parcels.wrap(gameModel));
 
                     context.startActivity(intent);
                 }
@@ -98,11 +98,11 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.ViewHolder> {
 
             if (position != RecyclerView.NO_POSITION) {
 
-                com.example.rebootapp.GameModel game = games.get(position);
+                GameModel gameModel = gameModels.get(position);
 
                 Intent intent = new Intent(context, GameDetailsActivity.class);
 
-                intent.putExtra(GameModel.class.getSimpleName(), Parcels.wrap(game));
+                intent.putExtra(GameModel.class.getSimpleName(), Parcels.wrap(gameModel));
 
                 context.startActivity(intent);
             }

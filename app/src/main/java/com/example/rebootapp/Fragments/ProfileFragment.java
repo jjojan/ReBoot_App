@@ -31,13 +31,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.rebootapp.Activities.EditProfileActivity;
 import com.example.rebootapp.Activities.FavoriteGamesActivity;
+import com.example.rebootapp.Adapters.ManageListAdapter;
 import com.example.rebootapp.Adapters.FavoriteGamesAdapter;
+import com.example.rebootapp.LoginActivity;
 import com.example.rebootapp.Models.FriendModel;
 import com.example.rebootapp.Activities.FriendsActivity;
 import com.example.rebootapp.Adapters.FriendsListAdapter;
-import com.example.rebootapp.Adapters.ManageListAdapter;
 import com.example.rebootapp.Models.UserListModel;
-import com.example.rebootapp.LoginActivity;
 import com.example.rebootapp.R;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -125,7 +125,7 @@ public class ProfileFragment extends Fragment {
         refreshProfile();
 
 //        view.findViewById(R.id.customList).setOnClickListener(new View.OnClickListener() {
-            CustomLists.setOnClickListener(new View.OnClickListener() {
+        CustomLists.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 manageCustomListDialog();
@@ -207,7 +207,7 @@ public class ProfileFragment extends Fragment {
                         userListModelArrayList.add(model);
                     }
 
-                   ManageListAdapter manageListAdapter=
+                    ManageListAdapter manageListAdapter=
                             new ManageListAdapter(getActivity(),
                                     userListModelArrayList);
                     recyclerView.setAdapter(manageListAdapter);
@@ -308,7 +308,7 @@ public class ProfileFragment extends Fragment {
         List<String> friendIds = currentUser.getList("friend_list");
         if (friendIds == null) return;
 
-        List<FriendModel> fetchedFriends = new ArrayList<>();
+        List<FriendModel> fetchedFriendModels = new ArrayList<>();
         AtomicInteger counter = new AtomicInteger(friendIds.size());
 
         for (String friendId : friendIds) {
@@ -319,14 +319,14 @@ public class ProfileFragment extends Fragment {
                     String username = friend.getString("username");
                     ParseFile profilePic = friend.getParseFile("profile_pic");
                     String profilePicUrl = profilePic != null ? profilePic.getUrl() : null;
-                    fetchedFriends.add(new FriendModel(username, profilePicUrl, id));
+                    fetchedFriendModels.add(new FriendModel(username, profilePicUrl, id));
                 } else {
                     Log.e("fetchFriends", "Error fetching friend data: " + e.getMessage(), e);
                 }
 
                 if (counter.decrementAndGet() == 0) {
                     getActivity().runOnUiThread(() -> {
-                        friendsListAdapter.updateData(fetchedFriends);
+                        friendsListAdapter.updateData(fetchedFriendModels);
                     });
                 }
             });

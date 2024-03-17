@@ -184,15 +184,15 @@ public class EditProfileActivity extends AppCompatActivity {
 //            System.out.println("invalid username");
 //        }
 //        else {
-            query.countInBackground(new CountCallback() {
-                @Override
-                public void done(int count, ParseException e) {
-                    if (e == null)
-                        callback.onResult(count == 0);
-                    else
-                        callback.onResult(false);
-                }
-            });
+        query.countInBackground(new CountCallback() {
+            @Override
+            public void done(int count, ParseException e) {
+                if (e == null)
+                    callback.onResult(count == 0);
+                else
+                    callback.onResult(false);
+            }
+        });
 //        }
 
     }

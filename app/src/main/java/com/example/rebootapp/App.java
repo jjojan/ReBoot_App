@@ -1,8 +1,7 @@
-package com.example.rebootapp.Utilities;
+package com.example.rebootapp;
 
 import android.app.Application;
 
-import com.example.rebootapp.R;
 import com.parse.Parse;
 
 public class App extends Application {

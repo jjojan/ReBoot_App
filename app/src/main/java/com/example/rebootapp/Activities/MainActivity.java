@@ -16,11 +16,11 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.example.rebootapp.Fragments.HomeFragment;
-import com.example.rebootapp.Fragments.ReviewFragment;
-import com.example.rebootapp.Fragments.SearchFragment;
 import com.example.rebootapp.Fragments.ProfileFragment;
 import com.example.rebootapp.MovieModel;
 import com.example.rebootapp.R;
+import com.example.rebootapp.Fragments.ReviewFragment;
+import com.example.rebootapp.Fragments.SearchFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String NOW_PLAYING_URL = "https://api.rawg.io/api/games?key=63502b95db9f41c99bb3d0ecf77aa811";
     public static final String TAG = "MainActivity";
 
-    List<MovieModel> movie;
+    List<MovieModel> movieModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,13 +60,13 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-            bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
-                @Override
-                public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                    Fragment fragment;
-                    switch (item.getItemId()) {
-                        case R.id.mHome:
-                            HomeFragment homeFragment = new HomeFragment();
+        bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                Fragment fragment;
+                switch (item.getItemId()) {
+                    case R.id.mHome:
+                        HomeFragment homeFragment = new HomeFragment();
 //                        Bundle bundle = new Bundle();
 //                       Intent intent = getIntent();
 //                        Log.i("fileName1", "waiting" );
@@ -83,31 +83,31 @@ public class MainActivity extends AppCompatActivity {
 //                        Log.i("fileName1", "" + jsonArray);
 //                        bundle.putString("result", result );
 //                        homeFragment.setArguments(bundle);
-                            fragment = homeFragment;
-                            break;
-                        case R.id.mSearch:
-                            fragment = new SearchFragment();
-                            break;
-                        case R.id.mEvents:
-                            fragment = new ReviewFragment();
-                            break;
-                        case R.id.mCart:
-                        default:
-                            fragment = new ProfileFragment();
-                            break;
-                    }
-                    fragmentManager.beginTransaction().replace(R.id.fLayoutContainer, fragment).commit();
-                    return true;
+                        fragment = homeFragment;
+                        break;
+                    case R.id.mSearch:
+                        fragment = new SearchFragment();
+                        break;
+                    case R.id.mEvents:
+                        fragment = new ReviewFragment();
+                        break;
+                    case R.id.mCart:
+                    default:
+                        fragment = new ProfileFragment();
+                        break;
                 }
-            });
-            bottomNavigationView.setSelectedItemId(R.id.mHome);
-        }
+                fragmentManager.beginTransaction().replace(R.id.fLayoutContainer, fragment).commit();
+                return true;
+            }
+        });
+        bottomNavigationView.setSelectedItemId(R.id.mHome);
+    }
 
 
 //        RecyclerView rvMovies = findViewById(R.id.rvYourGames);
-//        movie = new ArrayList<>();
+//        movieModel = new ArrayList<>();
 //
-//        MovieAdapter movieAdapter =  new MovieAdapter(this , movie);
+//        MovieAdapter movieAdapter =  new MovieAdapter(this , movieModel);
 //        rvMovies.setAdapter(movieAdapter);
 //        rvMovies.setLayoutManager(new LinearLayoutManager(this ));
 //
@@ -121,9 +121,9 @@ public class MainActivity extends AppCompatActivity {
 //                try{
 //                    JSONArray results = jsonObject.getJSONArray("results");
 //                    Log.i(TAG, "Results" + results.toString());
-//                    movie.addAll(Movie.fromJSONArray(results));
+//                    movieModel.addAll(MovieModel.fromJSONArray(results));
 //                    movieAdapter.notifyDataSetChanged();
-//                    Log.i(TAG, "Movies" + movie.size());
+//                    Log.i(TAG, "Movies" + movieModel.size());
 //                } catch(JSONException e){
 //                    Log.e(TAG, "hit json expception", e);
 //                }
@@ -135,7 +135,7 @@ public class MainActivity extends AppCompatActivity {
 //            }
 //        });
 //
-    }
+}
 
 
 

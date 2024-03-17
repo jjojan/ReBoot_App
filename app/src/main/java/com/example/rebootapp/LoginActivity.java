@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.rebootapp.Activities.SignUpActivity;
 import com.example.rebootapp.Activities.SplashScreenActivity;
+import com.example.rebootapp.R;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -46,26 +47,26 @@ public class LoginActivity extends AppCompatActivity {
             // User is logged in, navigate to the MainActivity
             navigateToHomePage();
         }
-        // No else part needed, if no user is logged in, stay on the Login screen
+        // No else part needed, if no user is logged in, stay on the LoginActivity screen
     }
     @Override
     protected void onCreate (Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        btnLogin = findViewById(R.id.btnLogin); //Login Button
+        btnLogin = findViewById(R.id.btnLogin); //LoginActivity Button
         btnSignUp = findViewById(R.id.btnSignUpLink); //Sign Up Link
-        googleImage = findViewById(R.id.google_img_login); //Google Login
+        googleImage = findViewById(R.id.google_img_login); //Google LoginActivity
 
         //Create Google Client
         gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
         gsc = GoogleSignIn.getClient(this, gso);
-        
+
         //User info for Manual Setup
         edtEmail = findViewById(R.id.edtEmail);
         edtPassword = findViewById(R.id.edtPassword);
 
-        //Manual Login Button onClickListener
+        //Manual LoginActivity Button onClickListener
         btnLogin.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -73,14 +74,14 @@ public class LoginActivity extends AppCompatActivity {
                 String username = edtEmail.getText().toString();
                 String password = edtPassword.getText().toString();
                 if(TextUtils.isEmpty(username)){
-                    Toast.makeText(getApplicationContext(), "Username is Required.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "userName is Required.", Toast.LENGTH_LONG).show();
                 }
                 else if(TextUtils.isEmpty(password)){
                     Toast.makeText(getApplicationContext(), "Password is Required.", Toast.LENGTH_LONG).show();
 
                 }
                 else if(TextUtils.isEmpty(username)&TextUtils.isEmpty(password)){
-                    Toast.makeText(getApplicationContext(), "Username and Password is Required.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "userName and Password is Required.", Toast.LENGTH_LONG).show();
                 }
                 else{
                     logInManual(username, password);
@@ -89,7 +90,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        //SignUp Link
+        //SignUpActivity Link
         btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -116,7 +117,7 @@ public class LoginActivity extends AppCompatActivity {
 //        if(account == null){
 //            //If GoogleSignIn.getLastSignedInAccount returns null, the user has not yet signed in to your app with Google. Update your UI to display the Google Sign-in button.
 //            //updateUI(account);
-//            //Go to SignUp
+//            //Go to SignUpActivity
 //        } else{
 //            //Update your UI accordingly—that is, hide the sign-in button, launch your main activity, or whatever is appropriate for your app.
 //            //updateUI(account);
@@ -131,12 +132,12 @@ public class LoginActivity extends AppCompatActivity {
 
     boolean logInManual(String username, String password){
 
-        Log.i("Before Login", "Attempting to log in user " + username);
+        Log.i("Before LoginActivity", "Attempting to log in user " + username);
         ParseUser.logInInBackground(username, password, new LogInCallback() {
             @Override
             public void done(ParseUser user, ParseException e) {
                 if(e != null){
-                    Log.e("After Login", "Error with Login");
+                    Log.e("After LoginActivity", "Error with LoginActivity");
                     System.out.println(e.toString());
                     return;
                 }

@@ -1,7 +1,6 @@
 package com.example.rebootapp.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -14,8 +13,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 
-import com.example.rebootapp.Adapters.FriendsListAdapter;
 import com.example.rebootapp.Models.FriendModel;
+import com.example.rebootapp.Adapters.FriendsListAdapter;
 import com.example.rebootapp.R;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -177,7 +176,7 @@ public class FriendsActivity extends AppCompatActivity {
                         currentUser.put("friend_list", friendList);
                         currentUser.saveInBackground( e1 -> {
                             if (e1 == null){
-                                Toast.makeText(getApplicationContext(), "Friend " + username + " added successfully!", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(), "FriendModel " + username + " added successfully!", Toast.LENGTH_SHORT).show();
                                 if(callback != null) {
                                     callback.onFriendListUpdated();
                                 }
@@ -201,7 +200,7 @@ public class FriendsActivity extends AppCompatActivity {
         List<String> friendIds = currentUser.getList("friend_list");
         if (friendIds == null) return;
 
-        List<FriendModel> fetchedFriends = new ArrayList<>();
+        List<FriendModel> fetchedFriendModels = new ArrayList<>();
         AtomicInteger counter = new AtomicInteger(friendIds.size());
 
         for (String friendId : friendIds) {
@@ -212,14 +211,14 @@ public class FriendsActivity extends AppCompatActivity {
                     String username = friend.getString("username");
                     ParseFile profilePic = friend.getParseFile("profile_pic");
                     String profilePicUrl = profilePic != null ? profilePic.getUrl() : null;
-                    fetchedFriends.add(new FriendModel(username, profilePicUrl, id));
+                    fetchedFriendModels.add(new FriendModel(username, profilePicUrl, id));
                 } else {
                     Log.e("fetchFriends", "Error fetching friend data: " + e.getMessage(), e);
                 }
 
                 if (counter.decrementAndGet() == 0) {
                     runOnUiThread(() -> {
-                        friendsListAdapter.updateData(fetchedFriends);
+                        friendsListAdapter.updateData(fetchedFriendModels);
                     });
                 }
             });

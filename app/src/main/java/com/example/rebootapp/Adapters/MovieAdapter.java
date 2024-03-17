@@ -25,11 +25,11 @@ import java.util.List;
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> {
 
     Context context;
-    List<MovieModel> movies;
+    List<MovieModel> movieModels;
 
-    public MovieAdapter(Context context, List<MovieModel> movies){
+    public MovieAdapter(Context context, List<MovieModel> movieModels){
         this.context = context;
-        this.movies = movies;
+        this.movieModels = movieModels;
     }
 
     @NonNull
@@ -41,13 +41,13 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        MovieModel movie = movies.get(position);
-        holder.bind(movie);
+        MovieModel movieModel = movieModels.get(position);
+        holder.bind(movieModel);
     }
 
     @Override
     public int getItemCount() {
-        return movies.size();
+        return movieModels.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
@@ -62,18 +62,18 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
             tvPoster = itemView.findViewById(R.id.gamePoster);
         }
 
-        public void bind(MovieModel movie) {
-            tvTitle.setText(movie.getTitle());
-            tvOverview.setText(movie.getOverview());
+        public void bind(MovieModel movieModel) {
+            tvTitle.setText(movieModel.getTitle());
+            tvOverview.setText(movieModel.getOverview());
             String imageUrl;
 
 
             if(context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
                 Log.i("movieAdapter", "We are in landscape");
-                imageUrl = movie.getBackdropPath();
+                imageUrl = movieModel.getBackdropPath();
             }
             else {
-                imageUrl = movie.getPosterPath();
+                imageUrl = movieModel.getPosterPath();
             }
 
             Glide.with(context).load(imageUrl).into(tvPoster);
@@ -88,7 +88,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
                 public void onClick(View v) {
                     Intent intent = new Intent(context, GameDetailsActivity.class);
 
-                    intent.putExtra(MovieModel.class.getSimpleName(), Parcels.wrap(movie));
+                    intent.putExtra(MovieModel.class.getSimpleName(), Parcels.wrap(movieModel));
 
                     context.startActivity(intent);
                 }
@@ -100,11 +100,11 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
 
             if (position != RecyclerView.NO_POSITION) {
 
-                MovieModel movie = movies.get(position);
+                MovieModel movieModel = movieModels.get(position);
 
                 Intent intent = new Intent(context, GameDetailsActivity.class);
 
-                intent.putExtra(MovieModel.class.getSimpleName(), Parcels.wrap(movie));
+                intent.putExtra(MovieModel.class.getSimpleName(), Parcels.wrap(movieModel));
 
                 context.startActivity(intent);
             }
@@ -114,7 +114,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
 
 
 
-}
+    }
 
 
 }

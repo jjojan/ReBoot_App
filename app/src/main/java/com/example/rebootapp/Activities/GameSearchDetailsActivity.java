@@ -14,8 +14,8 @@ import com.bumptech.glide.Glide;
 import com.codepath.asynchttpclient.AsyncHttpClient;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 import com.colormoon.readmoretextview.ReadMoreTextView;
-import com.example.rebootapp.GameModel;
 import com.example.rebootapp.GameSearchModel;
+import com.example.rebootapp.GameModel;
 import com.example.rebootapp.R;
 import com.parse.CountCallback;
 import com.parse.GetCallback;
@@ -37,7 +37,7 @@ public class GameSearchDetailsActivity extends AppCompatActivity {
 
     GameSearchModel movie;
 
-    List<GameModel> game;
+    List<GameModel> gameModel;
 
 
     TextView tvTitle;
@@ -97,8 +97,8 @@ public class GameSearchDetailsActivity extends AppCompatActivity {
                 try{
                     JSONArray results = jsonObject.getJSONArray("results");
                     Log.i("RETURN results", "Results" + results.toString());
-                    game.addAll(GameModel.fromJSONArray(results));
-                    Log.i("return list", "Movies" + game.toString());
+                    gameModel.addAll(GameModel.fromJSONArray(results));
+                    Log.i("return list", "Movies" + gameModel.toString());
 
                 } catch(JSONException e){
                     Log.e("error", "hit json expception", e);

@@ -43,7 +43,7 @@ public class GameModel {
 
     }
 //
-//    public Movie(JSONObject jsonObject){
+//    public MovieModel(JSONObject jsonObject){
 //        try {
 ////            backdropPath = jsonObject.getString("backdrop_path");
 //            posterPath = jsonObject.getString("background_image");
@@ -63,11 +63,11 @@ public class GameModel {
 //    }
 
     public static List<GameModel> fromJSONArray(JSONArray gameJSONArray) throws JSONException{
-        List<GameModel> games = new ArrayList<>();
+        List<GameModel> gameModels = new ArrayList<>();
         for(int i =0; i < gameJSONArray.length(); i++){
-            games.add(new GameModel(gameJSONArray.getJSONObject(i)));
+            gameModels.add(new GameModel(gameJSONArray.getJSONObject(i)));
         }
-        return games;
+        return gameModels;
     }
 
     public String getPosterPath() {

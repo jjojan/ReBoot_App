@@ -60,7 +60,7 @@ public class UserListNamesAdapter extends RecyclerView.Adapter<UserListNamesAdap
 
             holder.imgAdd.setImageResource(R.drawable.baseline_add_24);
         }
-            holder.imgAdd.setOnClickListener(new View.OnClickListener() {
+        holder.imgAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 

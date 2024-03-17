@@ -34,7 +34,7 @@ import okhttp3.Headers;
 
 public class ReviewFragment extends Fragment {
 
-    List<GameReviewModel> Reviews; //GameModel Model List for RecyclerView&Adapter
+    List<GameReviewModel> Reviews; //CustomListGameModel Model List for RecyclerView&Adapter
     String search_term = "";
     private MenuItem menuItem;
     private SearchView svSearchGame;

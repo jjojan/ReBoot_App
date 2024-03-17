@@ -28,9 +28,9 @@ public class GameReviewModel {
     public GameReviewModel(JSONObject game) throws JSONException {
         Log.i("search", "searching");
         title = game.getString("name");
-        Log.i("GameModel Name", title);
+        Log.i("CustomListGameModel Name", title);
         id = game.getString("id");
-        Log.i("GameModel ID", id);
+        Log.i("CustomListGameModel ID", id);
         String decName = game.getString("metacritic");
         Log.i("name", decName);
         date = game.getString("released");

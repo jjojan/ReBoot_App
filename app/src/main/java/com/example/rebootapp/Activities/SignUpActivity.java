@@ -92,7 +92,7 @@ public class SignUpActivity extends AppCompatActivity {
                 String password = edtPassword.getText().toString();
                 if(username.isEmpty()){
                     Log.i("username", username);
-                    Toast.makeText(getApplicationContext(), "Username is Required.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "userName is Required.", Toast.LENGTH_LONG).show();
                 }
                 else if(email.isEmpty()) {
                     Toast.makeText(getApplicationContext(), "Email is Required.", Toast.LENGTH_LONG).show();

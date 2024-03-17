@@ -17,10 +17,10 @@ public class HomeActivity extends AppCompatActivity {
     public static final String YOUR_GAMES_URL = "https://api.rawg.io/api/games?key=63502b95db9f41c99bb3d0ecf77aa811&dates=2023-12-01,2024-11-01";
     public static final String TAG = "HomeAct";
 
-    List<GameModel> game;
-    List<GameModel> newGames;
+    List<GameModel> gameModel;
+    List<GameModel> newGameModels;
 
-    List<GameModel> yourGames;
+    List<GameModel> yourGameModels;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,13 +30,13 @@ public class HomeActivity extends AppCompatActivity {
 //        RecyclerView rvYourGames = findViewById(R.id.rvYourGames);
 //
 //
-//        game = new ArrayList<>();
-//        newGames = new ArrayList<>();
-//        yourGames = new ArrayList<>();
+//        gameModel = new ArrayList<>();
+//        newGameModels = new ArrayList<>();
+//        yourGameModels = new ArrayList<>();
 //
-//        GameAdapter gameAdapter =  new GameAdapter(this , game);
-//        GameAdapter newGameAdapter = new GameAdapter(this, newGames);
-//        GameAdapter yourGamesAapter = new GameAdapter(this, yourGames);
+//        GameAdapter gameAdapter =  new GameAdapter(this , gameModel);
+//        GameAdapter newGameAdapter = new GameAdapter(this, newGameModels);
+//        GameAdapter yourGamesAapter = new GameAdapter(this, yourGameModels);
 //
 //        rvGames.setAdapter(gameAdapter);
 //        rvNewGames.setAdapter(newGameAdapter);
@@ -56,9 +56,9 @@ public class HomeActivity extends AppCompatActivity {
 //                try{
 //                    JSONArray results = jsonObject.getJSONArray("results");
 //                    Log.i(TAG, "Results" + results.toString());
-//                    game.addAll(GameModel.fromJSONArray(results));
+//                    gameModel.addAll(CustomListGameModel.fromJSONArray(results));
 //                    gameAdapter.notifyDataSetChanged();
-//                    Log.i(TAG, "Movies" + game.size());
+//                    Log.i(TAG, "Movies" + gameModel.size());
 //                } catch(JSONException e){
 //                    Log.e(TAG, "hit json expception", e);
 //                }
@@ -77,9 +77,9 @@ public class HomeActivity extends AppCompatActivity {
 //                try{
 //                    JSONArray results = jsonObject.getJSONArray("results");
 //                    Log.i(TAG, "Results" + results.toString());
-//                    newGames.addAll(GameModel.fromJSONArray(results));
+//                    newGameModels.addAll(CustomListGameModel.fromJSONArray(results));
 //                    newGameAdapter.notifyDataSetChanged();
-//                    Log.i(TAG, "Movies" + newGames.size());
+//                    Log.i(TAG, "Movies" + newGameModels.size());
 //                } catch(JSONException e){
 //                    Log.e(TAG, "hit json expception", e);
 //                }
@@ -98,9 +98,9 @@ public class HomeActivity extends AppCompatActivity {
 //                try{
 //                    JSONArray results = jsonObject.getJSONArray("results");
 //                    Log.i(TAG, "Results" + results.toString());
-//                    yourGames.addAll(GameModel.fromJSONArray(results));
+//                    yourGameModels.addAll(CustomListGameModel.fromJSONArray(results));
 //                    yourGamesAapter.notifyDataSetChanged();
-//                    Log.i(TAG, "Movies" + yourGames.size());
+//                    Log.i(TAG, "Movies" + yourGameModels.size());
 //                } catch(JSONException e){
 //                    Log.e(TAG, "hit json expception", e);
 //                }

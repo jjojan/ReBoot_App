@@ -78,7 +78,7 @@ public class FavoriteGamesAdapter extends RecyclerView.Adapter<FavoriteGamesAdap
             @Override
             public void onClick(View v) {
 
-                //GameSearch game = new GameSearch()
+                //GameSearchModel game = new GameSearchModel()
 
                 ParseQuery<ParseObject> gamesQuery = ParseQuery.getQuery("FavoriteGames");
                 ParseUser currentUser = ParseUser.getCurrentUser();
@@ -102,11 +102,11 @@ public class FavoriteGamesAdapter extends RecyclerView.Adapter<FavoriteGamesAdap
                                         System.out.println("line 1");
 //                                        JSONArray results = jsonobject.getJSONArray("results");
 //                                        System.out.println("count: " + results);
-                                        com.example.rebootapp.GameModel game = new com.example.rebootapp.GameModel((jsonobject));
+                                        GameModel gameModel = new GameModel((jsonobject));
                                         System.out.println("line 2");
                                         Intent intent = new Intent(holder.imageViewGamePhoto.getContext(), GameDetailsActivity.class);
                                         System.out.println("line 3");
-                                        intent.putExtra(GameModel.class.getSimpleName(), Parcels.wrap(game));
+                                        intent.putExtra(GameModel.class.getSimpleName(), Parcels.wrap(gameModel));
                                         System.out.println("line 4");
                                         holder.imageViewGamePhoto.getContext().startActivity(intent);
                                         System.out.println("line 5");
