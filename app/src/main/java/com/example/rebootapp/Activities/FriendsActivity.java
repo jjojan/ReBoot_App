@@ -43,7 +43,7 @@ public class FriendsActivity extends AppCompatActivity {
     List<FriendModel> friendsList = new ArrayList<>();
 
     private final FriendUpdateCallback friendUpdateCallback = this::fetchFriendsAndUpdateUI;
-
+    private final FriendUpdateCallback friendUpdateCallback2 = this::fetchFriendsAndUpdateUI2;
 
 
 
@@ -82,8 +82,8 @@ public class FriendsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String friendUserName = et_newFriend.getText().toString();
-                addFriendByUsername(friendUserName, friendUpdateCallback);
-//                addFriendByUsername2(friendUserName, friendUpdateCallback);
+//                addFriendByUsername(friendUserName, friendUpdateCallback);
+                addFriendByUsername2(friendUserName, friendUpdateCallback2);
             }
         });
 
@@ -152,7 +152,8 @@ public class FriendsActivity extends AppCompatActivity {
         super.onStart();
         friendUrls.clear();
         friendUsernames.clear();
-        fetchFriendsAndUpdateUI();
+//        fetchFriendsAndUpdateUI();
+        fetchFriendsAndUpdateUI2();
 //        testFriendRelation();
 //        testAddFriendRelation();
     }
@@ -253,6 +254,41 @@ public class FriendsActivity extends AppCompatActivity {
         }
     }
 
+    public void fetchFriendsAndUpdateUI2(){
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        ParseRelation<ParseUser> friendsRelation = currentUser.getRelation("friends");
+        ParseQuery<ParseUser> query = friendsRelation.getQuery();
+
+
+        query.findInBackground(new FindCallback<ParseUser>() {
+            @Override
+            public void done(List<ParseUser> list, ParseException e) {
+                if (e == null){
+
+                    List<FriendModel> fetchedFriendModels = new ArrayList<>();
+                    AtomicInteger counter = new AtomicInteger(list.size());
+
+                    for (ParseUser iUser : list){
+                        String id = iUser.getObjectId();
+                        String username = iUser.getString("username");
+                        ParseFile file = iUser.getParseFile("profile_pic");
+                        String fileUrl = file != null ? file.getUrl() : null;
+                        fetchedFriendModels.add(new FriendModel(username, fileUrl, id));
+
+                        if(counter.decrementAndGet() == 0){
+                            runOnUiThread(() -> {
+                                friendsListAdapter.updateData(fetchedFriendModels);
+                            });
+                        }
+                    }
+                }
+                else{
+                    System.out.println("Error: query -> List<ParseUser> gone wrong");
+                }
+            }
+        });
+
+    }
     public interface FriendUpdateCallback {
         void onFriendListUpdated();
     }

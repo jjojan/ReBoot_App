@@ -26,6 +26,7 @@ import com.parse.ParseObject;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseQuery;
+import com.parse.ParseRelation;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
@@ -197,13 +198,54 @@ public class FriendProfileActivity extends AppCompatActivity {
             }
         });
     }
+    public void nestedFetchFriendsAndUpdateUI2(){
+        ParseQuery<ParseUser> userQuery = ParseUser.getQuery();
 
+        userQuery.getInBackground(friendUserID, (parseUser, e1) -> {
+            if (e1 == null){
+
+                ParseRelation<ParseUser> friendsRelation = parseUser.getRelation("friends");
+                ParseQuery<ParseUser> query = friendsRelation.getQuery();
+
+                query.findInBackground(new FindCallback<ParseUser>() {
+                    @Override
+                    public void done(List<ParseUser> list, ParseException e2) {
+                        if(e2 == null){
+                            List<FriendModel> fetchedFriendModels = new ArrayList<>();
+                            AtomicInteger counter = new AtomicInteger(list.size());
+
+                            for (ParseUser iUser : list){
+                                String id = iUser.getObjectId();
+                                String username = iUser.getString("username");
+                                ParseFile file = iUser.getParseFile("profile_pic");
+                                String fileUrl = file != null ? file.getUrl() : null;
+                                fetchedFriendModels.add(new FriendModel(username, fileUrl, id));
+
+                                if(counter.decrementAndGet() == 0){
+                                    runOnUiThread(() -> {
+                                        friendsListAdapter.updateData(fetchedFriendModels);
+                                    });
+                                }
+                            }
+                        }
+                        else{
+                            System.out.println("error in 2nd call");
+                        }
+                    }
+                });
+            }
+            else{
+                System.out.println("error in first call");
+            }
+        });
+    }
     @Override
     protected void onStart(){
         super.onStart();
         friendFavoritesUris.clear();
         fillPhotos(friendUserID);
-        nestedFetchFriendsAndUpdateUI();
+//        nestedFetchFriendsAndUpdateUI();
+        nestedFetchFriendsAndUpdateUI2();
     }
 
 

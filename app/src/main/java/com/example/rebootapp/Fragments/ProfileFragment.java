@@ -51,6 +51,7 @@ import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseRelation;
 import com.parse.ParseUser;
 
 import com.squareup.picasso.Picasso;
@@ -333,6 +334,41 @@ public class ProfileFragment extends Fragment {
         }
     }
 
+    public void fetchFriendsAndUpdateUI2(){
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        ParseRelation<ParseUser> friendsRelation = currentUser.getRelation("friends");
+        ParseQuery<ParseUser> query = friendsRelation.getQuery();
+
+
+        query.findInBackground(new FindCallback<ParseUser>() {
+            @Override
+            public void done(List<ParseUser> list, ParseException e) {
+                if (e == null){
+
+                    List<FriendModel> fetchedFriendModels = new ArrayList<>();
+                    AtomicInteger counter = new AtomicInteger(list.size());
+
+                    for (ParseUser iUser : list){
+                        String id = iUser.getObjectId();
+                        String username = iUser.getString("username");
+                        ParseFile file = iUser.getParseFile("profile_pic");
+                        String fileUrl = file != null ? file.getUrl() : null;
+                        fetchedFriendModels.add(new FriendModel(username, fileUrl, id));
+
+                        if(counter.decrementAndGet() == 0){
+                            getActivity().runOnUiThread(() -> {
+                                friendsListAdapter.updateData(fetchedFriendModels);
+                            });
+                        }
+                    }
+                }
+                else{
+                    System.out.println("Error: query -> List<ParseUser> gone wrong");
+                }
+            }
+        });
+    }
+
     public interface FriendUpdateCallback {
         void onFriendListUpdated();
     }
@@ -375,7 +411,8 @@ public class ProfileFragment extends Fragment {
         favoritesUris.clear();
         friendsUris.clear();
         friendsUsernames.clear();
-        fetchFriendsAndUpdateUI();
+//        fetchFriendsAndUpdateUI();
+        fetchFriendsAndUpdateUI2();
         fillPhotos();
 //        ParseUser currentUser = ParseUser.getCurrentUser();
 //        String currentUserObjectID = currentUser.getObjectId();
