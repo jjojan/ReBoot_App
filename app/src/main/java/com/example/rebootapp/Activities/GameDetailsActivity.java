@@ -206,6 +206,7 @@ public class GameDetailsActivity extends AppCompatActivity implements AdapterVie
     }
     public void fetchReviews() {
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Review");
+        query.whereEqualTo("GameID", gameID);
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> reviews, ParseException e) {
