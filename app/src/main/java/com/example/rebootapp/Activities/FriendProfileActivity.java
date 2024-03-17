@@ -121,6 +121,7 @@ public class FriendProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(FriendProfileActivity.this, FriendsMessageActivity.class);
+                intent.putExtra("friendName", username.getText());
                 FriendProfileActivity.this.startActivity(intent);
             }
         });

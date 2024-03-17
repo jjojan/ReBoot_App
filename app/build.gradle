@@ -92,6 +92,7 @@ dependencies {
     implementation "androidx.cardview:cardview:1.0.0"
     implementation 'com.cometchat:chat-sdk-android:4.0.4'
     implementation "com.github.stfalcon:chatkit:0.3.3"
+    implementation 'androidx.legacy:legacy-support-core-ui:1.0.0'
 
 
 }

@@ -1,5 +1,6 @@
 package com.example.rebootapp.Activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -10,12 +11,18 @@ import com.cometchat.chat.core.AppSettings;
 import com.cometchat.chat.core.CometChat;
 import com.cometchat.chat.exceptions.CometChatException;
 import com.cometchat.chat.models.User;
+import com.example.rebootapp.Models.FriendModel;
 import com.example.rebootapp.R;
 import com.parse.GetCallback;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class FriendsMessageActivity extends AppCompatActivity {
 
@@ -31,9 +38,17 @@ public class FriendsMessageActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friendsmessaging);
 
+        Intent intent = getIntent();
+
+
+        String friendName = intent.getStringExtra("friendName");
+
+
         refreshProfile();
         initChat();
         checkUser();
+//        fetchFriends();
+        registerfriends(friendName);
 
     }
 
@@ -136,6 +151,51 @@ public class FriendsMessageActivity extends AppCompatActivity {
 
                     System.out.println(e.toString());
                 }
+            }
+        });
+    }
+
+    public void fetchFriends() {
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        List<String> friendIds = currentUser.getList("friend_list");
+        if (friendIds == null) return;
+
+        List<FriendModel> fetchedFriendModels = new ArrayList<>();
+        AtomicInteger counter = new AtomicInteger(friendIds.size());
+
+        for (String friendId : friendIds) {
+            ParseQuery<ParseUser> query = ParseUser.getQuery();
+            query.getInBackground(friendId, (friend, e) -> {
+                if (e == null) {
+                    String id = friend.getObjectId();
+                    String username = friend.getString("username");
+                    registerfriends(username);
+                    ParseFile profilePic = friend.getParseFile("profile_pic");
+                } else {
+                    Log.e("fetchFriends", "Error fetching friend data: " + e.getMessage(), e);
+                }
+
+
+            });
+        }
+    }
+
+    public void registerfriends(String name){
+
+        User user = new User();
+        user.setUid(name + "ReBoot");
+        user.setName(name);
+        Log.e("username","name: " + name);
+
+        CometChat.createUser(user, API_KEY, new CometChat.CallbackListener<User>() {
+            @Override
+            public void onSuccess(User user) {
+                Log.d("createFriend", user.toString());
+            }
+
+            @Override
+            public void onError(CometChatException e) {
+                Log.e("createFriend", e.getMessage());
             }
         });
     }
