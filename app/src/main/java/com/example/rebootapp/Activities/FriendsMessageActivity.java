@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.cometchat.chat.core.AppSettings;
 import com.cometchat.chat.core.CometChat;
 import com.cometchat.chat.exceptions.CometChatException;
+import com.cometchat.chat.models.User;
 import com.example.rebootapp.R;
 import com.parse.GetCallback;
 import com.parse.ParseException;
@@ -32,10 +33,11 @@ public class FriendsMessageActivity extends AppCompatActivity {
 
         refreshProfile();
         initChat();
+        checkUser();
+
     }
 
     private void initChat() {
-
 
         AppSettings appSettings=new AppSettings.AppSettingsBuilder()
                 .subscribePresenceForAllUsers()
@@ -53,6 +55,66 @@ public class FriendsMessageActivity extends AppCompatActivity {
                 Log.d("cometerror", "Initialization failed with exception: " + e.getMessage());
             }
         });
+    }
+
+    public void checkUser(){
+
+        String UID = username + "ReBoot";
+
+        CometChat.getUser(UID, new CometChat.CallbackListener<User>() {
+            @Override
+            public void onSuccess(User user) {
+                Log.d("GetUser", "User details fetched successfully for user: " + user.getUid());
+               loginUser();
+            }
+
+            @Override
+            public void onError(CometChatException e) {
+                Log.d("GetUser", "User fetching failed with exception: " + e.getMessage());
+                registerUser();
+            }
+        });
+    }
+
+    public void registerUser(){
+
+        User user = new User();
+        user.setUid(username + "ReBoot");
+        user.setName(username);
+        Log.e("username","name: " + username);
+
+        CometChat.createUser(user, API_KEY, new CometChat.CallbackListener<User>() {
+            @Override
+            public void onSuccess(User user) {
+                Log.d("createUser", user.toString());
+            }
+
+            @Override
+            public void onError(CometChatException e) {
+                Log.e("createUser", e.getMessage());
+            }
+        });
+    }
+
+    public void loginUser(){
+        String UID = username + "ReBoot";
+
+        if (CometChat.getLoggedInUser() == null) {
+            CometChat.login(UID, API_KEY, new CometChat.CallbackListener<User>() {
+
+                @Override
+                public void onSuccess(User user) {
+                    Log.d("loginWorks", "Login Successful : " + user.toString());
+                }
+
+                @Override
+                public void onError(CometChatException e) {
+                    Log.d("loginError", "Login failed with exception: " + e.getMessage());
+                }
+            });
+        } else {
+            // User already logged in
+        }
     }
 
     public void refreshProfile() {
