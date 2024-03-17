@@ -17,12 +17,16 @@ import com.example.rebootapp.Models.FriendModel;
 import com.example.rebootapp.Adapters.FriendsListAdapter;
 import com.example.rebootapp.R;
 import com.parse.FindCallback;
+import com.parse.FunctionCallback;
+import com.parse.ParseCloud;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseQuery;
+import com.parse.ParseRelation;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -79,6 +83,7 @@ public class FriendsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String friendUserName = et_newFriend.getText().toString();
                 addFriendByUsername(friendUserName, friendUpdateCallback);
+//                addFriendByUsername2(friendUserName, friendUpdateCallback);
             }
         });
 
@@ -148,6 +153,8 @@ public class FriendsActivity extends AppCompatActivity {
         friendUrls.clear();
         friendUsernames.clear();
         fetchFriendsAndUpdateUI();
+//        testFriendRelation();
+//        testAddFriendRelation();
     }
 
 //    private void refresh(){
@@ -195,6 +202,27 @@ public class FriendsActivity extends AppCompatActivity {
         });
     }
 
+    public void addFriendByUsername2(String username, FriendUpdateCallback callback){
+        HashMap<String, String> params = new HashMap<String, String>();
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        String oid = currentUser.getObjectId();
+        params.put("currentUserId", oid);
+        params.put("friendUsername", username);
+
+        ParseCloud.callFunctionInBackground("checkAndAddFriendByUsername", params, new FunctionCallback<String>() {
+            @Override
+            public void done(String result, ParseException e){
+                if (e == null) {
+                    Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
+                    if(callback != null) {
+                        callback.onFriendListUpdated();
+                    }
+                }
+            }
+        });
+
+    }
+
     public void fetchFriendsAndUpdateUI() {
         ParseUser currentUser = ParseUser.getCurrentUser();
         List<String> friendIds = currentUser.getList("friend_list");
@@ -227,6 +255,80 @@ public class FriendsActivity extends AppCompatActivity {
 
     public interface FriendUpdateCallback {
         void onFriendListUpdated();
+    }
+
+    public void testFriendRelation(){
+        HashMap<String, String> params = new HashMap<String, String>();
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        String oid = currentUser.getObjectId();
+        params.put("userId", oid);
+        ParseCloud.callFunctionInBackground("suggestFriends", params, new FunctionCallback<ArrayList<ParseUser>>() {
+            @Override
+            public void done(ArrayList<ParseUser> query, ParseException e){
+                if (e == null){
+                    int count = 0;
+//                    try{
+//                        count = query.count();
+//                    } catch(ParseException ex){
+//                        System.out.println("didnt work");
+//                    }
+                    count = query.size();
+                    for(ParseUser u : query){
+                        System.out.println(u.getString("username"));
+                    }
+                    System.out.println(count);
+
+                }
+            }
+        });
+//        ParseCloud.callFunctionInBackground("suggestFriends", params, new FunctionCallback<List<String>>() {
+//            @Override
+//            public void done(List<String> users, ParseException e) {
+//                if (e == null){
+//
+//                    int count = 0;
+//                    count = users.size();
+//                    System.out.println(count);
+//
+//                    for (String user : users){
+//                        System.out.println("iteration");
+//                        System.out.println(user);
+//                    }
+//                }
+//            }
+//        });
+//        ParseCloud.callFunctionInBackground("suggestFriends", params, new FunctionCallback<List<HashMap>>() {
+//            @Override
+//            public void done(List<HashMap> suggestedFriends, ParseException e) {
+//                if (e == null) {
+//                    System.out.println(oid);
+//                    System.out.println(suggestedFriends.size());
+//                    for (HashMap friend : suggestedFriends){
+//                        String id = (String) friend.get("objectId");
+//                        System.out.println(id);
+//                    }
+//                } else {
+//                    System.out.println("error");
+//                }
+//            }
+//        });
+    }
+
+    public void testAddFriendRelation(){
+        HashMap<String, String> params = new HashMap<String, String>();
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        String oid = currentUser.getObjectId();
+        params.put("currentUserId", oid);
+        params.put("friendUsername", "joey4");
+        ParseCloud.callFunctionInBackground("checkAndAddFriendByUsername", params, new FunctionCallback<String>() {
+            @Override
+            public void done(String result, ParseException e){
+                if (e == null) {
+                    System.out.println(result);
+                }
+            }
+        });
+
     }
 
 
