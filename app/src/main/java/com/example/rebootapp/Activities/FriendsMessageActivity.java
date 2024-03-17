@@ -30,6 +30,7 @@ public class FriendsMessageActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friendsmessaging);
 
+        refreshProfile();
         initChat();
     }
 
@@ -45,11 +46,11 @@ public class FriendsMessageActivity extends AppCompatActivity {
         CometChat.init(this, appID,appSettings, new CometChat.CallbackListener<String>() {
             @Override
             public void onSuccess(String successMessage) {
-                Log.d("MessageTag", "Initialization completed successfully");
+                Log.d("cometcheck", "Initialization completed successfully");
             }
             @Override
             public void onError(CometChatException e) {
-                Log.d("MessageTag", "Initialization failed with exception: " + e.getMessage());
+                Log.d("cometerror", "Initialization failed with exception: " + e.getMessage());
             }
         });
     }

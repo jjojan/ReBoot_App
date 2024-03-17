@@ -37,7 +37,7 @@ public class FriendProfileActivity extends AppCompatActivity {
     Button done;
     ImageView profile_pic;
     TextView username, bio;
-    ImageButton starred, friends, lists;
+    ImageButton starred, friends, lists, messageButton;
     String friendUserID;
 
     //RecyclerView for Favorite Games
@@ -59,6 +59,7 @@ public class FriendProfileActivity extends AppCompatActivity {
         username = findViewById(R.id.tvFriend_Friend_Username);
         bio = findViewById(R.id.friend_bio);
         starred = findViewById(R.id.friend_Starred);
+        messageButton = findViewById(R.id.messageButton);
 
         //Friends Favorites
         friendFavoritesUris = new ArrayList<>();
@@ -113,6 +114,14 @@ public class FriendProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 finish();
+            }
+        });
+
+        messageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(FriendProfileActivity.this, FriendsMessageActivity.class);
+                FriendProfileActivity.this.startActivity(intent);
             }
         });
 
