@@ -16,14 +16,31 @@
         android:layout_alignParentTop="true"
         android:text="Friends"
         android:textAlignment="center"
-        android:textSize="34sp"
+        android:textSize="20sp"
+        android:textColor="@color/aqua"/>
+    <TextView
+        android:id="@+id/tv_SuggestedTitle"
+        android:layout_width="425dp"
+        android:layout_marginTop="150dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:text="Suggested Friends"
+        android:textAlignment="center"
+        android:textSize="20sp"
         android:textColor="@color/aqua"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_Friends_list"
         android:layout_width="wrap_content"
+        android:layout_height="146dp"
+        android:layout_marginTop="30dp"
+        android:scrollbars="vertical" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_Suggested_Friends_list"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="175dp"
         android:scrollbars="vertical" />
 
     <Button
