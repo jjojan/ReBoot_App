@@ -3,15 +3,19 @@ package com.example.rebootapp.Activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ImageView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.cometchat.chat.constants.CometChatConstants;
 import com.cometchat.chat.core.AppSettings;
 import com.cometchat.chat.core.CometChat;
 import com.cometchat.chat.exceptions.CometChatException;
+import com.cometchat.chat.models.TextMessage;
 import com.cometchat.chat.models.User;
 import com.example.rebootapp.Models.FriendModel;
+import com.example.rebootapp.Models.MessageWrapper;
 import com.example.rebootapp.R;
 import com.parse.GetCallback;
 import com.parse.ParseException;
@@ -19,6 +23,11 @@ import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.squareup.picasso.Picasso;
+import com.stfalcon.chatkit.commons.ImageLoader;
+import com.stfalcon.chatkit.messages.MessageInput;
+import com.stfalcon.chatkit.messages.MessagesList;
+import com.stfalcon.chatkit.messages.MessagesListAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,22 +42,96 @@ public class FriendsMessageActivity extends AppCompatActivity {
 
     String username = "";
 
+    MessageInput submit;
+
+    String friendName;
+
+    MessagesList messagesList;
+
+    MessagesListAdapter<MessageWrapper> adapter;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friendsmessaging);
+        initChat();
 
         Intent intent = getIntent();
+        submit = findViewById(R.id.submit);
+        messagesList = findViewById(R.id.messages);
 
 
-        String friendName = intent.getStringExtra("friendName");
+        friendName = intent.getStringExtra("friendName");
+
+        String senderID = CometChat.getLoggedInUser().getUid();
+        ImageLoader imageLoader = new ImageLoader() {
+            @Override
+            public void loadImage(ImageView imageView, @Nullable String url, @Nullable Object payload) {
+                Picasso.get().load(url).into(imageView);
+            }
+        };
+
+        adapter = new MessagesListAdapter<>(senderID, imageLoader);
+        messagesList.setAdapter(adapter);
 
 
         refreshProfile();
-        initChat();
         checkUser();
 //        fetchFriends();
         registerfriends(friendName);
+
+        submit.setInputListener(new MessageInput.InputListener() {
+            @Override
+            public boolean onSubmit(CharSequence input) {
+                //validate and send message
+                sendMessage(input.toString());
+                return true;
+            }
+        });
+
+        addListeiner();
+
+    }
+
+    private void addListeiner() {
+
+        String listenerID = "UNIQUE_LISTENER_ID";
+        CometChat.addMessageListener(listenerID, new CometChat.MessageListener() {
+            @Override
+            public void onTextMessageReceived(TextMessage textMessage) {
+                addMessage(textMessage);
+                Log.d("listeining text", "Text message received successfully: " + textMessage.toString());
+            }
+
+
+        });
+    }
+
+    public void sendMessage(String message){
+
+        String receiverID = friendName + "ReBoot";
+        String receiverType = CometChatConstants.RECEIVER_TYPE_USER;
+
+        TextMessage textMessage = new TextMessage(receiverID, message, receiverType);
+
+        CometChat.sendMessage(textMessage, new CometChat.CallbackListener<TextMessage>() {
+            @Override
+            public void onSuccess(TextMessage textMessage) {
+                addMessage(textMessage);
+                Log.d("Send Message", "Message sent successfully: " + textMessage.toString());
+            }
+
+            @Override
+            public void onError(CometChatException e) {
+                Log.d("Send Error", "Message sending failed with exception: " + e.getMessage());
+            }
+        });
+
+    }
+
+    public void addMessage(TextMessage textMessage) {
+
+        adapter.addToStart(new MessageWrapper(textMessage), true);
 
     }
 
