@@ -11,7 +11,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.cometchat.chat.constants.CometChatConstants;
 import com.cometchat.chat.core.AppSettings;
 import com.cometchat.chat.core.CometChat;
+import com.cometchat.chat.core.MessagesRequest;
 import com.cometchat.chat.exceptions.CometChatException;
+import com.cometchat.chat.models.BaseMessage;
 import com.cometchat.chat.models.TextMessage;
 import com.cometchat.chat.models.User;
 import com.example.rebootapp.Models.FriendModel;
@@ -55,6 +57,10 @@ public class FriendsMessageActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friendsmessaging);
         initChat();
+        refreshProfile();
+        checkUser();
+//        fetchFriends();
+        checkFriend();
 
         Intent intent = getIntent();
         submit = findViewById(R.id.submit);
@@ -75,10 +81,7 @@ public class FriendsMessageActivity extends AppCompatActivity {
         messagesList.setAdapter(adapter);
 
 
-        refreshProfile();
-        checkUser();
-//        fetchFriends();
-        registerfriends(friendName);
+
 
         submit.setInputListener(new MessageInput.InputListener() {
             @Override
@@ -90,6 +93,34 @@ public class FriendsMessageActivity extends AppCompatActivity {
         });
 
         addListeiner();
+        fetchPastMessages();
+
+    }
+
+
+    private void fetchPastMessages() {
+        int limit = 50;
+
+        MessagesRequest messagesRequest = new MessagesRequest.MessagesRequestBuilder()
+                .setLimit(limit)
+                .setUID(username + "ReBoot")
+                .build();
+
+        messagesRequest.fetchPrevious(new CometChat.CallbackListener<List<BaseMessage>>() {
+            @Override
+            public void onSuccess(List<BaseMessage> list) {
+              addMessages(list);
+            }
+
+            @Override
+            public void onError(CometChatException e) {
+                Log.d("fail message", "Message fetching failed with exception: " + e.getMessage());
+            }
+        });
+    }
+
+    private void addMessages(List<BaseMessage> baseMessages) {
+
 
     }
 
@@ -173,6 +204,25 @@ public class FriendsMessageActivity extends AppCompatActivity {
             }
         });
     }
+
+    public void checkFriend(){
+
+            String UID = friendName + "ReBoot";
+
+            CometChat.getUser(UID, new CometChat.CallbackListener<User>() {
+                @Override
+                public void onSuccess(User user) {
+                    Log.d("GetUser", "User details fetched successfully for user: " + user.getUid());
+                }
+
+                @Override
+                public void onError(CometChatException e) {
+                    Log.d("GetUser", "User fetching failed with exception: " + e.getMessage());
+                    registerfriends(friendName);
+                }
+            });
+        }
+
 
     public void registerUser(){
 
