@@ -80,6 +80,7 @@ public class FriendsMessageActivity extends AppCompatActivity {
         };
         senderID = CometChat.getLoggedInUser().getUid();
         adapter = new MessagesListAdapter<>(senderID, imageLoader);
+
         messagesList.setAdapter(adapter);
 
 
@@ -172,6 +173,17 @@ public class FriendsMessageActivity extends AppCompatActivity {
 
             }
         }
+
+        ImageLoader imageLoader = new ImageLoader() {
+            @Override
+            public void loadImage(ImageView imageView, @Nullable String url, @Nullable Object payload) {
+                Picasso.get().load(url).into(imageView);
+            }
+        };
+
+        adapter = new MessagesListAdapter<>(senderID, imageLoader);
+
+        messagesList.setAdapter(adapter);
 
         adapter.addToEnd(list, true );
 
