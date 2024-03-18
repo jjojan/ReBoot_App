@@ -142,7 +142,7 @@ public class FriendsMessageActivity extends AppCompatActivity {
         messagesRequest.fetchPrevious(new CometChat.CallbackListener<List<BaseMessage>>() {
             @Override
             public void onSuccess(List<BaseMessage> baseMessages) {
-              addMessages(baseMessages);
+                addMessages(baseMessages);
 
                 Log.d("pass fetch", baseMessages.toString());
             }
@@ -241,7 +241,7 @@ public class FriendsMessageActivity extends AppCompatActivity {
             @Override
             public void onSuccess(User user) {
                 Log.d("GetUser", "User details fetched successfully for user: " + user.getUid());
-               loginUser();
+                loginUser();
             }
 
             @Override
@@ -254,23 +254,23 @@ public class FriendsMessageActivity extends AppCompatActivity {
 
     public void checkFriend(){
 
-            String UID = friendName + "ReBoot";
+        String UID = friendName + "ReBoot";
 
-            CometChat.getUser(UID, new CometChat.CallbackListener<User>() {
-                @Override
-                public void onSuccess(User user) {
-                    Log.d("GetFriend", "User details fetched successfully for user: " + UID);
+        CometChat.getUser(UID, new CometChat.CallbackListener<User>() {
+            @Override
+            public void onSuccess(User user) {
+                Log.d("GetFriend", "User details fetched successfully for user: " + UID);
 //                    fetchPastMessages();
-                    fetchUnread();
-                }
+                fetchUnread();
+            }
 
-                @Override
-                public void onError(CometChatException e) {
-                    Log.d("GetFriend", "User fetching failed with exception: " + e.getMessage());
-                    registerfriends(friendName);
-                }
-            });
-        }
+            @Override
+            public void onError(CometChatException e) {
+                Log.d("GetFriend", "User fetching failed with exception: " + e.getMessage());
+                registerfriends(friendName);
+            }
+        });
+    }
 
 
     public void registerUser(){
