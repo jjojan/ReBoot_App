@@ -27,9 +27,12 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.squareup.picasso.Picasso;
 import com.stfalcon.chatkit.commons.ImageLoader;
+import com.stfalcon.chatkit.commons.models.IMessage;
 import com.stfalcon.chatkit.messages.MessageInput;
 import com.stfalcon.chatkit.messages.MessagesList;
 import com.stfalcon.chatkit.messages.MessagesListAdapter;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -100,16 +103,17 @@ public class FriendsMessageActivity extends AppCompatActivity {
 
     private void fetchPastMessages() {
         int limit = 50;
+        String fetchUID = friendName + "ReBoot";
 
         MessagesRequest messagesRequest = new MessagesRequest.MessagesRequestBuilder()
                 .setLimit(limit)
-                .setUID(username + "ReBoot")
+                .setUID(fetchUID)
                 .build();
 
         messagesRequest.fetchPrevious(new CometChat.CallbackListener<List<BaseMessage>>() {
             @Override
-            public void onSuccess(List<BaseMessage> list) {
-              addMessages(list);
+            public void onSuccess(List<BaseMessage> baseMessages) {
+              addMessages(baseMessages);
             }
 
             @Override
@@ -120,6 +124,16 @@ public class FriendsMessageActivity extends AppCompatActivity {
     }
 
     private void addMessages(List<BaseMessage> baseMessages) {
+        List<MessageWrapper> list = new ArrayList<>();
+        for(BaseMessage message : baseMessages){
+            if (message instanceof TextMessage){
+                Log.i("old tests", message.toString());
+                list.add(new MessageWrapper((TextMessage) message ));
+
+            }
+        }
+
+        adapter.addToEnd(list, true );
 
 
     }
