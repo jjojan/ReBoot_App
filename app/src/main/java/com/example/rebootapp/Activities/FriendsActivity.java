@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 
+import com.example.rebootapp.Adapters.FriendRequestAdapter;
 import com.example.rebootapp.Adapters.SuggestedFriendsAdapter;
 import com.example.rebootapp.Models.FriendModel;
 import com.example.rebootapp.Adapters.FriendsListAdapter;
@@ -23,6 +24,7 @@ import com.parse.FunctionCallback;
 import com.parse.ParseCloud;
 import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseRelation;
 import com.parse.ParseUser;
@@ -37,14 +39,16 @@ public class FriendsActivity extends AppCompatActivity {
     Button btn_friends_done;
     ImageButton btn_newFriend;
     EditText et_newFriend;
-    RecyclerView rv_Friends_List, rv_Suggested_Friends_List;
+    RecyclerView rv_Friends_List, rv_Suggested_Friends_List, rv_Friend_Request_List;
     List<String> friendUrls;
     List<String> friendUsernames;
     FriendsListAdapter friendsListAdapter;
     SuggestedFriendsAdapter suggestedFriendsAdapter;
+    FriendRequestAdapter friendRequestAdapter;
 
     List<FriendModel> friendsList = new ArrayList<>();
     List<SuggestedFriendModel> suggestedFriendsList = new ArrayList<>();
+    List<SuggestedFriendModel> friendRequestList = new ArrayList<>();
 
     private final FriendUpdateCallback friendUpdateCallback = this::fetchFriendsAndUpdateUI;
     private final FriendUpdateCallback friendUpdateCallback2 = this::fetchFriendsAndUpdateUI2;
@@ -66,6 +70,9 @@ public class FriendsActivity extends AppCompatActivity {
         rv_Suggested_Friends_List = findViewById(R.id.rv_Suggested_Friends_list);
         rv_Suggested_Friends_List.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
+        rv_Friend_Request_List = findViewById(R.id.rv_Friend_Request_list);
+        rv_Friend_Request_List.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+
         btn_newFriend = findViewById(R.id.btn_addFriend);
         et_newFriend = findViewById(R.id.et_addFriend);
 
@@ -78,6 +85,9 @@ public class FriendsActivity extends AppCompatActivity {
 
         suggestedFriendsAdapter = new SuggestedFriendsAdapter(suggestedFriendsList);
         rv_Suggested_Friends_List.setAdapter(suggestedFriendsAdapter);
+
+        friendRequestAdapter = new FriendRequestAdapter(friendRequestList);
+        rv_Friend_Request_List.setAdapter(friendRequestAdapter);
 
 
 
@@ -93,7 +103,8 @@ public class FriendsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String friendUserName = et_newFriend.getText().toString();
 //                addFriendByUsername(friendUserName, friendUpdateCallback);
-                addFriendByUsername2(friendUserName, friendUpdateCallback2);
+//                addFriendByUsername2(friendUserName, friendUpdateCallback2);
+                requestFriendByUsername(friendUserName, friendUpdateCallback2);
             }
         });
 
@@ -164,9 +175,10 @@ public class FriendsActivity extends AppCompatActivity {
         friendUsernames.clear();
 //        fetchFriendsAndUpdateUI();
         fetchFriendsAndUpdateUI2();
-        suggestedFriendsTest();
+        fetchSuggestedFriends();
 //        fetchSuggestedFriendsAndUpdateUI();
 //        testAddFriendRelation();
+        fetchRequestedFriends();
     }
 
 
@@ -229,6 +241,26 @@ public class FriendsActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    public void requestFriendByUsername(String username, FriendUpdateCallback callback){
+        HashMap<String, String> params = new HashMap<String, String>();
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        String oid = currentUser.getObjectId();
+        params.put("currentUserId", oid);
+        params.put("friendUsername", username);
+
+        ParseCloud.callFunctionInBackground("friendRequestByUsername", params, new FunctionCallback<String>(){
+            @Override
+            public void done(String result, ParseException e){
+                if (e == null){
+                    Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
+                    if(callback != null) {
+                        callback.onFriendListUpdated();
+                    }
+                }
+            }
+        });
     }
 
     public void fetchFriendsAndUpdateUI() {
@@ -368,7 +400,7 @@ public class FriendsActivity extends AppCompatActivity {
 //        });
     }
 
-    public void suggestedFriendsTest(){
+    public void fetchSuggestedFriends(){
         HashMap<String, String> params = new HashMap<String, String>();
         ParseUser currentUser = ParseUser.getCurrentUser();
         String oid = currentUser.getObjectId();
@@ -377,23 +409,62 @@ public class FriendsActivity extends AppCompatActivity {
             @Override
             public void done(List<HashMap<String, Object>> map, ParseException e){
                 if (e == null){
-                    System.out.println(map.size());
+//                    System.out.println(map.size());
                     List<SuggestedFriendModel> sfml = new ArrayList<>();
                     AtomicInteger counter = new AtomicInteger(map.size());
                     for(HashMap<String, Object> m : map){
                         ParseUser a = (ParseUser) m.get("user");
                         String id = a.getObjectId();
+//                        System.out.println(id);
                         String username = a.getString("username");
                         int b = (int) m.get("mutualFriendsCount");
                         ParseFile pic = a.getParseFile("profile_pic");
                         String picUrl = pic != null ? pic.getUrl() : null;
                         String b_String = String.valueOf(b);
-                        System.out.println("username: " + username + " m_friends: " + b_String);
+//                        System.out.println("username: " + username + " m_friends: " + b_String);
                         sfml.add(new SuggestedFriendModel(username, picUrl, id, b));
 
                         if(counter.decrementAndGet() == 0){
                             runOnUiThread(() -> {
                                 suggestedFriendsAdapter.updateData(sfml);
+                            });
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    public void fetchRequestedFriends(){
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        String oid = currentUser.getObjectId();
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("FriendRequest");
+        query.whereEqualTo("destination_user", currentUser);
+        query.include("source_user");
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> list, ParseException e) {
+                if (e == null){
+
+                    List<SuggestedFriendModel> sfml = new ArrayList<>();
+                    AtomicInteger counter = new AtomicInteger(list.size());
+
+                    for(ParseObject req : list){
+                        ParseUser usr = req.getParseUser("source_user");
+
+                        String id = usr.getObjectId();
+                        System.out.println(id);
+                        String username = usr.getString("username");
+                        System.out.println(username);
+                        ParseFile file = usr.getParseFile("profile_pic");
+                        String picUrl = file != null ? file.getUrl() : null;
+                        int mut = 1;
+
+                        sfml.add(new SuggestedFriendModel(username, picUrl, id, mut));
+
+                        if(counter.decrementAndGet() == 0){
+                            runOnUiThread(() -> {
+                                friendRequestAdapter.updateData(sfml);
                             });
                         }
                     }
