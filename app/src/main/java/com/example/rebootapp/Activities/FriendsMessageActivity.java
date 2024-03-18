@@ -45,7 +45,7 @@ public class FriendsMessageActivity extends AppCompatActivity {
     String API_KEY = "da71d0ceb524d1db314641c3436881b71f6b3f65";
     String region = "US";
 
-    String username = "";
+    String username;
 
     MessageInput submit;
 
@@ -55,24 +55,27 @@ public class FriendsMessageActivity extends AppCompatActivity {
 
     MessagesListAdapter<MessageWrapper> adapter;
 
+    String senderID;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friendsmessaging);
-        initChat();
-        refreshProfile();
-        checkUser();
-//        fetchFriends();
-        checkFriend();
-
         Intent intent = getIntent();
+        friendName = intent.getStringExtra("friendName");
+        username = intent.getStringExtra("userName");
+        initChat();
+//        checkUser();
+//        fetchFriends();
+        loginUser();
+
+
         submit = findViewById(R.id.submit);
         messagesList = findViewById(R.id.messages);
 
 
-        friendName = intent.getStringExtra("friendName");
 
-        String senderID = CometChat.getLoggedInUser().getUid();
+
         ImageLoader imageLoader = new ImageLoader() {
             @Override
             public void loadImage(ImageView imageView, @Nullable String url, @Nullable Object payload) {
@@ -96,14 +99,40 @@ public class FriendsMessageActivity extends AppCompatActivity {
         });
 
         addListeiner();
-        fetchPastMessages();
+//        fetchPastMessages();
 
+    }
+
+    public void fetchUnread(){
+        String UID = friendName + "reboot";
+
+        MessagesRequest messagesRequest = new MessagesRequest.MessagesRequestBuilder()
+                .setUnread(true)
+                .setLimit(20)
+                .setUID(UID)
+                .build();
+
+        messagesRequest.fetchPrevious(new CometChat.CallbackListener<List<BaseMessage>>() {
+            @Override
+            public void onSuccess(List<BaseMessage> list) {
+
+                addMessages(list);
+
+                Log.d("pass unread", list.toString());
+            }
+
+            @Override
+            public void onError(CometChatException e) {
+                Log.d("unread fail", "Message fetching failed with exception: " + e.getMessage());
+            }
+        });
     }
 
 
     private void fetchPastMessages() {
         int limit = 50;
-        String fetchUID = friendName + "ReBoot";
+        String fetchUID = friendName + "reboot";
+        Log.d("pass name", fetchUID);
 
         MessagesRequest messagesRequest = new MessagesRequest.MessagesRequestBuilder()
                 .setLimit(limit)
@@ -114,6 +143,8 @@ public class FriendsMessageActivity extends AppCompatActivity {
             @Override
             public void onSuccess(List<BaseMessage> baseMessages) {
               addMessages(baseMessages);
+
+                Log.d("pass fetch", baseMessages.toString());
             }
 
             @Override
@@ -203,6 +234,8 @@ public class FriendsMessageActivity extends AppCompatActivity {
     public void checkUser(){
 
         String UID = username + "ReBoot";
+        Log.d("findingError", UID);
+
 
         CometChat.getUser(UID, new CometChat.CallbackListener<User>() {
             @Override
@@ -226,12 +259,14 @@ public class FriendsMessageActivity extends AppCompatActivity {
             CometChat.getUser(UID, new CometChat.CallbackListener<User>() {
                 @Override
                 public void onSuccess(User user) {
-                    Log.d("GetUser", "User details fetched successfully for user: " + user.getUid());
+                    Log.d("GetFriend", "User details fetched successfully for user: " + UID);
+//                    fetchPastMessages();
+                    fetchUnread();
                 }
 
                 @Override
                 public void onError(CometChatException e) {
-                    Log.d("GetUser", "User fetching failed with exception: " + e.getMessage());
+                    Log.d("GetFriend", "User fetching failed with exception: " + e.getMessage());
                     registerfriends(friendName);
                 }
             });
@@ -249,6 +284,7 @@ public class FriendsMessageActivity extends AppCompatActivity {
             @Override
             public void onSuccess(User user) {
                 Log.d("createUser", user.toString());
+                checkFriend();
             }
 
             @Override
@@ -266,16 +302,21 @@ public class FriendsMessageActivity extends AppCompatActivity {
 
                 @Override
                 public void onSuccess(User user) {
+                    senderID = CometChat.getLoggedInUser().getUid();
                     Log.d("loginWorks", "Login Successful : " + user.toString());
+                    checkFriend();
                 }
 
                 @Override
                 public void onError(CometChatException e) {
                     Log.d("loginError", "Login failed with exception: " + e.getMessage());
+                    registerUser();
                 }
             });
         } else {
-            // User already logged in
+            Log.d("loginNotneeded", username);
+            senderID = CometChat.getLoggedInUser().getUid();
+            checkFriend();
         }
     }
 

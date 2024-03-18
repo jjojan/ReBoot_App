@@ -267,6 +267,7 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), FriendsActivity.class);
+                intent.putExtra("profileName",tvUser_Username.getText() );
                 getActivity().startActivity(intent);
             }
         });
