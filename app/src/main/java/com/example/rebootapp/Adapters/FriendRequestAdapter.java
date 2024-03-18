@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.rebootapp.Activities.FriendProfileActivity;
+import com.example.rebootapp.Activities.RequestedFriendProfileActivity;
 import com.example.rebootapp.Models.FriendModel;
 import com.example.rebootapp.Models.SuggestedFriendModel;
 import com.example.rebootapp.R;
@@ -79,7 +80,7 @@ public class FriendRequestAdapter extends RecyclerView.Adapter<FriendRequestAdap
         holder.tv_mutualFriends.setText(numString2);
 
         holder.itemView.setOnClickListener(v -> {
-            Intent intent = new Intent(v.getContext(), FriendProfileActivity.class);
+            Intent intent = new Intent(v.getContext(), RequestedFriendProfileActivity.class);
             intent.putExtra("FRIEND_ID", suggestedFriendModel.getObjectId());
             v.getContext().startActivity(intent);
         });
