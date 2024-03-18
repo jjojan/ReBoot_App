@@ -72,19 +72,17 @@ public class FriendsMessageActivity extends AppCompatActivity {
 
         submit = findViewById(R.id.submit);
         messagesList = findViewById(R.id.messages);
-
-
-
-
         ImageLoader imageLoader = new ImageLoader() {
             @Override
             public void loadImage(ImageView imageView, @Nullable String url, @Nullable Object payload) {
                 Picasso.get().load(url).into(imageView);
             }
         };
-
+        senderID = CometChat.getLoggedInUser().getUid();
         adapter = new MessagesListAdapter<>(senderID, imageLoader);
         messagesList.setAdapter(adapter);
+
+
 
 
 
@@ -98,8 +96,19 @@ public class FriendsMessageActivity extends AppCompatActivity {
             }
         });
 
-        addListeiner();
+//        addListeiner();
 //        fetchPastMessages();
+
+        String listenerID = "UNIQUE_LISTENER_ID";
+        CometChat.addMessageListener(listenerID, new CometChat.MessageListener() {
+            @Override
+            public void onTextMessageReceived(TextMessage textMessage) {
+                addMessage(textMessage);
+                Log.d("listeining text", "Text message received successfully: " + textMessage.toString());
+            }
+
+
+        });
 
     }
 
@@ -260,8 +269,8 @@ public class FriendsMessageActivity extends AppCompatActivity {
             @Override
             public void onSuccess(User user) {
                 Log.d("GetFriend", "User details fetched successfully for user: " + UID);
-//                    fetchPastMessages();
-                fetchUnread();
+                    fetchPastMessages();
+//                fetchUnread();
             }
 
             @Override
@@ -297,7 +306,6 @@ public class FriendsMessageActivity extends AppCompatActivity {
     public void loginUser(){
         String UID = username + "ReBoot";
 
-        if (CometChat.getLoggedInUser() == null) {
             CometChat.login(UID, API_KEY, new CometChat.CallbackListener<User>() {
 
                 @Override
@@ -313,11 +321,7 @@ public class FriendsMessageActivity extends AppCompatActivity {
                     registerUser();
                 }
             });
-        } else {
-            Log.d("loginNotneeded", username);
-            senderID = CometChat.getLoggedInUser().getUid();
-            checkFriend();
-        }
+
     }
 
     public void refreshProfile() {
