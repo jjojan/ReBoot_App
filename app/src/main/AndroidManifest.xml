@@ -68,6 +68,9 @@
             android:name=".Activities.FriendProfileActivity"
             android:exported="true" />
         <activity
+            android:name=".Activities.RequestedFriendProfileActivity"
+            android:exported="true" />
+        <activity
             android:name=".Activities.FriendsMessageActivity"
             android:exported="true"></activity>
 

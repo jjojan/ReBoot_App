@@ -52,6 +52,8 @@ public class FriendsActivity extends AppCompatActivity {
 
     private final FriendUpdateCallback friendUpdateCallback = this::fetchFriendsAndUpdateUI;
     private final FriendUpdateCallback friendUpdateCallback2 = this::fetchFriendsAndUpdateUI2;
+    private final FriendUpdateCallback suggestCallback = this::fetchSuggestedFriends;
+    private final FriendUpdateCallback requestCallback = this::fetchRequestedFriends;
 
 
 
@@ -440,6 +442,7 @@ public class FriendsActivity extends AppCompatActivity {
         String oid = currentUser.getObjectId();
         ParseQuery<ParseObject> query = ParseQuery.getQuery("FriendRequest");
         query.whereEqualTo("destination_user", currentUser);
+        query.whereEqualTo("Response", "default");
         query.include("source_user");
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
