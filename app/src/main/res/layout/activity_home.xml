@@ -13,9 +13,11 @@
         android:textSize="25dp"
         android:textStyle="bold"
         android:fontFamily="@font/thasadith_bold"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="5dp"
         android:textAppearance="@drawable/gradient_background"
-        android:layout_marginHorizontal="@dimen/dialog_title_text_size"
-        android:layout_marginVertical="13dp"/>
+        android:layout_marginVertical="10dp"
+        android:layout_marginHorizontal="18sp"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/hzRecyclerView"
@@ -28,13 +30,14 @@
         android:id="@+id/textView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/dialog_title_text_size"
+
         android:text="New Games"
         android:textSize="25dp"
         android:textStyle="bold"
         android:fontFamily="@font/thasadith_bold"
+        android:layout_marginHorizontal="@dimen/dialog_title_text_size"
         android:textAppearance="@drawable/gradient_background"
-        android:layout_marginVertical="13dp"/>
+        android:layout_marginVertical="5dp"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/newGamesRV"
@@ -49,10 +52,11 @@
         android:text="Upcoming Games"
         android:textSize="25dp"
         android:textStyle="bold"
+        android:layout_marginHorizontal="@dimen/dialog_title_text_size"
         android:fontFamily="@font/thasadith_bold"
         android:textAppearance="@drawable/gradient_background"
-        android:layout_marginHorizontal="@dimen/dialog_title_text_size"
-        android:layout_marginVertical="13dp"/>
+
+        android:layout_marginVertical="5dp"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvYourGames"

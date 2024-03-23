@@ -32,6 +32,7 @@
         android:layout_below="@+id/svSearch"
         android:text="Search Results"
         android:fontFamily="@font/thasadith_bolditalic"
+        android:layout_marginHorizontal="18sp"
         android:textSize="25dp"
         android:textStyle="bold"
         android:layout_marginBottom="15dp"/>

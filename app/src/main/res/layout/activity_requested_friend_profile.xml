@@ -5,7 +5,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_alignParentBottom="false"
-    android:background="@color/white"
+    android:background="@drawable/gradient_background3"
     android:visibility="visible"
     tools:context=".Activities.FriendProfileActivity">
 
@@ -85,7 +85,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="450dp"
         android:layout_marginLeft="13dp"
-        android:text="Accept Friend\nRequest"
+        android:text="Accept Friend Request"
         android:textSize="25sp" />
     <TextView
         android:id="@+id/manage_user2"
@@ -93,7 +93,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="515dp"
         android:layout_marginLeft="13dp"
-        android:text="Deny Friend\nRequest"
+        android:text="Deny Friend Request"
         android:textSize="25sp" />
 
     <ImageButton
@@ -101,7 +101,7 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_alignBottom="@+id/manage_user"
-        android:layout_marginLeft="200dp"
+        android:layout_marginLeft="300dp"
         android:scaleType="fitCenter"
         android:src="@drawable/baseline_add_24" />
     <ImageButton
@@ -109,7 +109,7 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_alignBottom="@+id/manage_user2"
-        android:layout_marginLeft="200dp"
+        android:layout_marginLeft="300dp"
         android:scaleType="fitCenter"
         android:src="@drawable/baseline_delete_24" />
 
@@ -121,7 +121,7 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="50dp"
-        android:text="Done" />
+        android:text="Close" />
 
 
 
