@@ -38,9 +38,7 @@ public class SignUpActivity extends AppCompatActivity {
     GoogleSignInAccount account;
 
     //Manual Sign Up Variables
-    EditText edtUserName;
-    EditText edtEmail;
-    EditText edtPassword;
+    EditText edtUserName, edtEmail, edtPassword, edtRptPassword;
     Button btnSignUp;
     TextView tvLoginLink;
     Context context;
@@ -55,6 +53,7 @@ public class SignUpActivity extends AppCompatActivity {
         edtUserName = findViewById(R.id.edtUsername);
         edtEmail = findViewById(R.id.edtEmail);
         edtPassword = findViewById(R.id.edtPassword);
+        edtRptPassword = findViewById(R.id.edtRptPassword);
         btnSignUp = findViewById(R.id.btnSignUp);
         tvLoginLink = findViewById(R.id.tvLoginLink);
 
@@ -90,6 +89,7 @@ public class SignUpActivity extends AppCompatActivity {
                 String username = edtUserName.getText().toString();
                 String email = edtEmail.getText().toString();
                 String password = edtPassword.getText().toString();
+                String reptpassword = edtRptPassword.getText().toString();
                 if(username.isEmpty()){
                     Log.i("username", username);
                     Toast.makeText(getApplicationContext(), "userName is Required.", Toast.LENGTH_LONG).show();
@@ -101,7 +101,7 @@ public class SignUpActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Password is Required.", Toast.LENGTH_LONG).show();
                 }
                 else {
-                    signInManual(username, email, password);
+                    signInManual(username, email, password, reptpassword);
                     navigateToHomePage();
 
                 }
@@ -150,14 +150,19 @@ public class SignUpActivity extends AppCompatActivity {
         startActivityForResult(signInIntent, 1000);
     }
 
-    void signInManual(String username, String email, String password ){
+    void signInManual(String username, String email, String password, String reptpassword ){
         ParseUser user = new ParseUser();
 
         isValidEmail(email);
 
         user.setUsername(username);
         user.setEmail(email);
-        user.setPassword(password);
+        if(password == reptpassword){
+            user.setPassword(password);
+        }
+        else{
+            Toast.makeText(getApplicationContext(), "Passwords do not match", Toast.LENGTH_LONG).show();
+        }
 
         user.signUpInBackground(new SignUpCallback() {
             @Override

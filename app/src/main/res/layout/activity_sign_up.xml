@@ -3,28 +3,29 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@drawable/gradient_background"
     tools:context=".Activities.SignUpActivity">
 
     <ImageView
         android:id="@+id/ivRebootLogo"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:src="@drawable/rebootlogo"
+        android:layout_width="263dp"
+        android:layout_height="175dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="40dp"/>
+        android:layout_marginTop="15dp"
+        android:src="@drawable/rebootlogo" />
 
     <TextView
         android:id="@+id/tvIntroduction"
         android:layout_width="350dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/ivRebootLogo"
-        android:layout_marginTop="85dp"
+        android:layout_marginTop="35dp"
         android:text="Get Started with ReBoot"
         android:textColor="@color/aqua"
         android:layout_centerHorizontal="true"
         android:autoSizeTextType="uniform"
         android:textSize="25dp"
+        android:fontFamily="@font/thasadith_bold"
         android:textAlignment="center"
         />
     <EditText
@@ -33,11 +34,12 @@
         android:layout_height="50dp"
         android:layout_below="@id/tvIntroduction"
         android:hint="Username"
-        android:textColorHint="@color/black"
+        android:textColorHint="@color/aqua"
         android:layout_marginTop="13dp"
         android:layout_marginLeft="28dp"
         android:layout_marginRight="28dp"
         android:background="@drawable/edt_background"
+        android:fontFamily="@font/thasadith_bold"
         android:paddingLeft="13dp"/>
     <EditText
         android:id="@+id/edtEmail"
@@ -45,7 +47,8 @@
         android:layout_height="50dp"
         android:layout_below="@id/edtUsername"
         android:hint="Email"
-        android:textColorHint="@color/black"
+        android:textColorHint="@color/aqua"
+        android:fontFamily="@font/thasadith_bold"
         android:layout_marginTop="13dp"
         android:layout_marginLeft="28dp"
         android:layout_marginRight="28dp"
@@ -57,16 +60,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/edtEmail"
-        android:textColorHint="@color/black">
+        android:fontFamily="@font/thasadith_bold"
+        android:textColorHint="@color/aqua">
         <EditText
             android:id="@+id/edtPassword"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_below="@id/edtEmail"
             android:hint="Password"
-            android:textColorHighlight="@color/black"
-            android:textColor="@color/black"
-            android:textColorHint="@color/black"
+            android:textColorHighlight="@color/aqua"
+            android:textColor="@color/aqua"
+            android:textColorHint="@color/aqua"
             android:layout_marginTop="13dp"
             android:layout_marginLeft="28dp"
             android:layout_marginRight="28dp"
@@ -74,6 +78,19 @@
             android:inputType="textPassword"
             android:paddingLeft="13dp"/>
     </com.google.android.material.textfield.TextInputLayout>
+    <EditText
+        android:id="@+id/edtRptPassword"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@id/inputLayout"
+        android:hint="Password"
+        android:textColorHint="@color/aqua"
+        android:layout_marginTop="13dp"
+        android:layout_marginLeft="28dp"
+        android:layout_marginRight="28dp"
+        android:background="@drawable/edt_background"
+        android:inputType="textPassword"
+        android:paddingLeft="13dp"/>
     
     <TextView
         android:id="@+id/pop_up_window"
@@ -91,7 +108,8 @@
         android:layout_height="wrap_content"
         android:text="Sign Up"
         android:textColor="@color/black"
-        android:layout_below="@id/inputLayout"
+        android:fontFamily="@font/thasadith_bold"
+        android:layout_below="@id/edtRptPassword"
         android:layout_centerHorizontal="true"
         android:background="@drawable/btn_background"
         android:layout_marginTop="13dp"
@@ -106,7 +124,8 @@
         android:layout_centerHorizontal="true"
         android:linksClickable="true"
         android:textSize="18dp"
-        android:textColor="@color/aqua"
+        android:textColor="@color/white60"
+        android:fontFamily="@font/thasadith_bold"
         android:layout_marginTop="10dp" />
     <ImageView
         android:layout_width="79dp"
@@ -121,7 +140,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/tvLoginLink"
         android:text="Already have an account? Login here"
-        android:textColor="@color/aqua"
+        android:textColor="@color/white60"
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
         android:layout_marginTop="12dp"
