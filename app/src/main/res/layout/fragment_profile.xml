@@ -14,16 +14,19 @@
     <!--  -->
 
     <!-- User Profile Pic -->
-    <ImageView
+    <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/ProfilePic"
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:layout_marginTop="20dp"
         android:layout_marginLeft="25dp"
+        app:shapeAppearanceOverlay="@style/circleImageView"
         android:scaleType="fitCenter"
         android:src="?attr/selectableItemBackground"
         android:visibility="visible"
         app:srcCompat="@drawable/baseline_person_24" />
+
+
     <!--Username  -->
     <TextView
         android:id="@+id/tvUser_Username"

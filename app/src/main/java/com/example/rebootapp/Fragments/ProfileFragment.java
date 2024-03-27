@@ -45,6 +45,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.imageview.ShapeableImageView;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
@@ -60,6 +61,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 
 public class ProfileFragment extends Fragment {
 
@@ -69,7 +72,7 @@ public class ProfileFragment extends Fragment {
     Button btnSignOut;
     ImageButton Friends, Starred, EditProfileButton, CustomLists;
     TextView tvUser_Username, tvUser_Email, bio;
-    ImageView ProfilePic;
+    ShapeableImageView ProfilePic;
     private static final int PICK_IMAGE_REQUEST = 1;
     ActivityResultLauncher<Intent> resultLauncher;
     Uri profile_Uri;
