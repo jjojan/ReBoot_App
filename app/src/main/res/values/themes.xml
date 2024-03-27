@@ -18,5 +18,9 @@
         <item name="android:textSize">18sp</item>
         <item name="android:background">@drawable/dialog_background</item>
     </style>
+    
+    <style name="CardView." parent="CardView">
+        <item name="android:foreground">@drawable/green_gradient1</item>
+    </style>
 
 </resources>

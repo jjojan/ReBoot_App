@@ -1,4 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/gradient_background"
+    android:backgroundTint="@color/white"
+    app:strokeColor="@color/black"
+    app:strokeWidth="1dp"
+    app:cardUseCompatPadding="true"
+    android:theme="@style/Theme.MaterialComponents.Light">
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
@@ -19,3 +32,5 @@
         android:padding="8dp"
         android:textSize="12sp" />
 </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>

@@ -2,19 +2,26 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="110dp"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="15dp"
+    app:cardPreventCornerOverlap="true"
+    android:layout_margin="5dp"
+    android:elevation="100dp"
+    android:background="@drawable/gradient_background">
 
     <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@drawable/gradient_background">
 
         <ImageView
             android:id="@+id/gamePoster"
-            android:layout_width="125dp"
-            android:layout_height="200dp"
+            android:layout_width="115dp"
+            android:layout_height="160dp"
             android:scaleType="centerCrop"
             tools:srcCompat="@tools:sample/avatars"
-            android:padding="5dp"
+            android:padding="0dp"
             android:cropToPadding="true"/>
     </RelativeLayout>
 
