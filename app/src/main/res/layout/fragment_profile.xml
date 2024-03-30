@@ -33,9 +33,10 @@
         android:layout_width="218dp"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@+id/ProfilePic"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="55dp"
         android:textAlignment="textEnd"
-        android:textSize="20sp" />
+        android:textSize="20sp"
+        android:fontFamily="@font/thasadith_bold"/>
     <!-- User Email -->
     <TextView
         android:id="@+id/tvUser_Email"
@@ -44,17 +45,20 @@
         android:layout_toRightOf="@+id/ProfilePic"
         android:layout_below="@+id/tvUser_Username"
         android:textAlignment="textEnd"
-        android:textSize="20sp" />
+        android:textSize="20sp"
+        android:fontFamily="@font/thasadith_bold"/>
     <!-- Bio Header -->
     <TextView
         android:id="@+id/bioHeader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvUser_Email"
-        android:layout_marginTop="13dp"
+        android:layout_marginTop="15dp"
         android:layout_marginLeft="15dp"
         android:text="My Bio"
-        android:textSize="24sp" />
+        android:textSize="24sp"
+        android:fontFamily="@font/thasadith_bold"
+        android:textColor="@color/aqua"/>
     <!-- Bio -->
     <TextView
         android:id="@+id/bioContent"
@@ -64,7 +68,11 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="10dp"
         android:textSize="16sp"
-        android:background="@color/white"/>
+        android:textAlignment="center"
+        android:elegantTextHeight="true"
+        android:hint="Tell us about yourself..."
+        android:fontFamily="@font/thasadith_bold"
+        android:background="@drawable/rounded_textview"/>
     <!-- Friends Header -->
     <TextView
         android:id="@+id/friendsHeader"
@@ -75,7 +83,9 @@
         android:layout_marginLeft="13dp"
         android:layout_marginBottom="10dp"
         android:text="Friends"
-        android:textSize="30sp" />
+        android:textSize="30sp"
+        android:fontFamily="@font/thasadith_bold"
+        android:textColor="@color/aqua"/>
 
     <!-- Friends Button Link -->
     <ImageButton
@@ -108,7 +118,9 @@
         android:layout_below="@+id/friendsRecyclerView"
         android:layout_marginLeft="13dp"
         android:text="Starred"
-        android:textSize="30sp" />
+        android:textSize="30sp"
+        android:fontFamily="@font/thasadith_bold"
+        android:textColor="@color/aqua"/>
 
     <!-- Favorites Button Link -->
     <ImageButton
@@ -119,7 +131,8 @@
         android:layout_alignBottom="@+id/favoritesHeader"
         android:layout_marginLeft="25dp"
         android:scaleType="fitCenter"
-        android:src="@drawable/star" />
+        android:src="@drawable/star"
+        />
 
     <!-- Favorites Preview - RecyclerView -->
     <androidx.recyclerview.widget.RecyclerView
@@ -136,8 +149,11 @@
         android:id="@+id/EditProfileButton"
         android:layout_width="50dp"
         android:layout_height="50dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="0dp"
+        android:layout_marginBottom="0dp"
+        android:layout_alignBottom="@+id/ProfilePic"
         android:layout_toEndOf="@+id/ProfilePic"
-        android:layout_below="@+id/EditProfileHeader"
         android:scaleType="fitCenter"
         android:src="@drawable/edit_profile" />
 
@@ -145,12 +161,9 @@
         android:id="@+id/EditProfileHeader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="0dp"
-        android:layout_marginBottom="0dp"
-        android:layout_toEndOf="@+id/ProfilePic"
-        android:text="EditProfile"
+        android:layout_toEndOf="@+id/EditProfileButton"
+        android:layout_alignBottom="@+id/EditProfileButton"
+        android:text="Edit"
         android:textSize="20sp" />
 
     <!-- Custom List Header -->
@@ -171,7 +184,9 @@
         android:layout_alignBottom="@+id/customListHeader"
         android:layout_marginLeft="25dp"
         android:scaleType="fitCenter"
-        android:src="@drawable/baseline_playlist_add_check_24" />
+        android:src="@drawable/baseline_playlist_add_check_24"
+        android:fontFamily="@font/thasadith_bold"
+        android:textColor="@color/aqua"/>
 
 
     <Button

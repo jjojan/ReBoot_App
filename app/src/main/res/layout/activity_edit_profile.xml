@@ -5,31 +5,47 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_alignParentBottom="false"
-    android:background="@color/white"
+    android:background="@drawable/gradient_background"
     android:visibility="visible"
     tools:context=".Activities.EditProfileActivity">
 
-    <EditText
-        android:id="@+id/et_editUsername"
-        android:layout_width="match_parent"
-        android:layout_height="25dp"
-        android:layout_marginLeft="150dp"
-        android:layout_marginTop="150dp"
-        android:layout_marginRight="28dp"
-        android:background="@drawable/edt_background"
-        android:hint="Edit Username"
-        android:paddingLeft="13dp"
-        android:textColorHint="@color/black" />
-
-    <TextView
-        android:id="@+id/textView11"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@id/et_editUsername"
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/iv_currentUserProfilePic"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_marginTop="20dp"
         android:layout_marginLeft="25dp"
-        android:layout_marginTop="150dp"
-        android:background="@color/gray"
-        android:text="Edit Username" />
+        app:shapeAppearanceOverlay="@style/circleImageView"
+        android:scaleType="fitCenter"
+        android:src="?attr/selectableItemBackground"
+        android:visibility="visible"
+        app:srcCompat="@drawable/baseline_person_24" />
+
+    <Button
+        android:id="@+id/btn_edit_profile_pic"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/iv_currentUserProfilePic"
+        android:layout_marginLeft="280dp"
+        android:text="Edit" />
+
+    <EditText
+        android:id="@+id/et_currentUserName"
+        android:layout_width="175dp"
+        android:layout_height="30dp"
+        android:layout_below="@+id/iv_currentUserProfilePic"
+        android:layout_marginLeft="25dp"
+        android:layout_marginTop="65dp"
+        android:background="@color/white60"
+        android:textAlignment="center"/>
+
+    <Button
+        android:id="@+id/btn_edit_user_name"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/et_currentUserName"
+        android:layout_marginLeft="280dp"
+        android:text="Edit" />
 
     <Button
         android:id="@+id/btn_SaveProfile"
@@ -49,20 +65,14 @@
         android:layout_marginBottom="50dp"
         android:text="Done" />
 
-    <Button
-        android:id="@+id/btn_profile_pic"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="50dp"
-        android:text="Pick Profile Picture" />
 
     <EditText
         android:id="@+id/edt_Bio"
-        android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:layout_marginTop="200dp"
-        android:layout_marginHorizontal="15dp"
+        android:layout_width="350dp"
+        android:layout_height="60dp"
+        android:layout_below="@+id/et_currentUserName"
+        android:layout_marginTop="50dp"
+        android:layout_centerHorizontal="true"
         android:background="@drawable/edt_background"
         android:hint="Enter Bio"
         android:inputType="textMultiLine"

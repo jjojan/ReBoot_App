@@ -13,6 +13,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -23,6 +26,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -43,7 +47,7 @@ public class SignUpActivity extends AppCompatActivity {
     TextView tvLoginLink;
     Context context;
 
-
+    private ActivityResultLauncher<Intent> launcher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +65,15 @@ public class SignUpActivity extends AppCompatActivity {
 
         gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
         gsc = GoogleSignIn.getClient(this, gso);
+
+        launcher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == RESULT_OK) {
+                        Intent data = result.getData();
+                    }
+                }
+        );
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setCancelable(true);
@@ -100,6 +113,9 @@ public class SignUpActivity extends AppCompatActivity {
                 else if(password.isEmpty()){
                     Toast.makeText(getApplicationContext(), "Password is Required.", Toast.LENGTH_LONG).show();
                 }
+                else if(reptpassword.isEmpty()){
+                    Toast.makeText(getApplicationContext(), "Must enter password twice.", Toast.LENGTH_LONG).show();
+                }
                 else {
                     signInManual(username, email, password, reptpassword);
                     navigateToHomePage();
@@ -133,9 +149,9 @@ public class SignUpActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        account = GoogleSignIn.getLastSignedInAccount(this);
+        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
         if(account == null){
-
+            Toast.makeText(getApplicationContext(), "User has not signed up with Google", Toast.LENGTH_SHORT).show();
             updateUI(account);
         } else{
 
@@ -145,10 +161,14 @@ public class SignUpActivity extends AppCompatActivity {
 
     }
 
+
     void signIn(){
         Intent signInIntent = gsc.getSignInIntent();
+        //launcher.launch(signInIntent);
         startActivityForResult(signInIntent, 1000);
     }
+
+
 
     void signInManual(String username, String email, String password, String reptpassword ){
         ParseUser user = new ParseUser();
@@ -186,8 +206,39 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
 
-    void updateUI(GoogleSignInAccount account){
+    void updateUI(GoogleSignInAccount acct){
+        if(acct != null){
+            String personName = acct.getDisplayName();
+            String personGivenName = acct.getGivenName();
+            String personEmail = acct.getEmail();
+            String personId = acct.getId();
 
+            ParseUser user = new ParseUser();
+            user.setUsername(personGivenName);
+            user.setEmail(personEmail);
+            user.setPassword(personId);
+
+            ParseQuery<ParseObject> query = ParseQuery.getQuery("User");
+
+            Log.i("personGivenName", personGivenName);
+            Log.i("id", personId);
+
+            user.signUpInBackground(new SignUpCallback() {
+                @Override
+                public void done(ParseException e) {
+                    if(e == null){
+                        Toast.makeText(getApplicationContext(), "User Signed In", Toast.LENGTH_SHORT).show();
+                    }
+                    else{
+                        Toast.makeText(getApplicationContext(), "Failed to Sign In User.", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+            navigateToHomePage();
+        }
+        else{
+            Toast.makeText(getApplicationContext(), "Google info not available.", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
@@ -199,46 +250,16 @@ public class SignUpActivity extends AppCompatActivity {
             handleSignInResult(task);
 
         }
+        else{
+            Toast.makeText(getApplicationContext(), "Different Code", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void handleSignInResult(Task<GoogleSignInAccount> task) {
         try {
-            Log.i("sign", "signup");
-            GoogleSignInAccount account = task.getResult(ApiException.class);
-            Log.i("sign", String.valueOf(account));
+            GoogleSignInAccount acct = task.getResult(ApiException.class);
 
-            GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(this);
 
-            if(account != null){
-                String personName = account.getDisplayName();
-                String personGivenName = account.getGivenName();
-                String personEmail = account.getEmail();
-                String personId = account.getId();
-
-                ParseUser user = new ParseUser();
-                user.setUsername(personGivenName);
-                user.setEmail(personEmail);
-                user.setPassword(personId);
-                user.setEmail(personEmail);
-
-                ParseQuery<ParseObject> query = ParseQuery.getQuery("User");
-
-                Log.i("personGivenName", personGivenName);
-                Log.i("id", personId);
-
-                user.signUpInBackground(new SignUpCallback() {
-                    @Override
-                    public void done(ParseException e) {
-                        if(e == null){
-                            Toast.makeText(getApplicationContext(), "User Signed In", Toast.LENGTH_SHORT).show();
-                        }
-                        else{
-                            Toast.makeText(getApplicationContext(), "Failed to Sign In User.", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-                navigateToHomePage();
-            }
         } catch (ApiException e) {
             Log.i("sign", "error");
             Log.w(ContentValues.TAG, "signInResult:failed code=" + e.getStatusCode());
@@ -252,4 +273,5 @@ public class SignUpActivity extends AppCompatActivity {
         Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
         startActivity(intent);
     }
+
 }

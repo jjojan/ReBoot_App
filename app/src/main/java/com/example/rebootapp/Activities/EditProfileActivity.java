@@ -32,6 +32,7 @@ import java.io.InputStream;
 
 
 import com.example.rebootapp.R;
+import com.google.android.material.imageview.ShapeableImageView;
 import com.parse.CountCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
@@ -41,19 +42,21 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.parse.SignUpCallback;
+import com.squareup.picasso.Picasso;
 
 import androidx.activity.result.contract.ActivityResultContract;
 import 	androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia;
 public class EditProfileActivity extends AppCompatActivity {
 
-    Button btn_ProfileDone;
-    Button btn_SaveProfile;
-    Button btn_Profile_Pic;
-    EditText et_editUsername;
-    EditText edt_bio;
-    TextView tv_CharCount;
+    Button editProfilePic, editUserName, saveProfile, exitSession;
+    TextView characterCount;
+    EditText userName, editBio;
 
     ActivityResultLauncher<Intent> resultLauncher;
+
+    ImageView currentProfilePic;
+    Uri profile_Uri;
+    private static final int PICK_IMAGE_REQUEST = 1;
 
 
     // currentUser global Variable
@@ -68,6 +71,7 @@ public class EditProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profile);
 
+        //Get Current User Information
         ParseUser currentUser = ParseUser.getCurrentUser();
         try {
             currentUser.fetch();
@@ -81,16 +85,19 @@ public class EditProfileActivity extends AppCompatActivity {
         query.whereEqualTo(currentUserObjectID, "username");
 
 
-        btn_ProfileDone = findViewById(R.id.btn_ProfileDone);
-        btn_SaveProfile = findViewById(R.id.btn_SaveProfile);
-        btn_Profile_Pic = findViewById(R.id.btn_profile_pic);
-        et_editUsername = findViewById(R.id.et_editUsername);
-        edt_bio = findViewById(R.id.edt_Bio);
-        tv_CharCount = findViewById(R.id.tv_CharCount);
+        //Assign XML Elements
+        editProfilePic = findViewById(R.id.btn_edit_profile_pic);
+        editUserName = findViewById(R.id.btn_edit_user_name);
+        saveProfile = findViewById(R.id.btn_SaveProfile);
+        exitSession = findViewById(R.id.btn_ProfileDone);
+        characterCount = findViewById(R.id.tv_CharCount);
+        userName = findViewById(R.id.et_currentUserName);
+        editBio = findViewById(R.id.edt_Bio);
 
-        et_editUsername.setHint(currentUserName);
 
-        edt_bio.addTextChangedListener(new TextWatcher() {
+        userName.setHint(currentUserName);
+
+        editBio.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -106,21 +113,21 @@ public class EditProfileActivity extends AppCompatActivity {
                 String text = s.toString();
                 int length = text.length();
                 text = (length + "/225");
-                tv_CharCount.setText(text);
+                characterCount.setText(text);
             }
         });
-        btn_ProfileDone.setOnClickListener(new View.OnClickListener() {
+        exitSession.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
         });
 
-        btn_SaveProfile.setOnClickListener(new View.OnClickListener() {
+        saveProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String strUsername = et_editUsername.getText().toString();
-                String strBio = edt_bio.getText().toString();
+                String strUsername = userName.getText().toString();
+                String strBio = editBio.getText().toString();
                 checkUsername(strUsername, new UsernameCheckCallback() {
                     @Override
                     public void onResult(boolean isUsernameAvailable) {
@@ -162,7 +169,7 @@ public class EditProfileActivity extends AppCompatActivity {
 //            }
 //        });
 
-        btn_Profile_Pic.setOnClickListener(new View.OnClickListener() {
+        editProfilePic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 pickMedia.launch(new PickVisualMediaRequest.Builder()
@@ -176,7 +183,6 @@ public class EditProfileActivity extends AppCompatActivity {
 
 
     }
-
     public void checkUsername(String str, UsernameCheckCallback callback) {
         ParseQuery<ParseObject> query = ParseQuery.getQuery("_User");
         query.whereEqualTo("username", str);
