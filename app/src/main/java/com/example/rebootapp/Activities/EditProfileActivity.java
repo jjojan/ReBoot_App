@@ -2,6 +2,7 @@ package com.example.rebootapp.Activities;
 
 import android.app.Activity;
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,6 +25,7 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.PickVisualMediaRequest;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.ByteArrayOutputStream;
@@ -48,13 +51,13 @@ import androidx.activity.result.contract.ActivityResultContract;
 import 	androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia;
 public class EditProfileActivity extends AppCompatActivity {
 
-    Button editProfilePic, editUserName, saveProfile, exitSession;
-    TextView characterCount;
-    EditText userName, editBio;
+    Button exitSession;
+    TextView characterCount, userName, editProfilePic, editUserName, saveProfile;
+    EditText editBio;
 
     ActivityResultLauncher<Intent> resultLauncher;
 
-    ImageView currentProfilePic;
+    ShapeableImageView currentProfilePic;
     Uri profile_Uri;
     private static final int PICK_IMAGE_REQUEST = 1;
 
@@ -93,9 +96,39 @@ public class EditProfileActivity extends AppCompatActivity {
         characterCount = findViewById(R.id.tv_CharCount);
         userName = findViewById(R.id.et_currentUserName);
         editBio = findViewById(R.id.edt_Bio);
+        currentProfilePic = findViewById(R.id.iv_currentUserProfilePic);
 
 
         userName.setHint(currentUserName);
+        editBio.setHint(currentUser.getString("bio"));
+
+        editUserName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                userName = popUpEditText();
+            }
+        });
+
+        query.getInBackground(currentUserObjectID, new GetCallback<ParseObject>() {
+            @Override
+            public void done(ParseObject object, ParseException e) {
+                if (e == null) {
+                    ParseFile image = object.getParseFile("profile_pic");
+
+                    String imageUrl;
+                    if (image != null) {
+                        imageUrl = image.getUrl();
+                        Picasso.get().load(imageUrl).into(currentProfilePic);
+                    } else {
+                    }
+
+
+                } else {
+
+                    System.out.println(e.toString());
+                }
+            }
+        });
 
         editBio.addTextChangedListener(new TextWatcher() {
             @Override
@@ -140,7 +173,7 @@ public class EditProfileActivity extends AppCompatActivity {
                     }
                 });
 
-
+                Toast.makeText(getApplicationContext(), "Saved", Toast.LENGTH_LONG).show();
             }
         });
 
@@ -299,4 +332,46 @@ public class EditProfileActivity extends AppCompatActivity {
 //        ParseUser currentUser = ParseUser.getCurrentUser();
 //
 //    }
+
+    EditText popUpEditText() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("New Username");
+
+        final EditText input = new EditText(this);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT);
+        input.setLayoutParams(lp);
+        builder.setView(input);
+
+        // Set up the buttons
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                String strUsername = userName.getText().toString();
+                String strBio = editBio.getText().toString();
+                ParseUser currentUser = ParseUser.getCurrentUser();
+                try {
+                    currentUser.fetch();
+                }
+                catch (Exception e){
+                    System.out.println("won't fetch");
+                }
+                String currentUserObjectID = currentUser.getObjectId();
+                updateProfile(currentUserObjectID, strUsername, strBio );
+                finish();
+                startActivity(getIntent());
+
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        builder.show();
+        return input;
+    }
 }

@@ -13,7 +13,7 @@
         android:id="@+id/iv_currentUserProfilePic"
         android:layout_width="150dp"
         android:layout_height="150dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="55dp"
         android:layout_marginLeft="25dp"
         app:shapeAppearanceOverlay="@style/circleImageView"
         android:scaleType="fitCenter"
@@ -21,40 +21,37 @@
         android:visibility="visible"
         app:srcCompat="@drawable/baseline_person_24" />
 
-    <Button
+    <TextView
         android:id="@+id/btn_edit_profile_pic"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/iv_currentUserProfilePic"
         android:layout_marginLeft="280dp"
+        android:textSize="25dp"
+        android:fontFamily="@font/thasadith_bold"
+        android:clickable="true"
         android:text="Edit" />
 
-    <EditText
+    <TextView
         android:id="@+id/et_currentUserName"
         android:layout_width="175dp"
         android:layout_height="30dp"
         android:layout_below="@+id/iv_currentUserProfilePic"
         android:layout_marginLeft="25dp"
         android:layout_marginTop="65dp"
-        android:background="@color/white60"
-        android:textAlignment="center"/>
+        android:textSize="25dp"
+        android:textAlignment="center" />
 
-    <Button
+    <TextView
         android:id="@+id/btn_edit_user_name"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/et_currentUserName"
         android:layout_marginLeft="280dp"
-        android:text="Edit" />
-
-    <Button
-        android:id="@+id/btn_SaveProfile"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="100dp"
-        android:text="Save" />
+        android:textSize="25dp"
+        android:text="Edit"
+        android:fontFamily="@font/thasadith_bold"
+        android:clickable="true"/>
 
     <Button
         android:id="@+id/btn_ProfileDone"
@@ -73,11 +70,11 @@
         android:layout_below="@+id/et_currentUserName"
         android:layout_marginTop="50dp"
         android:layout_centerHorizontal="true"
-        android:background="@drawable/edt_background"
         android:hint="Enter Bio"
         android:inputType="textMultiLine"
         android:maxLines="5"
         android:paddingLeft="13dp"
+        android:fontFamily="@font/thasadith_bold"
         android:textColorHint="@color/black" />
 
     <TextView
@@ -85,8 +82,22 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/edt_Bio"
-        android:layout_alignParentRight="true"
+        android:layout_marginLeft="65dp"
         android:text="0/225" />
+
+    <TextView
+        android:id="@+id/btn_SaveProfile"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/tv_CharCount"
+       android:layout_marginTop="425dp"
+        android:layout_marginLeft="180dp"
+        android:textSize="25dp"
+        android:text="Save"
+        android:fontFamily="@font/thasadith_bold"
+        android:clickable="true"/>
+
+
 
 
 </RelativeLayout>

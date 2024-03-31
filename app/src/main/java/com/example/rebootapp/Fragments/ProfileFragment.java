@@ -24,7 +24,9 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -62,6 +64,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import android.view.MenuItem;
 
 
 public class ProfileFragment extends Fragment {
@@ -83,6 +86,10 @@ public class ProfileFragment extends Fragment {
     List<FriendModel> friendsList = new ArrayList<>();
     FavoriteGamesAdapter favoritesAdapter;
     FriendsListAdapter friendsListAdapter;
+    public DrawerLayout drawerLayout;
+    public ActionBarDrawerToggle actionBarDrawerToggle;
+
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -121,6 +128,12 @@ public class ProfileFragment extends Fragment {
         //EditProfileButton = view.findViewById(R.id.EditProfileButton);
         bio = view.findViewById(R.id.bioContent);
         CustomLists = view.findViewById(R.id.customList);
+
+        //drawerLayout = view.findViewById(R.id.my_drawer_layout);
+        //actionBarDrawerToggle = new ActionBarDrawerToggle(getActivity(), drawerLayout, R.string.nav_open, R.string.nav_close);
+        //drawerLayout.addDrawerListener(actionBarDrawerToggle);
+        //actionBarDrawerToggle.syncState();
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail().build();
@@ -163,6 +176,16 @@ public class ProfileFragment extends Fragment {
         return view;
 
     }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        if (actionBarDrawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     public void manageCustomListDialog() {
         // Inflate the custom layout using layout inflater
         LayoutInflater inflater = LayoutInflater.from(getActivity());
@@ -342,7 +365,6 @@ public class ProfileFragment extends Fragment {
         ParseUser currentUser = ParseUser.getCurrentUser();
         ParseRelation<ParseUser> friendsRelation = currentUser.getRelation("friends");
         ParseQuery<ParseUser> query = friendsRelation.getQuery();
-
 
         query.findInBackground(new FindCallback<ParseUser>() {
             @Override

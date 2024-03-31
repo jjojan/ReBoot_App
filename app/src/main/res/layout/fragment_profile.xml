@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+
+    <!-- this the navigation view which draws and shows the navigation drawer -->
+    <!-- include the menu created in the menu folder -->
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -13,6 +18,7 @@
 
     <!--  -->
 
+
     <!-- User Profile Pic -->
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/ProfilePic"
@@ -25,6 +31,7 @@
         android:src="?attr/selectableItemBackground"
         android:visibility="visible"
         app:srcCompat="@drawable/baseline_person_24" />
+
 
 
     <!--Username  -->
