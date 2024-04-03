@@ -1,19 +1,14 @@
 package com.example.rebootapp.Activities;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.RatingBar;
-import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.ToggleButton;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,7 +24,6 @@ import com.example.rebootapp.GameModel;
 import com.example.rebootapp.Models.ReviewModel;
 import com.example.rebootapp.Models.UserListModel;
 import com.example.rebootapp.R;
-import com.example.rebootapp.databinding.ActivityGameDetailsBinding;
 import com.parse.CountCallback;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
@@ -48,21 +42,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.Headers;
+
 public class GameDetailsActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
-    ActivityGameDetailsBinding binding;
+    com.example.rebootapp.databinding.ActivityGameDetailsNewBinding binding;
     GameModel movie;
 
     List<GameModel> gameModel;
 
-
-    // the view objects
-    TextView tvTitle;
-    TextView tvOverview;
-    RatingBar rbVoteAverage;
-    ImageView ivPoster;
-    ToggleButton heartButton;
-
-    ImageButton reviewButton;
 
     String currentUserID;
 
@@ -70,37 +56,17 @@ public class GameDetailsActivity extends AppCompatActivity implements AdapterVie
 
     String gameID;
 
-    RecyclerView recyclerView;
-
-
-    //Previous Type: ReadMoreTextView
-    TextView tvDesc;
-
-    ImageView enter;
-
     String GAME_URL = "https://api.rawg.io/api/games/";
+    ArrayList<ReviewModel> reviewList;
+    ReviewAdapter reviewAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
 
         super.onCreate(savedInstanceState);
-        binding=ActivityGameDetailsBinding.inflate(getLayoutInflater());
+        binding = com.example.rebootapp.databinding.ActivityGameDetailsNewBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
-        tvTitle = (TextView) findViewById(R.id.tvTitle);
-        tvOverview = (TextView) findViewById(R.id.tvOverview);
-        rbVoteAverage = (RatingBar) findViewById(R.id.rbVoteAverage);
-        heartButton = findViewById(R.id.toggleButton);
-        //Error here
-        tvDesc = findViewById(R.id.tvDesc);
-        //expTV = findViewById(R.id.expTV);
-
-        reviewButton = findViewById(R.id.reviewButton);
-        enter = findViewById(R.id.add);
-
-
-
 
 
         movie = (GameModel) Parcels.unwrap(getIntent().getParcelableExtra(GameModel.class.getSimpleName()));
@@ -110,19 +76,15 @@ public class GameDetailsActivity extends AppCompatActivity implements AdapterVie
                         "\nBackgropPath: " + movie.getBackdropPath() +
                         "\nPosterPath: " + movie.getPosterPath() + "\nVote: " + movie.getVoteAverage());
         gameID = movie.getID();
-        tvTitle.setText(movie.getTitle());
-        tvOverview.setText(movie.getOverview());
+        binding.tvTitle.setText(movie.getTitle());
+        binding.tvGameDescription.setText(movie.getOverview());
 
 
-//        float voteAverage = movieModel.getVoteAverage().floatValue();
-//        rbVoteAverage.setRating(voteAverage / 2.0f);
-
-        ivPoster = (ImageView) findViewById(R.id.ivPoster);
         Glide.with(this)
                 .load(movie.getPosterPath())
                 .placeholder(R.drawable.flicks_movie_placeholder)
                 .error(R.drawable.flicks_movie_placeholder)
-                .into(ivPoster);
+                .into(binding.imgPreview);
 
         ParseUser currentUser = ParseUser.getCurrentUser();
         currentUserID = currentUser.getObjectId();
@@ -164,7 +126,7 @@ public class GameDetailsActivity extends AppCompatActivity implements AdapterVie
                 JSONObject jsonObject = json.jsonObject;
                 try {
                     Log.i("id", jsonObject.getString("description_raw"));
-                    tvDesc.setText(jsonObject.getString("description_raw"));
+                    binding.tvGameDescription.setText(jsonObject.getString("description_raw"));
 
 
                 } catch (JSONException e) {
@@ -187,23 +149,116 @@ public class GameDetailsActivity extends AppCompatActivity implements AdapterVie
             }
         });
 
-        checkMovieID(currentUserID, gameID, isEmpty -> heartButton.setChecked(!isEmpty));
+//        checkMovieID(currentUserID, gameID, isEmpty -> heartButton.setChecked(!isEmpty));
 
-        heartButton.setOnClickListener(v -> {
-            if (heartButton.isChecked()) {
-                addFavoriteGame(currentUserID, gameID, favPath);
-            } else {
-                removeFavoriteGame(currentUserID, gameID);
+//        binding.imgFav.setOnClickListener(v -> {
+//            if (heartButton.isChecked()) {
+//                addFavoriteGame(currentUserID, gameID, favPath);
+//            } else {
+//                removeFavoriteGame(currentUserID, gameID);
+//            }
+//        });
+
+
+        binding.imgAddToList.setOnClickListener(v -> {
+            addToUserListDialog();
+        });
+//        binding.reviewButton.setOnClickListener(view -> checkIfUserReviewed(currentUserID,gameID));
+        fetchReviews();
+        fetchRatings();
+        binding.tvAllReviews.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                reviewAdapter.updateData(reviewList);
+                binding.tvAllReviews.setVisibility(View.GONE);
             }
         });
-
-
-        enter.setOnClickListener(v -> {addToUserListDialog();});
-        binding.reviewButton.setOnClickListener(view -> checkIfUserReviewed(currentUserID,gameID));
-        fetchReviews();
-
-
+        binding.btnSaveReview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                writeReview();
+            }
+        });
     }
+
+    public void fetchRatings() {
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Review");
+        query.whereEqualTo("GameID", gameID);
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> reviews, ParseException e) {
+                if (e == null) {
+                    List<Float> oneStarReviews = new ArrayList<>();
+                    List<Float> twoStarReviews = new ArrayList<>();
+                    List<Float> threeStarReviews = new ArrayList<>();
+                    List<Float> fourStarReviews = new ArrayList<>();
+                    List<Float> fiveStarReviews = new ArrayList<>();
+
+                    for (ParseObject reviewObject : reviews) {
+                        float ratingStar = reviewObject.getNumber("ratingStar") != null ? reviewObject.getNumber("ratingStar").floatValue() : 0;
+
+                        // Yuvarlama işlemi ve doğru listeye ekleme
+                        int roundedRating = Math.round(ratingStar);
+                        switch (roundedRating) {
+                            case 1:
+                                oneStarReviews.add(ratingStar);
+                                break;
+                            case 2:
+                                twoStarReviews.add(ratingStar);
+                                break;
+                            case 3:
+                                threeStarReviews.add(ratingStar);
+                                break;
+                            case 4:
+                                fourStarReviews.add(ratingStar);
+                                break;
+                            case 5:
+                                fiveStarReviews.add(ratingStar);
+                                break;
+                            default:
+                                // Eğer 1-5 dışında bir değer varsa, bu bir hata olabilir
+                                Log.e("fetchReviews", "Yıldız değerlendirme dışında bir değer bulundu: " + ratingStar);
+                        }
+                    }
+
+                    // Öncelikle tüm listelerdeki float değerlerini bir listeye ekleyelim
+                    ArrayList<Float> allRatings = new ArrayList<>();
+                    allRatings.addAll(oneStarReviews);
+                    allRatings.addAll(twoStarReviews);
+                    allRatings.addAll(threeStarReviews);
+                    allRatings.addAll(fourStarReviews);
+                    allRatings.addAll(fiveStarReviews);
+
+                    // Toplam puanı ve ortalama puanı hesaplayalım
+                    float totalRating = 0;
+                    for (Float rating : allRatings) {
+                        totalRating += rating;
+                    }
+                    // Aritmetik ortalamayı hesaplayalım
+                    float averageRating = totalRating / allRatings.size();
+                    // Virgülden sonra tek hane olacak şekilde formatlayalım
+                    averageRating = Math.round(averageRating * 10) / 10.0f;
+                    // Sonucu TextView'a set edelim
+                    binding.tvRatingCount.setText(String.valueOf(averageRating));
+                    binding.ratingBarMain.setRating(averageRating);
+                    binding.progressBar5.setMax(allRatings.size());
+                    binding.progressBar5.setProgress(fiveStarReviews.size());
+                    binding.progressBar4.setMax(allRatings.size());
+                    binding.progressBar4.setProgress(fourStarReviews.size());
+                    binding.progressBar3.setMax(allRatings.size());
+                    binding.progressBar3.setProgress(threeStarReviews.size());
+                    binding.progressBar2.setMax(allRatings.size());
+                    binding.progressBar2.setProgress(twoStarReviews.size());
+                    binding.progressBar1.setMax(allRatings.size());
+                    binding.progressBar1.setProgress(oneStarReviews.size());
+
+                } else {
+                    Log.e("fetchReviews", "Error: " + e.getMessage());
+                }
+            }
+        });
+    }
+
     public void fetchReviews() {
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Review");
         query.whereEqualTo("GameID", gameID);
@@ -211,7 +266,7 @@ public class GameDetailsActivity extends AppCompatActivity implements AdapterVie
             @Override
             public void done(List<ParseObject> reviews, ParseException e) {
                 if (e == null) {
-                    ArrayList<ReviewModel> reviewList = new ArrayList<>();
+                    reviewList = new ArrayList<>();
                     for (ParseObject reviewObject : reviews) {
                         String reviewUser = reviewObject.getString("ReviewUser") != null ? reviewObject.getString("ReviewUser") : "";
                         String reviewUserName = reviewObject.getString("ReviewUsername") != null
@@ -240,9 +295,12 @@ public class GameDetailsActivity extends AppCompatActivity implements AdapterVie
 
                         reviewList.add(review);
                     }
-                    ReviewAdapter reviewAdapter = new ReviewAdapter(GameDetailsActivity.this, reviewList);
-                    binding.rvReviews.setAdapter(reviewAdapter);
-                    binding.rvReviews.setLayoutManager(new LinearLayoutManager(GameDetailsActivity.this, LinearLayoutManager.HORIZONTAL, false));
+                    ArrayList<ReviewModel> limitedList = reviewList.size() > 5 ?
+                            new ArrayList<>(reviewList.subList(0, 5)) : new ArrayList<>(reviewList);
+                    reviewAdapter = new ReviewAdapter(GameDetailsActivity.this, limitedList);
+                    binding.recyclerView.setAdapter(reviewAdapter);
+                    binding.recyclerView.setLayoutManager(new LinearLayoutManager(GameDetailsActivity.this, LinearLayoutManager.VERTICAL, false));
+
 
                 } else {
                     Log.e("fetchReviews", "Error: " + e.getMessage());
@@ -408,7 +466,6 @@ public class GameDetailsActivity extends AppCompatActivity implements AdapterVie
     }
 
 
-
     public void addGame(String GameID, ParseObject review) {
 
         try {
@@ -522,60 +579,50 @@ public class GameDetailsActivity extends AppCompatActivity implements AdapterVie
 
 
     public void writeReview() {
-        // Inflate the custom layout using layout inflater
-        LayoutInflater inflater = LayoutInflater.from(this);
-        View customView = inflater.inflate(R.layout.dialog_write_review, null);
 
-        // Apply the custom style to the AlertDialog
-        AlertDialog.Builder reviewDialog = new AlertDialog.Builder(
-                new androidx.appcompat.view.ContextThemeWrapper(this, R.style.AlertDialogCustom));
-        AlertDialog reviewDialogBuilder = reviewDialog.create();
-        reviewDialogBuilder.setView(customView);
-        EditText etReview = customView.findViewById(R.id.etReview);
-        RatingBar ratingBar = customView.findViewById(R.id.ratingBar);
-        customView.findViewById(R.id.btnCancel).setOnClickListener(view -> reviewDialogBuilder.dismiss());
-        CheckBox chckBoxPrivate = customView.findViewById(R.id.chckBoxPrivate);
-        customView.findViewById(R.id.btnSave).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String strReview = etReview.getText().toString();
-                float floRating = ratingBar.getRating();
-                boolean isShowOnlyFriend = chckBoxPrivate.isChecked();
-                if (strReview.isEmpty()) {
-                    Toast.makeText(GameDetailsActivity.this, "Please write a review!", Toast.LENGTH_SHORT).show();
-                    return;
-                } else if (floRating == 0) {
-                    Toast.makeText(GameDetailsActivity.this, "Please select a review!", Toast.LENGTH_SHORT).show();
-                    return;
-                }
+        String reviewText = binding.etReviewBox.getText().toString();
+        float ratingFloat = binding.ratingBarReview.getRating();
+        boolean isShowOnlyFriend ;
+        if (binding.spinner.getSelectedItem().equals("Everyone")){
+            isShowOnlyFriend=false;
+        }else {
+            isShowOnlyFriend=true;
+        }
 
-                // create new parse objecet
-                ParseObject review = new ParseObject("Review");
-                review.put("ReviewUser", currentUserID);
-                review.put("ReviewUsername", userName);
-                review.put("GameID", gameID);
-                review.put("ReviewText", strReview);
-                review.put("isShowOnlyFriends", isShowOnlyFriend);
-                review.put("ratingStar", floRating);
+        if (reviewText.isEmpty()) {
+            Toast.makeText(GameDetailsActivity.this, "Please write a review!", Toast.LENGTH_SHORT).show();
+            return;
+        } else if (ratingFloat == 0) {
+            Toast.makeText(GameDetailsActivity.this, "Please select a review!", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
+        // create new parse objecet
+        ParseObject review = new ParseObject("Review");
+        review.put("ReviewUser", currentUserID);
+        review.put("ReviewUsername", userName);
+        review.put("GameID", gameID);
+        review.put("ReviewText", reviewText);
+        review.put("isShowOnlyFriends", isShowOnlyFriend);
+        review.put("ratingStar", ratingFloat);
+        ProgressDialog progressDialog=new ProgressDialog(GameDetailsActivity.this);
+        progressDialog.setMessage("Posting...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
 
-                // save to DB
-                review.saveInBackground(e -> {
-                    if (e == null) {
-                        // succesful
-                        Toast.makeText(GameDetailsActivity.this, "Review saved successfully!", Toast.LENGTH_SHORT).show();
-                        reviewDialogBuilder.dismiss(); // close dialog
-                    } else {
-                        // Error
-                        Toast.makeText(GameDetailsActivity.this, "Error saving review: " + e.getMessage(), Toast.LENGTH_LONG).show();
-                    }
-                });
+        // save to DB
+        review.saveInBackground(e -> {
+            if (e == null) {
+                // succesful
+                Toast.makeText(GameDetailsActivity.this, "Review saved successfully!", Toast.LENGTH_SHORT).show();
+                progressDialog.dismiss();
 
+            } else {
+                // Error
+                Toast.makeText(GameDetailsActivity.this, "Error saving review: " + e.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
-        Toast.makeText(this, "Showing!", Toast.LENGTH_SHORT).show();
 
-        reviewDialogBuilder.show();
     }
 
     @Override
