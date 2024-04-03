@@ -23,5 +23,5 @@
     <color name="aqua1">#902B3743</color>
     <color name="colorMainBg">#1E1E1E</color>
     <color name="colorRating">#6D4DBB</color>
-    <color name="colorMainText">#A5A6B3</color>
+    <color name="colorMainText">#FFF</color>
 </resources>
