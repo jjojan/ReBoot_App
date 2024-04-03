@@ -39,7 +39,8 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
 
     // ViewHolder class
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView tvUserName, tvReviewText, tvUp, tvDown,tvDate;
+        TextView tvUserName, tvReviewText, tvUp, tvDown,tvDate;
+        RatingBar ratingBar;
         View view;
 
         public ViewHolder(View itemView) {
@@ -50,8 +51,13 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
             tvUp = itemView.findViewById(R.id.tvUp); // ID should be unique for "up" TextView, assuming tvUp as ID here
             tvDown = itemView.findViewById(R.id.tvDown);
             tvDate = itemView.findViewById(R.id.tvDate);
+            ratingBar = itemView.findViewById(R.id.ratingbarRecyclerView);
             view=itemView.getRootView();
         }
+    }
+    public void updateData(ArrayList<ReviewModel> newData) {
+        this.reviewList = newData;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -64,8 +70,10 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
     public void onBindViewHolder(ReviewAdapter.ViewHolder holder, int position) {
         ReviewModel review = reviewList.get(position);
         // Assuming you have a way to get user's profile image, or use a default one
-
-        holder.tvUserName.setText(review.getRatingStar()+" "+review.getReviewUserName());
+        if (review.getRatingStar()>0) {
+            holder.ratingBar.setRating(review.getRatingStar());
+        }
+        holder.tvUserName.setText(review.getReviewUserName());
         holder.tvReviewText.setText(review.getReviewText());
         holder.tvUp.setText(review.getUpCount()+"");
         holder.tvDown.setText(review.getDownCount()+"");
@@ -240,7 +248,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
     }
 
     public  String formatDate(Date date) {
-        // SimpleDateFormat kullanarak istenilen formatı belirle
+
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MMMM/yyyy HH:mm",Locale.getDefault());
         return formatter.format(date);
     }
