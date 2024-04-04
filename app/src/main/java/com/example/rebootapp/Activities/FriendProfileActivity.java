@@ -21,7 +21,9 @@ import com.example.rebootapp.Adapters.FriendsListAdapter;
 import com.example.rebootapp.Models.FriendModel;
 import com.example.rebootapp.R;
 import com.parse.FindCallback;
+import com.parse.FunctionCallback;
 import com.parse.GetCallback;
+import com.parse.ParseCloud;
 import com.parse.ParseObject;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -30,6 +32,7 @@ import com.parse.ParseRelation;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -37,7 +40,7 @@ public class FriendProfileActivity extends AppCompatActivity {
     Button done;
     ImageView profile_pic;
     TextView username, bio;
-    ImageButton starred, friends, lists, messageButton;
+    ImageButton starred, friends, lists, messageButton, deleteButton;
     String friendUserID;
 
     //RecyclerView for Favorite Games
@@ -60,6 +63,7 @@ public class FriendProfileActivity extends AppCompatActivity {
         bio = findViewById(R.id.friend_bio);
         starred = findViewById(R.id.friend_Starred);
         messageButton = findViewById(R.id.messageButton);
+        deleteButton = findViewById(R.id.btn_delete);
 
         //Friends Favorites
         friendFavoritesUris = new ArrayList<>();
@@ -114,6 +118,42 @@ public class FriendProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 finish();
+            }
+        });
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ParseUser currentUser = ParseUser.getCurrentUser();
+                String o_Id = currentUser.getObjectId();
+
+                HashMap<String, String> params = new HashMap<String, String>();
+                params.put("currentUserId", o_Id);
+                params.put("friendUserId", friendUserID);
+
+                ParseCloud.callFunctionInBackground("checkAndRemoveFriendById", params, new FunctionCallback<String>() {
+                    @Override
+                    public void done(String result, ParseException e) {
+                        if (e == null) {
+                            System.out.println(result);
+                            runOnUiThread(() -> {
+                                finish();
+                            });
+                        }
+                    }
+                });
+
+//                ParseQuery<ParseUser> userQuery = ParseUser.getQuery();
+//                userQuery.whereEqualTo("objectId", friendUserID);
+//                userQuery.getFirstInBackground(new GetCallback<ParseUser>() {
+//                    @Override
+//                    public void done(ParseUser parseUser, ParseException e) {
+//                        if (e == null){
+//
+//                        }
+//                    }
+//                });
+
+
             }
         });
 

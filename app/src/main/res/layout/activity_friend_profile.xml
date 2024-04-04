@@ -176,4 +176,14 @@
         android:layout_toEndOf="@+id/Friend_ProfilePic"
         app:srcCompat="@drawable/shape_incoming_message" />
 
+    <ImageButton
+        android:id="@+id/btn_delete"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignTop="@+id/messageButton"
+        android:layout_marginLeft="300dp"
+        android:background="#FF0000"
+        android:scaleType="fitCenter"
+        android:src="@drawable/baseline_delete_24" />
+
 </RelativeLayout>
