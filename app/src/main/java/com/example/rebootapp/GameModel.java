@@ -24,6 +24,9 @@ public class GameModel {
     String backdropPath;
     Double voteAverage;
 
+    String developers;
+    String releaseDate;
+
 
 
     public Double getVoteAverage() {
@@ -40,6 +43,7 @@ public class GameModel {
         Log.i("name", decName);
         overview = game.getString("released");
         posterPath = game.getString("background_image");
+        releaseDate = game.getString("released");
 
     }
 //
@@ -72,6 +76,10 @@ public class GameModel {
 
     public String getPosterPath() {
         return posterPath;
+    }
+
+    public String getReleaseDate() {
+        return releaseDate;
     }
 
     public String getBackdropPath(){

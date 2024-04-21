@@ -56,6 +56,7 @@ public class GameDetailsActivity extends AppCompatActivity implements AdapterVie
 
     String gameID;
 
+
     String GAME_URL = "https://api.rawg.io/api/games/";
     ArrayList<ReviewModel> reviewList;
     ReviewAdapter reviewAdapter;
@@ -78,6 +79,7 @@ public class GameDetailsActivity extends AppCompatActivity implements AdapterVie
         gameID = movie.getID();
         binding.tvTitle.setText(movie.getTitle());
         binding.tvGameDescription.setText(movie.getOverview());
+        binding.tvReleaseDate.setText( "Release Date: " + movie.getReleaseDate());
 
 
         Glide.with(this)
