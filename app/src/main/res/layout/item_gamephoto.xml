@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@drawable/gradient_background"
+    android:background="@color/color1"
     android:backgroundTint="@color/white"
     app:strokeColor="@color/black"
     app:strokeWidth="1dp"

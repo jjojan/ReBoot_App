@@ -11,9 +11,10 @@
         android:layout_height="wrap_content"
         android:padding="10dp"
         android:text="Add to list"
-        android:textColor="@color/black"
+        android:textColor="@color/color5"
         android:textSize="20sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:fontFamily="@font/thasadith_regular"/>
 
 
 
@@ -21,11 +22,15 @@
         android:id="@+id/btnClose"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Close" />
+        android:text="Close"
+        android:fontFamily="@font/thasadith_bold"
+        android:textColor="@color/color5"/>
 
     <Button
         android:id="@+id/btnNewList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Add New List" />
+        android:text="Add New List"
+        android:fontFamily="@font/thasadith_bold"
+        android:textColor="@color/color5"/>
 </LinearLayout>
