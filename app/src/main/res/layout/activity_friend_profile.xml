@@ -88,7 +88,8 @@
         android:scaleType="fitCenter"
         android:outlineAmbientShadowColor="@color/color5"
         android:outlineSpotShadowColor="@color/color5"
-        android:src="@drawable/friends" />
+        android:src="@drawable/users"
+        style="?android:attr/borderlessButtonStyle"/>
 
     <!-- Friends Preview - RecyclerView -->
     <androidx.recyclerview.widget.RecyclerView
@@ -119,7 +120,8 @@
         android:layout_toEndOf="@+id/favoritesHeader"
         android:layout_alignBottom="@+id/favoritesHeader"
         android:scaleType="fitCenter"
-        android:src="@drawable/star" />
+        android:src="@drawable/star"
+        style="?android:attr/borderlessButtonStyle"/>
 
     <!-- Favorites Preview - RecyclerView -->
     <androidx.recyclerview.widget.RecyclerView
@@ -149,7 +151,8 @@
         android:layout_toEndOf="@+id/collectionsHeader"
         android:layout_alignBottom="@+id/collectionsHeader"
         android:scaleType="fitCenter"
-        android:src="@drawable/baseline_playlist_add_check_24" />
+        android:src="@drawable/add"
+        style="?android:attr/borderlessButtonStyle"/>
 
     <!-- Friends Preview - RecyclerView -->
     <androidx.recyclerview.widget.RecyclerView
@@ -194,8 +197,8 @@
         android:layout_height="50dp"
         android:layout_alignTop="@+id/messageButton"
         android:layout_marginLeft="300dp"
-        android:background="#FF0000"
         android:scaleType="fitCenter"
-        android:src="@drawable/baseline_delete_24" />
+        android:src="@drawable/garbage"
+        style="?android:attr/borderlessButtonStyle"/>
 
 </RelativeLayout>
