@@ -4,27 +4,27 @@
 
     <item
         android:id="@+id/mHome"
-        android:icon="@drawable/baseline_home_24"
+        android:icon="@drawable/home"
         android:title="Home"
         app:showAsAction="always" />
     <item
         android:id="@+id/mSearch"
-        android:icon="@drawable/baseline_search_24"
+        android:icon="@drawable/search"
         android:title="Search"
         app:showAsAction="always" />
     <item
         android:id="@+id/mFeed"
-        android:icon="@drawable/baseline_dynamic_feed_24"
+        android:icon="@drawable/windows"
         android:title="Feed"
         app:showAsAction="always" />
     <item
         android:id="@+id/mEvents"
-        android:icon="@drawable/baseline_create_24"
+        android:icon="@drawable/edit"
         android:title="Review"
         app:showAsAction="always" />
     <item
         android:id="@+id/mCart"
-        android:icon="@drawable/baseline_person_24"
+        android:icon="@drawable/user_icon"
         android:title="Profile"
         app:showAsAction="always" />
 </menu>

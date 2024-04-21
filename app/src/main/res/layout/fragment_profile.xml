@@ -105,7 +105,8 @@
         android:scaleType="fitCenter"
         android:outlineAmbientShadowColor="@color/blueberry"
         android:outlineSpotShadowColor="@color/blueberry"
-        android:src="@drawable/friends" />
+        android:src="@drawable/users"
+        style="?android:attr/borderlessButtonStyle"/>
 
     <!-- Friends Preview - RecyclerView -->
     <androidx.recyclerview.widget.RecyclerView
@@ -139,6 +140,7 @@
         android:layout_marginLeft="25dp"
         android:scaleType="fitCenter"
         android:src="@drawable/star"
+        style="?android:attr/borderlessButtonStyle"
         />
 
     <!-- Favorites Preview - RecyclerView -->
@@ -149,7 +151,8 @@
         android:clipToPadding="false"
         android:layout_below="@+id/favoritesHeader"
         android:scrollbars="horizontal"
-        android:outlineAmbientShadowColor="@color/aqua"/>
+        android:outlineAmbientShadowColor="@color/aqua"
+        />
 
 
     <ImageButton
@@ -162,7 +165,8 @@
         android:layout_alignBottom="@+id/ProfilePic"
         android:layout_toEndOf="@+id/ProfilePic"
         android:scaleType="fitCenter"
-        android:src="@drawable/edit_profile" />
+        android:src="@drawable/edit"
+        style="?android:attr/borderlessButtonStyle"/>
 
     <TextView
         android:id="@+id/EditProfileHeader"
@@ -193,9 +197,10 @@
         android:layout_alignBottom="@+id/customListHeader"
         android:layout_marginLeft="25dp"
         android:scaleType="fitCenter"
-        android:src="@drawable/baseline_playlist_add_check_24"
+        android:src="@drawable/add"
         android:fontFamily="@font/thasadith_regular"
-        android:textColor="@color/aqua"/>
+        android:textColor="@color/aqua"
+        style="?android:attr/borderlessButtonStyle"/>
 
 
     <Button

@@ -51,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
         assert actionBar != null;
         actionBar.setBackgroundDrawable(bottomNavigationView.getBackground());
 
+
         final FragmentManager fragmentManager = getSupportFragmentManager();
 
         Intent intent = getIntent();
