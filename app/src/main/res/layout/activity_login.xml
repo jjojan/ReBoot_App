@@ -81,7 +81,7 @@
         android:layout_marginTop="25dp"
         android:layout_centerHorizontal="true"
         android:autoSizeTextType="uniform"
-        android:text="By logginging in you are agreeing to our terms and conditions."
+        android:text="By logging in and or signing up in you are agreeing to our terms and conditions."
         android:textAlignment="center"
         android:textColor="@color/black"
         android:fontVariationSettings=""
