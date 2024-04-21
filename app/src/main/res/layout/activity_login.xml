@@ -45,12 +45,12 @@
         android:layout_height="50dp"
         android:layout_below="@id/ivRebootLogo"
         android:layout_marginLeft="28dp"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="95dp"
         android:layout_marginRight="28dp"
         android:background="@drawable/edt_background"
         android:hint="Email"
         android:paddingLeft="13dp"
-        android:textColorHint="@color/aqua"
+        android:textColorHint="@color/color5"
         android:fontFamily="@font/thasadith_bold"/>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -119,7 +119,7 @@
         android:layout_marginTop="15dp"
         android:backgroundTint="@null"
         android:text="Sign Up"
-        android:textColor="@color/color5"
+        android:textColor="@color/color1"
         android:textSize="25dp"
         android:textStyle="normal"
         android:fontFamily="@font/thasadith_regular"/>
@@ -136,9 +136,9 @@
         android:hint="Password"
         android:inputType="textPassword"
         android:paddingLeft="13dp"
-        android:textColor="@color/aqua"
-        android:textColorHighlight="@color/aqua"
-        android:textColorHint="@color/aqua"
+        android:textColor="@color/color5"
+        android:textColorHighlight="@color/color5"
+        android:textColorHint="@color/color5"
         android:fontFamily="@font/thasadith_bold"/>
 
 </RelativeLayout>
