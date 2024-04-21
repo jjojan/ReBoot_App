@@ -30,12 +30,14 @@ import java.util.List;
 public class ActivityFragment extends Fragment {
 
     private static final String ARG_PARAM1 = "param1";
+
+    com.example.rebootapp.databinding.FragmentActivityBinding binding;
     private static final String ARG_PARAM2 = "param2";
 
     private String mParam1;
     private String mParam2;
 
-    List<ReviewModel> reviewModel;
+    ArrayList<ReviewModel> reviewModel;
 
     ReviewAdapter reviewAdapter;
 
@@ -55,6 +57,7 @@ public class ActivityFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -65,18 +68,29 @@ public class ActivityFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_activity, container, false);
+        binding = com.example.rebootapp.databinding.FragmentActivityBinding.inflate(getLayoutInflater());
+        return binding.getRoot();
+//        return inflater.inflate(R.layout.fragment_activity, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        RecyclerView rvFeed = view.findViewById(R.id.rvFeed);
         reviewModel = new ArrayList<>();
-        reviewAdapter =  new ReviewAdapter(getContext(), (ArrayList<ReviewModel>) reviewModel);
+        reviewAdapter = new ReviewAdapter(getContext(), (ArrayList<ReviewModel>) reviewModel);
 
-        rvFeed.setAdapter(reviewAdapter);
+        // Now using binding to access the RecyclerView and set its properties
+        binding.rvFeed.setAdapter(reviewAdapter);
+        binding.rvFeed.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+
+//        RecyclerView rvFeed = getView().findViewById(R.id.rvFeed);
+//        reviewModel = new ArrayList<>();
+//        reviewAdapter =  new ReviewAdapter(getContext(), (ArrayList<ReviewModel>) reviewModel);
+//
+//        rvFeed.setAdapter(reviewAdapter);
+//
+//        reviewModel = new ArrayList<>();
 
         fetchReviews();
     }
@@ -87,47 +101,87 @@ public class ActivityFragment extends Fragment {
             @Override
             public void done(List<ParseObject> reviews, ParseException e) {
                 if (e == null) {
-                    reviewModel = new ArrayList<>();
+                    // Clear existing data
+                    reviewModel.clear();
+
+                    // Convert ParseObjects into your ReviewModel instances
                     for (ParseObject reviewObject : reviews) {
-                        String reviewUser = reviewObject.getString("ReviewUser") != null ? reviewObject.getString("ReviewUser") : "";
-                        String reviewUserName = reviewObject.getString("ReviewUsername") != null
-                                ? reviewObject.getString("ReviewUsername") : "";
-                        String reviewText = reviewObject.getString("ReviewText") != null ? reviewObject.getString("ReviewText") : "";
-                        String gameID = reviewObject.getString("GameID") != null ? reviewObject.getString("GameID") : "";
-                        String objectId = reviewObject.getObjectId();
-                        boolean isShowOnlyFriends = reviewObject.getBoolean("isShowOnlyFriends");
-                        // Number to float conversion with null check
-                        float ratingStar = reviewObject.getNumber("ratingStar") != null ? reviewObject.getNumber("ratingStar").floatValue() : 0;
-                        int upCount = reviewObject.has("upCount") ? reviewObject.getInt("upCount") : 0;
-                        int downCount = reviewObject.has("downCount") ? reviewObject.getInt("downCount") : 0;
                         ReviewModel review = new ReviewModel(
-                                reviewUser,
-                                reviewUserName,
-                                reviewText,
-                                gameID,
-                                objectId,
+                                reviewObject.getString("ReviewUser"),
+                                reviewObject.getString("ReviewUsername"),
+                                reviewObject.getString("ReviewText"),
+                                reviewObject.getString("GameID"),
+                                reviewObject.getObjectId(),
                                 reviewObject.getCreatedAt(),
                                 reviewObject.getUpdatedAt(),
-                                isShowOnlyFriends,
-                                ratingStar,
-                                upCount,
-                                downCount
+                                reviewObject.getBoolean("isShowOnlyFriends"),
+                                reviewObject.getNumber("ratingStar") != null ? reviewObject.getNumber("ratingStar").floatValue() : 0,
+                                reviewObject.getInt("upCount"),
+                                reviewObject.getInt("downCount")
                         );
-
                         reviewModel.add(review);
                     }
-                    ArrayList<ReviewModel> limitedList = reviewModel.size() > 5 ?
-                            new ArrayList<>(reviewModel.subList(0, 5)) : new ArrayList<>(reviewModel);
-                    reviewAdapter = new ReviewAdapter(getContext(), limitedList);
 
-
-
+                    // Notify the adapter of the change on the UI thread
+                    getActivity().runOnUiThread(() -> {
+                        reviewAdapter.notifyDataSetChanged();
+                    });
                 } else {
                     Log.e("fetchReviews", "Error: " + e.getMessage());
                 }
             }
         });
-
     }
+
+
+//    public void fetchReviews() {
+//        ParseQuery<ParseObject> query = ParseQuery.getQuery("Review");
+//        query.findInBackground(new FindCallback<ParseObject>() {
+//            @Override
+//            public void done(List<ParseObject> reviews, ParseException e) {
+//                if (e == null) {
+//                    reviewModel = new ArrayList<>();
+//                    for (ParseObject reviewObject : reviews) {
+//                        Log.i("reviewTag", reviewObject.getString("ReviewText"));
+//                        String reviewUser = reviewObject.getString("ReviewUser") != null ? reviewObject.getString("ReviewUser") : "";
+//                        String reviewUserName = reviewObject.getString("ReviewUsername") != null
+//                                ? reviewObject.getString("ReviewUsername") : "";
+//                        String reviewText = reviewObject.getString("ReviewText") != null ? reviewObject.getString("ReviewText") : "";
+//                        String gameID = reviewObject.getString("GameID") != null ? reviewObject.getString("GameID") : "";
+//                        String objectId = reviewObject.getObjectId();
+//                        boolean isShowOnlyFriends = reviewObject.getBoolean("isShowOnlyFriends");
+//                        // Number to float conversion with null check
+//                        float ratingStar = reviewObject.getNumber("ratingStar") != null ? reviewObject.getNumber("ratingStar").floatValue() : 0;
+//                        int upCount = reviewObject.has("upCount") ? reviewObject.getInt("upCount") : 0;
+//                        int downCount = reviewObject.has("downCount") ? reviewObject.getInt("downCount") : 0;
+//                        ReviewModel review = new ReviewModel(
+//                                reviewUser,
+//                                reviewUserName,
+//                                reviewText,
+//                                gameID,
+//                                objectId,
+//                                reviewObject.getCreatedAt(),
+//                                reviewObject.getUpdatedAt(),
+//                                isShowOnlyFriends,
+//                                ratingStar,
+//                                upCount,
+//                                downCount
+//                        );
+//
+//                        reviewModel.add(review);
+//                    }
+//                    ArrayList<ReviewModel> limitedList = reviewModel.size() > 5 ?
+//                            new ArrayList<>(reviewModel.subList(0, 5)) : new ArrayList<>(reviewModel);
+//                    reviewAdapter = new ReviewAdapter(getContext(), (ArrayList<ReviewModel>) reviewModel);
+//                    binding.rvFeed.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+//
+//
+//                } else {
+//                    Log.e("fetchReviews", "Error: " + e.getMessage());
+//                }
+//            }
+//        });
+//
+//    }
 
 }
