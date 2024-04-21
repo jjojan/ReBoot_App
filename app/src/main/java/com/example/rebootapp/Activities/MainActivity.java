@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import com.example.rebootapp.Fragments.ActivityFragment;
 import com.example.rebootapp.Fragments.HomeFragment;
 import com.example.rebootapp.Fragments.ProfileFragment;
 import com.example.rebootapp.MovieModel;
@@ -92,7 +93,9 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.mEvents:
                         fragment = new ReviewFragment();
                         break;
-                    case R.id.mCart:
+                    case R.id.mFeed:
+                        fragment = new ActivityFragment();
+                        break;
                     default:
                         fragment = new ProfileFragment();
                         break;

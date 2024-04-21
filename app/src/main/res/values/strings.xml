@@ -15,7 +15,7 @@
     <string name="expand">see more</string>
     <string name="collapse">see less</string>
 
-        <!-- to toggle the open close button of the navigation drawer -->
+    <!-- to toggle the open close button of the navigation drawer -->
     <string name="nav_open">Open</string>
     <string name="nav_close">Close</string>
 </resources>
