@@ -4,41 +4,48 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@drawable/gradient_background"
+    android:background="@color/white"
 
     tools:context=".LoginActivity">
 
     <ImageView
         android:id="@+id/ivRebootLogo"
         android:layout_width="353dp"
-        android:layout_height="147dp"
+        android:layout_height="190dp"
         android:layout_centerHorizontal="true"
         android:layout_marginHorizontal="20dp"
         android:layout_marginTop="65dp"
-        android:src="@drawable/rebootlogo" />
+        android:src="@drawable/reboot_logo2" />
+
 
     <TextView
-        android:id="@+id/tvIntroduction"
-        android:layout_width="350dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:id="@+id/login"
         android:layout_below="@+id/ivRebootLogo"
-        android:layout_marginTop="135dp"
-        android:layout_centerHorizontal="true"
-        android:autoSizeTextType="uniform"
-        android:text="Login to your account"
-        android:textAlignment="center"
-        android:textColor="@color/aqua"
-        android:fontVariationSettings=""
+        android:layout_marginLeft="95dp"
+        android:layout_marginTop="15dp"
+        android:text="Login"
+        android:textColor="@color/color5"
         android:textSize="25dp"
-        android:fontFamily="@font/thasadith_bold"/>
+        android:textStyle="normal"
+        android:fontFamily="@font/thasadith_regular"
+        />
+    <View
+        android:layout_width="150dp"
+        android:layout_height="2dp"
+        android:background="@color/color1"
+        android:layout_marginTop="1dp"
+        android:layout_marginLeft="50dp"
+        android:layout_below="@+id/login" />
 
     <EditText
         android:id="@+id/edtEmail"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_below="@id/tvIntroduction"
+        android:layout_below="@id/ivRebootLogo"
         android:layout_marginLeft="28dp"
-        android:layout_marginTop="13dp"
+        android:layout_marginTop="80dp"
         android:layout_marginRight="28dp"
         android:background="@drawable/edt_background"
         android:hint="Email"
@@ -66,6 +73,20 @@
         android:background="@drawable/btn_background"
         android:text="Login"
         android:fontFamily="@font/thasadith_bold"/>
+    <TextView
+        android:id="@+id/tvIntroduction"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btnLogin"
+        android:layout_marginTop="25dp"
+        android:layout_centerHorizontal="true"
+        android:autoSizeTextType="uniform"
+        android:text="By logginging in you are agreeing to our terms and conditions."
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:fontVariationSettings=""
+        android:textSize="20dp"
+        android:fontFamily="@font/thasadith_italic"/>
 
     <TextView
         android:id="@+id/tvLoginLink"
@@ -76,8 +97,8 @@
         android:layout_centerHorizontal="true"
         android:linksClickable="true"
         android:textSize="13dp"
-        android:textColor="@color/white60"
-        android:layout_marginTop="20dp"
+        android:textColor="@color/color2"
+        android:layout_marginTop="90dp"
         android:fontFamily="@font/thasadith_bold"
         />
 
@@ -93,15 +114,15 @@
         android:id="@+id/btnSignUpLink"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/ivRebootLogo"
+        android:layout_marginLeft="235dp"
+        android:layout_marginTop="15dp"
         android:backgroundTint="@null"
-        android:text="Don't have an account? Sign up here."
-        android:textSize="15dp"
-        android:fontFamily="@font/thasadith_bold"
-        android:textColor="@color/white60"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"
-        android:layout_below="@+id/google_img_login"
-        android:layout_marginBottom="10dp"/>
+        android:text="Sign Up"
+        android:textColor="@color/color5"
+        android:textSize="25dp"
+        android:textStyle="normal"
+        android:fontFamily="@font/thasadith_regular"/>
 
     <EditText
         android:id="@+id/edtPassword"

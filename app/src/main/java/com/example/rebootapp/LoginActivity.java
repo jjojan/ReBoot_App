@@ -165,15 +165,21 @@ public class LoginActivity extends AppCompatActivity {
     private void handleSignInResult(Task<GoogleSignInAccount> task) {
         try {
             GoogleSignInAccount account = task.getResult(ApiException.class);
+           // GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(this);
 
+            if(account != null) {
 
-            GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(this);
+                String email = account.getGivenName();
+                String password = account.getId();
+                Log.i("Google Email", email);
+                Log.i("Google Password", password);
+                logInManual(email, password);
+            }
+            else{
 
-            String email = acct.getGivenName();
-            String password = acct.getId();
-            Log.i("Google Email", email);
-            Log.i("Google Password", password);
-            logInManual(email, password);
+            }
+
+            navigateToHomePage();
 
         } catch (ApiException e) {
 

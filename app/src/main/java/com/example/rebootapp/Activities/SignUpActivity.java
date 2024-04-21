@@ -102,7 +102,7 @@ public class SignUpActivity extends AppCompatActivity {
                 String username = edtUserName.getText().toString();
                 String email = edtEmail.getText().toString();
                 String password = edtPassword.getText().toString();
-                String reptpassword = edtRptPassword.getText().toString();
+                String reptpassword = edtPassword.getText().toString();
                 if(username.isEmpty()){
                     Log.i("username", username);
                     Toast.makeText(getApplicationContext(), "userName is Required.", Toast.LENGTH_LONG).show();
@@ -177,11 +177,13 @@ public class SignUpActivity extends AppCompatActivity {
 
         user.setUsername(username);
         user.setEmail(email);
-        if(password == reptpassword){
+        user.setPassword(password);
+        if(password.equals(reptpassword)){
             user.setPassword(password);
         }
         else{
             Toast.makeText(getApplicationContext(), "Passwords do not match", Toast.LENGTH_LONG).show();
+
         }
 
         user.signUpInBackground(new SignUpCallback() {
@@ -190,9 +192,6 @@ public class SignUpActivity extends AppCompatActivity {
                 if (e == null) {
                     Toast.makeText(getApplicationContext(), "Sign Up Successful", Toast.LENGTH_LONG).show();
 
-                }
-                else{
-                    Toast.makeText(getApplicationContext(), "Sign Up Unsuccessful", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -208,20 +207,20 @@ public class SignUpActivity extends AppCompatActivity {
 
     void updateUI(GoogleSignInAccount acct){
         if(acct != null){
-            String personName = acct.getDisplayName();
+            /*String personName = acct.getDisplayName();
             String personGivenName = acct.getGivenName();
             String personEmail = acct.getEmail();
-            String personId = acct.getId();
+            String personId = acct.getId();*/
 
-            ParseUser user = new ParseUser();
-            user.setUsername(personGivenName);
+            ParseUser user = ParseUser.getCurrentUser();
+            /*user.setUsername(personGivenName);
             user.setEmail(personEmail);
-            user.setPassword(personId);
+            user.setPassword(personId);*/
 
             ParseQuery<ParseObject> query = ParseQuery.getQuery("User");
 
-            Log.i("personGivenName", personGivenName);
-            Log.i("id", personId);
+            /*Log.i("personGivenName", personGivenName);
+            Log.i("id", personId);*/
 
             user.signUpInBackground(new SignUpCallback() {
                 @Override
@@ -237,7 +236,7 @@ public class SignUpActivity extends AppCompatActivity {
             navigateToHomePage();
         }
         else{
-            Toast.makeText(getApplicationContext(), "Google info not available.", Toast.LENGTH_SHORT).show();
+
         }
     }
 
@@ -263,7 +262,7 @@ public class SignUpActivity extends AppCompatActivity {
         } catch (ApiException e) {
             Log.i("sign", "error");
             Log.w(ContentValues.TAG, "signInResult:failed code=" + e.getStatusCode());
-            Toast.makeText(getApplicationContext(), "Something went wrong", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getApplicationContext(), "Something went wrong", Toast.LENGTH_SHORT).show();
             updateUI(null);
         }
     }
