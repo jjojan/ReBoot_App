@@ -10,7 +10,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_alignParentBottom="false"
-    android:background="@drawable/gradient_background"
+    android:background="@color/white"
     android:visibility="visible"
     tools:context=".Fragments.ProfileFragment">
 
@@ -64,7 +64,7 @@
         android:layout_marginLeft="15dp"
         android:text="My Bio"
         android:textSize="24sp"
-        android:fontFamily="@font/thasadith_bold"
+        android:fontFamily="@font/thasadith_regular"
         android:textColor="@color/aqua"/>
     <!-- Bio -->
     <TextView
@@ -91,7 +91,7 @@
         android:layout_marginBottom="10dp"
         android:text="Friends"
         android:textSize="30sp"
-        android:fontFamily="@font/thasadith_bold"
+        android:fontFamily="@font/thasadith_regular"
         android:textColor="@color/aqua"/>
 
     <!-- Friends Button Link -->
@@ -126,7 +126,7 @@
         android:layout_marginLeft="13dp"
         android:text="Starred"
         android:textSize="30sp"
-        android:fontFamily="@font/thasadith_bold"
+        android:fontFamily="@font/thasadith_regular"
         android:textColor="@color/aqua"/>
 
     <!-- Favorites Button Link -->
@@ -171,6 +171,7 @@
         android:layout_toEndOf="@+id/EditProfileButton"
         android:layout_alignBottom="@+id/EditProfileButton"
         android:text="Edit"
+        android:fontFamily="@font/thasadith_regular"
         android:textSize="20sp" />
 
     <!-- Custom List Header -->
@@ -181,7 +182,8 @@
         android:layout_below="@+id/favoritesRecyclerView"
         android:layout_marginLeft="13dp"
         android:text="My Custom Lists"
-        android:textSize="25sp" />
+        android:textSize="25sp"
+        android:fontFamily="@font/thasadith_regular"/>
 
     <ImageButton
         android:id="@+id/customList"
@@ -192,7 +194,7 @@
         android:layout_marginLeft="25dp"
         android:scaleType="fitCenter"
         android:src="@drawable/baseline_playlist_add_check_24"
-        android:fontFamily="@font/thasadith_bold"
+        android:fontFamily="@font/thasadith_regular"
         android:textColor="@color/aqua"/>
 
 

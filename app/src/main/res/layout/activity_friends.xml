@@ -16,8 +16,9 @@
         android:layout_alignParentTop="true"
         android:text="Friends"
         android:textAlignment="center"
-        android:textSize="20sp"
-        android:textColor="@color/aqua"/>
+        android:textSize="30sp"
+        android:textColor="@color/color5"
+        android:fontFamily="@font/thasadith_regular"/>
     <TextView
         android:id="@+id/tv_SuggestedTitle"
         android:layout_width="425dp"
@@ -26,8 +27,9 @@
         android:layout_alignParentTop="true"
         android:text="Suggested Friends"
         android:textAlignment="center"
-        android:textSize="20sp"
-        android:textColor="@color/aqua"/>
+        android:textSize="30sp"
+        android:textColor="@color/color5"
+        android:fontFamily="@font/thasadith_regular"/>
     <TextView
         android:id="@+id/tv_RequestsTitle"
         android:layout_width="425dp"
@@ -36,8 +38,9 @@
         android:layout_alignParentTop="true"
         android:text="Friend Requests"
         android:textAlignment="center"
-        android:textSize="20sp"
-        android:textColor="@color/aqua"/>
+        android:textSize="30sp"
+        android:textColor="@color/color5"
+        android:fontFamily="@font/thasadith_regular"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_Friends_list"

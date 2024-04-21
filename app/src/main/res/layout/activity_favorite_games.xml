@@ -17,7 +17,8 @@
         android:text="Favorite Games"
         android:textAlignment="center"
         android:textSize="34sp"
-        android:textColor="@color/aqua"/>
+        android:textColor="@color/color5"
+        android:fontFamily="@font/thasadith_regular"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_games_list"

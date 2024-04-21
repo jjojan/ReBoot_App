@@ -3,7 +3,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/gradient_background">
+    android:background="@color/white">
 
     <TextView
         android:id="@+id/textView2"
@@ -12,10 +12,10 @@
         android:text="Popular Games"
         android:textSize="25dp"
         android:textStyle="bold"
-        android:fontFamily="@font/thasadith_bold"
+        android:textColor="@color/color5"
+        android:fontFamily="@font/thasadith_regular"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="5dp"
-        android:textAppearance="@drawable/gradient_background"
         android:layout_marginVertical="10dp"
         android:layout_marginHorizontal="18sp"/>
 
@@ -30,13 +30,12 @@
         android:id="@+id/textView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
         android:text="New Games"
         android:textSize="25dp"
         android:textStyle="bold"
-        android:fontFamily="@font/thasadith_bold"
+        android:textColor="@color/color5"
+        android:fontFamily="@font/thasadith_regular"
         android:layout_marginHorizontal="@dimen/dialog_title_text_size"
-        android:textAppearance="@drawable/gradient_background"
         android:layout_marginVertical="5dp"/>
 
     <androidx.recyclerview.widget.RecyclerView
@@ -52,10 +51,9 @@
         android:text="Upcoming Games"
         android:textSize="25dp"
         android:textStyle="bold"
+        android:textColor="@color/color5"
         android:layout_marginHorizontal="@dimen/dialog_title_text_size"
-        android:fontFamily="@font/thasadith_bold"
-        android:textAppearance="@drawable/gradient_background"
-
+        android:fontFamily="@font/thasadith_regular"
         android:layout_marginVertical="5dp"/>
 
     <androidx.recyclerview.widget.RecyclerView

@@ -30,7 +30,9 @@
         android:layout_toRightOf="@+id/Friend_ProfilePic"
         android:layout_marginTop="100dp"
         android:textAlignment="textStart"
-        android:textSize="20sp" />
+        android:textSize="20sp"
+        android:fontFamily="@font/thasadith_regular"
+        android:textColor="@color/color5"/>
     <!-- Email (not in friendModel profile) -->
     <TextView
         android:id="@+id/tvFriend_Email"
@@ -39,7 +41,9 @@
         android:layout_below="@+id/tvFriend_Friend_Username"
         android:layout_toRightOf="@+id/Friend_ProfilePic"
         android:textAlignment="textStart"
-        android:textSize="20sp" />
+        android:textSize="20sp"
+        android:fontFamily="@font/thasadith_regular"
+        android:textColor="@color/color5"/>
     <!-- Profile Bio Header -->
     <TextView
         android:id="@+id/bioHeader"
@@ -49,7 +53,9 @@
         android:layout_marginTop="13dp"
         android:layout_marginLeft="15dp"
         android:text="Bio"
-        android:textSize="24sp" />
+        android:textSize="24sp"
+        android:fontFamily="@font/thasadith_regular"
+        android:textColor="@color/color5"/>
     <!-- Bio -->
     <TextView
         android:id="@+id/friend_bio"
@@ -68,7 +74,9 @@
         android:layout_below="@+id/friend_bio"
         android:layout_marginLeft="13dp"
         android:text="Friends"
-        android:textSize="30sp" />
+        android:textSize="30sp"
+        android:fontFamily="@font/thasadith_regular"
+        android:textColor="@color/color5"/>
 
     <!-- Friends List Button (Place next to header) -->
     <ImageButton
@@ -78,8 +86,8 @@
         android:layout_toEndOf="@+id/friendsHeader"
         android:layout_alignBottom="@+id/friendsHeader"
         android:scaleType="fitCenter"
-        android:outlineAmbientShadowColor="@color/blueberry"
-        android:outlineSpotShadowColor="@color/blueberry"
+        android:outlineAmbientShadowColor="@color/color5"
+        android:outlineSpotShadowColor="@color/color5"
         android:src="@drawable/friends" />
 
     <!-- Friends Preview - RecyclerView -->
@@ -99,7 +107,9 @@
         android:layout_below="@+id/friendsRecyclerView"
         android:text="Favorites"
         android:layout_marginLeft="13dp"
-        android:textSize="30sp" />
+        android:textSize="30sp"
+        android:fontFamily="@font/thasadith_regular"
+        android:textColor="@color/color5"/>
 
     <!-- Button Link to favorite customListGameModels -->
     <ImageButton
@@ -128,7 +138,9 @@
         android:layout_below="@+id/favoritesRecyclerView"
         android:text="Collections"
         android:layout_marginLeft="13dp"
-        android:textSize="30sp" />
+        android:textSize="30sp"
+        android:fontFamily="@font/thasadith_regular"
+        android:textColor="@color/color5"/>
 
     <ImageButton
         android:id="@+id/friend_customList"

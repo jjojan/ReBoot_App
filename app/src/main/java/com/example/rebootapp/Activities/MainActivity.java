@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         Resources.Theme theme = this.getTheme();
-        bottomNavigationView.setBackgroundColor(getResources().getColor(R.color.gray));
+        bottomNavigationView.setBackgroundColor(getResources().getColor(R.color.color2));
 
         Window window = getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
