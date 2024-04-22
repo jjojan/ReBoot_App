@@ -53,7 +53,7 @@ public class SearchFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    Button actionButton;
+    Button actionButton, indieButton, shootButton,mmoButton, casualButton, rpgButton, famButton, cardButton ;
 
     public SearchFragment() {
         // Required empty public constructor
@@ -137,6 +137,16 @@ public class SearchFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         svSearch = view.findViewById(R.id.svSearch);
         actionButton = view.findViewById(R.id.actionButton);
+        shootButton = view.findViewById(R.id.shooterButton);
+        indieButton = view.findViewById(R.id.indieButton);
+        cardButton = view.findViewById(R.id.cardButton);
+        mmoButton = view.findViewById(R.id.mmoButton);
+        rpgButton = view.findViewById(R.id.rpgButton);
+        casualButton = view.findViewById(R.id.casual);
+        famButton = view.findViewById(R.id.familyButton);
+
+
+
         RecyclerView searchRecyclerView = view.findViewById(R.id.searchRecyclerView);
         searchGames = new ArrayList<>();
         GameSearchAdapter gameSearchAdapter = new GameSearchAdapter(getApplicationContext(), searchGames);
@@ -152,10 +162,6 @@ public class SearchFragment extends Fragment {
 
             @Override
             public void onClick(View view) {
-
-
-
-
 
                   fetchGames("action", gameSearchAdapter, searchRecyclerView);
 
@@ -188,6 +194,76 @@ public class SearchFragment extends Fragment {
 //
 //                    }
 //                });
+            }
+        });
+
+        indieButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+
+                fetchGames("indie", gameSearchAdapter, searchRecyclerView);
+
+            }
+        });
+
+        cardButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+
+                fetchGames("card", gameSearchAdapter, searchRecyclerView);
+
+            }
+        });
+
+        casualButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+
+                fetchGames("casual", gameSearchAdapter, searchRecyclerView);
+
+            }
+        });
+
+        shootButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+
+                fetchGames("shooter", gameSearchAdapter, searchRecyclerView);
+
+            }
+        });
+
+        mmoButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+
+                fetchGames("massively-multiplayer", gameSearchAdapter, searchRecyclerView);
+
+            }
+        });
+
+        famButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+
+                fetchGames("family", gameSearchAdapter, searchRecyclerView);
+
+            }
+        });
+
+        rpgButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+
+                fetchGames("role-playing-games-rpg", gameSearchAdapter, searchRecyclerView);
+
             }
         });
 

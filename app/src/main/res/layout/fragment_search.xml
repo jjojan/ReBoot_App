@@ -47,12 +47,14 @@
 
             <Button
                 android:layout_width="100dp"
+                android:id="@+id/indieButton"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="15dp"
                 android:text="Indie"/>
 
             <Button
                 android:layout_width="100dp"
+                android:id="@+id/shooterButton"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="15dp"
                 android:text="Shooter"/>
@@ -60,30 +62,35 @@
             <Button
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
+                android:id="@+id/rpgButton"
                 android:layout_marginLeft="15dp"
                 android:text="RPG"/>
 
             <Button
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
+                android:id="@+id/casual"
                 android:layout_marginLeft="15dp"
                 android:text="Casual"/>
 
             <Button
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
+                android:id="@+id/mmoButton"
                 android:layout_marginLeft="15dp"
                 android:text="MMO"/>
 
             <Button
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
+                android:id="@+id/cardButton"
                 android:layout_marginLeft="15dp"
                 android:text="Card"/>
 
             <Button
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
+                android:id="@+id/familyButton"
                 android:layout_marginLeft="15dp"
                 android:text="Family"/>
 
