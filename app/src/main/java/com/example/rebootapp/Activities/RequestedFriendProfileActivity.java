@@ -76,41 +76,42 @@ public class RequestedFriendProfileActivity extends AppCompatActivity {
         accept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ParseQuery<ParseUser> userQuery = ParseUser.getQuery();
-                userQuery.whereEqualTo("objectId", friendUserID);
-                userQuery.getFirstInBackground(new GetCallback<ParseUser>() {
-                    @Override
-                    public void done(ParseUser parseUser, ParseException e) {
-                        if (e == null){
-                            String friend_objectId = parseUser.getObjectId();
-                            ParseUser currentUser = ParseUser.getCurrentUser();
-                            ParseQuery<ParseObject> query = ParseQuery.getQuery("FriendRequest");
-                            query.whereEqualTo("source_user", parseUser);
-                            query.whereEqualTo("destination_user", currentUser);
-                            query.getFirstInBackground(new GetCallback<ParseObject>() {
-                                @Override
-                                public void done(ParseObject parseObject, ParseException e2) {
-                                    if (e2 == null) {
-                                        parseObject.deleteInBackground(new DeleteCallback() {
-                                            @Override
-                                            public void done(ParseException e) {
-                                                if (e == null)
-                                                    System.out.println("Success");
-                                                else System.out.println("Faulture to delte");
-                                            }
-                                        });
-                                        acceptFriendRequest(friend_objectId);
-                                        runOnUiThread(() -> {
-                                            finish();
-                                        });
-                                    }
-                                }
-                            });
-
-
-                        }
-                    }
-                });
+                acceptFriendRequest(friendUserID);
+//                ParseQuery<ParseUser> userQuery = ParseUser.getQuery();
+//                userQuery.whereEqualTo("objectId", friendUserID);
+//                userQuery.getFirstInBackground(new GetCallback<ParseUser>() {
+//                    @Override
+//                    public void done(ParseUser parseUser, ParseException e) {
+//                        if (e == null){
+//                            String friend_objectId = parseUser.getObjectId();
+//                            ParseUser currentUser = ParseUser.getCurrentUser();
+//                            ParseQuery<ParseObject> query = ParseQuery.getQuery("FriendRequest");
+//                            query.whereEqualTo("source_user", parseUser);
+//                            query.whereEqualTo("destination_user", currentUser);
+//                            query.getFirstInBackground(new GetCallback<ParseObject>() {
+//                                @Override
+//                                public void done(ParseObject parseObject, ParseException e2) {
+//                                    if (e2 == null) {
+//                                        parseObject.deleteInBackground(new DeleteCallback() {
+//                                            @Override
+//                                            public void done(ParseException e) {
+//                                                if (e == null)
+//                                                    System.out.println("Success");
+//                                                else System.out.println("Faulture to delte");
+//                                            }
+//                                        });
+//                                        acceptFriendRequest(friend_objectId);
+//                                        runOnUiThread(() -> {
+//                                            finish();
+//                                        });
+//                                    }
+//                                }
+//                            });
+//
+//
+//                        }
+//                    }
+//                });
 
 
             }
@@ -120,32 +121,70 @@ public class RequestedFriendProfileActivity extends AppCompatActivity {
             public void onClick(View v) {
                 ParseQuery<ParseUser> userQuery = ParseUser.getQuery();
                 userQuery.whereEqualTo("objectId", friendUserID);
-                userQuery.getFirstInBackground(new GetCallback<ParseUser>() {
+                HashMap<String, String> params = new HashMap<String, String>();
+                ParseUser currentUser = ParseUser.getCurrentUser();
+                String oid = currentUser.getObjectId();
+                params.put("currentUserId", oid);
+                params.put("friendUserId", friendUserID);
+                System.out.println("ID's : " + oid + " " + friendUserID);
+                ParseCloud.callFunctionInBackground("deleteFriendRequest", params, new FunctionCallback<String>() {
                     @Override
-                    public void done(ParseUser parseUser, ParseException e) {
-                        if (e == null){
-                            String friend_objectId = parseUser.getObjectId();
-                            ParseUser currentUser = ParseUser.getCurrentUser();
-                            ParseQuery<ParseObject> query = ParseQuery.getQuery("FriendRequest");
-                            query.whereEqualTo("source_user", parseUser);
-                            query.whereEqualTo("destination_user", currentUser);
-                            query.getFirstInBackground(new GetCallback<ParseObject>() {
-                                @Override
-                                public void done(ParseObject parseObject, ParseException e2) {
-                                    if (e2 == null) {
-                                        parseObject.put("Response", "Deny");
-                                        parseObject.saveInBackground();
-                                        runOnUiThread(() -> {
-                                            finish();
-                                        });
-                                    }
-                                }
+                    public void done(String result2, ParseException e){
+                        if (e == null) {
+                            System.out.println(result2);
+                            runOnUiThread(() -> {
+                                finish();
                             });
-
-
                         }
                     }
                 });
+//                userQuery.getFirstInBackground(new GetCallback<ParseUser>() {
+//                    @Override
+//                    public void done(ParseUser parseUser, ParseException e) {
+//                        if (e == null){
+//                            String friend_objectId = parseUser.getObjectId();
+//                            ParseUser currentUser = ParseUser.getCurrentUser();
+//                            String oid = currentUser.getObjectId();
+//                            HashMap<String, String> params = new HashMap<String, String>();
+//
+//                            params.put("currentUserId", oid);
+//                            params.put("friendUserId", friend_objectId);
+//
+//                            ParseCloud.callFunctionInBackground("deleteFriendRequest", params, new FunctionCallback<String>() {
+//                                @Override
+//                                public void done(String result, ParseException e){
+//                                    if (e == null){
+//                                        System.out.println(result);
+//
+//                                        runOnUiThread(() -> {
+//                                            finish();
+//                                        });
+//                                    }
+//                                }
+//                            });
+//
+//
+////                            ParseQuery<ParseObject> query = ParseQuery.getQuery("FriendRequest");
+////                            query.whereEqualTo("source_user", parseUser);
+////                            query.whereEqualTo("destination_user", currentUser);
+////                            query.getFirstInBackground(new GetCallback<ParseObject>() {
+////                                @Override
+////                                public void done(ParseObject parseObject, ParseException e2) {
+////                                    if (e2 == null) {
+////                                        parseObject.put("Response", "Deny");
+////                                        parseObject.saveInBackground();
+////
+////                                        runOnUiThread(() -> {
+////                                            finish();
+////                                        });
+////                                    }
+////                                }
+////                            });
+//
+//
+//                        }
+//                    }
+//                });
 
 
             }
@@ -176,6 +215,19 @@ public class RequestedFriendProfileActivity extends AppCompatActivity {
             public void done(String result, ParseException e){
                 if (e == null) {
                     System.out.println(result);
+                    if(result.equals("Friend added")){
+                        ParseCloud.callFunctionInBackground("deleteFriendRequest", params, new FunctionCallback<String>() {
+                            @Override
+                            public void done(String result2, ParseException e){
+                                if (e == null) {
+                                    System.out.println(result2);
+//                                    runOnUiThread(() -> {
+//                                        finish();
+//                                    });
+                                }
+                            }
+                        });
+                    }
                 }
             }
         });

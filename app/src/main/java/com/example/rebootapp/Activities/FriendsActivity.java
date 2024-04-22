@@ -50,7 +50,7 @@ public class FriendsActivity extends AppCompatActivity {
     List<SuggestedFriendModel> suggestedFriendsList = new ArrayList<>();
     List<SuggestedFriendModel> friendRequestList = new ArrayList<>();
 
-    private final FriendUpdateCallback friendUpdateCallback = this::fetchFriendsAndUpdateUI;
+//    private final FriendUpdateCallback friendUpdateCallback = this::fetchFriendsAndUpdateUI;
     private final FriendUpdateCallback friendUpdateCallback2 = this::fetchFriendsAndUpdateUI2;
     private final FriendUpdateCallback suggestCallback = this::fetchSuggestedFriends;
     private final FriendUpdateCallback requestCallback = this::fetchRequestedFriends;
@@ -493,6 +493,13 @@ public class FriendsActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onResume(){
+        super.onResume();
+        fetchFriendsAndUpdateUI2();
+        fetchSuggestedFriends();
+        fetchRequestedFriends();
+    }
 
 
 }
