@@ -23,30 +23,88 @@
         android:fontFamily="@font/thasadith_bold"
         android:queryHint="Search Games"
         android:searchSuggestSelection=" ?"
-        app:theme="@style/svSearch" />
+        app:theme="@style/svSearch" >
 
-    <TextView
-        android:id="@+id/tvSearchResults"
+    </SearchView>
+
+    <HorizontalScrollView
+        android:id="@+id/hScrollView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/svSearch"
-        android:text="Search Results"
-        android:fontFamily="@font/thasadith_bolditalic"
-        android:textColor="@color/color5"
-        android:layout_marginHorizontal="18sp"
-        android:textSize="25dp"
-        android:textStyle="bold"
-        android:layout_marginBottom="15dp"/>
+        android:layout_height="50dp"
+        android:layout_marginTop="60dp"
+        android:layout_marginLeft="5dp">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <Button
+                android:layout_width="100dp"
+                android:id="@+id/actionButton"
+                android:layout_height="wrap_content"
+                android:text="Action"/>
+
+            <Button
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:text="Indie"/>
+
+            <Button
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:text="Shooter"/>
+
+            <Button
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:text="RPG"/>
+
+            <Button
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:text="Casual"/>
+
+            <Button
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:text="MMO"/>
+
+            <Button
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:text="Card"/>
+
+            <Button
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:text="Family"/>
+
+
+        </LinearLayout>
+
+
+
+            />
+
+
+    </HorizontalScrollView>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/searchRecyclerView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:scrollbars="vertical"
-        android:layout_below="@+id/tvSearchResults"
+        android:layout_below="@+id/hScrollView"
         android:textAlignment="center"
         android:adjustViewBounds="true"/>
 
-    
 
 </RelativeLayout>

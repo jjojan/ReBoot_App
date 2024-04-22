@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.SearchView;
 
 import androidx.fragment.app.Fragment;
@@ -42,12 +43,17 @@ public class SearchFragment extends Fragment {
     private SearchView svSearch;
     String SEARCH_QUERY = "https://api.rawg.io/api/games?key=63502b95db9f41c99bb3d0ecf77aa811" + search_term;
 
+
+    String GENRE_QUERY = "https://api.rawg.io/api/games?key=63502b95db9f41c99bb3d0ecf77aa811&genres=";
+
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
 
     private String mParam1;
     private String mParam2;
+
+    Button actionButton;
 
     public SearchFragment() {
         // Required empty public constructor
@@ -130,6 +136,7 @@ public class SearchFragment extends Fragment {
         AsyncHttpClient client = new AsyncHttpClient();
         super.onViewCreated(view, savedInstanceState);
         svSearch = view.findViewById(R.id.svSearch);
+        actionButton = view.findViewById(R.id.actionButton);
         RecyclerView searchRecyclerView = view.findViewById(R.id.searchRecyclerView);
         searchGames = new ArrayList<>();
         GameSearchAdapter gameSearchAdapter = new GameSearchAdapter(getApplicationContext(), searchGames);
@@ -139,6 +146,50 @@ public class SearchFragment extends Fragment {
 
         //Create request client
 
+
+        actionButton.setOnClickListener(new View.OnClickListener() {
+
+
+            @Override
+            public void onClick(View view) {
+
+
+
+
+
+                  fetchGames("action", gameSearchAdapter, searchRecyclerView);
+
+
+//                svSearch = view.findViewById(R.id.svSearch);
+//                RecyclerView searchRecyclerView = view.findViewById(R.id.searchRecyclerView);
+//                searchGames = new ArrayList<>();
+//                searchRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+//                searchRecyclerView.setAdapter(gameSearchAdapter);
+//                String search = GENRE_QUERY + "card";
+//                client.get(search, new JsonHttpResponseHandler() {
+//                    @Override
+//                    public void onSuccess(int statusCode, Headers headers, JSON json) {
+//                        JSONObject jsonObject = json.jsonObject;
+//                        try{
+//                            JSONArray results = jsonObject.getJSONArray("results");
+//                            Log.i("Results", "Results" + results.toString());
+//                            searchGames.addAll(GameSearchModel.fromJSONArray(results));
+//                            gameSearchAdapter.notifyDataSetChanged();
+//                            println("hello");
+//                            Log.i("Movies", "Movies" + searchGames.size());
+//                        } catch(JSONException e){
+//                            Log.e("json", "hit json expception", e);
+//                        }
+//
+//                    }
+//
+//                    @Override
+//                    public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+//
+//                    }
+//                });
+            }
+        });
 
         //Http Query
         client.get(SEARCH_QUERY, new JsonHttpResponseHandler() {
@@ -187,7 +238,7 @@ public class SearchFragment extends Fragment {
                         JSONObject jsonObject = json.jsonObject;
                         try{
                             JSONArray results = jsonObject.getJSONArray("results");
-                            //Log.i(TAG, "Results" + results.toString());
+                            Log.i("SearchingResults", "Search" + results.toString());
                             searchGames.addAll(GameSearchModel.fromJSONArray(results));
                             gameSearchAdapter.notifyDataSetChanged();
                             println("hello");
@@ -245,6 +296,45 @@ public class SearchFragment extends Fragment {
 
 
     }
+
+    public void fetchGames(String searchTerm,  GameSearchAdapter gameSearchmAdapter, RecyclerView searchRecyclerView ) {
+        GENRE_QUERY = "https://api.rawg.io/api/games?key=63502b95db9f41c99bb3d0ecf77aa811&genres=";
+        AsyncHttpClient client = new AsyncHttpClient();
+        ArrayList genreGames = new ArrayList<>();
+
+
+        GameSearchAdapter gameSearchAdapter = new GameSearchAdapter(getContext(), genreGames);
+        searchRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+        searchRecyclerView.setAdapter(gameSearchAdapter);
+        GENRE_QUERY = GENRE_QUERY + searchTerm;
+        Log.i("Term", GENRE_QUERY);
+
+
+        client.get(GENRE_QUERY, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Headers headers, JSON json) {
+                JSONObject jsonObject = json.jsonObject;
+                try{
+                    JSONArray results = jsonObject.getJSONArray("results");
+                    Log.i("Cards", "Cards " + results.toString());
+                    genreGames.addAll(GameSearchModel.fromJSONArray(results));
+                    gameSearchAdapter.notifyDataSetChanged();
+                    println("hello");
+                    Log.i("Movies", "Movies" + searchGames.size());
+                } catch(JSONException e){
+                    Log.e("json", "hit json expception", e);
+                }
+
+            }
+
+            @Override
+            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+
+            }
+        });
+    }
+
+
 
 
 }
