@@ -47,7 +47,7 @@
                 android:checked="false"
                 android:text="Dev"
                 android:textOff="Dev Off"
-                android:textOn="Dev" />
+                android:textOn="Dev On" />
 
             <Button
                 android:layout_width="100dp"
