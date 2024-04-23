@@ -9,6 +9,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -61,6 +62,8 @@ public class GameDetailsActivity extends AppCompatActivity implements AdapterVie
     ArrayList<ReviewModel> reviewList;
     ReviewAdapter reviewAdapter;
 
+    ToggleButton imgFav;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -80,6 +83,7 @@ public class GameDetailsActivity extends AppCompatActivity implements AdapterVie
         binding.tvTitle.setText(movie.getTitle());
         binding.tvGameDescription.setText(movie.getOverview());
         binding.tvReleaseDate.setText( "Release Date: " + movie.getReleaseDate());
+        imgFav = findViewById(R.id.imgFav);
 
 
         Glide.with(this)
@@ -151,15 +155,15 @@ public class GameDetailsActivity extends AppCompatActivity implements AdapterVie
             }
         });
 
-//        checkMovieID(currentUserID, gameID, isEmpty -> heartButton.setChecked(!isEmpty));
+        checkMovieID(currentUserID, gameID, isEmpty -> imgFav.setChecked(!isEmpty));
 
-//        binding.imgFav.setOnClickListener(v -> {
-//            if (heartButton.isChecked()) {
-//                addFavoriteGame(currentUserID, gameID, favPath);
-//            } else {
-//                removeFavoriteGame(currentUserID, gameID);
-//            }
-//        });
+        binding.imgFav.setOnClickListener(v -> {
+            if (imgFav.isChecked()) {
+                addFavoriteGame(currentUserID, gameID, favPath);
+            } else {
+                removeFavoriteGame(currentUserID, gameID);
+            }
+        });
 
 
         binding.imgAddToList.setOnClickListener(v -> {
