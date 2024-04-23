@@ -1,8 +1,10 @@
 package com.example.rebootapp.Activities;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 
 import com.example.rebootapp.Adapters.FriendRequestAdapter;
+import com.example.rebootapp.Adapters.ManageBlockedAdapter;
 import com.example.rebootapp.Adapters.SuggestedFriendsAdapter;
 import com.example.rebootapp.Models.FriendModel;
 import com.example.rebootapp.Adapters.FriendsListAdapter;
@@ -37,7 +40,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class FriendsActivity extends AppCompatActivity {
 
     Button btn_friends_done;
-    ImageButton btn_newFriend;
+    ImageButton btn_newFriend, btn_blockedUsers;
     EditText et_newFriend;
     RecyclerView rv_Friends_List, rv_Suggested_Friends_List, rv_Friend_Request_List;
     List<String> friendUrls;
@@ -45,10 +48,12 @@ public class FriendsActivity extends AppCompatActivity {
     FriendsListAdapter friendsListAdapter;
     SuggestedFriendsAdapter suggestedFriendsAdapter;
     FriendRequestAdapter friendRequestAdapter;
+    ManageBlockedAdapter blockedUsersAdapter;
 
     List<FriendModel> friendsList = new ArrayList<>();
     List<SuggestedFriendModel> suggestedFriendsList = new ArrayList<>();
     List<SuggestedFriendModel> friendRequestList = new ArrayList<>();
+    List<SuggestedFriendModel> blockedUserList = new ArrayList<>();
 
 //    private final FriendUpdateCallback friendUpdateCallback = this::fetchFriendsAndUpdateUI;
     private final FriendUpdateCallback friendUpdateCallback2 = this::fetchFriendsAndUpdateUI2;
@@ -76,6 +81,7 @@ public class FriendsActivity extends AppCompatActivity {
         rv_Friend_Request_List.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
         btn_newFriend = findViewById(R.id.btn_addFriend);
+        btn_blockedUsers = findViewById(R.id.btn_block);
         et_newFriend = findViewById(R.id.et_addFriend);
 
 
@@ -93,6 +99,8 @@ public class FriendsActivity extends AppCompatActivity {
 
 
 
+
+
         btn_friends_done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -107,6 +115,13 @@ public class FriendsActivity extends AppCompatActivity {
 //                addFriendByUsername(friendUserName, friendUpdateCallback);
 //                addFriendByUsername2(friendUserName, friendUpdateCallback2);
                 requestFriendByUsername(friendUserName, friendUpdateCallback2);
+            }
+        });
+
+        btn_blockedUsers.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                manageBlockedUsers();
             }
         });
 
@@ -177,10 +192,10 @@ public class FriendsActivity extends AppCompatActivity {
         friendUsernames.clear();
 //        fetchFriendsAndUpdateUI();
         fetchFriendsAndUpdateUI2();
-        fetchSuggestedFriends();
+        fetchSuggestedFriends2();
 //        fetchSuggestedFriendsAndUpdateUI();
 //        testAddFriendRelation();
-        fetchRequestedFriends();
+        fetchRequestedFriends2();
     }
 
 
@@ -437,6 +452,41 @@ public class FriendsActivity extends AppCompatActivity {
         });
     }
 
+    public void fetchSuggestedFriends2(){
+        HashMap<String, String> params = new HashMap<String, String>();
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        String oid = currentUser.getObjectId();
+        params.put("userId", oid);
+        ParseCloud.callFunctionInBackground("suggestFriends2", params, new FunctionCallback<List<HashMap<String, Object>>>() {
+            @Override
+            public void done(List<HashMap<String, Object>> map, ParseException e){
+                if (e == null){
+                    List<SuggestedFriendModel> sfml = new ArrayList<>();
+                    AtomicInteger counter = new AtomicInteger(map.size());
+
+                    for(HashMap<String, Object> m : map){
+                        ParseUser a = (ParseUser) m.get("user");
+                        String id = a.getObjectId();
+//                        System.out.println(id);
+                        String username = a.getString("username");
+                        int b = (int) m.get("mutualFriendsCount");
+                        ParseFile pic = a.getParseFile("profile_pic");
+                        String picUrl = pic != null ? pic.getUrl() : null;
+                        String b_String = String.valueOf(b);
+//                        System.out.println("username: " + username + " m_friends: " + b_String);
+                        sfml.add(new SuggestedFriendModel(username, picUrl, id, b));
+
+                        if(counter.decrementAndGet() == 0){
+                            runOnUiThread(() -> {
+                                suggestedFriendsAdapter.updateData(sfml);
+                            });
+                        }
+                    }
+                }
+            }
+        });
+    }
+
     public void fetchRequestedFriends(){
         ParseUser currentUser = ParseUser.getCurrentUser();
         String oid = currentUser.getObjectId();
@@ -476,6 +526,102 @@ public class FriendsActivity extends AppCompatActivity {
         });
     }
 
+    public void fetchRequestedFriends2(){
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        String oid = currentUser.getObjectId();
+
+        HashMap<String, String> params = new HashMap<String, String>();
+        params.put("userId", oid);
+        ParseCloud.callFunctionInBackground("requestedFriends", params, new FunctionCallback<List<HashMap<String, Object>>>() {
+            @Override
+            public void done(List<HashMap<String, Object>> map, ParseException e){
+                if(e == null){
+                    List<SuggestedFriendModel> sfml = new ArrayList<>();
+                    AtomicInteger counter = new AtomicInteger(map.size());
+
+                    for(HashMap<String, Object> m : map){
+                        ParseUser a = (ParseUser) m.get("user");
+                        String id = a.getObjectId();
+                        String username = a.getString("username");
+                        int b = (int) m.get("mutualFriendsCount");
+                        ParseFile pic = a.getParseFile("profile_pic");
+                        String picUrl = pic != null ? pic.getUrl() : null;
+
+                        sfml.add(new SuggestedFriendModel(username, picUrl, id, b));
+
+                        if(counter.decrementAndGet() == 0){
+                            runOnUiThread(() -> {
+                                friendRequestAdapter.updateData(sfml);
+                            });
+                        }
+                    }
+
+                }
+            }
+        });
+    }
+
+    public void manageBlockedUsers(){
+        LayoutInflater inflater = LayoutInflater.from(this);
+        View customView = inflater.inflate(R.layout.layout_blocked_list, null);
+
+        AlertDialog.Builder listDialog = new AlertDialog.Builder(
+                new androidx.appcompat.view.ContextThemeWrapper(this, R.style.AlertDialogCustom));
+
+
+        listDialog.setView(customView); // Set the custom view for the dialog
+        AlertDialog userListDialogBuilder = listDialog.create();
+
+        Button close = customView.findViewById(R.id.btnClose);
+        RecyclerView rv = customView.findViewById(R.id.recyclerViewBlocked);
+
+        blockedUsersAdapter = new ManageBlockedAdapter(blockedUserList);
+        rv.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        rv.setAdapter(blockedUsersAdapter);
+
+
+
+        HashMap<String, String> params = new HashMap<String, String>();
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        String oid = currentUser.getObjectId();
+        params.put("userId", oid);
+        ParseCloud.callFunctionInBackground("getBlockedUsers", params, new FunctionCallback<List<HashMap<String, Object>>>() {
+            @Override
+            public void done(List<HashMap<String, Object>> map, ParseException e){
+                if(e == null){
+                    List<SuggestedFriendModel> sfml = new ArrayList<>();
+                    AtomicInteger counter = new AtomicInteger(map.size());
+                    System.out.println("there are this many " + counter);
+                    for(HashMap<String, Object> m : map){
+                        ParseUser a = (ParseUser) m.get("user");
+                        String id = a.getObjectId();
+                        String username = a.getString("username");
+                        int b = (int) m.get("mutualFriendsCount");
+                        ParseFile pic = a.getParseFile("profile_pic");
+                        String picUrl = pic != null ? pic.getUrl() : null;
+
+                        sfml.add(new SuggestedFriendModel(username, picUrl, id, b));
+
+                        if(counter.decrementAndGet() == 0){
+                            runOnUiThread(() -> {
+                                blockedUsersAdapter.updateData(sfml);
+                            });
+                        }
+                    }
+
+                }
+            }
+        });
+
+        close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                userListDialogBuilder.dismiss();
+            }
+        });
+        userListDialogBuilder.show();
+    }
+
     public void testAddFriendRelation(){
         HashMap<String, String> params = new HashMap<String, String>();
         ParseUser currentUser = ParseUser.getCurrentUser();
@@ -493,13 +639,13 @@ public class FriendsActivity extends AppCompatActivity {
 
     }
 
-    @Override
-    protected void onResume(){
-        super.onResume();
-        fetchFriendsAndUpdateUI2();
-        fetchSuggestedFriends();
-        fetchRequestedFriends();
-    }
+//    @Override
+//    protected void onResume(){
+//        super.onResume();
+//        fetchFriendsAndUpdateUI2();
+//        fetchSuggestedFriends();
+//        fetchRequestedFriends();
+//    }
 
 
 }

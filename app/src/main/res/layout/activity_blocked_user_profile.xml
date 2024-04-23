@@ -80,53 +80,19 @@
         android:textSize="20sp" />
 
     <TextView
-        android:id="@+id/manage_user"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="450dp"
-        android:layout_marginLeft="13dp"
-        android:text="Accept Friend Request"
-        android:textSize="25sp" />
-    <TextView
         android:id="@+id/manage_user2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="515dp"
         android:layout_marginLeft="13dp"
-        android:text="Deny Friend Request"
+        android:text="Un-Block User"
         android:textSize="25sp" />
 
-    <TextView
-        android:id="@+id/tv_block_user"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="580dp"
-        android:layout_marginLeft="13dp"
-        android:text="Block User"
-        android:textSize="25sp"/>
-
     <ImageButton
-        android:id="@+id/btn_accept"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_alignBottom="@+id/manage_user"
-        android:layout_marginLeft="300dp"
-        android:scaleType="fitCenter"
-        android:src="@drawable/baseline_add_24" />
-    <ImageButton
-        android:id="@+id/btn_deny"
+        android:id="@+id/btn_unblock"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_alignBottom="@+id/manage_user2"
-        android:layout_marginLeft="300dp"
-        android:scaleType="fitCenter"
-        android:src="@drawable/baseline_delete_24" />
-
-    <ImageButton
-        android:id="@+id/btn_block"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_alignBottom="@+id/tv_block_user"
         android:layout_marginLeft="300dp"
         android:scaleType="fitCenter"
         android:src="@drawable/block_user" />

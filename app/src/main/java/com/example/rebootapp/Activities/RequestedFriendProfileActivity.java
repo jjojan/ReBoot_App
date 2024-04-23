@@ -8,6 +8,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Button;
+import android.widget.Toast;
 
 
 import com.bumptech.glide.Glide;
@@ -26,7 +27,7 @@ import java.util.HashMap;
 
 public class RequestedFriendProfileActivity extends AppCompatActivity {
     Button done;
-    ImageButton accept, deny;
+    ImageButton accept, deny, block;
     ImageView profile_pic;
     TextView username, bio;
 
@@ -44,6 +45,7 @@ public class RequestedFriendProfileActivity extends AppCompatActivity {
         done = findViewById(R.id.btn_Friend_Profile_Done);
         accept = findViewById(R.id.btn_accept);
         deny = findViewById(R.id.btn_deny);
+        block = findViewById(R.id.btn_block);
 
         profile_pic = findViewById(R.id.Friend_ProfilePic);
         username = findViewById(R.id.tvFriend_Friend_Username);
@@ -196,6 +198,13 @@ public class RequestedFriendProfileActivity extends AppCompatActivity {
             }
         });
 
+        block.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                blockUser(friendUserID);
+            }
+        });
+
     }
 
     @Override
@@ -231,6 +240,27 @@ public class RequestedFriendProfileActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    public void blockUser(String userId){
+        HashMap<String, String> params = new HashMap<String, String>();
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        String oid = currentUser.getObjectId();
+        params.put("currentUserId", oid);
+        params.put("friendUserId", userId);
+
+        ParseCloud.callFunctionInBackground("blockUserById", params, new FunctionCallback<String>() {
+            @Override
+            public void done(String result, ParseException e){
+                if (e == null){
+                    Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
+                    runOnUiThread(()-> {
+                        finish();
+                    });
+                }
+            }
+        });
+
     }
 
 

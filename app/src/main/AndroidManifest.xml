@@ -71,6 +71,9 @@
             android:name=".Activities.RequestedFriendProfileActivity"
             android:exported="true" />
         <activity
+            android:name=".Activities.BlockedUserProfileActivity"
+            android:exported="true" />
+        <activity
             android:name=".Activities.SuggestedFriendProfileActivity"
             android:exported="true" />
         <activity
