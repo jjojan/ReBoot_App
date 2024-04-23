@@ -17,9 +17,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.rebootapp.Activities.FriendProfileActivity;
+import com.example.rebootapp.Activities.SuggestedFriendProfileActivity;
 import com.example.rebootapp.Models.FriendModel;
 import com.example.rebootapp.R;
+import com.parse.FunctionCallback;
+import com.parse.ParseCloud;
+import com.parse.ParseException;
+import com.parse.ParseUser;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class FriendsListAdapter extends RecyclerView.Adapter<FriendsListAdapter.ViewHolder>{
@@ -129,9 +135,42 @@ public class FriendsListAdapter extends RecyclerView.Adapter<FriendsListAdapter.
 
 
         holder.itemView.setOnClickListener(v -> {
-            Intent intent = new Intent(v.getContext(), FriendProfileActivity.class);
-            intent.putExtra("FRIEND_ID", friendModel.getObjectId());
-            v.getContext().startActivity(intent);
+//            Intent intent = new Intent(v.getContext(), FriendProfileActivity.class);
+//            intent.putExtra("FRIEND_ID", friendModel.getObjectId());
+//            v.getContext().startActivity(intent);
+            ParseUser currentUser = ParseUser.getCurrentUser();
+            String oid = currentUser.getObjectId();
+            HashMap<String, String> params = new HashMap<String, String>();
+            params.put("userId1", oid);
+            String fid = friendModel.getObjectId();
+            params.put("userId2", fid);
+            ParseCloud.callFunctionInBackground("checkFriend", params, new FunctionCallback<HashMap>() {
+                @Override
+                public void done(HashMap result, ParseException e){
+                    if (e == null){
+                        try{
+                            boolean isFriend = (boolean) result.get("isFriend");
+
+                            if(isFriend){
+                                Intent intent = new Intent(v.getContext(), FriendProfileActivity.class);
+                                intent.putExtra("FRIEND_ID", friendModel.getObjectId());
+                                v.getContext().startActivity(intent);
+                            } else {
+                                Intent intent = new Intent(v.getContext(), SuggestedFriendProfileActivity.class);
+                                intent.putExtra("FRIEND_ID", friendModel.getObjectId());
+                                v.getContext().startActivity(intent);
+                            }
+
+
+
+
+                        } catch (Exception e2) {
+                            System.out.println("null ptr");
+                        }
+
+                    }
+                }
+            });
         });
     }
 

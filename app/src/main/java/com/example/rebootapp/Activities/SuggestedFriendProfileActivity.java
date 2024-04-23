@@ -83,6 +83,18 @@ public class SuggestedFriendProfileActivity extends AppCompatActivity {
                 requestFriendByUserId(friendUserID);
             }
         });
+        done.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        block.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                blockUser(friendUserID);
+            }
+        });
     }
 
     @Override
@@ -111,6 +123,27 @@ public class SuggestedFriendProfileActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    public void blockUser(String userId){
+        HashMap<String, String> params = new HashMap<String, String>();
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        String oid = currentUser.getObjectId();
+        params.put("currentUserId", oid);
+        params.put("friendUserId", userId);
+
+        ParseCloud.callFunctionInBackground("blockUserById", params, new FunctionCallback<String>() {
+            @Override
+            public void done(String result, ParseException e){
+                if (e == null){
+                    Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
+                    runOnUiThread(()-> {
+                        finish();
+                    });
+                }
+            }
+        });
+
     }
 
 }
