@@ -93,6 +93,7 @@ public class GameSearchAdapter extends RecyclerView.Adapter<GameSearchAdapter.Vi
                     Intent intent = new Intent(context, GameSearchDetailsActivity.class);
 
                     intent.putExtra(GameSearchModel.class.getSimpleName(), Parcels.wrap(game));
+                    intent.putExtra("ModelType", "Search");
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
                     context.startActivity(intent);

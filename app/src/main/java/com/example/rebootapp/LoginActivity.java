@@ -143,7 +143,9 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 else{
                     //System.out.println(e.toString());
+                    Log.e("After LoginActivity", "not error");
                 }
+                Log.e("After LoginActivity", "sucess with LoginActivity");
                 navigateToHomePage();
                 Toast.makeText(LoginActivity.this, "Sucess", Toast.LENGTH_SHORT).show();
             }

@@ -33,8 +33,8 @@ public class GameReviewDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_game_details);
 
 
-        tvOverview = (TextView) findViewById(R.id.tvOverview);
-        rbVoteAverage = (RatingBar) findViewById(R.id.rbVoteAverage);
+//        tvOverview = (TextView) findViewById(R.id.tvOverview);
+//        rbVoteAverage = (RatingBar) findViewById(R.id.rbVoteAverage);
 
 
         review = (GameReviewModel) Parcels.unwrap(getIntent().getParcelableExtra(GameReviewModel.class.getSimpleName()));
@@ -49,12 +49,12 @@ public class GameReviewDetailsActivity extends AppCompatActivity {
 
 
 
-        ivPoster = (ImageView) findViewById(R.id.ivPoster);
-        Glide.with(this)
-                .load(review.getPosterPath())
-                .placeholder(R.drawable.flicks_movie_placeholder)
-                .error(R.drawable.flicks_movie_placeholder)
-                .into(ivPoster);
+//        ivPoster = (ImageView) findViewById(R.id.ivPoster);
+//        Glide.with(this)
+//                .load(review.getPosterPath())
+//                .placeholder(R.drawable.flicks_movie_placeholder)
+//                .error(R.drawable.flicks_movie_placeholder)
+//                .into(ivPoster);
     }
 
 }
