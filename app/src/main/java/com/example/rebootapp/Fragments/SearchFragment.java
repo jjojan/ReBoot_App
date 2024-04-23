@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.SearchView;
+import android.widget.ToggleButton;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -37,6 +38,8 @@ public class SearchFragment extends Fragment {
     List<GameSearchModel> searchGames; //CustomListGameModel Model List for RecyclerView&Adapter
 
     String search_term = "";
+
+    String slug = "";
     private MenuItem menuItem;
     private SearchView searchView;
 
@@ -54,6 +57,8 @@ public class SearchFragment extends Fragment {
     private String mParam2;
 
     Button actionButton, indieButton, shootButton,mmoButton, casualButton, rpgButton, famButton, cardButton ;
+
+    ToggleButton toggleButton;
 
     public SearchFragment() {
         // Required empty public constructor
@@ -144,6 +149,7 @@ public class SearchFragment extends Fragment {
         rpgButton = view.findViewById(R.id.rpgButton);
         casualButton = view.findViewById(R.id.casual);
         famButton = view.findViewById(R.id.familyButton);
+        toggleButton = view.findViewById(R.id.toggleButton);
 
 
 
@@ -155,6 +161,10 @@ public class SearchFragment extends Fragment {
         String search = "https://api.rawg.io/api/games?key=63502b95db9f41c99bb3d0ecf77aa811&&search_precise&search=";
 
         //Create request client
+
+        toggleButton.setOnCheckedChangeListener((buttonView, isChecked) -> {
+
+        });
 
 
         actionButton.setOnClickListener(new View.OnClickListener() {
@@ -297,39 +307,141 @@ public class SearchFragment extends Fragment {
 
 
         svSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
+
+
+
             @Override
             public boolean onQueryTextSubmit(String query) {
-                Log.i("new", query);
 
-                svSearch = view.findViewById(R.id.svSearch);
-                RecyclerView searchRecyclerView = view.findViewById(R.id.searchRecyclerView);
-                searchGames = new ArrayList<>();
-                GameSearchAdapter gameSearchAdapter = new GameSearchAdapter(getContext(), searchGames);
-                searchRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-                searchRecyclerView.setAdapter(gameSearchAdapter);
-                String search = "https://api.rawg.io/api/games?key=63502b95db9f41c99bb3d0ecf77aa811&&search_precise&search=" + query + "&ordering=-added";
-                client.get(search, new JsonHttpResponseHandler() {
-                    @Override
-                    public void onSuccess(int statusCode, Headers headers, JSON json) {
-                        JSONObject jsonObject = json.jsonObject;
-                        try{
-                            JSONArray results = jsonObject.getJSONArray("results");
-                            Log.i("SearchingResults", "Search" + results.toString());
-                            searchGames.addAll(GameSearchModel.fromJSONArray(results));
-                            gameSearchAdapter.notifyDataSetChanged();
-                            println("hello");
-                            //Log.i(TAG, "Movies" + searchGame.size());
-                        } catch(JSONException e){
-                            //Log.e(TAG, "hit json expception", e);
+
+
+                if (toggleButton.isChecked()) {
+
+                    String devSearch = "https://api.rawg.io/api/developers?key=63502b95db9f41c99bb3d0ecf77aa811&search=" + query;
+
+                    Log.i("toggleCheck", "on");
+
+                    client.get(devSearch, new JsonHttpResponseHandler() {
+                        @Override
+                        public void onSuccess(int statusCode, Headers headers, JSON json) {
+                            JSONObject jsonObject = json.jsonObject;
+                            try{
+                                JSONArray results = jsonObject.getJSONArray("results");
+
+                                if (results.length() > 0) {
+                                    // Get the first JSONObject from the JSONArray
+                                    JSONObject firstResult = results.getJSONObject(0);
+
+                                   Log.i("json", firstResult.toString());
+                                    Log.i("json", firstResult.getString("slug"));
+                                    slug = firstResult.getString("slug");
+
+                                    // Output or use the slug as needed
+
+
+                                } else {
+                                    Log.i("devTag", "no found");
+                                }
+                                Log.i("devTag", "Search" + results.toString());
+
+//                            searchGames.addAll(GameSearchModel.fromJSONArray(results));
+//                            gameSearchAdapter.notifyDataSetChanged();
+                                println("hello");
+                                //Log.i(TAG, "Movies" + searchGame.size());
+                            } catch(JSONException e){
+                                //Log.e(TAG, "hit json expception", e);
+                            }
+
                         }
 
-                    }
+                        @Override
+                        public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
 
-                    @Override
-                    public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+                        }
+                    });
+                } else {
+                    Log.i("toggleCheck", "off");
+                }
 
-                    }
-                });
+
+
+
+
+
+                Log.i("final", slug);
+
+                if(slug != "" || slug != "null"){
+                    svSearch = view.findViewById(R.id.svSearch);
+                    RecyclerView searchRecyclerView = view.findViewById(R.id.searchRecyclerView);
+                    searchGames = new ArrayList<>();
+                    GameSearchAdapter gameSearchAdapter = new GameSearchAdapter(getContext(), searchGames);
+                    searchRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+                    searchRecyclerView.setAdapter(gameSearchAdapter);
+                    String search = "https://api.rawg.io/api/games?key=63502b95db9f41c99bb3d0ecf77aa811&developers=" + slug + "&ordering=-added";
+                    client.get(search, new JsonHttpResponseHandler() {
+                        @Override
+                        public void onSuccess(int statusCode, Headers headers, JSON json) {
+                            JSONObject jsonObject = json.jsonObject;
+                            try{
+                                JSONArray results = jsonObject.getJSONArray("results");
+                                Log.i("SearchingResults", "Search" + results.toString());
+                                searchGames.addAll(GameSearchModel.fromJSONArray(results));
+                                gameSearchAdapter.notifyDataSetChanged();
+                                println("hello");
+                                //Log.i(TAG, "Movies" + searchGame.size());
+                            } catch(JSONException e){
+                                //Log.e(TAG, "hit json expception", e);
+                            }
+
+                        }
+
+                        @Override
+                        public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+
+                        }
+                    });
+
+                    return false;
+                }else{
+
+                    svSearch = view.findViewById(R.id.svSearch);
+                    RecyclerView searchRecyclerView = view.findViewById(R.id.searchRecyclerView);
+                    searchGames = new ArrayList<>();
+                    GameSearchAdapter gameSearchAdapter = new GameSearchAdapter(getContext(), searchGames);
+                    searchRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+                    searchRecyclerView.setAdapter(gameSearchAdapter);
+                    String search = "https://api.rawg.io/api/games?key=63502b95db9f41c99bb3d0ecf77aa811&&search_precise&search=" + query + "&ordering=-added";
+                    client.get(search, new JsonHttpResponseHandler() {
+                        @Override
+                        public void onSuccess(int statusCode, Headers headers, JSON json) {
+                            JSONObject jsonObject = json.jsonObject;
+                            try{
+                                JSONArray results = jsonObject.getJSONArray("results");
+                                Log.i("SearchingResults", "Search" + results.toString());
+                                searchGames.addAll(GameSearchModel.fromJSONArray(results));
+                                gameSearchAdapter.notifyDataSetChanged();
+                                println("hello");
+                                //Log.i(TAG, "Movies" + searchGame.size());
+                            } catch(JSONException e){
+                                //Log.e(TAG, "hit json expception", e);
+                            }
+
+                        }
+
+                        @Override
+                        public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+
+                        }
+                    });
+
+                }
+
+
+
+
+
+
 
                 return false;
             }

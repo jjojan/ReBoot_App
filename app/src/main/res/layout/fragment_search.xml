@@ -39,6 +39,16 @@
             android:layout_height="match_parent"
             android:orientation="horizontal">
 
+            <ToggleButton
+                android:id="@+id/toggleButton"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="15dp"
+                android:checked="false"
+                android:text="Dev"
+                android:textOff="Dev Off"
+                android:textOn="Dev" />
+
             <Button
                 android:layout_width="100dp"
                 android:id="@+id/actionButton"
