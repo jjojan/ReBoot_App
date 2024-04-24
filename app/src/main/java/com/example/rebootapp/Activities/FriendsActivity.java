@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -17,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.rebootapp.Adapters.FriendRequestAdapter;
 import com.example.rebootapp.Adapters.ManageBlockedAdapter;
+import com.example.rebootapp.Adapters.SearchUserAdapter;
 import com.example.rebootapp.Adapters.SuggestedFriendsAdapter;
 import com.example.rebootapp.Models.FriendModel;
 import com.example.rebootapp.Adapters.FriendsListAdapter;
@@ -40,7 +42,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class FriendsActivity extends AppCompatActivity {
 
     Button btn_friends_done;
-    ImageButton btn_newFriend, btn_blockedUsers;
+    ImageButton btn_newFriend, btn_blockedUsers, btn_search;
     EditText et_newFriend;
     RecyclerView rv_Friends_List, rv_Suggested_Friends_List, rv_Friend_Request_List;
     List<String> friendUrls;
@@ -49,11 +51,13 @@ public class FriendsActivity extends AppCompatActivity {
     SuggestedFriendsAdapter suggestedFriendsAdapter;
     FriendRequestAdapter friendRequestAdapter;
     ManageBlockedAdapter blockedUsersAdapter;
+    SearchUserAdapter searchUserAdapter;
 
     List<FriendModel> friendsList = new ArrayList<>();
     List<SuggestedFriendModel> suggestedFriendsList = new ArrayList<>();
     List<SuggestedFriendModel> friendRequestList = new ArrayList<>();
     List<SuggestedFriendModel> blockedUserList = new ArrayList<>();
+    List<SuggestedFriendModel> searchUserList = new ArrayList<>();
 
 //    private final FriendUpdateCallback friendUpdateCallback = this::fetchFriendsAndUpdateUI;
     private final FriendUpdateCallback friendUpdateCallback2 = this::fetchFriendsAndUpdateUI2;
@@ -82,6 +86,7 @@ public class FriendsActivity extends AppCompatActivity {
 
         btn_newFriend = findViewById(R.id.btn_addFriend);
         btn_blockedUsers = findViewById(R.id.btn_block);
+        btn_search = findViewById(R.id.btn_searchFriend);
         et_newFriend = findViewById(R.id.et_addFriend);
 
 
@@ -122,6 +127,13 @@ public class FriendsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 manageBlockedUsers();
+            }
+        });
+
+        btn_search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                searchUsers();
             }
         });
 
@@ -619,6 +631,120 @@ public class FriendsActivity extends AppCompatActivity {
                 userListDialogBuilder.dismiss();
             }
         });
+        userListDialogBuilder.show();
+    }
+
+    public void searchUsers(){
+        LayoutInflater inflater = LayoutInflater.from(this);
+        View customView = inflater.inflate(R.layout.layout_search_user, null);
+
+        AlertDialog.Builder listDialog = new AlertDialog.Builder(
+                new androidx.appcompat.view.ContextThemeWrapper(this, R.style.AlertDialogCustom));
+
+        listDialog.setView(customView); // Set the custom view for the dialog
+        AlertDialog userListDialogBuilder = listDialog.create();
+
+        Button close = customView.findViewById(R.id.btnClose);
+        RecyclerView rv = customView.findViewById(R.id.recyclerViewBlocked);
+        SearchView sv = customView.findViewById(R.id.sv_searchUser);
+
+        searchUserAdapter = new SearchUserAdapter(searchUserList);
+        rv.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        rv.setAdapter(searchUserAdapter);
+
+        close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                userListDialogBuilder.dismiss();
+            }
+        });
+
+        sv.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                HashMap<String, String> params = new HashMap<String, String>();
+                ParseUser currentUser = ParseUser.getCurrentUser();
+                String oid = currentUser.getObjectId();
+                params.put("currentUserId", oid);
+                String kw = query.toString();
+                params.put("keyword", kw);
+                System.out.println("Got to first part in search, keyword = " + query);
+
+                ParseCloud.callFunctionInBackground("searchUsers", params, new FunctionCallback<List<HashMap<String, Object>>>() {
+                    @Override
+                    public void done(List<HashMap<String, Object>> map, ParseException e) {
+                        if (e == null){
+                            System.out.println("Got to here in search");
+                            List<SuggestedFriendModel> sfml = new ArrayList<>();
+                            AtomicInteger counter = new AtomicInteger(map.size());
+                            System.out.println("there are this many " + counter);
+                            for (HashMap<String, Object> m : map) {
+                                ParseUser a = (ParseUser) m.get("user");
+                                String id = a.getObjectId();
+                                String username = a.getString("username");
+                                int b = (int) m.get("mutualFriendsCount");
+                                ParseFile pic = a.getParseFile("profile_pic");
+                                String picUrl = pic != null ? pic.getUrl() : null;
+
+                                sfml.add(new SuggestedFriendModel(username, picUrl, id, b));
+
+                                if (counter.decrementAndGet() == 0) {
+                                    runOnUiThread(() -> {
+                                        searchUserAdapter.updateData(sfml);
+                                    });
+                                }
+                            }
+                        }
+                    }
+                });
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+//        sv.setOnSearchClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                HashMap<String, String> params = new HashMap<String, String>();
+//                ParseUser currentUser = ParseUser.getCurrentUser();
+//                String oid = currentUser.getObjectId();
+//                String kw = sv.getQuery().toString();
+//                params.put("CurrentUserId", oid);
+//                params.put("keyword", kw);
+//                System.out.println("Got to first part in search");
+//                ParseCloud.callFunctionInBackground("searchUsers", params, new FunctionCallback<List<HashMap<String, Object>>>() {
+//                    @Override
+//                    public void done(List<HashMap<String, Object>> map, ParseException e) {
+//                        if (e == null) {
+//                            System.out.println("Got to here in search");
+//                            List<SuggestedFriendModel> sfml = new ArrayList<>();
+//                            AtomicInteger counter = new AtomicInteger(map.size());
+//                            System.out.println("there are this many " + counter);
+//                            for (HashMap<String, Object> m : map) {
+//                                ParseUser a = (ParseUser) m.get("user");
+//                                String id = a.getObjectId();
+//                                String username = a.getString("username");
+//                                int b = (int) m.get("mutualFriendsCount");
+//                                ParseFile pic = a.getParseFile("profile_pic");
+//                                String picUrl = pic != null ? pic.getUrl() : null;
+//
+//                                sfml.add(new SuggestedFriendModel(username, picUrl, id, b));
+//
+//                                if (counter.decrementAndGet() == 0) {
+//                                    runOnUiThread(() -> {
+//                                        searchUserAdapter.updateData(sfml);
+//                                    });
+//                                }
+//                            }
+//
+//                        }
+//                    }
+//                });
+//            }
+//        });
         userListDialogBuilder.show();
     }
 

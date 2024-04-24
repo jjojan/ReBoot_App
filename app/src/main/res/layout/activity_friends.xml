@@ -87,6 +87,7 @@
         android:layout_marginRight="140dp"
         android:background="@drawable/edt_background"
         android:hint="Add Friend"
+        android:visibility="invisible"
         android:paddingLeft="13dp"
         android:textColorHint="@color/black" />
 
@@ -94,9 +95,18 @@
         android:id="@+id/btn_addFriend"
         android:layout_width="50dp"
         android:layout_height="50dp"
+        android:visibility="invisible"
         android:layout_marginLeft="275dp"
         android:layout_marginTop="540dp"
         android:scaleType="fitCenter"
         android:src="@drawable/baseline_add_24" />
+
+    <ImageButton
+        android:id="@+id/btn_searchFriend"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginLeft="350dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/baseline_search_24" />
 
 </RelativeLayout>
