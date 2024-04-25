@@ -15,6 +15,7 @@ public class ReviewModel {
     String ReviewText;
     String GameID;
     String objectId;
+    String photo_url;
     Date createdAt;
     Date updatedAt;
     boolean isShowOnlyFriends;
@@ -36,6 +37,23 @@ public class ReviewModel {
         this.ratingStar = ratingStar;
         this.upCount = upCount;
         this.downCount = downCount;
+    }
+
+    public ReviewModel(String reviewUser, String reviewUserName, String reviewText, String gameID,String objectId
+            , Date createdAt, Date updatedAt, boolean isShowOnlyFriends, float ratingStar,
+                       int upCount,int downCount, String url) {
+        ReviewUser = reviewUser;
+        ReviewUserName = reviewUserName;
+        ReviewText = reviewText;
+        GameID = gameID;
+        this.objectId = objectId;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.isShowOnlyFriends = isShowOnlyFriends;
+        this.ratingStar = ratingStar;
+        this.upCount = upCount;
+        this.downCount = downCount;
+        this.photo_url = url;
     }
 
     public String getObjectId() {
@@ -124,5 +142,9 @@ public class ReviewModel {
 
     public void setRatingStar(float ratingStar) {
         this.ratingStar = ratingStar;
+    }
+
+    public String getPhoto_url(){
+        return photo_url;
     }
 }

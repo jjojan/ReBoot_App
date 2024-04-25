@@ -55,11 +55,14 @@ public class MainActivity extends AppCompatActivity {
 
         final FragmentManager fragmentManager = getSupportFragmentManager();
 
-        Intent intent = getIntent();
-        Log.i("fileName1", "waiting");
-        if (getIntent().hasExtra("jsonArray")) {
-            Log.i("fileName1", "" + getIntent().getStringExtra("jsonArray"));
-        }
+
+
+
+//        Intent intent = getIntent();
+//        Log.i("fileName1", "waiting");
+//        if (getIntent().hasExtra("jsonArray")) {
+//            Log.i("fileName1", "" + getIntent().getStringExtra("jsonArray"));
+//        }
 
 
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
@@ -104,8 +107,51 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
-        bottomNavigationView.setSelectedItemId(R.id.mHome);
+        boolean profile = false;
+        Intent intent = getIntent();
+        System.out.println("got 2 here in main");
+        if (intent != null && intent.getExtras() != null) {
+            if (intent.getExtras().containsKey("openFragment")) {
+                String fragmentToOpen = intent.getStringExtra("openFragment");
+                if (fragmentToOpen != null && fragmentToOpen.equals("profile")) {
+                    bottomNavigationView.setSelectedItemId(R.id.mCart);
+                    profile = true;
+                }
+            }
+        }
+        if(!profile) bottomNavigationView.setSelectedItemId(R.id.mHome);
     }
+
+//    @Override
+//    protected void onNewIntent(Intent intent) {
+//        super.onNewIntent(intent);
+//        System.out.println("got 1 here in main");
+//        setIntent(intent);
+//        handleIntent(intent);
+//    }
+//
+//    public void handleIntent(Intent intent) {
+//        System.out.println("got 2 here in main");
+//        if (intent != null && intent.getExtras() != null) {
+//            if (intent.getExtras().containsKey("openFragment")) {
+//                String fragmentToOpen = intent.getStringExtra("openFragment");
+//                if (fragmentToOpen != null && fragmentToOpen.equals("profile")) {
+//                    openProfileFragment();
+//                }
+//            }
+//        }
+//    }
+
+//    public void openProfileFragment(FragmentManager f) {
+//        System.out.println("got 3 here in main");
+//        ProfileFragment profileFragment = new ProfileFragment();
+////        getSupportFragmentManager().beginTransaction()
+//        f.beginTransaction()
+//                .replace(R.id.fLayoutContainer, profileFragment)
+//                .commit();
+//        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+//        bottomNavigationView.setSelectedItemId(R.id.mCart);
+//    }
 
 
 //        RecyclerView rvMovies = findViewById(R.id.rvYourGames);

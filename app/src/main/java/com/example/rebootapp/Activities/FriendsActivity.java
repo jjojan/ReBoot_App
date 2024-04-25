@@ -26,6 +26,7 @@ import com.example.rebootapp.Models.SuggestedFriendModel;
 import com.example.rebootapp.R;
 import com.parse.FindCallback;
 import com.parse.FunctionCallback;
+import com.parse.GetCallback;
 import com.parse.ParseCloud;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -33,6 +34,7 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseRelation;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,7 +43,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class FriendsActivity extends AppCompatActivity {
 
-    Button btn_friends_done;
+    Button btn_friends_done, btn_update;
     ImageButton btn_newFriend, btn_blockedUsers, btn_search;
     EditText et_newFriend;
     RecyclerView rv_Friends_List, rv_Suggested_Friends_List, rv_Friend_Request_List;
@@ -73,6 +75,7 @@ public class FriendsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_friends);
 
         btn_friends_done = findViewById(R.id.btn_Friends_Done);
+        btn_update = findViewById(R.id.btn_redo);
         rv_Friends_List = findViewById(R.id.rv_Friends_list);
 //        rv_Friends_List.setLayoutManager(new GridLayoutManager(this, 3));
         rv_Friends_List.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
@@ -134,6 +137,42 @@ public class FriendsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 searchUsers();
+            }
+        });
+
+        btn_update.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final int[] i = {0};
+                ParseQuery<ParseObject> query = ParseQuery.getQuery("Review");
+                query.findInBackground(new FindCallback<ParseObject>() {
+                    @Override
+                    public void done(List<ParseObject> list, ParseException e) {
+                        if(e == null){
+                            for(ParseObject review : list) {
+                                String oid = review.getString("ReviewUser");
+                                ParseQuery<ParseUser> userQuery = ParseUser.getQuery();
+                                userQuery.whereEqualTo("objectId", oid);
+                                userQuery.getFirstInBackground(new GetCallback<ParseUser>() {
+                                    @Override
+                                    public void done(ParseUser parseUser, ParseException e2) {
+                                        if (e2 == null) {
+                                            review.put("source_user", parseUser);
+                                            review.saveInBackground(new SaveCallback() {
+                                                @Override
+                                                public void done(ParseException e) {
+                                                    System.out.println(i[0]);
+                                                    i[0]++;
+                                                }
+                                            });
+                                        }
+                                    }
+                                });
+                            }
+                        }
+                    }
+                });
+
             }
         });
 

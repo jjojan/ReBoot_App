@@ -1,6 +1,8 @@
 package com.example.rebootapp.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,8 +15,15 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.example.rebootapp.Activities.FriendProfileActivity;
+import com.example.rebootapp.Activities.MainActivity;
+import com.example.rebootapp.Activities.SuggestedFriendProfileActivity;
 import com.example.rebootapp.Models.ReviewModel;
 import com.example.rebootapp.R;
+import com.parse.FunctionCallback;
+import com.parse.ParseCloud;
+import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
@@ -39,6 +48,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
 
     // ViewHolder class
     public static class ViewHolder extends RecyclerView.ViewHolder {
+        ImageView imageView;
         TextView tvUserName, tvReviewText, tvUp, tvDown,tvDate;
         RatingBar ratingBar;
         View view;
@@ -53,6 +63,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
             tvDate = itemView.findViewById(R.id.tvDate);
             ratingBar = itemView.findViewById(R.id.ratingbarRecyclerView);
             view=itemView.getRootView();
+            imageView = itemView.findViewById(R.id.imageView);
         }
     }
     public void updateData(ArrayList<ReviewModel> newData) {
@@ -81,6 +92,56 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
         holder.tvUp.setOnClickListener(view -> sendUpVote(position));
         holder.tvDown.setOnClickListener(view -> sendDownVote(position));
         holder.view.setOnClickListener(view -> showDialog(position));
+
+        String uri = review.getPhoto_url();
+        if (uri != null) {
+            Glide.with(holder.imageView.getContext()).load(uri).into(holder.imageView);
+        } else {
+            holder.imageView.setBackgroundColor(Color.BLACK);
+        }
+
+        holder.imageView.setOnClickListener(v-> {
+            ParseUser currentUser = ParseUser.getCurrentUser();
+            String oid = currentUser.getObjectId();
+            HashMap<String, String> params = new HashMap<String, String>();
+            params.put("userId1", oid);
+            String fid = review.getReviewUser();
+            params.put("userId2", fid);
+            if(oid.equals(fid)){
+                Intent intent = new Intent(v.getContext(), MainActivity.class);
+                intent.putExtra("openFragment", "profile");
+                v.getContext().startActivity(intent);
+            }
+            else {
+                ParseCloud.callFunctionInBackground("checkFriend", params, new FunctionCallback<HashMap>() {
+                    @Override
+                    public void done(HashMap result, ParseException e) {
+                        if (e == null) {
+
+
+                            try {
+                                boolean isFriend = (boolean) result.get("isFriend");
+
+                                if (isFriend) {
+                                    Intent intent = new Intent(v.getContext(), FriendProfileActivity.class);
+                                    intent.putExtra("FRIEND_ID", review.getReviewUser());
+                                    v.getContext().startActivity(intent);
+                                } else {
+                                    Intent intent = new Intent(v.getContext(), SuggestedFriendProfileActivity.class);
+                                    intent.putExtra("FRIEND_ID", review.getReviewUser());
+                                    v.getContext().startActivity(intent);
+                                }
+
+
+                            } catch (Exception e2) {
+                                System.out.println("null ptr");
+                            }
+
+                        }
+                    }
+                });
+            }
+        });
     }
     private void sendUpVote(int position) {
         // Query the Review table for the specific review using the objectId

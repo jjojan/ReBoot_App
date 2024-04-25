@@ -70,6 +70,13 @@
         android:layout_marginLeft="150dp"
         android:layout_marginTop="600dp"
         android:text="Done" />
+    <Button
+        android:id="@+id/btn_redo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="300dp"
+        android:layout_marginTop="600dp"
+        android:text="update" />
     <ImageButton
         android:id="@+id/btn_block"
         android:layout_width="50dp"
