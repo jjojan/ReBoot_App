@@ -19,10 +19,12 @@ import com.example.rebootapp.Adapters.ReviewAdapter;
 import com.example.rebootapp.GameModel;
 import com.example.rebootapp.Models.ReviewModel;
 import com.example.rebootapp.R;
+import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +42,9 @@ public class ActivityFragment extends Fragment {
     ArrayList<ReviewModel> reviewModel;
 
     ReviewAdapter reviewAdapter;
+
+    SwitchMaterial switchMaterial;
+    List<String> friendList = new ArrayList<>();
 
     public ActivityFragment() {
 
@@ -68,7 +73,9 @@ public class ActivityFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
         binding = com.example.rebootapp.databinding.FragmentActivityBinding.inflate(getLayoutInflater());
+        switchMaterial = binding.materialSwitch;
         return binding.getRoot();
 //        return inflater.inflate(R.layout.fragment_activity, container, false);
     }
@@ -77,12 +84,25 @@ public class ActivityFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+
+
         reviewModel = new ArrayList<>();
         reviewAdapter = new ReviewAdapter(getContext(), (ArrayList<ReviewModel>) reviewModel);
 
         // Now using binding to access the RecyclerView and set its properties
         binding.rvFeed.setAdapter(reviewAdapter);
         binding.rvFeed.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+
+        switchMaterial.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                Log.i("hiSwitch", "j");
+                fetchFriends();
+            } else {
+                Log.i("hiSwitch", "f");
+                fetchReviews();
+
+            }
+        });
 
 //        RecyclerView rvFeed = getView().findViewById(R.id.rvFeed);
 //        reviewModel = new ArrayList<>();
@@ -93,6 +113,68 @@ public class ActivityFragment extends Fragment {
 //        reviewModel = new ArrayList<>();
 
         fetchReviews();
+    }
+
+    public void fetchFriends() {
+
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        if (currentUser != null) {
+           friendList = currentUser.getList("friend_list");
+            if (friendList != null) {
+                // Process your friend list here
+                for (String friend : friendList) {
+                    Log.d("Friend", friend);
+                }
+            } else {
+                Log.d("Error", "No friends list found");
+            }
+        } else {
+            Log.d("Error", "No user logged in");
+        }
+
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Review");
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> reviews, ParseException e) {
+                if (e == null) {
+                    // Clear existing data
+                    reviewModel.clear();
+
+                    // Convert ParseObjects into your ReviewModel instances
+                    for (ParseObject reviewObject : reviews) {
+                        ReviewModel review = new ReviewModel(
+                                reviewObject.getString("ReviewUser"),
+                                reviewObject.getString("ReviewUsername"),
+                                reviewObject.getString("ReviewText"),
+                                reviewObject.getString("GameID"),
+                                reviewObject.getObjectId(),
+                                reviewObject.getCreatedAt(),
+                                reviewObject.getUpdatedAt(),
+                                reviewObject.getBoolean("isShowOnlyFriends"),
+                                reviewObject.getNumber("ratingStar") != null ? reviewObject.getNumber("ratingStar").floatValue() : 0,
+                                reviewObject.getInt("upCount"),
+                                reviewObject.getInt("downCount")
+                        );
+
+                        if (friendList.contains(review.getReviewUser())){
+                            Log.i("friendList", review.getReviewUser().toString());
+                            reviewModel.add(review);
+
+                        }
+
+                    }
+
+                    // Notify the adapter of the change on the UI thread
+                    getActivity().runOnUiThread(() -> {
+                        reviewAdapter.notifyDataSetChanged();
+                    });
+                } else {
+                    Log.e("fetchReviews", "Error: " + e.getMessage());
+                }
+            }
+        });
+
+
     }
 
     public void fetchReviews() {

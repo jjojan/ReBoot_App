@@ -361,7 +361,36 @@ public class SearchFragment extends Fragment {
                         }
                     });
                 } else {
-                    Log.i("toggleCheck", "off");
+                    svSearch = view.findViewById(R.id.svSearch);
+                    RecyclerView searchRecyclerView = view.findViewById(R.id.searchRecyclerView);
+                    searchGames = new ArrayList<>();
+                    GameSearchAdapter gameSearchAdapter = new GameSearchAdapter(getContext(), searchGames);
+                    searchRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+                    searchRecyclerView.setAdapter(gameSearchAdapter);
+                    String search = "https://api.rawg.io/api/games?key=63502b95db9f41c99bb3d0ecf77aa811&&search_precise&search=" + query + "&ordering=-added";
+                    client.get(search, new JsonHttpResponseHandler() {
+                        @Override
+                        public void onSuccess(int statusCode, Headers headers, JSON json) {
+                            JSONObject jsonObject = json.jsonObject;
+                            try{
+                                JSONArray results = jsonObject.getJSONArray("results");
+                                Log.i("SearchingResults", "Search" + results.toString());
+                                searchGames.addAll(GameSearchModel.fromJSONArray(results));
+                                gameSearchAdapter.notifyDataSetChanged();
+                                println("hello");
+                                //Log.i(TAG, "Movies" + searchGame.size());
+                            } catch(JSONException e){
+                                //Log.e(TAG, "hit json expception", e);
+                            }
+
+                        }
+
+                        @Override
+                        public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+
+                        }
+                    });
+
                 }
 
 

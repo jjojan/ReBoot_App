@@ -100,6 +100,7 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.ViewHolder> {
 
                 GameModel gameModel = gameModels.get(position);
 
+
                 Intent intent = new Intent(context, GameDetailsActivity.class);
 
                 intent.putExtra(GameModel.class.getSimpleName(), Parcels.wrap(gameModel));
