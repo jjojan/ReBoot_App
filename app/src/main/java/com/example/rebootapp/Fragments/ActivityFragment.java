@@ -25,6 +25,7 @@ import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseRelation;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
@@ -97,7 +98,7 @@ public class ActivityFragment extends Fragment {
         switchMaterial.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
                 Log.i("hiSwitch", "j");
-                fetchFriends();
+                fetchFriends2();
             } else {
                 Log.i("hiSwitch", "f");
                 fetchReviews();
@@ -177,6 +178,68 @@ public class ActivityFragment extends Fragment {
 
 
     }
+    public void fetchFriends2() {
+
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        ParseRelation<ParseUser> friendsRelation = currentUser.getRelation("friends");
+        ParseQuery<ParseUser> friendsRelationQuery = friendsRelation.getQuery();
+
+        friendsRelationQuery.findInBackground(new FindCallback<ParseUser>() {
+            @Override
+            public void done(List<ParseUser> list, ParseException e) {
+                if(e == null){
+                    ParseQuery<ParseObject> reviewQuery = ParseQuery.getQuery("Review");
+                    reviewQuery.whereContainedIn("source_user", list);
+                    reviewQuery.include("source_user");
+                    reviewQuery.findInBackground(new FindCallback<ParseObject>() {
+                        @Override
+                        public void done(List<ParseObject> reviews, ParseException e) {
+                            if(e == null) {
+                                reviewModel.clear();
+
+                                for (ParseObject reviewObject : reviews) {
+                                    ParseUser user = reviewObject.getParseUser("source_user");
+                                    if (user != null) {
+                                        String username = user.getUsername();
+                                        ParseFile picFile = user.getParseFile("profile_pic");
+                                        String picUrl = picFile != null ? picFile.getUrl() : null;
+
+                                        ReviewModel review = new ReviewModel(
+                                                reviewObject.getString("ReviewUser"),
+                                                username,
+                                                reviewObject.getString("ReviewText"),
+                                                reviewObject.getString("GameID"),
+                                                reviewObject.getObjectId(),
+                                                reviewObject.getCreatedAt(),
+                                                reviewObject.getUpdatedAt(),
+                                                reviewObject.getBoolean("isShowOnlyFriends"),
+                                                reviewObject.getNumber("ratingStar") != null ? reviewObject.getNumber("ratingStar").floatValue() : 0,
+                                                reviewObject.getInt("upCount"),
+                                                reviewObject.getInt("downCount"),
+                                                picUrl
+                                        );
+                                        reviewModel.add(review);
+                                    }
+                                }
+                                getActivity().runOnUiThread(() -> {
+                                    reviewAdapter.notifyDataSetChanged();
+                                });
+                            }
+                        }
+                    });
+                } else {
+                    Log.e("fetchFriends2", "Error: " + e.getMessage());
+                }
+
+            }
+        });
+
+
+
+
+
+    }
+
 
     public void fetchReviews() {
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Review");
