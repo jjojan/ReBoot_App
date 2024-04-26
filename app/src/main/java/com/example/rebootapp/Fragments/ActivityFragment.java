@@ -22,6 +22,7 @@ import com.example.rebootapp.R;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
@@ -179,6 +180,7 @@ public class ActivityFragment extends Fragment {
 
     public void fetchReviews() {
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Review");
+        query.include("source_user");
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> reviews, ParseException e) {
@@ -188,20 +190,28 @@ public class ActivityFragment extends Fragment {
 
                     // Convert ParseObjects into your ReviewModel instances
                     for (ParseObject reviewObject : reviews) {
-                        ReviewModel review = new ReviewModel(
-                                reviewObject.getString("ReviewUser"),
-                                reviewObject.getString("ReviewUsername"),
-                                reviewObject.getString("ReviewText"),
-                                reviewObject.getString("GameID"),
-                                reviewObject.getObjectId(),
-                                reviewObject.getCreatedAt(),
-                                reviewObject.getUpdatedAt(),
-                                reviewObject.getBoolean("isShowOnlyFriends"),
-                                reviewObject.getNumber("ratingStar") != null ? reviewObject.getNumber("ratingStar").floatValue() : 0,
-                                reviewObject.getInt("upCount"),
-                                reviewObject.getInt("downCount")
-                        );
-                        reviewModel.add(review);
+                        ParseUser user = reviewObject.getParseUser("source_user");
+                        if (user != null) {
+                            String username = user.getUsername();
+                            ParseFile picFile = user.getParseFile("profile_pic");
+                            String picUrl = picFile != null ? picFile.getUrl() : null;
+
+                            ReviewModel review = new ReviewModel(
+                                    reviewObject.getString("ReviewUser"),
+                                    username,
+                                    reviewObject.getString("ReviewText"),
+                                    reviewObject.getString("GameID"),
+                                    reviewObject.getObjectId(),
+                                    reviewObject.getCreatedAt(),
+                                    reviewObject.getUpdatedAt(),
+                                    reviewObject.getBoolean("isShowOnlyFriends"),
+                                    reviewObject.getNumber("ratingStar") != null ? reviewObject.getNumber("ratingStar").floatValue() : 0,
+                                    reviewObject.getInt("upCount"),
+                                    reviewObject.getInt("downCount"),
+                                    picUrl
+                            );
+                            reviewModel.add(review);
+                        }
                     }
 
                     // Notify the adapter of the change on the UI thread
