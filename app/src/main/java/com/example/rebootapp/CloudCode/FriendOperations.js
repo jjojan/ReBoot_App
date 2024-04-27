@@ -606,10 +606,28 @@ Parse.Cloud.define("requestedFriends", async (request) => {
 Parse.Cloud.define("getBlockedUsers", async (request) => {
     const userId = request.params.userId;
     const user = await getUserById(userId);
-    console.log("testing");
+
+
 
     const results = await fetchBlockedUsers(user);
     return results;
+});
+
+Parse.Cloud.define("getBlockedAndBlockedBy", async (request) => {
+    const userId = request.params.userId;
+
+    const user = await getUserById(userId);
+
+    const allBlockedIds = new Set();
+
+    const blockedByUser = await fetchBlocked(user);
+    blockedByUser.forEach(id => allBlockedIds.add(id));
+
+    const blockingUser = await fetchBlocker(user);
+    blockingUser.forEach(id => allBlockedIds.add(id));
+
+    return Array.from(allBlockedIds);
+
 });
 
 Parse.Cloud.define("unblock", async (request) => {

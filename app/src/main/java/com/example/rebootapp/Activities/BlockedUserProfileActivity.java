@@ -1,6 +1,8 @@
 package com.example.rebootapp.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ImageButton;
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,6 +30,8 @@ import com.parse.ParseUser;
 
 import java.util.HashMap;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+
 public class BlockedUserProfileActivity extends AppCompatActivity {
     Button done;
     ImageButton unblock;
@@ -102,6 +106,10 @@ public class BlockedUserProfileActivity extends AppCompatActivity {
                 if (e == null){
                     runOnUiThread(() -> {
                         Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent("com.example.UPDATE_UNBLOCK");
+                        intent.putExtra("action", "remove");
+                        intent.putExtra("friendId", friendUserID);
+                        LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
                         finish();
                     });
                 }

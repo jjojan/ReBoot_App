@@ -27,7 +27,9 @@ import com.example.rebootapp.Models.UserListModel;
 import com.example.rebootapp.R;
 import com.parse.CountCallback;
 import com.parse.FindCallback;
+import com.parse.FunctionCallback;
 import com.parse.GetCallback;
+import com.parse.ParseCloud;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
@@ -41,6 +43,7 @@ import org.json.JSONObject;
 import org.parceler.Parcels;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import okhttp3.Headers;
@@ -171,7 +174,8 @@ public class GameDetailsActivity extends AppCompatActivity implements AdapterVie
             addToUserListDialog();
         });
 //        binding.reviewButton.setOnClickListener(view -> checkIfUserReviewed(currentUserID,gameID));
-        fetchReviews2();
+//        fetchReviews2();
+        fetchBlocked();
         fetchRatings();
         binding.tvAllReviews.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -266,60 +270,75 @@ public class GameDetailsActivity extends AppCompatActivity implements AdapterVie
         });
     }
 
-    public void fetchReviews() {
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("Review");
-        query.whereEqualTo("GameID", gameID);
-        query.findInBackground(new FindCallback<ParseObject>() {
+//    public void fetchReviews() {
+//        ParseQuery<ParseObject> query = ParseQuery.getQuery("Review");
+//        query.whereEqualTo("GameID", gameID);
+//        query.findInBackground(new FindCallback<ParseObject>() {
+//            @Override
+//            public void done(List<ParseObject> reviews, ParseException e) {
+//                if (e == null) {
+//                    reviewList = new ArrayList<>();
+//                    for (ParseObject reviewObject : reviews) {
+//                        String reviewUser = reviewObject.getString("ReviewUser") != null ? reviewObject.getString("ReviewUser") : "";
+//                        String reviewUserName = reviewObject.getString("ReviewUsername") != null
+//                                ? reviewObject.getString("ReviewUsername") : "";
+//                        String reviewText = reviewObject.getString("ReviewText") != null ? reviewObject.getString("ReviewText") : "";
+//                        String gameID = reviewObject.getString("GameID") != null ? reviewObject.getString("GameID") : "";
+//                        String objectId = reviewObject.getObjectId();
+//                        boolean isShowOnlyFriends = reviewObject.getBoolean("isShowOnlyFriends");
+//                        // Number to float conversion with null check
+//                        float ratingStar = reviewObject.getNumber("ratingStar") != null ? reviewObject.getNumber("ratingStar").floatValue() : 0;
+//                        int upCount = reviewObject.has("upCount") ? reviewObject.getInt("upCount") : 0;
+//                        int downCount = reviewObject.has("downCount") ? reviewObject.getInt("downCount") : 0;
+//                        ReviewModel review = new ReviewModel(
+//                                reviewUser,
+//                                reviewUserName,
+//                                reviewText,
+//                                gameID,
+//                                objectId,
+//                                reviewObject.getCreatedAt(),
+//                                reviewObject.getUpdatedAt(),
+//                                isShowOnlyFriends,
+//                                ratingStar,
+//                                upCount,
+//                                downCount
+//                        );
+//
+//                        reviewList.add(review);
+//                    }
+//                    ArrayList<ReviewModel> limitedList = reviewList.size() > 5 ?
+//                            new ArrayList<>(reviewList.subList(0, 5)) : new ArrayList<>(reviewList);
+//                    reviewAdapter = new ReviewAdapter(GameDetailsActivity.this, limitedList);
+//                    binding.recyclerView.setAdapter(reviewAdapter);
+//                    binding.recyclerView.setLayoutManager(new LinearLayoutManager(GameDetailsActivity.this, LinearLayoutManager.VERTICAL, false));
+//
+//
+//                } else {
+//                    Log.e("fetchReviews", "Error: " + e.getMessage());
+//                }
+//            }
+//        });
+//
+//    }
+
+    public void fetchBlocked() {
+        HashMap<String, String> params = new HashMap<String, String>();
+        params.put("userId", currentUserID);
+        ParseCloud.callFunctionInBackground("getBlockedAndBlockedBy", params, new FunctionCallback<ArrayList<String>>() {
             @Override
-            public void done(List<ParseObject> reviews, ParseException e) {
-                if (e == null) {
-                    reviewList = new ArrayList<>();
-                    for (ParseObject reviewObject : reviews) {
-                        String reviewUser = reviewObject.getString("ReviewUser") != null ? reviewObject.getString("ReviewUser") : "";
-                        String reviewUserName = reviewObject.getString("ReviewUsername") != null
-                                ? reviewObject.getString("ReviewUsername") : "";
-                        String reviewText = reviewObject.getString("ReviewText") != null ? reviewObject.getString("ReviewText") : "";
-                        String gameID = reviewObject.getString("GameID") != null ? reviewObject.getString("GameID") : "";
-                        String objectId = reviewObject.getObjectId();
-                        boolean isShowOnlyFriends = reviewObject.getBoolean("isShowOnlyFriends");
-                        // Number to float conversion with null check
-                        float ratingStar = reviewObject.getNumber("ratingStar") != null ? reviewObject.getNumber("ratingStar").floatValue() : 0;
-                        int upCount = reviewObject.has("upCount") ? reviewObject.getInt("upCount") : 0;
-                        int downCount = reviewObject.has("downCount") ? reviewObject.getInt("downCount") : 0;
-                        ReviewModel review = new ReviewModel(
-                                reviewUser,
-                                reviewUserName,
-                                reviewText,
-                                gameID,
-                                objectId,
-                                reviewObject.getCreatedAt(),
-                                reviewObject.getUpdatedAt(),
-                                isShowOnlyFriends,
-                                ratingStar,
-                                upCount,
-                                downCount
-                        );
+            public void done(ArrayList<String> list, ParseException e){
+                if (e == null){
 
-                        reviewList.add(review);
-                    }
-                    ArrayList<ReviewModel> limitedList = reviewList.size() > 5 ?
-                            new ArrayList<>(reviewList.subList(0, 5)) : new ArrayList<>(reviewList);
-                    reviewAdapter = new ReviewAdapter(GameDetailsActivity.this, limitedList);
-                    binding.recyclerView.setAdapter(reviewAdapter);
-                    binding.recyclerView.setLayoutManager(new LinearLayoutManager(GameDetailsActivity.this, LinearLayoutManager.VERTICAL, false));
-
-
-                } else {
-                    Log.e("fetchReviews", "Error: " + e.getMessage());
+                    fetchReviews2(list);
                 }
             }
         });
 
     }
-
-    public void fetchReviews2(){
+    public void fetchReviews2(ArrayList<String> blocked){
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Review");
         query.whereEqualTo("GameID", gameID);
+        query.whereNotContainedIn("ReviewUser", blocked);
         query.include("source_user");
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
@@ -544,33 +563,33 @@ public class GameDetailsActivity extends AppCompatActivity implements AdapterVie
     }
 
 
-    public void addGame(String GameID, ParseObject review) {
-
-        try {
-            ParseQuery<ParseObject> query = ParseQuery.getQuery("CustomListGameModel");
-            query.whereEqualTo("GameID", GameID);
-            query.getFirstInBackground(new GetCallback<ParseObject>() {
-                @Override
-                public void done(ParseObject object, ParseException e) {
-                    if (e == null) {
-                        Log.i("gameModel exists", "arready exists");
-                        object.add("ReviewArray", review);
-                        object.saveInBackground();
-                    } else {
-                        ParseObject game = new ParseObject("CustomListGameModel");
-                        game.put("GameID", gameID);
-                        game.add("ReviewArray", review);
-                        game.saveInBackground();
-                    }
-                }
-            });
-
-        } catch (Exception e) {
-            System.out.println("Parse Error in Saving");
-        }
-
-
-    }
+//    public void addGame(String GameID, ParseObject review) {
+//
+//        try {
+//            ParseQuery<ParseObject> query = ParseQuery.getQuery("CustomListGameModel");
+//            query.whereEqualTo("GameID", GameID);
+//            query.getFirstInBackground(new GetCallback<ParseObject>() {
+//                @Override
+//                public void done(ParseObject object, ParseException e) {
+//                    if (e == null) {
+//                        Log.i("gameModel exists", "arready exists");
+//                        object.add("ReviewArray", review);
+//                        object.saveInBackground();
+//                    } else {
+//                        ParseObject game = new ParseObject("CustomListGameModel");
+//                        game.put("GameID", gameID);
+//                        game.add("ReviewArray", review);
+//                        game.saveInBackground();
+//                    }
+//                }
+//            });
+//
+//        } catch (Exception e) {
+//            System.out.println("Parse Error in Saving");
+//        }
+//
+//
+//    }
 
     public void removeFavoriteGame(String UserID, String gameID) {
         try {
@@ -613,95 +632,95 @@ public class GameDetailsActivity extends AppCompatActivity implements AdapterVie
     }
 
 
-    public void checkIfUserReviewed(String userId, String gameId) {
-        // Create a query for the Review table
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("Review");
-        // Filter for reviews made by the current user for the specific game
-        query.whereEqualTo("ReviewUser", userId);
-        query.whereEqualTo("GameID", gameId);
+//    public void checkIfUserReviewed(String userId, String gameId) {
+//        // Create a query for the Review table
+//        ParseQuery<ParseObject> query = ParseQuery.getQuery("Review");
+//        // Filter for reviews made by the current user for the specific game
+//        query.whereEqualTo("ReviewUser", userId);
+//        query.whereEqualTo("GameID", gameId);
+//
+//        // Execute the query
+//        query.findInBackground(new FindCallback<ParseObject>() {
+//            @Override
+//            public void done(List<ParseObject> reviews, ParseException e) {
+//                if (e == null && !reviews.isEmpty()) {
+//                    // User has already reviewed this game, show the existing review with an option to delete
+//                    ParseObject review = reviews.get(0); // Assuming there's only one review per user per game
+//                    AlertDialog.Builder builder = new AlertDialog.Builder(GameDetailsActivity.this);
+//                    builder.setTitle("Your Review");
+//                    String reviewText = review.getString("ReviewText");
+//                    builder.setMessage(reviewText);
+//                    builder.setPositiveButton("Delete", (dialog, which) -> {
+//                        // Delete the review
+//                        review.deleteInBackground(e1 -> {
+//                            if (e1 == null) {
+//                                Toast.makeText(GameDetailsActivity.this, "Review deleted successfully.", Toast.LENGTH_SHORT).show();
+//                            } else {
+//                                Toast.makeText(GameDetailsActivity.this, "Failed to delete review: " + e1.getMessage(), Toast.LENGTH_SHORT).show();
+//                            }
+//                        });
+//                    });
+//                    builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
+//                    AlertDialog dialog = builder.create();
+//                    dialog.show();
+//                } else if (e != null) {
+//                    // An error occurred
+//                    Log.e("checkIfUserReviewed", "Error: " + e.getMessage());
+//                } else {
+//                    // User has not reviewed this game, show the review dialog
+//                    writeReview();
+//                }
+//            }
+//        });
+//    }
 
-        // Execute the query
-        query.findInBackground(new FindCallback<ParseObject>() {
-            @Override
-            public void done(List<ParseObject> reviews, ParseException e) {
-                if (e == null && !reviews.isEmpty()) {
-                    // User has already reviewed this game, show the existing review with an option to delete
-                    ParseObject review = reviews.get(0); // Assuming there's only one review per user per game
-                    AlertDialog.Builder builder = new AlertDialog.Builder(GameDetailsActivity.this);
-                    builder.setTitle("Your Review");
-                    String reviewText = review.getString("ReviewText");
-                    builder.setMessage(reviewText);
-                    builder.setPositiveButton("Delete", (dialog, which) -> {
-                        // Delete the review
-                        review.deleteInBackground(e1 -> {
-                            if (e1 == null) {
-                                Toast.makeText(GameDetailsActivity.this, "Review deleted successfully.", Toast.LENGTH_SHORT).show();
-                            } else {
-                                Toast.makeText(GameDetailsActivity.this, "Failed to delete review: " + e1.getMessage(), Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                    });
-                    builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
-                    AlertDialog dialog = builder.create();
-                    dialog.show();
-                } else if (e != null) {
-                    // An error occurred
-                    Log.e("checkIfUserReviewed", "Error: " + e.getMessage());
-                } else {
-                    // User has not reviewed this game, show the review dialog
-                    writeReview();
-                }
-            }
-        });
-    }
 
-
-    public void writeReview() {
-
-        String reviewText = binding.etReviewBox.getText().toString();
-        float ratingFloat = binding.ratingBarReview.getRating();
-        boolean isShowOnlyFriend ;
-        if (binding.spinner.getSelectedItem().equals("Everyone")){
-            isShowOnlyFriend=false;
-        }else {
-            isShowOnlyFriend=true;
-        }
-
-        if (reviewText.isEmpty()) {
-            Toast.makeText(GameDetailsActivity.this, "Please write a review!", Toast.LENGTH_SHORT).show();
-            return;
-        } else if (ratingFloat == 0) {
-            Toast.makeText(GameDetailsActivity.this, "Please select a review!", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        // create new parse objecet
-        ParseObject review = new ParseObject("Review");
-        review.put("ReviewUser", currentUserID);
-        review.put("ReviewUsername", userName);
-        review.put("GameID", gameID);
-        review.put("ReviewText", reviewText);
-        review.put("isShowOnlyFriends", isShowOnlyFriend);
-        review.put("ratingStar", ratingFloat);
-        ProgressDialog progressDialog=new ProgressDialog(GameDetailsActivity.this);
-        progressDialog.setMessage("Posting...");
-        progressDialog.setCancelable(false);
-        progressDialog.show();
-
-        // save to DB
-        review.saveInBackground(e -> {
-            if (e == null) {
-                // succesful
-                Toast.makeText(GameDetailsActivity.this, "Review saved successfully!", Toast.LENGTH_SHORT).show();
-                progressDialog.dismiss();
-
-            } else {
-                // Error
-                Toast.makeText(GameDetailsActivity.this, "Error saving review: " + e.getMessage(), Toast.LENGTH_LONG).show();
-            }
-        });
-
-    }
+//    public void writeReview() {
+//
+//        String reviewText = binding.etReviewBox.getText().toString();
+//        float ratingFloat = binding.ratingBarReview.getRating();
+//        boolean isShowOnlyFriend ;
+//        if (binding.spinner.getSelectedItem().equals("Everyone")){
+//            isShowOnlyFriend=false;
+//        }else {
+//            isShowOnlyFriend=true;
+//        }
+//
+//        if (reviewText.isEmpty()) {
+//            Toast.makeText(GameDetailsActivity.this, "Please write a review!", Toast.LENGTH_SHORT).show();
+//            return;
+//        } else if (ratingFloat == 0) {
+//            Toast.makeText(GameDetailsActivity.this, "Please select a review!", Toast.LENGTH_SHORT).show();
+//            return;
+//        }
+//
+//        // create new parse objecet
+//        ParseObject review = new ParseObject("Review");
+//        review.put("ReviewUser", currentUserID);
+//        review.put("ReviewUsername", userName);
+//        review.put("GameID", gameID);
+//        review.put("ReviewText", reviewText);
+//        review.put("isShowOnlyFriends", isShowOnlyFriend);
+//        review.put("ratingStar", ratingFloat);
+//        ProgressDialog progressDialog=new ProgressDialog(GameDetailsActivity.this);
+//        progressDialog.setMessage("Posting...");
+//        progressDialog.setCancelable(false);
+//        progressDialog.show();
+//
+//        // save to DB
+//        review.saveInBackground(e -> {
+//            if (e == null) {
+//                // succesful
+//                Toast.makeText(GameDetailsActivity.this, "Review saved successfully!", Toast.LENGTH_SHORT).show();
+//                progressDialog.dismiss();
+//
+//            } else {
+//                // Error
+//                Toast.makeText(GameDetailsActivity.this, "Error saving review: " + e.getMessage(), Toast.LENGTH_LONG).show();
+//            }
+//        });
+//
+//    }
 
     public void writeReview2(){
         String reviewText = binding.etReviewBox.getText().toString();

@@ -21,6 +21,8 @@ import com.example.rebootapp.Models.ReviewModel;
 import com.example.rebootapp.R;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.parse.FindCallback;
+import com.parse.FunctionCallback;
+import com.parse.ParseCloud;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
@@ -29,6 +31,7 @@ import com.parse.ParseRelation;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class ActivityFragment extends Fragment {
@@ -101,7 +104,7 @@ public class ActivityFragment extends Fragment {
                 fetchFriends2();
             } else {
                 Log.i("hiSwitch", "f");
-                fetchReviews();
+                fetchBlocked();
 
             }
         });
@@ -114,7 +117,7 @@ public class ActivityFragment extends Fragment {
 //
 //        reviewModel = new ArrayList<>();
 
-        fetchReviews();
+        fetchBlocked();
     }
 
     public void fetchFriends() {
@@ -176,6 +179,21 @@ public class ActivityFragment extends Fragment {
             }
         });
 
+
+    }
+
+    public void fetchBlocked() {
+        HashMap<String, String> params = new HashMap<String, String>();
+        String currentUserID = ParseUser.getCurrentUser().getObjectId();
+        params.put("userId", currentUserID);
+        ParseCloud.callFunctionInBackground("getBlockedAndBlockedBy", params, new FunctionCallback<ArrayList<String>>() {
+            @Override
+            public void done(ArrayList<String> list, ParseException e){
+                if (e == null){
+                    fetchReviews(list);
+                }
+            }
+        });
 
     }
     public void fetchFriends2() {
@@ -241,9 +259,10 @@ public class ActivityFragment extends Fragment {
     }
 
 
-    public void fetchReviews() {
+    public void fetchReviews(ArrayList<String> blocked) {
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Review");
         query.include("source_user");
+        query.whereNotContainedIn("ReviewUser", blocked);
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> reviews, ParseException e) {

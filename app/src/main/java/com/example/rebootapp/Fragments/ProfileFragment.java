@@ -264,7 +264,7 @@ public class ProfileFragment extends Fragment {
         // User Friends
         friendsUris = new ArrayList<>();
         friendsUsernames = new ArrayList<>();
-        friendsListAdapter = new FriendsListAdapter(friendsList);
+        friendsListAdapter = new FriendsListAdapter(friendsList, getApplicationContext());
         friendsRV = view.findViewById(R.id.friendsRecyclerView);
         friendsRV.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         friendsRV.setAdapter(friendsListAdapter);

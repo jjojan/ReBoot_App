@@ -1,7 +1,9 @@
 package com.example.rebootapp.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
@@ -135,6 +137,10 @@ public class RequestedFriendProfileActivity extends AppCompatActivity {
                         if (e == null) {
                             System.out.println(result2);
                             runOnUiThread(() -> {
+                                Intent intent = new Intent("com.example.UPDATE_REQUEST");
+                                intent.putExtra("action", "remove");
+                                intent.putExtra("friendId", friendUserID); // the ID of the friend removed
+                                LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
                                 finish();
                             });
                         }
@@ -230,9 +236,13 @@ public class RequestedFriendProfileActivity extends AppCompatActivity {
                             public void done(String result2, ParseException e){
                                 if (e == null) {
                                     System.out.println(result2);
-//                                    runOnUiThread(() -> {
-//                                        finish();
-//                                    });
+                                    runOnUiThread(() -> {
+                                        Intent intent = new Intent("com.example.UPDATE_REQUEST");
+                                        intent.putExtra("action", "remove");
+                                        intent.putExtra("friendId", f_id);
+                                        LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
+                                        finish();
+                                    });
                                 }
                             }
                         });
@@ -255,6 +265,10 @@ public class RequestedFriendProfileActivity extends AppCompatActivity {
                 if (e == null){
                     Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
                     runOnUiThread(()-> {
+                        Intent intent = new Intent("com.example.UPDATE_REQUEST");
+                        intent.putExtra("action", "remove");
+                        intent.putExtra("friendId", userId);
+                        LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
                         finish();
                     });
                 }

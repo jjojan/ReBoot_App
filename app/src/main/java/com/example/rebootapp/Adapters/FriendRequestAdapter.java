@@ -3,8 +3,10 @@ package com.example.rebootapp.Adapters;
 
 import androidx.annotation.NonNull;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 
@@ -29,6 +32,7 @@ public class FriendRequestAdapter extends RecyclerView.Adapter<FriendRequestAdap
     private List<String> photoUsernames;
     private List<SuggestedFriendModel> suggestedFriendModels;
     Context context;
+    private BroadcastReceiver updateReceiver;
     public static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView imageViewProfilePhoto;
         TextView tv_username, tv_mutualFriends;
@@ -48,8 +52,10 @@ public class FriendRequestAdapter extends RecyclerView.Adapter<FriendRequestAdap
         this.photoUsernames = Usernames;
     }
 
-    public FriendRequestAdapter(List<SuggestedFriendModel> SuggestedFriendModels){
+    public FriendRequestAdapter(List<SuggestedFriendModel> SuggestedFriendModels, Context context){
         this.suggestedFriendModels = SuggestedFriendModels;
+        this.context = context;
+        setupBroadcastReceiver();
     }
 
     @NonNull
@@ -99,6 +105,42 @@ public class FriendRequestAdapter extends RecyclerView.Adapter<FriendRequestAdap
         notifyDataSetChanged();
     }
 
+    private void removeFriend(String friendId) {
+        for (int i = 0; i < suggestedFriendModels.size(); i++) {
+            if (suggestedFriendModels.get(i).getObjectId().equals(friendId)) {
+                suggestedFriendModels.remove(i);
+                notifyItemRemoved(i);
+                break;
+            }
+        }
+    }
+
+    @Override
+    public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+        LocalBroadcastManager.getInstance(recyclerView.getContext()).registerReceiver(updateReceiver, new IntentFilter("com.example.UPDATE_REQUEST"));
+    }
+
+    @Override
+    public void onDetachedFromRecyclerView(@NonNull RecyclerView recyclerView) {
+        super.onDetachedFromRecyclerView(recyclerView);
+        LocalBroadcastManager.getInstance(recyclerView.getContext()).unregisterReceiver(updateReceiver);
+    }
+
+    private void setupBroadcastReceiver() {
+        updateReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                String action = intent.getStringExtra("action");
+                if ("remove".equals(action)) {
+                    String friendId = intent.getStringExtra("friendId");
+                    removeFriend(friendId);
+                }
+            }
+        };
+        IntentFilter filter = new IntentFilter("com.example.UPDATE_REQUEST");
+        LocalBroadcastManager.getInstance(context).registerReceiver(updateReceiver, filter);
+    }
 
 
 }

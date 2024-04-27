@@ -96,13 +96,13 @@ public class FriendsActivity extends AppCompatActivity {
         friendUrls = new ArrayList<>();
         friendUsernames = new ArrayList<>();
 
-        friendsListAdapter = new FriendsListAdapter(friendsList);
+        friendsListAdapter = new FriendsListAdapter(friendsList, getApplicationContext());
         rv_Friends_List.setAdapter(friendsListAdapter);
 
-        suggestedFriendsAdapter = new SuggestedFriendsAdapter(suggestedFriendsList);
+        suggestedFriendsAdapter = new SuggestedFriendsAdapter(suggestedFriendsList, getApplicationContext());
         rv_Suggested_Friends_List.setAdapter(suggestedFriendsAdapter);
 
-        friendRequestAdapter = new FriendRequestAdapter(friendRequestList);
+        friendRequestAdapter = new FriendRequestAdapter(friendRequestList, getApplicationContext());
         rv_Friend_Request_List.setAdapter(friendRequestAdapter);
 
 
@@ -626,7 +626,7 @@ public class FriendsActivity extends AppCompatActivity {
         Button close = customView.findViewById(R.id.btnClose);
         RecyclerView rv = customView.findViewById(R.id.recyclerViewBlocked);
 
-        blockedUsersAdapter = new ManageBlockedAdapter(blockedUserList);
+        blockedUsersAdapter = new ManageBlockedAdapter(blockedUserList, getApplicationContext());
         rv.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         rv.setAdapter(blockedUsersAdapter);
 
@@ -803,6 +803,8 @@ public class FriendsActivity extends AppCompatActivity {
         });
 
     }
+
+
 
 //    @Override
 //    protected void onResume(){

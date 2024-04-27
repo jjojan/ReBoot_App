@@ -1,11 +1,14 @@
 package com.example.rebootapp.Adapters;
 
+import android.content.BroadcastReceiver;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -43,9 +46,12 @@ public class ManageBlockedAdapter extends RecyclerView.Adapter<ManageBlockedAdap
 
     private LayoutInflater mInflater;
     private List<SuggestedFriendModel> suggestedFriendModels;
+    Context context;
+    private BroadcastReceiver updateReceiver;
     public static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView imageViewProfilePhoto;
         TextView tv_username;
+
 
 
 
@@ -59,8 +65,10 @@ public class ManageBlockedAdapter extends RecyclerView.Adapter<ManageBlockedAdap
 
     }
 
-    public ManageBlockedAdapter(List<SuggestedFriendModel> list){
+    public ManageBlockedAdapter(List<SuggestedFriendModel> list, Context context){
         this.suggestedFriendModels = list;
+        this.context = context;
+        setupBroadcastReceiver();
     }
 
     @NonNull
@@ -98,5 +106,42 @@ public class ManageBlockedAdapter extends RecyclerView.Adapter<ManageBlockedAdap
         this.suggestedFriendModels.clear();
         this.suggestedFriendModels.addAll(newFriendModels);
         notifyDataSetChanged();
+    }
+
+    private void removeFriend(String friendId) {
+        for (int i = 0; i < suggestedFriendModels.size(); i++) {
+            if (suggestedFriendModels.get(i).getObjectId().equals(friendId)) {
+                suggestedFriendModels.remove(i);
+                notifyItemRemoved(i);
+                break;
+            }
+        }
+    }
+
+    @Override
+    public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+        LocalBroadcastManager.getInstance(recyclerView.getContext()).registerReceiver(updateReceiver, new IntentFilter("com.example.UPDATE_UNBLOCK"));
+    }
+
+    @Override
+    public void onDetachedFromRecyclerView(@NonNull RecyclerView recyclerView) {
+        super.onDetachedFromRecyclerView(recyclerView);
+        LocalBroadcastManager.getInstance(recyclerView.getContext()).unregisterReceiver(updateReceiver);
+    }
+
+    private void setupBroadcastReceiver() {
+        updateReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                String action = intent.getStringExtra("action");
+                if ("remove".equals(action)) {
+                    String friendId = intent.getStringExtra("friendId");
+                    removeFriend(friendId);
+                }
+            }
+        };
+        IntentFilter filter = new IntentFilter("com.example.UPDATE_UNBLOCK");
+        LocalBroadcastManager.getInstance(context).registerReceiver(updateReceiver, filter);
     }
 }

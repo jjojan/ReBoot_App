@@ -1,5 +1,6 @@
 package com.example.rebootapp.Activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ImageButton;
 import androidx.appcompat.app.AppCompatActivity;
@@ -27,6 +28,7 @@ import com.parse.ParseUser;
 
 import java.util.HashMap;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 public class SuggestedFriendProfileActivity extends AppCompatActivity {
 
@@ -36,6 +38,7 @@ public class SuggestedFriendProfileActivity extends AppCompatActivity {
     TextView username, bio;
 
     String friendUserID;
+    int currentListSize;
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -52,6 +55,8 @@ public class SuggestedFriendProfileActivity extends AppCompatActivity {
         bio = findViewById(R.id.friend_bio);
 
         friendUserID = getIntent().getStringExtra("FRIEND_ID");
+        currentListSize = getIntent().getIntExtra("FRIEND_SIZE", 0);
+        System.out.println("size of SF: " + currentListSize);
 
         ParseQuery<ParseUser> query = ParseUser.getQuery();
         query.whereEqualTo("objectId", friendUserID);
@@ -138,6 +143,10 @@ public class SuggestedFriendProfileActivity extends AppCompatActivity {
                 if (e == null){
                     Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
                     runOnUiThread(()-> {
+                        Intent intent = new Intent("com.example.UPDATE_ACTION");
+                        intent.putExtra("action", "remove");
+                        intent.putExtra("friendId", userId);
+                        LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
                         finish();
                     });
                 }

@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Button;
 
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -68,7 +69,7 @@ public class FriendProfileActivity extends AppCompatActivity {
         //Friends Favorites
         friendFavoritesUris = new ArrayList<>();
         friendFavoritesAdapter = new FavoriteGamesAdapter(friendFavoritesUris);
-        friendsListAdapter = new FriendsListAdapter(friendsList);
+        friendsListAdapter = new FriendsListAdapter(friendsList, getApplicationContext());
 
 
         friendFavoritesRv = findViewById(R.id.favoritesRecyclerView);
@@ -136,6 +137,10 @@ public class FriendProfileActivity extends AppCompatActivity {
                         if (e == null) {
                             System.out.println(result);
                             runOnUiThread(() -> {
+                                Intent intent = new Intent("com.example.UPDATE_FRIEND");
+                                intent.putExtra("action", "remove");
+                                intent.putExtra("friendId", friendUserID);
+                                LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
                                 finish();
                             });
                         }
