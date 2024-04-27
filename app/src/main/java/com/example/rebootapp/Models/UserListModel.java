@@ -66,4 +66,5 @@ public class UserListModel {
     public void setObjectID(String objectID) {
         this.objectID = objectID;
     }
+
 }

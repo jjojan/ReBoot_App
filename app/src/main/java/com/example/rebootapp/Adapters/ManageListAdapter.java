@@ -135,6 +135,8 @@ public class ManageListAdapter extends RecyclerView.Adapter<ManageListAdapter.Vi
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
 
+
+
         userListDialogBuilder.show();
     }
 

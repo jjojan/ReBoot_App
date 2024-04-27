@@ -3,6 +3,7 @@ package com.example.rebootapp.Adapters;
 import android.app.Instrumentation;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,10 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.codepath.asynchttpclient.AsyncHttpClient;
+import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
+import com.example.rebootapp.Activities.GameDetailsActivity;
+import com.example.rebootapp.GameModel;
 import com.example.rebootapp.Models.UserListModel;
 import com.example.rebootapp.R;
 import com.parse.GetCallback;
@@ -22,7 +27,13 @@ import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.parceler.Parcels;
+
 import java.util.List;
+
+import okhttp3.Headers;
 
 public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHolder> {
 
@@ -108,6 +119,38 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHo
                         .setNegativeButton(android.R.string.no, null)
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         .show();
+            }
+        });
+
+        holder.imgPreview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String game_id = userListModel.getGameID().get(holder.getPosition());
+                String search = "https://api.rawg.io/api/games/" + game_id + "?key=63502b95db9f41c99bb3d0ecf77aa811";
+                AsyncHttpClient client = new AsyncHttpClient();
+                client.get(search, new JsonHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, Headers headers, JSON json) {
+                        JSONObject jsonobject = json.jsonObject;
+                        try {
+                            ;
+                            GameModel gameModel = new GameModel((jsonobject));
+                            Intent intent = new Intent(holder.imgPreview.getContext(), GameDetailsActivity.class);
+                            intent.putExtra(GameModel.class.getSimpleName(), Parcels.wrap(gameModel));
+                            holder.imgPreview.getContext().startActivity(intent);
+
+                        } catch (JSONException ex) {
+                            System.out.println("almost");
+                            throw new RuntimeException(ex);
+
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+                        System.out.println("oops");
+                    }
+                });
             }
         });
 
