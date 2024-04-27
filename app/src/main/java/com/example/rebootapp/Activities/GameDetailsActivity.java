@@ -341,8 +341,19 @@ public class GameDetailsActivity extends AppCompatActivity implements AdapterVie
                             boolean isShowOnlyFriends = reviewObject.getBoolean("isShowOnlyFriends");
                             // Number to float conversion with null check
                             float ratingStar = reviewObject.getNumber("ratingStar") != null ? reviewObject.getNumber("ratingStar").floatValue() : 0;
-                            int upCount = reviewObject.has("upCount") ? reviewObject.getInt("upCount") : 0;
-                            int downCount = reviewObject.has("downCount") ? reviewObject.getInt("downCount") : 0;
+                            int upCount = reviewObject.has("upvotes") ? reviewObject.getInt("upvotes") : 0;
+                            int downCount = reviewObject.has("downvotes") ? reviewObject.getInt("downvotes") : 0;
+
+                            int absCount = Math.abs(upCount - downCount);
+                            if (upCount >= downCount){
+                                upCount = absCount;
+                                downCount = 0;
+                            }
+                            else{
+                                downCount = absCount;
+                                upCount = 0;
+                            }
+
                             ReviewModel review = new ReviewModel(
                                     reviewUser,
                                     reviewUserName,

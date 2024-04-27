@@ -19,8 +19,7 @@ async function fetchBlockedUsers(user){
     blockedQuery.equalTo("source_user", user);
     blockedQuery.include("blocked_user");
     blocked = await blockedQuery.find({useMasterKey: true});
-    console.log(blocked);
-    console.log("testing2");
+
 
     let rDetails = [];
 
@@ -160,6 +159,16 @@ async function getUserById(userId){
     const user = await query.first({useMasterKey: true});
     return user;
 }
+
+async function getReviewById(reviewId){
+    const review = Parse.Object.extend("Review");
+    const reviewQuery = new Parse.Query(review);
+    requestQuery.equalTo("objectId", reviewId);
+    const ans = await reviewQuery.first({useMasterKey: true});
+    return ans;
+}
+
+
 
 async function addFriend(user1, user2){
     const relation = user1.relation("friends");
@@ -346,7 +355,7 @@ Parse.Cloud.define("checkFriend", async (request) => {
         if (!user1) {
             return {error: "User1 not found"};
         }
-        if (!user2) {
+        if (!user2) {g
             return {error: "User2 not found"};
         }
 
@@ -613,6 +622,59 @@ Parse.Cloud.define("unblock", async (request) => {
     return result;
 });
 
+Parse.Cloud.define("addVote", async (request) => {
+    const {currentUserId, reviewId, vote} = request.params;
+
+
+    const Review = Parse.Object.extend("Review");
+    const reviewQuery = new Parse.Query(Review);
+    reviewQuery.equalTo("objectId", reviewId);
+    const review = await reviewQuery.first({useMasterKey: true});
+
+    if(!review){
+        throw new Error("Review not found");
+    }
+
+    let upVoters = review.get("upVoters") || [];
+    let downVoters = review.get("downVoters") || [];
+
+    const hasVotedUp = upVoters.includes(currentUserId);
+    const hasVotedDown = downVoters.includes(currentUserId);
+
+    if (hasVotedUp || hasVotedDown) {
+        if (hasVotedUp) {
+            review.remove("upVoters", currentUserId);
+            review.increment("upvotes", -1);
+        }
+        if (hasVotedDown) {
+            review.remove("downVoters", currentUserId);
+            review.increment("downvotes", -1);
+        }
+
+        if ((hasVotedUp && vote === "up") || (hasVotedDown && vote === "down")) {
+            await review.save(null, { useMasterKey: true });
+            return {
+                message: "Already Voted",
+                upvotes: review.get("upvotes"),
+                downvotes: review.get("downvotes")
+            };
+        }
+    }
+    if (vote === "up") {
+        review.addUnique("upVoters", currentUserId);
+        review.increment("upvotes");
+    } else if (vote === "down") {
+        review.addUnique("downVoters", currentUserId);
+        review.increment("downvotes");
+    }
+    await review.save(null, { useMasterKey: true });
+    return {
+          message: "Vote Saved",
+          upvotes: review.get("upvotes"),
+          downvotes: review.get("downvotes")
+    };
+});
+
 Parse.Cloud.define("searchUsers", async (request) => {
     const {currentUserId, keyword} = request.params;
     if (!keyword) {
@@ -672,3 +734,4 @@ Parse.Cloud.define("deleteFriendRequest", async (request) => {
     return result;
 
 });
+

@@ -89,8 +89,10 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
         holder.tvUp.setText(review.getUpCount()+"");
         holder.tvDown.setText(review.getDownCount()+"");
         holder.tvDate.setText(formatDate(review.getUpdatedAt()));
-        holder.tvUp.setOnClickListener(view -> sendUpVote(position));
-        holder.tvDown.setOnClickListener(view -> sendDownVote(position));
+//        holder.tvUp.setOnClickListener(view -> sendUpVote(position));
+//        holder.tvDown.setOnClickListener(view -> sendDownVote(position));
+        holder.tvUp.setOnClickListener(view -> sendVote(position, "up"));
+        holder.tvDown.setOnClickListener(view -> sendVote(position, "down"));
         holder.view.setOnClickListener(view -> showDialog(position));
 
         String uri = review.getPhoto_url();
@@ -218,6 +220,47 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
                 Toast.makeText(context, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
+    }
+    public void sendVote(int position, String upDown){
+        String oid = ParseUser.getCurrentUser().getObjectId();
+        String rid = reviewList.get(position).getObjectId();
+        HashMap<String, String> params = new HashMap<String, String>();
+        params.put("currentUserId", oid);
+        params.put("reviewId", rid);
+        params.put("vote", upDown);
+        ParseCloud.callFunctionInBackground("addVote", params, new FunctionCallback<HashMap<String,Object>>() {
+            @Override
+            public void done(HashMap<String, Object> result, ParseException e){
+                if (e == null){
+                    try {
+
+                        String msg = (String) result.get("message");
+                        int upvote = (int) result.get("upvotes");
+                        int downvote = (int) result.get("downvotes");
+
+                        int absCount = Math.abs(upvote - downvote);
+                        if (upvote >= downvote){
+                            upvote = absCount;
+                            downvote = 0;
+                        }
+                        else{
+                            downvote = absCount;
+                            upvote = 0;
+                        }
+                        reviewList.get(position).setDownCount(downvote);
+                        reviewList.get(position).setUpCount(upvote);
+                        notifyItemChanged(position);
+                        System.out.println(msg + " " + upvote + " " + downvote);
+//                        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
+
+
+                    } catch (Error e2){
+                        System.out.println("Null return on sendvote");
+                    }
+                }
+            }
+        });
+
     }
     private void sendDownVote(int position) {
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Review");
