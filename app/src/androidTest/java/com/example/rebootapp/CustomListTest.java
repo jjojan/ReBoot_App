@@ -7,6 +7,7 @@ import static org.junit.Assert.*;
 
 import com.example.rebootapp.Adapters.GameListAdapter;
 import com.example.rebootapp.Models.UserListModel;
+import com.parse.ParseUser;
 
 public class CustomListTest {
 
@@ -14,7 +15,7 @@ public class CustomListTest {
     public void itemCountTest() {
         Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
         UserListModel testList = new UserListModel("user123", null, null, null, "MyList", "list123");
-        GameListAdapter test = new GameListAdapter(context, testList);
+        GameListAdapter test = new GameListAdapter(context, testList, ParseUser.getCurrentUser().getObjectId());
         int result = test.getItemCount();
         assertEquals(0, result);
     }

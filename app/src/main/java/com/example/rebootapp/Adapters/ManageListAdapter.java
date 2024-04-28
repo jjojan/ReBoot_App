@@ -18,9 +18,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.rebootapp.Models.UserListModel;
 import com.example.rebootapp.R;
 import com.parse.GetCallback;
+import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 import java.util.ArrayList;
 
@@ -29,12 +31,14 @@ public class ManageListAdapter extends RecyclerView.Adapter<ManageListAdapter.Vi
     private ArrayList<UserListModel> userListModelArrayList;
     private LayoutInflater mInflater;
     private Context context;
+    private String this_id;
 
-    public ManageListAdapter(Context context, ArrayList<UserListModel> data) {
+    public ManageListAdapter(Context context, ArrayList<UserListModel> data, String s_id) {
         this.mInflater = LayoutInflater.from(context);
 
         this.userListModelArrayList = data;
         this.context = context;
+        this.this_id = s_id;
     }
 
 
@@ -49,60 +53,65 @@ public class ManageListAdapter extends RecyclerView.Adapter<ManageListAdapter.Vi
     public void onBindViewHolder(ManageListAdapter.ViewHolder holder, int position) {
         String listName = userListModelArrayList.get(position).getListName();
         holder.tvListName.setText(listName);
-        holder.imgAdd.setImageResource(R.drawable.baseline_delete_24);
+        if (this_id.equals(ParseUser.getCurrentUser().getObjectId())){
 
-        holder.imgAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                UserListModel userModel = userListModelArrayList.get(position);
-                String objectId = userModel.getObjectID();
+            holder.imgAdd.setImageResource(R.drawable.baseline_delete_24);
+
+            holder.imgAdd.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    UserListModel userModel = userListModelArrayList.get(position);
+                    String objectId = userModel.getObjectID();
 
 
-                new AlertDialog.Builder(mInflater.getContext())
-                        .setTitle("Delete List")
-                        .setMessage("Are you sure you want to delete this list?")
-                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
+                    new AlertDialog.Builder(mInflater.getContext())
+                            .setTitle("Delete List")
+                            .setMessage("Are you sure you want to delete this list?")
+                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
 
-                                ParseQuery<ParseObject> query = ParseQuery.getQuery("CustomUserList");
-                                query.getInBackground(objectId, new GetCallback<ParseObject>() {
-                                    @Override
-                                    public void done(ParseObject object, ParseException e) {
-                                        if (e == null && object != null) {
+                                    ParseQuery<ParseObject> query = ParseQuery.getQuery("CustomUserList");
+                                    query.getInBackground(objectId, new GetCallback<ParseObject>() {
+                                        @Override
+                                        public void done(ParseObject object, ParseException e) {
+                                            if (e == null && object != null) {
 
-                                            object.deleteInBackground(e1 -> {
-                                                if (e1 == null) {
+                                                object.deleteInBackground(e1 -> {
+                                                    if (e1 == null) {
 
-                                                    userListModelArrayList.remove(position);
-                                                    notifyItemRemoved(position);
-                                                    notifyItemRangeChanged(position, userListModelArrayList.size());
-                                                    Toast.makeText(mInflater.getContext(), "List successfully deleted", Toast.LENGTH_SHORT).show();
-                                                } else {
+                                                        userListModelArrayList.remove(position);
+                                                        notifyItemRemoved(position);
+                                                        notifyItemRangeChanged(position, userListModelArrayList.size());
+                                                        Toast.makeText(mInflater.getContext(), "List successfully deleted", Toast.LENGTH_SHORT).show();
+                                                    } else {
 
-                                                    Toast.makeText(mInflater.getContext(), "Error deleting list: " + e1.getMessage(), Toast.LENGTH_SHORT).show();
-                                                }
-                                            });
-                                        } else {
+                                                        Toast.makeText(mInflater.getContext(), "Error deleting list: " + e1.getMessage(), Toast.LENGTH_SHORT).show();
+                                                    }
+                                                });
+                                            } else {
 
-                                            Toast.makeText(mInflater.getContext(), "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(mInflater.getContext(), "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                            }
                                         }
-                                    }
-                                });
-                            }
-                        })
-                        .setNegativeButton(android.R.string.no, null)
-                        .setIcon(android.R.drawable.ic_dialog_alert)
-                        .show();
-            }
-        });
+                                    });
+                                }
+                            })
+                            .setNegativeButton(android.R.string.no, null)
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .show();
+                }
+            });
+        } else{
+            holder.imgAdd.setVisibility(View.INVISIBLE);
+        }
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                gameListDialog(position);
+                gameListDialog(position, this_id);
             }
         });
     }
-    public void gameListDialog(int position) {
+    public void gameListDialog(int position, String some_id) {
         // Inflate the custom layout using layout inflater
         LayoutInflater inflater = LayoutInflater.from(context);
         View customView = inflater.inflate(R.layout.layout_user_list, null);
@@ -130,7 +139,7 @@ public class ManageListAdapter extends RecyclerView.Adapter<ManageListAdapter.Vi
 
         GameListAdapter gameListAdapter=
                 new GameListAdapter(context,
-                        userListModelArrayList.get(position));
+                        userListModelArrayList.get(position), some_id);
         recyclerView.setAdapter(gameListAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
 

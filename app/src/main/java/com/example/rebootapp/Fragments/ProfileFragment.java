@@ -236,7 +236,7 @@ public class ProfileFragment extends Fragment {
 
                     ManageListAdapter manageListAdapter=
                             new ManageListAdapter(getActivity(),
-                                    userListModelArrayList);
+                                    userListModelArrayList, userId);
                     recyclerView.setAdapter(manageListAdapter);
                     recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
                 } else {
