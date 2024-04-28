@@ -1,6 +1,7 @@
 package com.example.rebootapp.Activities;
 
 import android.app.ProgressDialog;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -8,6 +9,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
@@ -53,6 +56,7 @@ public class GameDetailsActivity extends AppCompatActivity implements AdapterVie
     GameModel movie;
 
     List<GameModel> gameModel;
+    Spinner vis_spinner;
 
 
     String currentUserID;
@@ -77,6 +81,7 @@ public class GameDetailsActivity extends AppCompatActivity implements AdapterVie
         setContentView(binding.getRoot());
 
 
+
         movie = (GameModel) Parcels.unwrap(getIntent().getParcelableExtra(GameModel.class.getSimpleName()));
         Log.d("MovieDetailsActivity", String.format("Showing details for '%s'", movie.getTitle()));
         Log.i("MARDUK",
@@ -87,8 +92,26 @@ public class GameDetailsActivity extends AppCompatActivity implements AdapterVie
         binding.tvTitle.setText(movie.getTitle());
         binding.tvGameDescription.setText(movie.getOverview());
         binding.tvReleaseDate.setText( "Release Date: " + movie.getReleaseDate());
-        imgFav = findViewById(R.id.imgFav);
 
+        imgFav = findViewById(R.id.imgFav);
+        vis_spinner = findViewById(R.id.spinner);
+
+        vis_spinner.post(() -> {
+            for (int i = 0; i < vis_spinner.getChildCount(); i++){
+                ((TextView) vis_spinner.getChildAt(i)).setTextColor(Color.WHITE);
+            }
+        });
+
+        vis_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                ((TextView) view).setTextColor(Color.WHITE);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
 
         Glide.with(this)
                 .load(movie.getPosterPath())
