@@ -126,7 +126,7 @@
         android:layout_below="@+id/friendsRecyclerView"
         android:layout_marginLeft="13dp"
         android:text="Starred"
-        android:textSize="30sp"
+        android:textSize="25sp"
         android:fontFamily="@font/thasadith_regular"
         android:textColor="@color/aqua"/>
 
@@ -137,7 +137,7 @@
         android:layout_height="50dp"
         android:layout_toEndOf="@+id/favoritesHeader"
         android:layout_alignBottom="@+id/favoritesHeader"
-        android:layout_marginLeft="25dp"
+        android:layout_marginLeft="10dp"
         android:scaleType="fitCenter"
         android:src="@drawable/star"
         style="?android:attr/borderlessButtonStyle"
@@ -183,11 +183,12 @@
         android:id="@+id/customListHeader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/favoritesRecyclerView"
-        android:layout_marginLeft="13dp"
+        android:layout_alignBaseline="@+id/favoritesHeader"
+        android:layout_marginLeft="160dp"
         android:text="My Custom Lists"
         android:textSize="25sp"
-        android:fontFamily="@font/thasadith_regular"/>
+        android:fontFamily="@font/thasadith_regular"
+        android:textColor="@color/aqua"/>
 
     <ImageButton
         android:id="@+id/customList"
@@ -195,7 +196,7 @@
         android:layout_height="50dp"
         android:layout_toEndOf="@+id/customListHeader"
         android:layout_alignBottom="@+id/customListHeader"
-        android:layout_marginLeft="25dp"
+        android:layout_marginLeft="10dp"
         android:scaleType="fitCenter"
         android:src="@drawable/add"
         android:fontFamily="@font/thasadith_regular"

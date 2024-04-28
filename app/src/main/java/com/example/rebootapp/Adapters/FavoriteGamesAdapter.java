@@ -34,6 +34,8 @@ import okhttp3.Headers;
 
 public class FavoriteGamesAdapter extends RecyclerView.Adapter<FavoriteGamesAdapter.ViewHolder>{
     private List<String> photoUris; // List of URIs as strings
+    Boolean small;
+    private String userId;
     public static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView imageViewGamePhoto;
         Context context;
@@ -55,14 +57,18 @@ public class FavoriteGamesAdapter extends RecyclerView.Adapter<FavoriteGamesAdap
 
     }
 
-    public FavoriteGamesAdapter(List<String> photoUris){
-
+    public FavoriteGamesAdapter(List<String> photoUris, String id){
+        this.small = false;
         this.photoUris = photoUris;
+        this.userId = id;
     }
+
+
 
     @NonNull
     @Override
     public FavoriteGamesAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_gamephoto, parent, false);
         return new ViewHolder(view);
@@ -83,7 +89,7 @@ public class FavoriteGamesAdapter extends RecyclerView.Adapter<FavoriteGamesAdap
                 ParseQuery<ParseObject> gamesQuery = ParseQuery.getQuery("FavoriteGames");
                 ParseUser currentUser = ParseUser.getCurrentUser();
                 String currentUserID = currentUser.getObjectId();
-                gamesQuery.whereEqualTo("user_id", currentUserID);
+                gamesQuery.whereEqualTo("user_id", userId);
                 gamesQuery.whereEqualTo("picture_uri", photoUris.get(tempPos));
                 gamesQuery.getFirstInBackground(new GetCallback<ParseObject>() {
                     @Override
@@ -99,17 +105,12 @@ public class FavoriteGamesAdapter extends RecyclerView.Adapter<FavoriteGamesAdap
                                 public void onSuccess(int statusCode, Headers headers, JSON json) {
                                     JSONObject jsonobject = json.jsonObject;
                                     try {
-                                        System.out.println("line 1");
 //                                        JSONArray results = jsonobject.getJSONArray("results");
 //                                        System.out.println("count: " + results);
                                         GameModel gameModel = new GameModel((jsonobject));
-                                        System.out.println("line 2");
                                         Intent intent = new Intent(holder.imageViewGamePhoto.getContext(), GameDetailsActivity.class);
-                                        System.out.println("line 3");
                                         intent.putExtra(GameModel.class.getSimpleName(), Parcels.wrap(gameModel));
-                                        System.out.println("line 4");
                                         holder.imageViewGamePhoto.getContext().startActivity(intent);
-                                        System.out.println("line 5");
 
                                     } catch (JSONException ex) {
                                         System.out.println("almost");

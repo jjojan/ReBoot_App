@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_alignParentBottom="false"
-    android:background="@color/white"
+    android:background="@color/color2"
     android:visibility="visible"
     tools:context=".Activities.FavoriteGamesActivity">
 
@@ -14,11 +14,11 @@
         android:layout_width="425dp"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
+        android:fontFamily="@font/thasadith_regular"
         android:text="Favorite Games"
         android:textAlignment="center"
-        android:textSize="34sp"
         android:textColor="@color/color5"
-        android:fontFamily="@font/thasadith_regular"/>
+        android:textSize="34sp" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_games_list"

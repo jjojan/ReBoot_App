@@ -256,7 +256,8 @@ public class ProfileFragment extends Fragment {
 
         // User Favorites
         favoritesUris = new ArrayList<>();
-        favoritesAdapter = new FavoriteGamesAdapter(favoritesUris);
+        String currentUserId = ParseUser.getCurrentUser().getObjectId();
+        favoritesAdapter = new FavoriteGamesAdapter(favoritesUris, currentUserId);
         favoritesRv = view.findViewById(R.id.favoritesRecyclerView);
         favoritesRv.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         favoritesRv.setAdapter(favoritesAdapter);

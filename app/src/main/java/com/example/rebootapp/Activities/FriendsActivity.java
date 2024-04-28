@@ -43,9 +43,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class FriendsActivity extends AppCompatActivity {
 
-    Button btn_friends_done, btn_update;
-    ImageButton btn_newFriend, btn_blockedUsers, btn_search;
-    EditText et_newFriend;
+    Button btn_friends_done;
+    ImageButton  btn_blockedUsers, btn_search;
     RecyclerView rv_Friends_List, rv_Suggested_Friends_List, rv_Friend_Request_List;
     List<String> friendUrls;
     List<String> friendUsernames;
@@ -75,7 +74,7 @@ public class FriendsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_friends);
 
         btn_friends_done = findViewById(R.id.btn_Friends_Done);
-        btn_update = findViewById(R.id.btn_redo);
+
         rv_Friends_List = findViewById(R.id.rv_Friends_list);
 //        rv_Friends_List.setLayoutManager(new GridLayoutManager(this, 3));
         rv_Friends_List.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
@@ -87,10 +86,9 @@ public class FriendsActivity extends AppCompatActivity {
         rv_Friend_Request_List = findViewById(R.id.rv_Friend_Request_list);
         rv_Friend_Request_List.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
-        btn_newFriend = findViewById(R.id.btn_addFriend);
         btn_blockedUsers = findViewById(R.id.btn_block);
         btn_search = findViewById(R.id.btn_searchFriend);
-        et_newFriend = findViewById(R.id.et_addFriend);
+
 
 
         friendUrls = new ArrayList<>();
@@ -116,15 +114,7 @@ public class FriendsActivity extends AppCompatActivity {
             }
         });
 
-        btn_newFriend.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String friendUserName = et_newFriend.getText().toString();
-//                addFriendByUsername(friendUserName, friendUpdateCallback);
-//                addFriendByUsername2(friendUserName, friendUpdateCallback2);
-                requestFriendByUsername(friendUserName, friendUpdateCallback2);
-            }
-        });
+
 
         btn_blockedUsers.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -140,41 +130,7 @@ public class FriendsActivity extends AppCompatActivity {
             }
         });
 
-        btn_update.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final int[] i = {0};
-                ParseQuery<ParseObject> query = ParseQuery.getQuery("Review");
-                query.findInBackground(new FindCallback<ParseObject>() {
-                    @Override
-                    public void done(List<ParseObject> list, ParseException e) {
-                        if(e == null){
-                            for(ParseObject review : list) {
-                                String oid = review.getString("ReviewUser");
-                                ParseQuery<ParseUser> userQuery = ParseUser.getQuery();
-                                userQuery.whereEqualTo("objectId", oid);
-                                userQuery.getFirstInBackground(new GetCallback<ParseUser>() {
-                                    @Override
-                                    public void done(ParseUser parseUser, ParseException e2) {
-                                        if (e2 == null) {
-                                            review.put("source_user", parseUser);
-                                            review.saveInBackground(new SaveCallback() {
-                                                @Override
-                                                public void done(ParseException e) {
-                                                    System.out.println(i[0]);
-                                                    i[0]++;
-                                                }
-                                            });
-                                        }
-                                    }
-                                });
-                            }
-                        }
-                    }
-                });
 
-            }
-        });
 
 
 

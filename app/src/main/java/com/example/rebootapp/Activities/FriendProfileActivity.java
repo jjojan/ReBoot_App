@@ -1,10 +1,14 @@
 package com.example.rebootapp.Activities;
 
+import static com.parse.Parse.getApplicationContext;
+
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -19,7 +23,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.rebootapp.Adapters.FavoriteGamesAdapter;
 import com.example.rebootapp.Adapters.FriendsListAdapter;
+import com.example.rebootapp.Adapters.ManageListAdapter;
 import com.example.rebootapp.Models.FriendModel;
+import com.example.rebootapp.Models.UserListModel;
 import com.example.rebootapp.R;
 import com.parse.FindCallback;
 import com.parse.FunctionCallback;
@@ -68,7 +74,7 @@ public class FriendProfileActivity extends AppCompatActivity {
 
         //Friends Favorites
         friendFavoritesUris = new ArrayList<>();
-        friendFavoritesAdapter = new FavoriteGamesAdapter(friendFavoritesUris);
+        friendFavoritesAdapter = new FavoriteGamesAdapter(friendFavoritesUris, friendUserID);
         friendsListAdapter = new FriendsListAdapter(friendsList, getApplicationContext());
 
 
@@ -162,6 +168,8 @@ public class FriendProfileActivity extends AppCompatActivity {
             }
         });
 
+
+
         messageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -173,8 +181,89 @@ public class FriendProfileActivity extends AppCompatActivity {
             }
         });
 
+        starred.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(FriendProfileActivity.this, FriendFavoriteGamesActivity.class);
+                intent.putExtra("FRIEND_ID", friendUserID);
+                FriendProfileActivity.this.startActivity(intent);
+            }
+        });
+
+        lists.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                manageCustomListDialog();
+            }
+        });
+
 
     }
+
+//    public void manageCustomListDialog() {
+//        // Inflate the custom layout using layout inflater
+//        LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
+//        View customView = inflater.inflate(R.layout.layout_user_list, null);
+//
+//        // Apply the custom style to the AlertDialog
+//        AlertDialog.Builder listDialog = new AlertDialog.Builder(
+//                new androidx.appcompat.view.ContextThemeWrapper(getApplicationContext(), R.style.AlertDialogCustom));
+//
+//        listDialog.setView(customView); // Set the custom view for the dialog
+//        AlertDialog userListDialogBuilder = listDialog.create();
+//
+//        Button btnAddNewList=customView.findViewById(R.id.btnNewList);
+//        TextView tvTitleList=customView.findViewById(R.id.tvTitleList);
+//        tvTitleList.setText("Manage Lists");
+//        btnAddNewList.setVisibility(View.GONE);
+//        Button btnClose=customView.findViewById(R.id.btnClose);
+//        RecyclerView recyclerView=customView.findViewById(R.id.recyclerView);
+//
+//        btnClose.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                userListDialogBuilder.dismiss();
+//            }
+//        });
+//        ParseUser currentUser = ParseUser.getCurrentUser();
+//        String userId = friendUserID;
+//        ParseQuery<ParseObject> query = ParseQuery.getQuery("CustomUserList");
+//        query.whereEqualTo("userID", userId);
+//        query.findInBackground(new FindCallback<ParseObject>() {
+//            @Override
+//            public void done(List<ParseObject> customUserLists, ParseException e) {
+//                if (e == null) {
+//
+//                    ArrayList<UserListModel> userListModelArrayList = new ArrayList<>();
+//                    for (ParseObject object : customUserLists) {
+//                        String listName = object.getString("listName");
+//                        List<String> gameName = object.getList("gameName");
+//                        List<String> gamePreviewLink = object.getList("gamePreviewLink");
+//                        String userID = object.getString("userID");
+//                        List<String> gameID = object.getList("gameID");
+//                        String objectID = object.getObjectId();
+//
+//                        UserListModel model = new UserListModel(listName, gameName,
+//                                gamePreviewLink,gameID, userID, objectID);
+//                        userListModelArrayList.add(model);
+//                    }
+//
+//                    ManageListAdapter manageListAdapter=
+//                            new ManageListAdapter(getApplicationContext(),
+//                                    userListModelArrayList);
+//                    recyclerView.setAdapter(manageListAdapter);
+//                    recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+//                } else {
+//
+//                    Log.e("ParseError", "Error retrieving CustomUserList: " + e.getMessage());
+//                }
+//            }
+//        });
+//
+//
+//
+//        userListDialogBuilder.show();
+//    }
 
     public void fillPhotos(String id){
 //        ParseQuery<ParseObject> gamesQuery = ParseQuery.getQuery("FavoriteGames");
