@@ -11,16 +11,35 @@
 
 
     <!-- Profile Picture -->
-    <ImageView
+    <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/Friend_ProfilePic"
         android:layout_width="120dp"
         android:layout_height="120dp"
         android:layout_marginLeft="25dp"
         android:layout_marginTop="20dp"
-        android:scaleType="fitCenter"
+        android:scaleType="centerCrop"
         android:src="?attr/selectableItemBackground"
         android:visibility="visible"
+        app:shapeAppearanceOverlay="@style/circleImageView"
         app:srcCompat="@drawable/baseline_person_24" />
+
+    <ImageView
+        android:id="@+id/b4"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignBaseline="@id/btn_request"
+        android:layout_alignBottom="@+id/btn_request"
+        android:layout_alignRight="@id/btn_request"
+        android:src="@drawable/bio_background2" />
+
+    <ImageView
+        android:id="@+id/b3"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignBaseline="@id/btn_block"
+        android:layout_alignBottom="@+id/btn_block"
+        android:layout_alignRight="@id/btn_block"
+        android:src="@drawable/bio_background2" />
 
     <!-- UserName -->
     <TextView
@@ -28,6 +47,7 @@
         android:layout_width="218dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="100dp"
+        android:layout_marginLeft="15dp"
         android:layout_toRightOf="@+id/Friend_ProfilePic"
         android:textAlignment="textStart"
         android:textSize="20sp" />
@@ -38,6 +58,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvFriend_Friend_Username"
         android:layout_toRightOf="@+id/Friend_ProfilePic"
+        android:layout_marginLeft="15dp"
         android:textAlignment="textStart"
         android:textSize="20sp" />
     <!-- Profile Bio Header -->
@@ -54,10 +75,11 @@
     <TextView
         android:id="@+id/friend_bio"
         android:layout_width="350dp"
-        android:layout_height="50dp"
+        android:layout_height="60dp"
+        android:background="@drawable/rounded_textview"
+        android:backgroundTint="@color/aqua1"
         android:layout_below="@id/bioHeader"
         android:layout_centerHorizontal="true"
-        android:background="@color/white"
         android:textSize="16sp" />
 
     <ImageView
@@ -99,20 +121,22 @@
 
     <ImageButton
         android:id="@+id/btn_request"
+        style="?android:attr/borderlessButtonStyle"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_alignBottom="@+id/manage_user"
         android:layout_marginLeft="300dp"
-        android:scaleType="fitCenter"
+        android:scaleType="centerCrop"
         android:src="@drawable/baseline_add_24" />
 
     <ImageButton
         android:id="@+id/btn_block"
+        style="?android:attr/borderlessButtonStyle"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_alignBottom="@+id/manage_user2"
         android:layout_marginLeft="300dp"
-        android:scaleType="fitCenter"
+        android:scaleType="centerCrop"
         android:src="@drawable/block_user" />
 
 
@@ -123,6 +147,7 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="50dp"
+        android:background="@color/aqua1"
         android:text="Close" />
 
 

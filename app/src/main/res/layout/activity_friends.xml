@@ -9,10 +9,29 @@
     android:visibility="visible"
     tools:context=".Activities.FriendsActivity">
 
+    <ImageView
+        android:id="@+id/b3"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
+        android:layout_alignBottom="@+id/btn_searchFriend"
+        android:layout_alignBaseline="@+id/btn_searchFriend"
+        android:layout_alignRight="@+id/btn_searchFriend"
+        android:visibility="visible"
+        android:src="@drawable/bio_background2" />
+    <ImageView
+        android:id="@+id/b2"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
+        android:layout_alignBottom="@+id/btn_block"
+        android:layout_alignBaseline="@+id/btn_block"
+        android:layout_alignRight="@+id/btn_block"
+        android:visibility="visible"
+        android:src="@drawable/bio_background2" />
+
     <TextView
         android:id="@+id/tv_FriendsTitle"
         android:layout_width="425dp"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:layout_alignParentTop="true"
         android:fontFamily="@font/thasadith_regular"
         android:text="Friends"
@@ -23,9 +42,9 @@
     <TextView
         android:id="@+id/tv_SuggestedTitle"
         android:layout_width="425dp"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="150dp"
+        android:layout_marginTop="165dp"
         android:fontFamily="@font/thasadith_regular"
         android:text="Suggested Friends"
         android:textAlignment="center"
@@ -35,9 +54,9 @@
     <TextView
         android:id="@+id/tv_RequestsTitle"
         android:layout_width="425dp"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="325dp"
+        android:layout_marginTop="350dp"
         android:fontFamily="@font/thasadith_regular"
         android:text="Friend Requests"
         android:textAlignment="center"
@@ -55,14 +74,14 @@
         android:id="@+id/rv_Suggested_Friends_list"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="185dp"
+        android:layout_marginTop="205dp"
         android:scrollbars="vertical" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_Friend_Request_list"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="360dp"
+        android:layout_marginTop="390dp"
         android:scrollbars="vertical" />
 
     <TextView
@@ -70,49 +89,52 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="80dp"
-        android:layout_marginTop="500dp"
+        android:layout_marginTop="565dp"
         android:fontFamily="@font/thasadith_regular"
         android:text="Search User"
         android:textColor="@color/color5"
-        android:textSize="30sp" />
+        android:textSize="25sp" />
 
     <TextView
         android:id="@+id/tv_block"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="80dp"
-        android:layout_marginTop="575dp"
+        android:layout_marginTop="615dp"
         android:fontFamily="@font/thasadith_regular"
         android:text="Blocked Users"
         android:textColor="@color/color5"
-        android:textSize="30sp" />
+        android:textSize="25sp" />
 
     <Button
         android:id="@+id/btn_Friends_Done"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="150dp"
-        android:layout_marginTop="650dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:background="@color/aqua1"
         android:text="Done" />
 
 
     <ImageButton
         android:id="@+id/btn_block"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
         android:layout_alignBottom="@+id/tv_block"
         android:layout_marginLeft="275dp"
-        android:scaleType="fitCenter"
+        android:scaleType="centerCrop"
         android:src="@drawable/block_user" />
 
 
     <ImageButton
         android:id="@+id/btn_searchFriend"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
         android:layout_alignBottom="@+id/tv_search"
         android:layout_marginLeft="275dp"
-        android:scaleType="fitCenter"
+        android:scaleType="centerCrop"
         android:src="@drawable/baseline_search_24" />
 
 </RelativeLayout>

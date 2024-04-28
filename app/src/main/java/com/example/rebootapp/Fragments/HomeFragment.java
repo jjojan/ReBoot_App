@@ -133,10 +133,10 @@ public class HomeFragment extends Fragment {
                 JSONObject jsonObject = json.jsonObject;
                 try{
                     JSONArray results = jsonObject.getJSONArray("results");
-                    Log.i(TAG, "Results" + results.toString());
+//                    Log.i(TAG, "Results" + results.toString());
                     gameModel.addAll(GameModel.fromJSONArray(results));
                     gameAdapter.notifyDataSetChanged();
-                    Log.i(TAG, "Movies" + gameModel.size());
+//                    Log.i(TAG, "Movies" + gameModel.size());
                 } catch(JSONException e){
                     Log.e(TAG, "hit json expception", e);
                 }
@@ -154,10 +154,10 @@ public class HomeFragment extends Fragment {
                 JSONObject jsonObject = json.jsonObject;
                 try{
                     JSONArray results = jsonObject.getJSONArray("results");
-                    Log.i(TAG, "Results" + results.toString());
+//                    Log.i(TAG, "Results" + results.toString());
                     newGameModels.addAll(GameModel.fromJSONArray(results));
                     newGameAdapter.notifyDataSetChanged();
-                    Log.i(TAG, "Movies" + newGameModels.size());
+//                    Log.i(TAG, "Movies" + newGameModels.size());
                 } catch(JSONException e){
                     Log.e(TAG, "hit json expception", e);
                 }
@@ -175,10 +175,10 @@ public class HomeFragment extends Fragment {
                 JSONObject jsonObject = json.jsonObject;
                 try{
                     JSONArray results = jsonObject.getJSONArray("results");
-                    Log.i(TAG, "Results" + results.toString());
+//                    Log.i(TAG, "Results" + results.toString());
                     yourGameModels.addAll(GameModel.fromJSONArray(results));
                     yourGamesAapter.notifyDataSetChanged();
-                    Log.i(TAG, "Movies" + yourGameModels.size());
+//                    Log.i(TAG, "Movies" + yourGameModels.size());
                 } catch(JSONException e){
                     Log.e(TAG, "hit json expception", e);
                 }

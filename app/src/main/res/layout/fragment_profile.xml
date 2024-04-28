@@ -9,8 +9,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:background="@color/color1"
     android:layout_alignParentBottom="false"
-    android:background="@color/white"
     android:visibility="visible"
     tools:context=".Fragments.ProfileFragment">
 
@@ -20,102 +20,151 @@
 
 
     <!-- User Profile Pic -->
+    <ImageView
+        android:id="@+id/b1"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignBottom="@+id/friendsHeader"
+        android:visibility="invisible"
+        android:src="@drawable/bio_background" />
+    <ImageView
+        android:id="@+id/b2"
+        android:layout_width="match_parent"
+        android:visibility="invisible"
+        android:layout_height="42dp"
+        android:layout_alignBottom="@+id/Starred"
+        android:src="@drawable/bio_background" />
+    <ImageView
+        android:id="@+id/b3"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignBottom="@+id/EditProfileButton"
+        android:layout_toEndOf="@+id/ProfilePic"
+        android:src="@drawable/bio_background2" />
+
+    <ImageView
+        android:id="@+id/b4"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignBaseline="@id/friendsButton"
+        android:layout_alignBottom="@+id/friendsButton"
+        android:layout_alignRight="@id/friendsButton"
+        android:src="@drawable/bio_background2" />
+    <ImageView
+        android:id="@+id/b5"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
+        android:layout_alignBaseline="@id/Starred"
+        android:layout_alignBottom="@+id/Starred"
+        android:layout_alignRight="@id/Starred"
+        android:src="@drawable/bio_background2" />
+    <ImageView
+        android:id="@+id/b6"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
+        android:layout_alignBaseline="@id/customList"
+        android:layout_alignBottom="@+id/customList"
+        android:layout_alignRight="@id/customList"
+        android:src="@drawable/bio_background2" />
+
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/ProfilePic"
         android:layout_width="150dp"
         android:layout_height="150dp"
-        android:layout_marginTop="20dp"
         android:layout_marginLeft="25dp"
-        app:shapeAppearanceOverlay="@style/circleImageView"
-        android:scaleType="fitCenter"
+        android:layout_marginTop="20dp"
+        android:scaleType="centerCrop"
         android:src="?attr/selectableItemBackground"
         android:visibility="visible"
+        app:shapeAppearanceOverlay="@style/circleImageView"
         app:srcCompat="@drawable/baseline_person_24" />
-
 
 
     <!--Username  -->
     <TextView
         android:id="@+id/tvUser_Username"
-        android:layout_width="218dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/ProfilePic"
         android:layout_marginTop="55dp"
+        android:layout_toRightOf="@+id/ProfilePic"
+        android:fontFamily="@font/thasadith_bold"
+        android:textColor="@color/aqua"
         android:textAlignment="textEnd"
-        android:textSize="20sp"
-        android:fontFamily="@font/thasadith_bold"/>
+        android:textSize="20sp" />
     <!-- User Email -->
     <TextView
         android:id="@+id/tvUser_Email"
-        android:layout_width="219dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/ProfilePic"
         android:layout_below="@+id/tvUser_Username"
+        android:layout_toRightOf="@+id/ProfilePic"
+        android:fontFamily="@font/thasadith_bold"
+        android:textColor="@color/aqua"
         android:textAlignment="textEnd"
-        android:textSize="20sp"
-        android:fontFamily="@font/thasadith_bold"/>
+        android:textSize="20sp" />
     <!-- Bio Header -->
     <TextView
         android:id="@+id/bioHeader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvUser_Email"
-        android:layout_marginTop="25dp"
         android:layout_marginLeft="15dp"
+        android:layout_marginTop="40dp"
+        android:fontFamily="@font/thasadith_bold"
         android:text="My Bio"
-        android:textSize="24sp"
-        android:fontFamily="@font/thasadith_regular"
-        android:textColor="@color/aqua"/>
+        android:textColor="@color/aqua"
+        android:textSize="24sp" />
     <!-- Bio -->
     <TextView
         android:id="@+id/bioContent"
         android:layout_width="350dp"
-        android:layout_height="50dp"
+        android:layout_height="60dp"
         android:layout_below="@id/bioHeader"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="10dp"
-        android:textSize="16sp"
-        android:textAlignment="center"
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/rounded_textview"
+        android:backgroundTint="@color/aqua1"
         android:elegantTextHeight="true"
-        android:hint="Tell us about yourself..."
         android:fontFamily="@font/thasadith_bold"
-        android:background="@drawable/rounded_textview"/>
+        android:hint="Tell us about yourself..."
+        android:textAlignment="center"
+        android:textSize="16sp" />
     <!-- Friends Header -->
     <TextView
         android:id="@+id/friendsHeader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="false"
         android:layout_below="@+id/bioContent"
+        android:layout_alignParentTop="false"
         android:layout_marginLeft="13dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="0dp"
+        android:fontFamily="@font/thasadith_bold"
         android:text="Friends"
-        android:textSize="30sp"
-        android:fontFamily="@font/thasadith_regular"
-        android:textColor="@color/aqua"/>
+        android:textColor="@color/aqua"
+        android:textSize="30sp" />
 
     <!-- Friends Button Link -->
     <ImageButton
         android:id="@+id/friendsButton"
+        style="?android:attr/borderlessButtonStyle"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_toEndOf="@+id/friendsHeader"
         android:layout_alignBottom="@+id/friendsHeader"
-        android:layout_marginLeft="25dp"
-        android:scaleType="fitCenter"
+        android:layout_marginLeft="10dp"
+        android:layout_toEndOf="@+id/friendsHeader"
         android:outlineAmbientShadowColor="@color/blueberry"
         android:outlineSpotShadowColor="@color/blueberry"
-        android:src="@drawable/users"
-        style="?android:attr/borderlessButtonStyle"/>
+        android:scaleType="centerCrop"
+        android:src="@drawable/users" />
 
     <!-- Friends Preview - RecyclerView -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/friendsRecyclerView"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="125dp"
         android:layout_below="@+id/friendsHeader"
-        android:scrollbars="horizontal"
-        android:outlineAmbientShadowColor="@color/aqua"/>
+        android:outlineAmbientShadowColor="@color/aqua"
+        android:scrollbars="horizontal" />
 
 
     <!-- Favorites Header -->
@@ -125,57 +174,56 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/friendsRecyclerView"
         android:layout_marginLeft="13dp"
+        android:fontFamily="@font/thasadith_bold"
         android:text="Starred"
-        android:textSize="25sp"
-        android:fontFamily="@font/thasadith_regular"
-        android:textColor="@color/aqua"/>
+        android:textColor="@color/aqua"
+        android:textSize="25sp" />
 
     <!-- Favorites Button Link -->
     <ImageButton
         android:id="@+id/Starred"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_toEndOf="@+id/favoritesHeader"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
         android:layout_alignBottom="@+id/favoritesHeader"
         android:layout_marginLeft="10dp"
-        android:scaleType="fitCenter"
-        android:src="@drawable/star"
-        style="?android:attr/borderlessButtonStyle"
-        />
+        android:layout_toEndOf="@+id/favoritesHeader"
+        android:scaleType="centerCrop"
+        android:src="@drawable/star" />
 
     <!-- Favorites Preview - RecyclerView -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/favoritesRecyclerView"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="125dp"
-        android:clipToPadding="false"
         android:layout_below="@+id/favoritesHeader"
-        android:scrollbars="horizontal"
+        android:clipToPadding="false"
         android:outlineAmbientShadowColor="@color/aqua"
-        />
+        android:scrollbars="horizontal" />
 
 
     <ImageButton
         android:id="@+id/EditProfileButton"
+        style="?android:attr/borderlessButtonStyle"
         android:layout_width="50dp"
         android:layout_height="50dp"
+        android:layout_alignBottom="@+id/ProfilePic"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="0dp"
         android:layout_marginBottom="0dp"
-        android:layout_alignBottom="@+id/ProfilePic"
         android:layout_toEndOf="@+id/ProfilePic"
         android:scaleType="fitCenter"
-        android:src="@drawable/edit"
-        style="?android:attr/borderlessButtonStyle"/>
+        android:src="@drawable/edit" />
 
     <TextView
         android:id="@+id/EditProfileHeader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toEndOf="@+id/EditProfileButton"
         android:layout_alignBottom="@+id/EditProfileButton"
+        android:layout_toEndOf="@+id/EditProfileButton"
+        android:fontFamily="@font/thasadith_bold"
+        android:textColor="@color/aqua"
         android:text="Edit"
-        android:fontFamily="@font/thasadith_regular"
         android:textSize="20sp" />
 
     <!-- Custom List Header -->
@@ -184,24 +232,24 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/favoritesHeader"
-        android:layout_marginLeft="160dp"
-        android:text="My Custom Lists"
-        android:textSize="25sp"
-        android:fontFamily="@font/thasadith_regular"
-        android:textColor="@color/aqua"/>
+        android:layout_marginLeft="180dp"
+        android:fontFamily="@font/thasadith_bold"
+        android:text="Collections"
+        android:textColor="@color/aqua"
+        android:textSize="25sp" />
 
     <ImageButton
         android:id="@+id/customList"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_toEndOf="@+id/customListHeader"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
         android:layout_alignBottom="@+id/customListHeader"
         android:layout_marginLeft="10dp"
-        android:scaleType="fitCenter"
-        android:src="@drawable/add"
+        android:layout_toEndOf="@+id/customListHeader"
         android:fontFamily="@font/thasadith_regular"
-        android:textColor="@color/aqua"
-        style="?android:attr/borderlessButtonStyle"/>
+        android:scaleType="centerCrop"
+        android:src="@drawable/add"
+        android:textColor="@color/aqua" />
 
 
     <Button
@@ -211,6 +259,7 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="50dp"
+        android:background="@color/aqua1"
         android:text="Sign Out" />
 
 </RelativeLayout>

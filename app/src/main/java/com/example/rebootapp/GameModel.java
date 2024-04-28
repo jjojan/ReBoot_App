@@ -40,7 +40,7 @@ public class GameModel {
         title = game.getString("name");
         id = game.getString("id");
         String decName = game.getString("metacritic");
-        Log.i("name", decName);
+//        Log.i("name", decName);
         overview = game.getString("released");
         posterPath = game.getString("background_image");
         releaseDate = game.getString("released");

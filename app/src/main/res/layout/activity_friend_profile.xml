@@ -11,47 +11,70 @@
 
 
     <!-- Profile Picture -->
-    <ImageView
+    <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/Friend_ProfilePic"
         android:layout_width="120dp"
         android:layout_height="120dp"
         android:layout_marginLeft="25dp"
         android:layout_marginTop="20dp"
-        android:scaleType="fitCenter"
+        android:scaleType="centerCrop"
         android:src="?attr/selectableItemBackground"
         android:visibility="visible"
+        app:shapeAppearanceOverlay="@style/circleImageView"
         app:srcCompat="@drawable/baseline_person_24" />
 
+    <ImageView
+        android:id="@+id/b4"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
+        android:layout_alignBaseline="@id/friend_Starred"
+        android:layout_alignBottom="@+id/friend_Starred"
+        android:layout_alignRight="@id/friend_Starred"
+        android:src="@drawable/bio_background2" />
+    <ImageView
+        android:id="@+id/b1"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
+        android:layout_alignBaseline="@id/friend_customList"
+        android:layout_alignBottom="@+id/friend_customList"
+        android:layout_alignRight="@id/friend_customList"
+        android:src="@drawable/bio_background2" />
+    <ImageView
+        android:id="@+id/b2"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
+        android:layout_alignBaseline="@id/btn_delete"
+        android:layout_alignBottom="@id/btn_delete"
+        android:layout_alignRight="@id/btn_delete"
+        android:src="@drawable/bio_background2" />
+    <ImageView
+        android:id="@+id/b3"
+        android:layout_width="58dp"
+        android:layout_height="39dp"
+        android:layout_alignBaseline="@id/messageButton"
+        android:layout_alignBottom="@id/messageButton"
+        android:layout_alignRight="@id/messageButton"
+        android:src="@drawable/bio_background2" />
     <!-- UserName -->
     <TextView
         android:id="@+id/tvFriend_Friend_Username"
         android:layout_width="218dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="55dp"
+        android:layout_marginLeft="15dp"
         android:layout_toRightOf="@+id/Friend_ProfilePic"
         android:fontFamily="@font/thasadith_regular"
         android:textAlignment="textStart"
         android:textColor="@color/color5"
         android:textSize="20sp" />
     <!-- Email (not in friendModel profile) -->
-    <TextView
-        android:id="@+id/tvFriend_Email"
-        android:layout_width="219dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tvFriend_Friend_Username"
-        android:layout_toRightOf="@+id/Friend_ProfilePic"
-        android:fontFamily="@font/thasadith_regular"
-        android:textAlignment="textStart"
-        android:textColor="@color/color5"
-        android:textSize="20sp" />
     <!-- Profile Bio Header -->
     <TextView
         android:id="@+id/bioHeader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tvFriend_Email"
         android:layout_marginLeft="15dp"
-        android:layout_marginTop="13dp"
+        android:layout_marginTop="120dp"
         android:fontFamily="@font/thasadith_regular"
         android:text="Bio"
         android:textColor="@color/color5"
@@ -60,19 +83,22 @@
     <TextView
         android:id="@+id/friend_bio"
         android:layout_width="350dp"
-        android:layout_height="50dp"
+        android:layout_height="60dp"
         android:layout_below="@id/bioHeader"
         android:layout_centerHorizontal="true"
-        android:background="@color/white"
+        android:paddingLeft="13dp"
+        android:background="@drawable/rounded_textview"
+        android:backgroundTint="@color/aqua1"
         android:textSize="16sp" />
+
 
     <!-- Link to Friends Page -->
     <TextView
         android:id="@+id/friendsHeader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/friend_bio"
         android:layout_marginLeft="13dp"
+        android:layout_marginTop="275dp"
         android:fontFamily="@font/thasadith_regular"
         android:text="Friends"
         android:textColor="@color/color5"
@@ -111,17 +137,18 @@
         android:fontFamily="@font/thasadith_regular"
         android:text="Favorites"
         android:textColor="@color/color5"
-        android:textSize="30sp" />
+        android:textSize="25sp" />
 
     <!-- Button Link to favorite customListGameModels -->
     <ImageButton
         android:id="@+id/friend_Starred"
         style="?android:attr/borderlessButtonStyle"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
         android:layout_alignBottom="@+id/favoritesHeader"
         android:layout_toEndOf="@+id/favoritesHeader"
-        android:scaleType="fitCenter"
+        android:layout_marginLeft="10dp"
+        android:scaleType="centerCrop"
         android:src="@drawable/star" />
 
     <!-- Favorites Preview - RecyclerView -->
@@ -129,6 +156,7 @@
         android:id="@+id/favoritesRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="125dp"
+
         android:layout_below="@+id/favoritesHeader"
         android:outlineAmbientShadowColor="@color/aqua"
         android:scrollbars="horizontal" />
@@ -138,21 +166,22 @@
         android:id="@+id/collectionsHeader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/favoritesRecyclerView"
-        android:layout_marginLeft="13dp"
+        android:layout_below="@+id/friendsRecyclerView"
+        android:layout_marginLeft="200dp"
         android:fontFamily="@font/thasadith_regular"
         android:text="Collections"
         android:textColor="@color/color5"
-        android:textSize="30sp" />
+        android:textSize="25sp" />
 
     <ImageButton
         android:id="@+id/friend_customList"
         style="?android:attr/borderlessButtonStyle"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
         android:layout_alignBottom="@+id/collectionsHeader"
         android:layout_toEndOf="@+id/collectionsHeader"
-        android:scaleType="fitCenter"
+        android:layout_marginLeft="10dp"
+        android:scaleType="centerCrop"
         android:src="@drawable/add" />
 
     <!-- Friends Preview - RecyclerView -->
@@ -164,14 +193,6 @@
         android:outlineAmbientShadowColor="@color/aqua"
         android:scrollbars="horizontal" />
 
-    <Button
-        android:id="@+id/btnSignOut"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="50dp"
-        android:text="Sign Out" />
 
     <Button
         android:id="@+id/btn_Friend_Profile_Done"
@@ -180,26 +201,49 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="50dp"
+        android:background="@color/aqua1"
         android:text="Done" />
+    <TextView
+        android:id="@+id/MessageHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="225dp"
+        android:layout_marginLeft="13dp"
+        android:fontFamily="@font/thasadith_regular"
+        android:text="Message"
+        android:textColor="@color/color5"
+        android:textSize="25sp" />
+    <TextView
+        android:id="@+id/DeleteHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="625dp"
+        android:layout_marginLeft="13dp"
+        android:fontFamily="@font/thasadith_regular"
+        android:text="Delete Friend"
+        android:textColor="@color/color5"
+        android:textSize="25sp" />
 
     <ImageButton
         android:id="@+id/messageButton"
+        style="?android:attr/borderlessButtonStyle"
         android:layout_width="58dp"
         android:layout_height="39dp"
-        android:layout_alignBottom="@+id/Friend_ProfilePic"
-        android:layout_marginStart="32dp"
-        android:layout_marginBottom="62dp"
-        android:layout_toEndOf="@+id/Friend_ProfilePic"
+        android:layout_alignBottom="@+id/MessageHeader"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="80dp"
+        android:layout_toEndOf="@+id/MessageHeader"
         app:srcCompat="@drawable/shape_incoming_message" />
 
     <ImageButton
         android:id="@+id/btn_delete"
         style="?android:attr/borderlessButtonStyle"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_alignTop="@+id/messageButton"
-        android:layout_marginLeft="300dp"
-        android:scaleType="fitCenter"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
+        android:layout_alignTop="@+id/DeleteHeader"
+        android:layout_marginStart="32dp"
+        android:scaleType="centerCrop"
+        android:layout_toEndOf="@+id/Friend_ProfilePic"
         android:src="@drawable/garbage" />
 
 </RelativeLayout>

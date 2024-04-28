@@ -64,24 +64,28 @@ public class FriendsMessageActivity extends AppCompatActivity {
         Intent intent = getIntent();
         friendName = intent.getStringExtra("friendName");
         username = intent.getStringExtra("userName");
+        System.out.println("hey");
         initChat();
 //        checkUser();
 //        fetchFriends();
-        loginUser();
+        System.out.println("hey2");
+//        loginUser();
+        System.out.println("hey3");
 
 
         submit = findViewById(R.id.submit);
         messagesList = findViewById(R.id.messages);
-        ImageLoader imageLoader = new ImageLoader() {
-            @Override
-            public void loadImage(ImageView imageView, @Nullable String url, @Nullable Object payload) {
-                Picasso.get().load(url).into(imageView);
-            }
-        };
-        senderID = CometChat.getLoggedInUser().getUid();
-        adapter = new MessagesListAdapter<>(senderID, imageLoader);
-
-        messagesList.setAdapter(adapter);
+//        ImageLoader imageLoader = new ImageLoader() {
+//            @Override
+//            public void loadImage(ImageView imageView, @Nullable String url, @Nullable Object payload) {
+//                Picasso.get().load(url).into(imageView);
+//            }
+//        };
+//        System.out.println("hey4");
+//
+//        senderID = CometChat.getLoggedInUser().getUid();
+//        adapter = new MessagesListAdapter<>(senderID, imageLoader);
+//        messagesList.setAdapter(adapter);
 
 
 
@@ -233,17 +237,19 @@ public class FriendsMessageActivity extends AppCompatActivity {
     }
 
     private void initChat() {
-
+        System.out.println("hey1");
         AppSettings appSettings=new AppSettings.AppSettingsBuilder()
                 .subscribePresenceForAllUsers()
                 .setRegion(region)
                 .autoEstablishSocketConnection(true)
                 .build();
-
+        System.out.println("hey11");
         CometChat.init(this, appID,appSettings, new CometChat.CallbackListener<String>() {
             @Override
             public void onSuccess(String successMessage) {
                 Log.d("cometcheck", "Initialization completed successfully");
+                loginUser();
+                System.out.println();
             }
             @Override
             public void onError(CometChatException e) {
@@ -305,7 +311,8 @@ public class FriendsMessageActivity extends AppCompatActivity {
             @Override
             public void onSuccess(User user) {
                 Log.d("createUser", user.toString());
-                checkFriend();
+//                checkFriend();
+                loginUser();
             }
 
             @Override
@@ -322,9 +329,13 @@ public class FriendsMessageActivity extends AppCompatActivity {
 
                 @Override
                 public void onSuccess(User user) {
-                    senderID = CometChat.getLoggedInUser().getUid();
+//                    senderID = CometChat.getLoggedInUser().getUid();
+                    senderID = user.getUid();
                     Log.d("loginWorks", "Login Successful : " + user.toString());
                     checkFriend();
+
+                    senderID = CometChat.getLoggedInUser().getUid();
+
                 }
 
                 @Override
@@ -394,7 +405,9 @@ public class FriendsMessageActivity extends AppCompatActivity {
         CometChat.createUser(user, API_KEY, new CometChat.CallbackListener<User>() {
             @Override
             public void onSuccess(User user) {
+
                 Log.d("createFriend", user.toString());
+                checkFriend();
             }
 
             @Override
