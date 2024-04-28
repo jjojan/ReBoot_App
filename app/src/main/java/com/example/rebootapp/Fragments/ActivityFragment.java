@@ -278,6 +278,8 @@ public class ActivityFragment extends Fragment {
                     for (ParseObject reviewObject : reviews) {
                         ParseUser user = reviewObject.getParseUser("source_user");
                         if (user != null) {
+
+
                             String username = user.getUsername();
                             ParseFile picFile = user.getParseFile("profile_pic");
                             String picUrl = picFile != null ? picFile.getUrl() : null;
@@ -391,25 +393,68 @@ public class ActivityFragment extends Fragment {
                     for (ParseObject reviewObject : reviews) {
                         ParseUser user = reviewObject.getParseUser("source_user");
                         if (user != null) {
-                            String username = user.getUsername();
-                            ParseFile picFile = user.getParseFile("profile_pic");
-                            String picUrl = picFile != null ? picFile.getUrl() : null;
+                            String currentUserId = ParseUser.getCurrentUser().getObjectId();
+                            String reviewUserId = reviewObject.getString("ReviewUser");
+                            boolean isShowOnlyFriends = reviewObject.getBoolean("isShowOnlyFriends");
 
-                            ReviewModel review = new ReviewModel(
-                                    reviewObject.getString("ReviewUser"),
-                                    username,
-                                    reviewObject.getString("ReviewText"),
-                                    reviewObject.getString("GameID"),
-                                    reviewObject.getObjectId(),
-                                    reviewObject.getCreatedAt(),
-                                    reviewObject.getUpdatedAt(),
-                                    reviewObject.getBoolean("isShowOnlyFriends"),
-                                    reviewObject.getNumber("ratingStar") != null ? reviewObject.getNumber("ratingStar").floatValue() : 0,
-                                    reviewObject.getInt("upCount"),
-                                    reviewObject.getInt("downCount"),
-                                    picUrl
-                            );
-                            reviewModel.add(review);
+                            if (isShowOnlyFriends) {
+                                HashMap<String, String> params = new HashMap<String, String>();
+                                params.put("userId1", currentUserId);
+                                params.put("userId2", reviewUserId);
+                                ParseCloud.callFunctionInBackground("checkFriend", params, new FunctionCallback<HashMap>() {
+                                    @Override
+                                    public void done(HashMap result, ParseException e2) {
+                                        if (e2 == null) {
+                                            boolean isFriend = (boolean) result.get("isFriend");
+
+                                            if (isFriend || (currentUserId.equals(reviewUserId))) {
+                                                String username = user.getUsername();
+                                                ParseFile picFile = user.getParseFile("profile_pic");
+                                                String picUrl = picFile != null ? picFile.getUrl() : null;
+
+                                                ReviewModel review = new ReviewModel(
+                                                        reviewUserId,
+                                                        username,
+                                                        reviewObject.getString("ReviewText"),
+                                                        reviewObject.getString("GameID"),
+                                                        reviewObject.getObjectId(),
+                                                        reviewObject.getCreatedAt(),
+                                                        reviewObject.getUpdatedAt(),
+                                                        isShowOnlyFriends,
+                                                        reviewObject.getNumber("ratingStar") != null ? reviewObject.getNumber("ratingStar").floatValue() : 0,
+                                                        reviewObject.getInt("upCount"),
+                                                        reviewObject.getInt("downCount"),
+                                                        picUrl
+                                                );
+                                                reviewModel.add(review);
+                                            }
+                                        }
+                                    }
+                                });
+                            } else{
+                                String username = user.getUsername();
+                                ParseFile picFile = user.getParseFile("profile_pic");
+                                String picUrl = picFile != null ? picFile.getUrl() : null;
+
+                                ReviewModel review = new ReviewModel(
+                                        reviewUserId,
+                                        username,
+                                        reviewObject.getString("ReviewText"),
+                                        reviewObject.getString("GameID"),
+                                        reviewObject.getObjectId(),
+                                        reviewObject.getCreatedAt(),
+                                        reviewObject.getUpdatedAt(),
+                                        isShowOnlyFriends,
+                                        reviewObject.getNumber("ratingStar") != null ? reviewObject.getNumber("ratingStar").floatValue() : 0,
+                                        reviewObject.getInt("upCount"),
+                                        reviewObject.getInt("downCount"),
+                                        picUrl
+                                );
+                                reviewModel.add(review);
+                            }
+
+
+
                         }
                     }
 

@@ -370,48 +370,106 @@ public class GameDetailsActivity extends AppCompatActivity implements AdapterVie
                     reviewList = new ArrayList<>();
                     for (ParseObject reviewObject : reviews) {
                         ParseUser user = reviewObject.getParseUser("source_user");
+
                         if(user != null) {
-                            String reviewUserName = user.getString("username");
-                            ParseFile picFile = user.getParseFile("profile_pic");
-                            String picUrl = picFile != null ? picFile.getUrl() : null;
-                            String reviewUser = reviewObject.getString("ReviewUser") != null ? reviewObject.getString("ReviewUser") : "";
-                            //                        String reviewUserName = reviewObject.getString("ReviewUsername") != null
-                            //                                ? reviewObject.getString("ReviewUsername") : "";
-                            String reviewText = reviewObject.getString("ReviewText") != null ? reviewObject.getString("ReviewText") : "";
-                            String gameID = reviewObject.getString("GameID") != null ? reviewObject.getString("GameID") : "";
-                            String objectId = reviewObject.getObjectId();
                             boolean isShowOnlyFriends = reviewObject.getBoolean("isShowOnlyFriends");
-                            // Number to float conversion with null check
-                            float ratingStar = reviewObject.getNumber("ratingStar") != null ? reviewObject.getNumber("ratingStar").floatValue() : 0;
-                            int upCount = reviewObject.has("upvotes") ? reviewObject.getInt("upvotes") : 0;
-                            int downCount = reviewObject.has("downvotes") ? reviewObject.getInt("downvotes") : 0;
+                            String reviewUser = reviewObject.getString("ReviewUser") != null ? reviewObject.getString("ReviewUser") : "";
+                            if(isShowOnlyFriends){
+                                HashMap<String, String> params = new HashMap<String, String>();
+                                params.put("userId1", currentUserID);
+                                params.put("userId2", reviewUser);
+                                ParseCloud.callFunctionInBackground("checkFriend", params, new FunctionCallback<HashMap>() {
+                                    @Override
+                                    public void done(HashMap result, ParseException e){
+                                        boolean isFriend = (boolean) result.get("isFriend");
 
-                            int absCount = Math.abs(upCount - downCount);
-                            if (upCount >= downCount){
-                                upCount = absCount;
-                                downCount = 0;
+                                        if(isFriend || (currentUserID.equals(reviewUser))){
+                                            String reviewUserName = user.getString("username");
+                                            ParseFile picFile = user.getParseFile("profile_pic");
+                                            String picUrl = picFile != null ? picFile.getUrl() : null;
+
+                                            //                        String reviewUserName = reviewObject.getString("ReviewUsername") != null
+                                            //                                ? reviewObject.getString("ReviewUsername") : "";
+                                            String reviewText = reviewObject.getString("ReviewText") != null ? reviewObject.getString("ReviewText") : "";
+                                            String gameID = reviewObject.getString("GameID") != null ? reviewObject.getString("GameID") : "";
+                                            String objectId = reviewObject.getObjectId();
+                                            // Number to float conversion with null check
+                                            float ratingStar = reviewObject.getNumber("ratingStar") != null ? reviewObject.getNumber("ratingStar").floatValue() : 0;
+                                            int upCount = reviewObject.has("upvotes") ? reviewObject.getInt("upvotes") : 0;
+                                            int downCount = reviewObject.has("downvotes") ? reviewObject.getInt("downvotes") : 0;
+
+                                            int absCount = Math.abs(upCount - downCount);
+                                            if (upCount >= downCount){
+                                                upCount = absCount;
+                                                downCount = 0;
+                                            }
+                                            else{
+                                                downCount = absCount;
+                                                upCount = 0;
+                                            }
+
+                                            ReviewModel review = new ReviewModel(
+                                                    reviewUser,
+                                                    reviewUserName,
+                                                    reviewText,
+                                                    gameID,
+                                                    objectId,
+                                                    reviewObject.getCreatedAt(),
+                                                    reviewObject.getUpdatedAt(),
+                                                    isShowOnlyFriends,
+                                                    ratingStar,
+                                                    upCount,
+                                                    downCount,
+                                                    picUrl
+                                            );
+
+                                            reviewList.add(review);
+                                        }
+                                    }
+                                });
+                            }else{
+                                String reviewUserName = user.getString("username");
+                                ParseFile picFile = user.getParseFile("profile_pic");
+                                String picUrl = picFile != null ? picFile.getUrl() : null;
+
+                                //                        String reviewUserName = reviewObject.getString("ReviewUsername") != null
+                                //                                ? reviewObject.getString("ReviewUsername") : "";
+                                String reviewText = reviewObject.getString("ReviewText") != null ? reviewObject.getString("ReviewText") : "";
+                                String gameID = reviewObject.getString("GameID") != null ? reviewObject.getString("GameID") : "";
+                                String objectId = reviewObject.getObjectId();
+                                // Number to float conversion with null check
+                                float ratingStar = reviewObject.getNumber("ratingStar") != null ? reviewObject.getNumber("ratingStar").floatValue() : 0;
+                                int upCount = reviewObject.has("upvotes") ? reviewObject.getInt("upvotes") : 0;
+                                int downCount = reviewObject.has("downvotes") ? reviewObject.getInt("downvotes") : 0;
+
+                                int absCount = Math.abs(upCount - downCount);
+                                if (upCount >= downCount){
+                                    upCount = absCount;
+                                    downCount = 0;
+                                }
+                                else{
+                                    downCount = absCount;
+                                    upCount = 0;
+                                }
+
+                                ReviewModel review = new ReviewModel(
+                                        reviewUser,
+                                        reviewUserName,
+                                        reviewText,
+                                        gameID,
+                                        objectId,
+                                        reviewObject.getCreatedAt(),
+                                        reviewObject.getUpdatedAt(),
+                                        isShowOnlyFriends,
+                                        ratingStar,
+                                        upCount,
+                                        downCount,
+                                        picUrl
+                                );
+
+                                reviewList.add(review);
                             }
-                            else{
-                                downCount = absCount;
-                                upCount = 0;
-                            }
 
-                            ReviewModel review = new ReviewModel(
-                                    reviewUser,
-                                    reviewUserName,
-                                    reviewText,
-                                    gameID,
-                                    objectId,
-                                    reviewObject.getCreatedAt(),
-                                    reviewObject.getUpdatedAt(),
-                                    isShowOnlyFriends,
-                                    ratingStar,
-                                    upCount,
-                                    downCount,
-                                    picUrl
-                            );
-
-                            reviewList.add(review);
                         }
                     }
                     ArrayList<ReviewModel> limitedList = reviewList.size() > 5 ?
