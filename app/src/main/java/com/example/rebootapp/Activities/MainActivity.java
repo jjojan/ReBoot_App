@@ -93,9 +93,6 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.mSearch:
                         fragment = new SearchFragment();
                         break;
-                    case R.id.mEvents:
-                        fragment = new ReviewFragment();
-                        break;
                     case R.id.mFeed:
                         fragment = new ActivityFragment();
                         break;

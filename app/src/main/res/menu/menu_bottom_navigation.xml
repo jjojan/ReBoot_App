@@ -17,11 +17,7 @@
         android:icon="@drawable/windows"
         android:title="Feed"
         app:showAsAction="always" />
-    <item
-        android:id="@+id/mEvents"
-        android:icon="@drawable/edit"
-        android:title="Review"
-        app:showAsAction="always" />
+
     <item
         android:id="@+id/mCart"
         android:icon="@drawable/user_icon"
