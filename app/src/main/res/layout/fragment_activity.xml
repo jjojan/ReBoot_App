@@ -6,38 +6,49 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".Fragments.ActivityFragment">
 
-    <com.google.android.material.switchmaterial.SwitchMaterial
-        android:id="@+id/material_switch"
+    <TextView
+        android:id="@+id/tvAll"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text=""
-        android:scaleX="1.5"
-        android:scaleY="1.5"
-        android:layout_marginLeft="180dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/rvFeed" />
+        android:layout_below="@+id/tvIntroduction"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="0dp"
+        android:fontFamily="@font/thasadith_regular"
+        android:text="All"
+        android:textColor="@color/color1"
+        android:textSize="25dp"
+        android:textStyle="normal" />
+
+    <TextView
+        android:id="@+id/tvFriends"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvIntroduction"
+        android:layout_marginLeft="150dp"
+        android:layout_marginTop="0dp"
+        android:fontFamily="@font/thasadith_regular"
+        android:text="Friends"
+        android:textColor="@color/black"
+        android:textSize="25dp"
+        android:textStyle="normal" />
+
+    <TextView
+        android:id="@+id/tvYours"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvIntroduction"
+        android:layout_marginLeft="325dp"
+        android:layout_marginTop="0dp"
+        android:fontFamily="@font/thasadith_regular"
+        android:text="Mine"
+        android:textColor="@color/black"
+        android:textSize="25dp"
+        android:textStyle="normal" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvFeed"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="30dp" />
-
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="135dp"
-        android:text="All"
-        android:textSize="24sp" />
-
-    <TextView
-        android:id="@+id/textView6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="225dp"
-        android:text="Friends"
-        android:textSize="24sp" />
 
 </FrameLayout>

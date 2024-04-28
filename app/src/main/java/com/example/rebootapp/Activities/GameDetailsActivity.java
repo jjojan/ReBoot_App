@@ -759,6 +759,9 @@ public class GameDetailsActivity extends AppCompatActivity implements AdapterVie
                 // succesful
                 Toast.makeText(GameDetailsActivity.this, "Review saved successfully!", Toast.LENGTH_SHORT).show();
                 progressDialog.dismiss();
+                binding.etReviewBox.getText().clear();
+                finish();
+                startActivity(getIntent());
 
             } else {
                 // Error

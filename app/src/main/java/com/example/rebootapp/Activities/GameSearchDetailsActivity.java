@@ -631,6 +631,8 @@ public class GameSearchDetailsActivity extends AppCompatActivity implements Adap
         });
 
         binding.etReviewBox.getText().clear();
+        finish();
+        startActivity(getIntent());
 
     }
 

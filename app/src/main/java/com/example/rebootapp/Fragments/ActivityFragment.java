@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -12,12 +13,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.rebootapp.Activities.GameDetailsActivity;
 import com.example.rebootapp.Adapters.GameAdapter;
 import com.example.rebootapp.Adapters.ReviewAdapter;
+import com.example.rebootapp.Adapters.YourReviewAdapter;
 import com.example.rebootapp.GameModel;
 import com.example.rebootapp.Models.ReviewModel;
+import com.example.rebootapp.Models.YourReviewModel;
 import com.example.rebootapp.R;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.parse.FindCallback;
@@ -46,10 +50,18 @@ public class ActivityFragment extends Fragment {
 
     ArrayList<ReviewModel> reviewModel;
 
+    ArrayList<YourReviewModel> yourreviewModel;
+
     ReviewAdapter reviewAdapter;
+
+    YourReviewAdapter yourreviewAdapter;
 
     SwitchMaterial switchMaterial;
     List<String> friendList = new ArrayList<>();
+
+    TextView allbutton, friendsButton, yoursButton;
+
+
 
     public ActivityFragment() {
 
@@ -80,7 +92,9 @@ public class ActivityFragment extends Fragment {
         // Inflate the layout for this fragment
 
         binding = com.example.rebootapp.databinding.FragmentActivityBinding.inflate(getLayoutInflater());
-        switchMaterial = binding.materialSwitch;
+        allbutton = binding.tvAll;
+        friendsButton = binding.tvFriends;
+        yoursButton = binding.tvYours;
         return binding.getRoot();
 //        return inflater.inflate(R.layout.fragment_activity, container, false);
     }
@@ -94,20 +108,66 @@ public class ActivityFragment extends Fragment {
         reviewModel = new ArrayList<>();
         reviewAdapter = new ReviewAdapter(getContext(), (ArrayList<ReviewModel>) reviewModel);
 
+        yourreviewModel = new ArrayList<>();
+        yourreviewAdapter = new YourReviewAdapter(getContext(), (ArrayList<YourReviewModel>) yourreviewModel);
+
         // Now using binding to access the RecyclerView and set its properties
         binding.rvFeed.setAdapter(reviewAdapter);
         binding.rvFeed.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+        fetchBlocked();
 
-        switchMaterial.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) {
-                Log.i("hiSwitch", "j");
-                fetchFriends2();
-            } else {
-                Log.i("hiSwitch", "f");
+        allbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                binding.rvFeed.setAdapter(reviewAdapter);
+                allbutton.setTextColor(getResources().getColor(R.color.color1));
+                friendsButton.setTextColor(getResources().getColor(R.color.black));
+                yoursButton.setTextColor(getResources().getColor(R.color.black));
+
                 fetchBlocked();
-
             }
         });
+
+        friendsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                binding.rvFeed.setAdapter(reviewAdapter);
+                friendsButton.setTextColor(getResources().getColor(R.color.color1));
+                allbutton.setTextColor(getResources().getColor(R.color.black));
+                yoursButton.setTextColor(getResources().getColor(R.color.black));
+
+                fetchFriends2();
+            }
+        });
+
+        yoursButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                binding.rvFeed.setAdapter(yourreviewAdapter);
+//                binding.rvFeed.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+                yoursButton.setTextColor(getResources().getColor(R.color.color1));
+                allbutton.setTextColor(getResources().getColor(R.color.black));
+                friendsButton.setTextColor(getResources().getColor(R.color.black));
+
+                fetchYourReviews();
+            }
+        });
+
+//        switchMaterial.setOnCheckedChangeListener((buttonView, isChecked) -> {
+//            if (isChecked) {
+//                Log.i("hiSwitch", "j");
+//                binding.rvFeed.setAdapter(yourreviewAdapter);
+//                binding.rvFeed.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+////                fetchFriends2();
+//                fetchYourReviews();
+//
+//            } else {
+//                Log.i("hiSwitch", "f");
+//                fetchBlocked();
+//
+//            }
+//        });
 
 //        RecyclerView rvFeed = getView().findViewById(R.id.rvFeed);
 //        reviewModel = new ArrayList<>();
@@ -196,6 +256,62 @@ public class ActivityFragment extends Fragment {
         });
 
     }
+
+    public void fetchYourReviews(){
+
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        String userId = currentUser.getObjectId();
+
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Review");
+        query.include("source_user");
+
+        query.whereEqualTo("ReviewUser",userId );
+
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> reviews, ParseException e) {
+                if (e == null) {
+                    // Clear existing data
+                    yourreviewModel.clear();
+
+                    // Convert ParseObjects into your ReviewModel instances
+                    for (ParseObject reviewObject : reviews) {
+                        ParseUser user = reviewObject.getParseUser("source_user");
+                        if (user != null) {
+                            String username = user.getUsername();
+                            ParseFile picFile = user.getParseFile("profile_pic");
+                            String picUrl = picFile != null ? picFile.getUrl() : null;
+
+                            YourReviewModel review = new YourReviewModel(
+                                    reviewObject.getString("ReviewUser"),
+                                    username,
+                                    reviewObject.getString("ReviewText"),
+                                    reviewObject.getString("GameID"),
+                                    reviewObject.getObjectId(),
+                                    reviewObject.getCreatedAt(),
+                                    reviewObject.getUpdatedAt(),
+                                    reviewObject.getBoolean("isShowOnlyFriends"),
+                                    reviewObject.getNumber("ratingStar") != null ? reviewObject.getNumber("ratingStar").floatValue() : 0,
+                                    reviewObject.getInt("upCount"),
+                                    reviewObject.getInt("downCount"),
+                                    picUrl
+                            );
+                            Log.i("yourreview", review.toString());
+                            yourreviewModel.add(review);
+                        }
+                    }
+
+                    // Notify the adapter of the change on the UI thread
+                    getActivity().runOnUiThread(() -> {
+                        yourreviewAdapter.notifyDataSetChanged();
+                    });
+                } else {
+                    Log.e("fetchReviews", "Error: " + e.getMessage());
+                }
+            }
+        });
+
+    }
     public void fetchFriends2() {
 
         ParseUser currentUser = ParseUser.getCurrentUser();
@@ -263,6 +379,7 @@ public class ActivityFragment extends Fragment {
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Review");
         query.include("source_user");
         query.whereNotContainedIn("ReviewUser", blocked);
+
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> reviews, ParseException e) {
