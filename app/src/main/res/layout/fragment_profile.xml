@@ -215,17 +215,6 @@
         android:scaleType="fitCenter"
         android:src="@drawable/edit" />
 
-    <TextView
-        android:id="@+id/EditProfileHeader"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/EditProfileButton"
-        android:layout_toEndOf="@+id/EditProfileButton"
-        android:fontFamily="@font/thasadith_bold"
-        android:textColor="@color/aqua"
-        android:text="Edit"
-        android:textSize="20sp" />
-
     <!-- Custom List Header -->
     <TextView
         android:id="@+id/customListHeader"
