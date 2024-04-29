@@ -36,15 +36,12 @@ public class GameViewModel extends ViewModel {
 //        return gamesLiveData;
 //    }
     public LiveData<List<GameModel>> getGames(String url) {
-        if (url.equals(POPULAR_GAMES_URL) && popularGames.getValue() == null && !isPopularGamesLoaded) {
+        if (url.equals(POPULAR_GAMES_URL) && popularGames.getValue() == null) {
             loadGames(url, popularGames);
-            isPopularGamesLoaded = true;
-        } else if (url.equals(NEW_GAMES_URL) && newGames.getValue() == null && !isNewGamesLoaded) {
+        } else if (url.equals(NEW_GAMES_URL) && newGames.getValue() == null) {
             loadGames(url, newGames);
-            isNewGamesLoaded = true;
-        } else if (url.equals(YOUR_GAMES_URL) && yourGames.getValue() == null&& !isYourGamesLoaded) {
+        } else if (url.equals(YOUR_GAMES_URL) && yourGames.getValue() == null) {
             loadGames(url, yourGames);
-            isYourGamesLoaded = true;
         }
         switch (url) {
             case POPULAR_GAMES_URL:
