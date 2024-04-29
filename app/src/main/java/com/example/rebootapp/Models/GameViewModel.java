@@ -78,6 +78,7 @@ public class GameViewModel extends ViewModel {
                 @Override
                 public void onFailure(int i, Headers headers, String s, Throwable throwable) {
                     System.out.println("reallly didnt work");
+                    Log.d("fail", "onFailure");
                 }
             });
 

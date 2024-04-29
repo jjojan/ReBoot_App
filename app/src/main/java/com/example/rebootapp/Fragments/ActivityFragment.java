@@ -264,8 +264,8 @@ public class ActivityFragment extends Fragment {
 
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Review");
         query.include("source_user");
-
         query.whereEqualTo("ReviewUser",userId );
+        query.orderByDescending("createdAt");
 
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
@@ -327,6 +327,7 @@ public class ActivityFragment extends Fragment {
                     ParseQuery<ParseObject> reviewQuery = ParseQuery.getQuery("Review");
                     reviewQuery.whereContainedIn("source_user", list);
                     reviewQuery.include("source_user");
+                    reviewQuery.orderByDescending("createdAt");
                     reviewQuery.findInBackground(new FindCallback<ParseObject>() {
                         @Override
                         public void done(List<ParseObject> reviews, ParseException e) {
@@ -381,6 +382,7 @@ public class ActivityFragment extends Fragment {
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Review");
         query.include("source_user");
         query.whereNotContainedIn("ReviewUser", blocked);
+        query.orderByDescending("createdAt");
 
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override

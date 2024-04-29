@@ -363,6 +363,7 @@ public class GameDetailsActivity extends AppCompatActivity implements AdapterVie
         query.whereEqualTo("GameID", gameID);
         query.whereNotContainedIn("ReviewUser", blocked);
         query.include("source_user");
+        query.orderByDescending("createdAt");
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> reviews, ParseException e) {
