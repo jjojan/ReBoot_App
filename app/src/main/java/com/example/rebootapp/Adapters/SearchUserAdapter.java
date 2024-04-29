@@ -135,4 +135,10 @@ public class SearchUserAdapter extends RecyclerView.Adapter<SearchUserAdapter.Vi
         this.suggestedFriendModels.addAll(newFriendModels);
         notifyItemRangeInserted(0, suggestedFriendModels.size());
     }
+
+    public void updateClear(int size){
+        if(size <= 0) size = 0;
+        this.suggestedFriendModels.clear();
+        notifyItemRangeRemoved(0, size);
+    }
 }

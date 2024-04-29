@@ -53,6 +53,7 @@ public class FriendsActivity extends AppCompatActivity {
     FriendRequestAdapter friendRequestAdapter;
     ManageBlockedAdapter blockedUsersAdapter;
     SearchUserAdapter searchUserAdapter;
+    private int lastSearchSize;
 
     List<FriendModel> friendsList = new ArrayList<>();
     List<SuggestedFriendModel> suggestedFriendsList = new ArrayList<>();
@@ -102,7 +103,7 @@ public class FriendsActivity extends AppCompatActivity {
 
         friendRequestAdapter = new FriendRequestAdapter(friendRequestList, getApplicationContext());
         rv_Friend_Request_List.setAdapter(friendRequestAdapter);
-
+        lastSearchSize = 0;
 
 
 
@@ -310,6 +311,7 @@ public class FriendsActivity extends AppCompatActivity {
 
                 if (counter.decrementAndGet() == 0) {
                     runOnUiThread(() -> {
+
                         friendsListAdapter.updateData(fetchedFriendModels);
                     });
                 }
@@ -672,7 +674,12 @@ public class FriendsActivity extends AppCompatActivity {
                             System.out.println("Got to here in search");
                             List<SuggestedFriendModel> sfml = new ArrayList<>();
                             AtomicInteger counter = new AtomicInteger(map.size());
-                            System.out.println("there are this many " + counter);
+//                            System.out.println("there are this many " + counter);
+                            if (counter.get() == 0){
+                                System.out.println("nothing in search: " + lastSearchSize);
+                                searchUserAdapter.updateClear(lastSearchSize);
+                                lastSearchSize = 0;
+                            }
                             for (HashMap<String, Object> m : map) {
                                 ParseUser a = (ParseUser) m.get("user");
                                 String id = a.getObjectId();
@@ -682,9 +689,12 @@ public class FriendsActivity extends AppCompatActivity {
                                 String picUrl = pic != null ? pic.getUrl() : null;
 
                                 sfml.add(new SuggestedFriendModel(username, picUrl, id, b));
+                                System.out.println("what happened");
 
                                 if (counter.decrementAndGet() == 0) {
                                     runOnUiThread(() -> {
+                                        lastSearchSize = sfml.size();
+                                        System.out.println("this many were searched: " + lastSearchSize);
                                         searchUserAdapter.updateData(sfml);
                                     });
                                 }

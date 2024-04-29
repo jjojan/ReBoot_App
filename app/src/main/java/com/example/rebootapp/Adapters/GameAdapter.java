@@ -74,7 +74,7 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.ViewHolder> {
                 imageUrl = gameModel.getPosterPath();
             }
 
-            Glide.with(context).load(imageUrl).into(tvPoster);
+//            Glide.with(context).load(imageUrl).into(tvPoster);
 
             Glide.with(context)
                     .load(imageUrl)

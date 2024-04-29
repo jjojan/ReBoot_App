@@ -129,17 +129,21 @@ public class HomeFragment extends Fragment {
         client.get(POPULAR_GAMES_URL , new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Headers headers, JSON json) {
-                Log.d(TAG, "onSucess");
-                JSONObject jsonObject = json.jsonObject;
-                try{
-                    JSONArray results = jsonObject.getJSONArray("results");
-//                    Log.i(TAG, "Results" + results.toString());
-                    gameModel.addAll(GameModel.fromJSONArray(results));
-                    gameAdapter.notifyDataSetChanged();
-//                    Log.i(TAG, "Movies" + gameModel.size());
-                } catch(JSONException e){
-                    Log.e(TAG, "hit json expception", e);
-                }
+                new Thread(() ->{
+                    Log.d(TAG, "onSucess");
+                    JSONObject jsonObject = json.jsonObject;
+                    try {
+                        JSONArray results = jsonObject.getJSONArray("results");
+                        List<GameModel> games = GameModel.fromJSONArray(results);
+                        getActivity().runOnUiThread(() ->{
+                            gameModel.addAll(games);
+                            gameAdapter.notifyItemRangeInserted(0, 40);
+                        });
+
+                    } catch (JSONException e) {
+                        Log.e(TAG, "hit json expception", e);
+                    }
+                }).start();
             }
 
             @Override
@@ -151,16 +155,23 @@ public class HomeFragment extends Fragment {
         client.get(NEW_GAMES_URL, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Headers headers, JSON json) {
-                JSONObject jsonObject = json.jsonObject;
-                try{
-                    JSONArray results = jsonObject.getJSONArray("results");
-//                    Log.i(TAG, "Results" + results.toString());
-                    newGameModels.addAll(GameModel.fromJSONArray(results));
-                    newGameAdapter.notifyDataSetChanged();
-//                    Log.i(TAG, "Movies" + newGameModels.size());
-                } catch(JSONException e){
-                    Log.e(TAG, "hit json expception", e);
-                }
+                new Thread(() -> {
+                    JSONObject jsonObject = json.jsonObject;
+                    try {
+                        JSONArray results = jsonObject.getJSONArray("results");
+                        List<GameModel> games = GameModel.fromJSONArray(results);
+
+                        getActivity().runOnUiThread(() -> {
+                            newGameModels.addAll(games);
+                            newGameAdapter.notifyItemRangeInserted(0, 40);
+                        });
+
+
+                    } catch (JSONException e) {
+                        Log.e(TAG, "hit json expception", e);
+                    }
+                }).start();
+
             }
 
             @Override
@@ -172,16 +183,25 @@ public class HomeFragment extends Fragment {
         client.get(YOUR_GAMES_URL, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Headers headers, JSON json) {
-                JSONObject jsonObject = json.jsonObject;
-                try{
-                    JSONArray results = jsonObject.getJSONArray("results");
-//                    Log.i(TAG, "Results" + results.toString());
-                    yourGameModels.addAll(GameModel.fromJSONArray(results));
-                    yourGamesAapter.notifyDataSetChanged();
-//                    Log.i(TAG, "Movies" + yourGameModels.size());
-                } catch(JSONException e){
-                    Log.e(TAG, "hit json expception", e);
-                }
+                new Thread(() -> {
+                    JSONObject jsonObject = json.jsonObject;
+                    try{
+                        JSONArray results = jsonObject.getJSONArray("results");
+                        List<GameModel> games = GameModel.fromJSONArray(results);
+
+                        getActivity().runOnUiThread(() -> {
+                            yourGameModels.addAll(games);
+
+                            yourGamesAapter.notifyItemRangeInserted(0, 40);
+                        });
+
+
+
+                    } catch(JSONException e){
+                        Log.e(TAG, "hit json expception", e);
+                    }
+
+                }).start();
             }
 
             @Override
