@@ -180,67 +180,67 @@ public class ActivityFragment extends Fragment {
         fetchBlocked();
     }
 
-    public void fetchFriends() {
-
-        ParseUser currentUser = ParseUser.getCurrentUser();
-        if (currentUser != null) {
-           friendList = currentUser.getList("friend_list");
-            if (friendList != null) {
-                // Process your friend list here
-                for (String friend : friendList) {
-                    Log.d("Friend", friend);
-                }
-            } else {
-                Log.d("Error", "No friends list found");
-            }
-        } else {
-            Log.d("Error", "No user logged in");
-        }
-
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("Review");
-        query.findInBackground(new FindCallback<ParseObject>() {
-            @Override
-            public void done(List<ParseObject> reviews, ParseException e) {
-                if (e == null) {
-                    // Clear existing data
-                    reviewModel.clear();
-
-                    // Convert ParseObjects into your ReviewModel instances
-                    for (ParseObject reviewObject : reviews) {
-                        ReviewModel review = new ReviewModel(
-                                reviewObject.getString("ReviewUser"),
-                                reviewObject.getString("ReviewUsername"),
-                                reviewObject.getString("ReviewText"),
-                                reviewObject.getString("GameID"),
-                                reviewObject.getObjectId(),
-                                reviewObject.getCreatedAt(),
-                                reviewObject.getUpdatedAt(),
-                                reviewObject.getBoolean("isShowOnlyFriends"),
-                                reviewObject.getNumber("ratingStar") != null ? reviewObject.getNumber("ratingStar").floatValue() : 0,
-                                reviewObject.getInt("upCount"),
-                                reviewObject.getInt("downCount")
-                        );
-
-                        if (friendList.contains(review.getReviewUser())){
-                            Log.i("friendList", review.getReviewUser().toString());
-                            reviewModel.add(review);
-
-                        }
-
-                    }
-
-                    // Notify the adapter of the change on the UI thread
-                    getActivity().runOnUiThread(() -> {
-                        reviewAdapter.notifyDataSetChanged();
-                    });
-                } else {
-                    Log.e("fetchReviews", "Error: " + e.getMessage());
-                }
-            }
-        });
-
-
-    }
+//    public void fetchFriends() {
+//
+//        ParseUser currentUser = ParseUser.getCurrentUser();
+//        if (currentUser != null) {
+//           friendList = currentUser.getList("friend_list");
+//            if (friendList != null) {
+//                // Process your friend list here
+//                for (String friend : friendList) {
+//                    Log.d("Friend", friend);
+//                }
+//            } else {
+//                Log.d("Error", "No friends list found");
+//            }
+//        } else {
+//            Log.d("Error", "No user logged in");
+//        }
+//
+//        ParseQuery<ParseObject> query = ParseQuery.getQuery("Review");
+//        query.findInBackground(new FindCallback<ParseObject>() {
+//            @Override
+//            public void done(List<ParseObject> reviews, ParseException e) {
+//                if (e == null) {
+//                    // Clear existing data
+//                    reviewModel.clear();
+//
+//                    // Convert ParseObjects into your ReviewModel instances
+//                    for (ParseObject reviewObject : reviews) {
+//                        ReviewModel review = new ReviewModel(
+//                                reviewObject.getString("ReviewUser"),
+//                                reviewObject.getString("ReviewUsername"),
+//                                reviewObject.getString("ReviewText"),
+//                                reviewObject.getString("GameID"),
+//                                reviewObject.getObjectId(),
+//                                reviewObject.getCreatedAt(),
+//                                reviewObject.getUpdatedAt(),
+//                                reviewObject.getBoolean("isShowOnlyFriends"),
+//                                reviewObject.getNumber("ratingStar") != null ? reviewObject.getNumber("ratingStar").floatValue() : 0,
+//                                reviewObject.getInt("upCount"),
+//                                reviewObject.getInt("downCount")
+//                        );
+//
+//                        if (friendList.contains(review.getReviewUser())){
+//                            Log.i("friendList", review.getReviewUser().toString());
+//                            reviewModel.add(review);
+//
+//                        }
+//
+//                    }
+//
+//                    // Notify the adapter of the change on the UI thread
+//                    getActivity().runOnUiThread(() -> {
+//                        reviewAdapter.notifyDataSetChanged();
+//                    });
+//                } else {
+//                    Log.e("fetchReviews", "Error: " + e.getMessage());
+//                }
+//            }
+//        });
+//
+//
+//    }
 
     public void fetchBlocked() {
         HashMap<String, String> params = new HashMap<String, String>();
@@ -294,8 +294,8 @@ public class ActivityFragment extends Fragment {
                                     reviewObject.getUpdatedAt(),
                                     reviewObject.getBoolean("isShowOnlyFriends"),
                                     reviewObject.getNumber("ratingStar") != null ? reviewObject.getNumber("ratingStar").floatValue() : 0,
-                                    reviewObject.getInt("upCount"),
-                                    reviewObject.getInt("downCount"),
+                                    reviewObject.getInt("upvotes"),
+                                    reviewObject.getInt("downvotes"),
                                     picUrl
                             );
                             Log.i("yourreview", review.toString());
@@ -350,8 +350,8 @@ public class ActivityFragment extends Fragment {
                                                 reviewObject.getUpdatedAt(),
                                                 reviewObject.getBoolean("isShowOnlyFriends"),
                                                 reviewObject.getNumber("ratingStar") != null ? reviewObject.getNumber("ratingStar").floatValue() : 0,
-                                                reviewObject.getInt("upCount"),
-                                                reviewObject.getInt("downCount"),
+                                                reviewObject.getInt("upvotes"),
+                                                reviewObject.getInt("downvotes"),
                                                 picUrl
                                         );
                                         reviewModel.add(review);
@@ -422,8 +422,8 @@ public class ActivityFragment extends Fragment {
                                                         reviewObject.getUpdatedAt(),
                                                         isShowOnlyFriends,
                                                         reviewObject.getNumber("ratingStar") != null ? reviewObject.getNumber("ratingStar").floatValue() : 0,
-                                                        reviewObject.getInt("upCount"),
-                                                        reviewObject.getInt("downCount"),
+                                                        reviewObject.getInt("upvotes"),
+                                                        reviewObject.getInt("downvotes"),
                                                         picUrl
                                                 );
                                                 reviewModel.add(review);
@@ -446,8 +446,8 @@ public class ActivityFragment extends Fragment {
                                         reviewObject.getUpdatedAt(),
                                         isShowOnlyFriends,
                                         reviewObject.getNumber("ratingStar") != null ? reviewObject.getNumber("ratingStar").floatValue() : 0,
-                                        reviewObject.getInt("upCount"),
-                                        reviewObject.getInt("downCount"),
+                                        reviewObject.getInt("upvotes"),
+                                        reviewObject.getInt("downvotes"),
                                         picUrl
                                 );
                                 reviewModel.add(review);
