@@ -139,6 +139,7 @@ public class LoginActivity extends AppCompatActivity {
                 if(e != null){
                     Log.e("After LoginActivity", "Error with LoginActivity");
                     System.out.println(e.toString());
+                    Toast.makeText(getApplicationContext(), "Incorrect username/password", Toast.LENGTH_LONG).show();
                     return;
                 }
                 else{
@@ -146,8 +147,9 @@ public class LoginActivity extends AppCompatActivity {
                     Log.e("After LoginActivity", "not error");
                 }
                 Log.e("After LoginActivity", "sucess with LoginActivity");
+
                 navigateToHomePage();
-                Toast.makeText(LoginActivity.this, "Sucess", Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginActivity.this, "Success", Toast.LENGTH_SHORT).show();
             }
         });
         return true;

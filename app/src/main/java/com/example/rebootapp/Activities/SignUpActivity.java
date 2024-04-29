@@ -24,11 +24,14 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
+import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
+
+import java.util.List;
 
 public class SignUpActivity extends AppCompatActivity {
 
@@ -40,7 +43,7 @@ public class SignUpActivity extends AppCompatActivity {
     //Manual Sign Up Variables
     EditText edtUserName;
     EditText edtEmail;
-    EditText edtPassword;
+    EditText edtPassword, edtRptPassword;
     Button btnSignUp;
     TextView tvLoginLink;
     Context context;
@@ -55,6 +58,7 @@ public class SignUpActivity extends AppCompatActivity {
         edtUserName = findViewById(R.id.edtUsername);
         edtEmail = findViewById(R.id.edtEmail);
         edtPassword = findViewById(R.id.edtPassword);
+        edtRptPassword = findViewById(R.id.edtRptPassword);
         btnSignUp = findViewById(R.id.btnSignUp);
         tvLoginLink = findViewById(R.id.tvLoginLink);
 
@@ -76,6 +80,7 @@ public class SignUpActivity extends AppCompatActivity {
         builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                finish();
             }
         });
 
@@ -90,6 +95,7 @@ public class SignUpActivity extends AppCompatActivity {
                 String username = edtUserName.getText().toString();
                 String email = edtEmail.getText().toString();
                 String password = edtPassword.getText().toString();
+                String password2 = edtRptPassword.getText().toString();
                 if(username.isEmpty()){
                     Log.i("username", username);
                     Toast.makeText(getApplicationContext(), "userName is Required.", Toast.LENGTH_LONG).show();
@@ -101,8 +107,8 @@ public class SignUpActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Password is Required.", Toast.LENGTH_LONG).show();
                 }
                 else {
-                    signInManual(username, email, password);
-                    navigateToHomePage();
+                    signInManual(username, email, password, password2);
+//                    navigateToHomePage();
 
                 }
 
@@ -150,27 +156,50 @@ public class SignUpActivity extends AppCompatActivity {
         startActivityForResult(signInIntent, 1000);
     }
 
-    void signInManual(String username, String email, String password ){
-        ParseUser user = new ParseUser();
+    void signInManual(String username, String email, String password, String passwordConfirm ){
 
-        isValidEmail(email);
+        if(!isValidEmail2(email)){
+            Toast.makeText(getApplicationContext(), "Invalid Email.", Toast.LENGTH_LONG).show();
+            return;
+        }
+        if(!password.equals(passwordConfirm)){
+            Toast.makeText(getApplicationContext(), "Passwords Must Match", Toast.LENGTH_LONG).show();
+            return;
+        }
 
-        user.setUsername(username);
-        user.setEmail(email);
-        user.setPassword(password);
-
-        user.signUpInBackground(new SignUpCallback() {
+        ParseQuery<ParseUser> users = ParseUser.getQuery();
+        users.whereEqualTo("username", username);
+        users.findInBackground(new FindCallback<ParseUser>() {
             @Override
-            public void done(ParseException e) {
-                if (e == null) {
-                    Toast.makeText(getApplicationContext(), "Sign Up Successful", Toast.LENGTH_LONG).show();
-
-                }
-                else{
-                    Toast.makeText(getApplicationContext(), "Sign Up Unsuccessful", Toast.LENGTH_LONG).show();
+            public void done(List<ParseUser> list, ParseException e) {
+                if(e == null) {
+                    if (!list.isEmpty()) {
+                        Toast.makeText(getApplicationContext(), "Username taken.", Toast.LENGTH_LONG).show();
+                    } else {
+                        ParseUser user = new ParseUser();
+                        user.setUsername(username);
+                        user.setEmail(email);
+                        user.setPassword(password);
+                        user.signUpInBackground(new SignUpCallback() {
+                            @Override
+                            public void done(ParseException e) {
+                                if (e == null) {
+                                    Toast.makeText(getApplicationContext(), "Sign Up Successful", Toast.LENGTH_LONG).show();
+                                    navigateToHomePage();
+                                } else {
+                                    Toast.makeText(getApplicationContext(), "Sign Up Unsuccessful", Toast.LENGTH_LONG).show();
+                                }
+                            }
+                        });
+                    }
+                }else{
+                    Toast.makeText(getApplicationContext(), "error", Toast.LENGTH_LONG).show();
                 }
             }
         });
+
+
+
     }
 
     static boolean isValidEmail(String email){
@@ -226,13 +255,14 @@ public class SignUpActivity extends AppCompatActivity {
                     public void done(ParseException e) {
                         if(e == null){
                             Toast.makeText(getApplicationContext(), "User Signed In", Toast.LENGTH_SHORT).show();
+                            navigateToHomePage();
                         }
                         else{
                             Toast.makeText(getApplicationContext(), "Failed to Sign In User.", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
-                navigateToHomePage();
+
             }
         } catch (ApiException e) {
             Log.i("sign", "error");
@@ -247,4 +277,10 @@ public class SignUpActivity extends AppCompatActivity {
         Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
         startActivity(intent);
     }
+
+    static boolean isValidEmail2(String email) {
+        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
+    }
+
+
 }
