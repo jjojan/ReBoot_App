@@ -278,31 +278,31 @@ public class SearchFragment extends Fragment {
         });
 
         //Http Query
-        client.get(SEARCH_QUERY, new JsonHttpResponseHandler() {
-
-            @Override
-            public void onSuccess(int statusCode, Headers headers, JSON json) {
-                //Log.d(TAG, "onSucess");
-                JSONObject jsonObject = json.jsonObject;
-                try {
-                    JSONArray results = jsonObject.getJSONArray("results");
-                    //Log.i(TAG, "Results" + results.toString());
-                    searchGames.addAll(GameSearchModel.fromJSONArray(results));
-                    gameSearchAdapter.notifyDataSetChanged();
-                    println("hello");
-                    //Log.i(TAG, "Movies" + searchGame.size());
-                } catch (JSONException e) {
-                    //Log.e(TAG, "hit json expception", e);
-                }
-            }
-
-
-            @Override
-            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
-                //Log.d(TAG, "onFailure");
-                println("hello");
-            }
-        });
+//        client.get(SEARCH_QUERY, new JsonHttpResponseHandler() {
+//
+//            @Override
+//            public void onSuccess(int statusCode, Headers headers, JSON json) {
+//                //Log.d(TAG, "onSucess");
+//                JSONObject jsonObject = json.jsonObject;
+//                try {
+//                    JSONArray results = jsonObject.getJSONArray("results");
+//                    //Log.i(TAG, "Results" + results.toString());
+//                    searchGames.addAll(GameSearchModel.fromJSONArray(results));
+//                    gameSearchAdapter.notifyDataSetChanged();
+//                    println("hello");
+//                    //Log.i(TAG, "Movies" + searchGame.size());
+//                } catch (JSONException e) {
+//                    //Log.e(TAG, "hit json expception", e);
+//                }
+//            }
+//
+//
+//            @Override
+//            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+//                //Log.d(TAG, "onFailure");
+//                println("hello");
+//            }
+//        });
 
 
 

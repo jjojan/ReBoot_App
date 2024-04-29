@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -16,6 +17,7 @@ import com.codepath.asynchttpclient.AsyncHttpClient;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 import com.example.rebootapp.GameModel;
 import com.example.rebootapp.Adapters.GameAdapter;
+import com.example.rebootapp.Models.GameViewModel;
 import com.example.rebootapp.R;
 
 import org.json.JSONArray;
@@ -121,94 +123,113 @@ public class HomeFragment extends Fragment {
         rvNewGames.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         rvYourGames.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
 
+//        GameViewModel gameViewModel = new ViewModelProvider(requireActivity()).get(GameViewModel.class);
+//        GameViewModel gameViewModel = new ViewModelProvider(this).get(GameViewModel.class);
+//        gameViewModel.getGames(POPULAR_GAMES_URL).observe(getViewLifecycleOwner(), games ->{
+//            gameAdapter.updateData(games);
+//        });
+//
+//        GameViewModel newGameViewModel = new ViewModelProvider(this).get(GameViewModel.class);
+//        newGameViewModel.getGames(NEW_GAMES_URL).observe(getViewLifecycleOwner(), games ->{
+//            newGameAdapter.updateData(games);
+//        });
+//
+//        GameViewModel yourGameViewModel = new ViewModelProvider(this).get(GameViewModel.class);
+//        yourGameViewModel.getGames(YOUR_GAMES_URL).observe(getViewLifecycleOwner(), games ->{
+//            yourGamesAapter.updateData(games);
+//        });
+        GameViewModel gameViewModel = new ViewModelProvider(requireActivity()).get(GameViewModel.class);
+        gameViewModel.getGames(POPULAR_GAMES_URL).observe(getViewLifecycleOwner(), gameAdapter::updateData);
+        gameViewModel.getGames(NEW_GAMES_URL).observe(getViewLifecycleOwner(), newGameAdapter::updateData);
+        gameViewModel.getGames(YOUR_GAMES_URL).observe(getViewLifecycleOwner(), yourGamesAapter::updateData);
 
 
-        AsyncHttpClient client = new AsyncHttpClient();
+//        AsyncHttpClient client = new AsyncHttpClient();
 
 
-        client.get(POPULAR_GAMES_URL , new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Headers headers, JSON json) {
-                new Thread(() ->{
-                    Log.d(TAG, "onSucess");
-                    JSONObject jsonObject = json.jsonObject;
-                    try {
-                        JSONArray results = jsonObject.getJSONArray("results");
-                        List<GameModel> games = GameModel.fromJSONArray(results);
-                        getActivity().runOnUiThread(() ->{
-                            gameModel.addAll(games);
-                            gameAdapter.notifyItemRangeInserted(0, 40);
-                        });
+//        client.get(POPULAR_GAMES_URL , new JsonHttpResponseHandler() {
+//            @Override
+//            public void onSuccess(int statusCode, Headers headers, JSON json) {
+//                new Thread(() ->{
+//                    Log.d(TAG, "onSucess");
+//                    JSONObject jsonObject = json.jsonObject;
+//                    try {
+//                        JSONArray results = jsonObject.getJSONArray("results");
+//                        List<GameModel> games = GameModel.fromJSONArray(results);
+//                        getActivity().runOnUiThread(() ->{
+//                            gameModel.addAll(games);
+//                            gameAdapter.notifyItemRangeInserted(0, 40);
+//                        });
+//
+//                    } catch (JSONException e) {
+//                        Log.e(TAG, "hit json expception", e);
+//                    }
+//                }).start();
+//            }
+//
+//            @Override
+//            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+//                Log.d(TAG, "onFailure");
+//            }
+//        });
 
-                    } catch (JSONException e) {
-                        Log.e(TAG, "hit json expception", e);
-                    }
-                }).start();
-            }
+//        client.get(NEW_GAMES_URL, new JsonHttpResponseHandler() {
+//            @Override
+//            public void onSuccess(int statusCode, Headers headers, JSON json) {
+//                new Thread(() -> {
+//                    JSONObject jsonObject = json.jsonObject;
+//                    try {
+//                        JSONArray results = jsonObject.getJSONArray("results");
+//                        List<GameModel> games = GameModel.fromJSONArray(results);
+//
+//                        getActivity().runOnUiThread(() -> {
+//                            newGameModels.addAll(games);
+//                            newGameAdapter.notifyItemRangeInserted(0, 40);
+//                        });
+//
+//
+//                    } catch (JSONException e) {
+//                        Log.e(TAG, "hit json expception", e);
+//                    }
+//                }).start();
+//
+//            }
+//
+//            @Override
+//            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+//                Log.d(TAG, "onFailure");
+//            }
+//        });
 
-            @Override
-            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
-                Log.d(TAG, "onFailure");
-            }
-        });
-
-        client.get(NEW_GAMES_URL, new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Headers headers, JSON json) {
-                new Thread(() -> {
-                    JSONObject jsonObject = json.jsonObject;
-                    try {
-                        JSONArray results = jsonObject.getJSONArray("results");
-                        List<GameModel> games = GameModel.fromJSONArray(results);
-
-                        getActivity().runOnUiThread(() -> {
-                            newGameModels.addAll(games);
-                            newGameAdapter.notifyItemRangeInserted(0, 40);
-                        });
-
-
-                    } catch (JSONException e) {
-                        Log.e(TAG, "hit json expception", e);
-                    }
-                }).start();
-
-            }
-
-            @Override
-            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
-                Log.d(TAG, "onFailure");
-            }
-        });
-
-        client.get(YOUR_GAMES_URL, new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Headers headers, JSON json) {
-                new Thread(() -> {
-                    JSONObject jsonObject = json.jsonObject;
-                    try{
-                        JSONArray results = jsonObject.getJSONArray("results");
-                        List<GameModel> games = GameModel.fromJSONArray(results);
-
-                        getActivity().runOnUiThread(() -> {
-                            yourGameModels.addAll(games);
-
-                            yourGamesAapter.notifyItemRangeInserted(0, 40);
-                        });
-
-
-
-                    } catch(JSONException e){
-                        Log.e(TAG, "hit json expception", e);
-                    }
-
-                }).start();
-            }
-
-            @Override
-            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
-
-            }
-        });
+//        client.get(YOUR_GAMES_URL, new JsonHttpResponseHandler() {
+//            @Override
+//            public void onSuccess(int statusCode, Headers headers, JSON json) {
+//                new Thread(() -> {
+//                    JSONObject jsonObject = json.jsonObject;
+//                    try{
+//                        JSONArray results = jsonObject.getJSONArray("results");
+//                        List<GameModel> games = GameModel.fromJSONArray(results);
+//
+//                        getActivity().runOnUiThread(() -> {
+//                            yourGameModels.addAll(games);
+//
+//                            yourGamesAapter.notifyItemRangeInserted(0, 40);
+//                        });
+//
+//
+//
+//                    } catch(JSONException e){
+//                        Log.e(TAG, "hit json expception", e);
+//                    }
+//
+//                }).start();
+//            }
+//
+//            @Override
+//            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+//
+//            }
+//        });
     }
 }
 

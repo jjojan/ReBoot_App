@@ -50,6 +50,11 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.ViewHolder> {
         return gameModels.size();
     }
 
+    public void updateData(List<GameModel> games){
+        this.gameModels.addAll(games);
+        notifyItemRangeInserted(0, 40);
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         TextView tvTitle;
         TextView tvOverview;
@@ -108,6 +113,8 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.ViewHolder> {
                 context.startActivity(intent);
             }
         }
+
+
 
 
 
