@@ -455,7 +455,7 @@
                 android:fontFamily="@font/inter_regular"
                 android:gravity="top|left"
                 android:hint="Write your review"
-                android:inputType="text"
+                android:inputType="textMultiLine"
                 android:paddingLeft="15dp"
                 android:paddingTop="15dp"
                 android:paddingRight="15dp"

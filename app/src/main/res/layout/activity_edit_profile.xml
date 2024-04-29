@@ -38,7 +38,7 @@
         android:layout_height="30dp"
         android:layout_below="@+id/iv_currentUserProfilePic"
         android:layout_marginLeft="25dp"
-        android:layout_marginTop="65dp"
+        android:layout_marginTop="35dp"
         android:textSize="25dp"
         android:textAlignment="center" />
 
@@ -63,19 +63,40 @@
         android:text="Done" />
 
 
+<!--    <EditText-->
+<!--        android:id="@+id/edt_Bio"-->
+<!--        android:layout_width="350dp"-->
+<!--        android:layout_height="60dp"-->
+<!--        android:layout_below="@+id/et_currentUserName"-->
+<!--        android:layout_marginTop="50dp"-->
+<!--        android:layout_centerHorizontal="true"-->
+<!--        android:hint="Enter Bio"-->
+<!--        android:inputType="textMultiLine"-->
+<!--        android:maxLines="5"-->
+<!--        android:paddingLeft="13dp"-->
+<!--        android:fontFamily="@font/thasadith_bold"-->
+<!--        android:textColorHint="@color/black" />-->
+
     <EditText
         android:id="@+id/edt_Bio"
-        android:layout_width="350dp"
-        android:layout_height="60dp"
-        android:layout_below="@+id/et_currentUserName"
-        android:layout_marginTop="50dp"
-        android:layout_centerHorizontal="true"
-        android:hint="Enter Bio"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:background="@color/aqua1"
+        android:ems="10"
+        android:fontFamily="@font/inter_regular"
+        android:hint="Write a bio..."
+        android:textColorHint="@color/black"
         android:inputType="textMultiLine"
-        android:maxLines="5"
-        android:paddingLeft="13dp"
-        android:fontFamily="@font/thasadith_bold"
-        android:textColorHint="@color/black" />
+        android:gravity="top|left"
+        android:paddingLeft="15dp"
+        android:layout_below="@+id/et_currentUserName"
+        android:paddingTop="15dp"
+        android:paddingRight="15dp"
+        android:paddingBottom="15dp"
+        android:textColor="@color/black" />
 
     <TextView
         android:id="@+id/tv_CharCount"
@@ -90,7 +111,7 @@
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@+id/tv_CharCount"
-       android:layout_marginTop="425dp"
+       android:layout_marginTop="525dp"
         android:layout_marginLeft="180dp"
         android:textSize="25dp"
         android:text="Save"

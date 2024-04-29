@@ -76,12 +76,12 @@ public class EditProfileActivity extends AppCompatActivity {
 
         //Get Current User Information
         ParseUser currentUser = ParseUser.getCurrentUser();
-        try {
-            currentUser.fetch();
-        }
-        catch (Exception e){
-            System.out.println("won't fetch");
-        }
+//        try {
+//            currentUser.fetch();
+//        }
+//        catch (Exception e){
+//            System.out.println("won't fetch");
+//        }
         String currentUserObjectID = currentUser.getObjectId();
         String currentUserName = currentUser.getUsername();
         ParseQuery<ParseObject> query = ParseQuery.getQuery("_User");
@@ -100,7 +100,11 @@ public class EditProfileActivity extends AppCompatActivity {
 
 
         userName.setHint(currentUserName);
-        editBio.setHint(currentUser.getString("bio"));
+//        if(currentUser.getString("bio").isEmpty()){
+//            editBio.setHint(currentUser.getString("bio"));
+//        }
+
+
 
         editUserName.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -114,6 +118,12 @@ public class EditProfileActivity extends AppCompatActivity {
             public void done(ParseObject object, ParseException e) {
                 if (e == null) {
                     ParseFile image = object.getParseFile("profile_pic");
+                    String bio_content = object.getString("bio");
+                    if(bio_content == null || bio_content.isEmpty()){
+
+                    }else{
+                        editBio.setHint(bio_content);
+                    }
 
                     String imageUrl;
                     if (image != null) {

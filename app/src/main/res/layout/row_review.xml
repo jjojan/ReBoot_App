@@ -82,7 +82,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
             android:layout_marginTop="5dp"
-            android:maxLength="25"
+            android:maxLength="225"
             android:text="This very cool game. i sugges everyone. thx."
             android:textColor="@color/colorMainText"
             android:textSize="17sp" />
