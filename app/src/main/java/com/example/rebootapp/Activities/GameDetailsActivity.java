@@ -231,7 +231,7 @@ public class GameDetailsActivity extends AppCompatActivity implements AdapterVie
                     for (ParseObject reviewObject : reviews) {
                         float ratingStar = reviewObject.getNumber("ratingStar") != null ? reviewObject.getNumber("ratingStar").floatValue() : 0;
 
-                        // Yuvarlama işlemi ve doğru listeye ekleme
+
                         int roundedRating = Math.round(ratingStar);
                         switch (roundedRating) {
                             case 1:
@@ -250,12 +250,12 @@ public class GameDetailsActivity extends AppCompatActivity implements AdapterVie
                                 fiveStarReviews.add(ratingStar);
                                 break;
                             default:
-                                // Eğer 1-5 dışında bir değer varsa, bu bir hata olabilir
-                                Log.e("fetchReviews", "Yıldız değerlendirme dışında bir değer bulundu: " + ratingStar);
+
+                                Log.e("fetchReviews", "A value other than star rating was found: " + ratingStar);
                         }
                     }
 
-                    // Öncelikle tüm listelerdeki float değerlerini bir listeye ekleyelim
+
                     ArrayList<Float> allRatings = new ArrayList<>();
                     allRatings.addAll(oneStarReviews);
                     allRatings.addAll(twoStarReviews);
@@ -263,16 +263,16 @@ public class GameDetailsActivity extends AppCompatActivity implements AdapterVie
                     allRatings.addAll(fourStarReviews);
                     allRatings.addAll(fiveStarReviews);
 
-                    // Toplam puanı ve ortalama puanı hesaplayalım
+
                     float totalRating = 0;
                     for (Float rating : allRatings) {
                         totalRating += rating;
                     }
-                    // Aritmetik ortalamayı hesaplayalım
+
                     float averageRating = totalRating / allRatings.size();
-                    // Virgülden sonra tek hane olacak şekilde formatlayalım
+
                     averageRating = Math.round(averageRating * 10) / 10.0f;
-                    // Sonucu TextView'a set edelim
+
                     binding.tvRatingCount.setText(String.valueOf(averageRating));
                     binding.ratingBarMain.setRating(averageRating);
                     binding.progressBar5.setMax(allRatings.size());
