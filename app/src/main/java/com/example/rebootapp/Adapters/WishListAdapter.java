@@ -64,7 +64,7 @@ public class WishListAdapter extends RecyclerView.Adapter<WishListAdapter .ViewH
     public void onBindViewHolder(ViewHolder holder, int position) {
         String uri = photoUris.get(position);
         int tempPos = position;
-        // Using Glide to load the image from the URI
+
         Glide.with(holder.imageViewGamePhoto.getContext()).load(uri).into(holder.imageViewGamePhoto);
         holder.imageViewGamePhoto.setOnClickListener(new View.OnClickListener() {
             @Override

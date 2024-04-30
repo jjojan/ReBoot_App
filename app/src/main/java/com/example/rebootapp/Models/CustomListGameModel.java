@@ -33,7 +33,7 @@ public class CustomListGameModel {
 
 
 
-    // no-arg, empty constructor required for Parceler
+
     public CustomListGameModel() {}
 
     public CustomListGameModel(JSONObject game) throws JSONException {

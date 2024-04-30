@@ -84,7 +84,7 @@ public class GameDetailsActivity extends AppCompatActivity implements AdapterVie
 
         movie = (GameModel) Parcels.unwrap(getIntent().getParcelableExtra(GameModel.class.getSimpleName()));
         Log.d("MovieDetailsActivity", String.format("Showing details for '%s'", movie.getTitle()));
-        Log.i("MARDUK",
+        Log.i("Good",
                 "Tıtle: " + movie.getTitle() + "\nOverView: " + movie.getOverview() + "\n ID: " + movie.getID() +
                         "\nBackgropPath: " + movie.getBackdropPath() +
                         "\nPosterPath: " + movie.getPosterPath() + "\nVote: " + movie.getVoteAverage());
@@ -610,7 +610,7 @@ public class GameDetailsActivity extends AppCompatActivity implements AdapterVie
                                         } else {
                                             createNewListBuilder.dismiss();
                                             Toast.makeText(GameDetailsActivity.this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                                            Log.i("YARDUK", e.getMessage().toString());
+                                            Log.i("Good", e.getMessage().toString());
                                         }
                                     }
                                 });
@@ -683,7 +683,7 @@ public class GameDetailsActivity extends AppCompatActivity implements AdapterVie
                 public void done(ParseObject object, ParseException e) {
                     if (e == null) {
                         object.deleteInBackground();
-                    } else System.out.println("cannot find to delete");
+                    } else System.out.println("cannot delete");
                 }
             });
 

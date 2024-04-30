@@ -58,7 +58,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
 
             tvUserName = itemView.findViewById(R.id.tvUserName);
             tvReviewText = itemView.findViewById(R.id.tvReviewText);
-            tvUp = itemView.findViewById(R.id.tvUp); // ID should be unique for "up" TextView, assuming tvUp as ID here
+            tvUp = itemView.findViewById(R.id.tvUp);
             tvDown = itemView.findViewById(R.id.tvDown);
             tvDate = itemView.findViewById(R.id.tvDate);
             ratingBar = itemView.findViewById(R.id.ratingbarRecyclerView);
@@ -80,7 +80,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
     @Override
     public void onBindViewHolder(ReviewAdapter.ViewHolder holder, int position) {
         ReviewModel review = reviewList.get(position);
-        // Assuming you have a way to get user's profile image, or use a default one
+
         if (review.getRatingStar()>0) {
             holder.ratingBar.setRating(review.getRatingStar());
         }
@@ -150,8 +150,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Review");
         query.getInBackground(reviewList.get(position).getObjectId(), (review, e) -> {
             if (e == null) {
-                // Successfully retrieved the review
-                // Try to get the voterArrayList with the correct type
+
                 List<Object> rawList = review.getList("voterArrayList");
                 ArrayList<HashMap<String, Object>> voterArrayList = new ArrayList<>();
                 if (rawList != null) {
@@ -165,7 +164,6 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
                 String currentUserId = ParseUser.getCurrentUser().getObjectId();
                 boolean hasVoted = false;
 
-                // Check if the current user has already voted
                 if (voterArrayList != null) {
                     for (HashMap<String, Object> voter : voterArrayList) {
                         String userID = (String) voter.get("userID");
@@ -184,7 +182,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
                                 notifyDataSetChanged();
                                 Toast.makeText(context, "Upvote successful!", Toast.LENGTH_SHORT).show();
                             } else {
-                                // User has already voted, show a toast message
+
                                 Toast.makeText(context, "You have already voted.", Toast.LENGTH_SHORT).show();
                             }
                             break;
@@ -193,13 +191,13 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
                 }
 
                 if (!hasVoted) {
-                    // User hasn't voted yet, proceed with upvote
+
                     int upCount = review.getInt("upCount");
                     int downCount = review.getInt("downCount");
                     review.put("upCount", upCount + 1);
                     reviewList.get(position).setUpCount(upCount + 1);
                     notifyDataSetChanged();
-                    // Add the user to the voterArrayList with an upvote
+
                     if (voterArrayList == null) voterArrayList = new ArrayList<>();
                     HashMap<String, Object> voteInfo = new HashMap<>();
                     voteInfo.put("userID", currentUserId);
