@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-
-    <!-- this the navigation view which draws and shows the navigation drawer -->
-    <!-- include the menu created in the menu folder -->
+<androidx.drawerlayout.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -13,11 +16,6 @@
     android:layout_alignParentBottom="false"
     android:visibility="visible"
     tools:context=".Fragments.ProfileFragment">
-
-    <!-- TODO: Update blank fragment layout -->
-
-    <!--  -->
-
 
     <!-- User Profile Pic -->
     <ImageView
@@ -34,38 +32,6 @@
         android:layout_height="42dp"
         android:layout_alignBottom="@+id/Starred"
         android:src="@drawable/bio_background" />
-    <ImageView
-        android:id="@+id/b3"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_alignBottom="@+id/EditProfileButton"
-        android:layout_toEndOf="@+id/ProfilePic"
-        android:src="@drawable/bio_background2" />
-
-    <ImageView
-        android:id="@+id/b4"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_alignBaseline="@id/friendsButton"
-        android:layout_alignBottom="@+id/friendsButton"
-        android:layout_alignRight="@id/friendsButton"
-        android:src="@drawable/bio_background2" />
-    <ImageView
-        android:id="@+id/b5"
-        android:layout_width="42dp"
-        android:layout_height="42dp"
-        android:layout_alignBaseline="@id/Starred"
-        android:layout_alignBottom="@+id/Starred"
-        android:layout_alignRight="@id/Starred"
-        android:src="@drawable/bio_background2" />
-    <ImageView
-        android:id="@+id/b6"
-        android:layout_width="42dp"
-        android:layout_height="42dp"
-        android:layout_alignBaseline="@id/customList"
-        android:layout_alignBottom="@+id/customList"
-        android:layout_alignRight="@id/customList"
-        android:src="@drawable/bio_background2" />
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/ProfilePic"
@@ -85,8 +51,8 @@
         android:id="@+id/tvUser_Username"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="55dp"
-        android:layout_toRightOf="@+id/ProfilePic"
+        android:layout_marginTop="5dp"
+        android:layout_below="@+id/ProfilePic"
         android:fontFamily="@font/thasadith_bold"
         android:textColor="@color/aqua"
         android:textAlignment="textEnd"
@@ -97,7 +63,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvUser_Username"
-        android:layout_toRightOf="@+id/ProfilePic"
         android:fontFamily="@font/thasadith_bold"
         android:textColor="@color/aqua"
         android:textAlignment="textEnd"
@@ -109,11 +74,11 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvUser_Email"
         android:layout_marginLeft="15dp"
-        android:layout_marginTop="40dp"
-        android:fontFamily="@font/thasadith_bold"
+        android:layout_marginTop="11dp"
+        android:fontFamily="@font/abel_regular"
         android:text="My Bio"
         android:textColor="@color/aqua"
-        android:textSize="24sp" />
+        android:textSize="30sp" />
     <!-- Bio -->
     <TextView
         android:id="@+id/bioContent"
@@ -122,8 +87,7 @@
         android:layout_below="@id/bioHeader"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="5dp"
-        android:background="@drawable/rounded_textview"
-        android:backgroundTint="@color/aqua1"
+
         android:elegantTextHeight="true"
         android:fontFamily="@font/thasadith_bold"
         android:hint="Tell us about yourself..."
@@ -136,9 +100,10 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/bioContent"
         android:layout_alignParentTop="false"
-        android:layout_marginLeft="13dp"
+        android:layout_marginLeft="30dp"
         android:layout_marginBottom="0dp"
-        android:fontFamily="@font/thasadith_bold"
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/abel_regular"
         android:text="Friends"
         android:textColor="@color/aqua"
         android:textSize="30sp" />
@@ -155,7 +120,8 @@
         android:outlineAmbientShadowColor="@color/blueberry"
         android:outlineSpotShadowColor="@color/blueberry"
         android:scaleType="centerCrop"
-        android:src="@drawable/users" />
+        android:src="@drawable/users"
+        android:background="@drawable/round_button"/>
 
     <!-- Friends Preview - RecyclerView -->
     <androidx.recyclerview.widget.RecyclerView
@@ -174,7 +140,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/friendsRecyclerView"
         android:layout_marginLeft="13dp"
-        android:fontFamily="@font/thasadith_bold"
+        android:fontFamily="@font/abel_regular"
         android:text="Starred"
         android:textColor="@color/aqua"
         android:textSize="25sp" />
@@ -183,13 +149,15 @@
     <ImageButton
         android:id="@+id/Starred"
         style="?android:attr/borderlessButtonStyle"
-        android:layout_width="42dp"
-        android:layout_height="42dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_alignBottom="@+id/favoritesHeader"
         android:layout_marginLeft="10dp"
         android:layout_toEndOf="@+id/favoritesHeader"
         android:scaleType="centerCrop"
-        android:src="@drawable/star" />
+        android:src="@drawable/star"
+        android:background="@drawable/round_button"
+        />
 
     <!-- Favorites Preview - RecyclerView -->
     <androidx.recyclerview.widget.RecyclerView
@@ -205,15 +173,17 @@
     <ImageButton
         android:id="@+id/EditProfileButton"
         style="?android:attr/borderlessButtonStyle"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
         android:layout_alignBottom="@+id/ProfilePic"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="0dp"
         android:layout_marginBottom="0dp"
         android:layout_toEndOf="@+id/ProfilePic"
         android:scaleType="fitCenter"
-        android:src="@drawable/edit" />
+        android:src="@drawable/edit"
+        android:background="@drawable/round_button"
+        />
 
     <!-- Custom List Header -->
     <TextView
@@ -222,7 +192,7 @@
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/favoritesHeader"
         android:layout_marginLeft="180dp"
-        android:fontFamily="@font/thasadith_bold"
+        android:fontFamily="@font/abel_regular"
         android:text="Collections"
         android:textColor="@color/aqua"
         android:textSize="25sp" />
@@ -230,15 +200,16 @@
     <ImageButton
         android:id="@+id/customList"
         style="?android:attr/borderlessButtonStyle"
-        android:layout_width="42dp"
-        android:layout_height="42dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_alignBottom="@+id/customListHeader"
         android:layout_marginLeft="10dp"
         android:layout_toEndOf="@+id/customListHeader"
         android:fontFamily="@font/thasadith_regular"
         android:scaleType="centerCrop"
         android:src="@drawable/add"
-        android:textColor="@color/aqua" />
+        android:textColor="@color/aqua"
+        android:background="@drawable/round_button"/>
 
 
     <Button
@@ -252,3 +223,10 @@
         android:text="Sign Out" />
 
 </RelativeLayout>
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/navigation"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        app:menu="@menu/hamburger_profile_navigation" />
+</androidx.drawerlayout.widget.DrawerLayout>
