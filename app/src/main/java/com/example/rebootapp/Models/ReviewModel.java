@@ -13,6 +13,7 @@ public class ReviewModel {
 
     String ReviewUserName;
     String ReviewText;
+    int reportNum;
     String GameID;
     String objectId;
     String photo_url;
@@ -25,11 +26,12 @@ public class ReviewModel {
 
     public ReviewModel(String reviewUser, String reviewUserName, String reviewText, String gameID,String objectId
             , Date createdAt, Date updatedAt, boolean isShowOnlyFriends, float ratingStar,
-                       int upCount,int downCount) {
+                       int upCount,int downCount, int reportNum) {
         ReviewUser = reviewUser;
         ReviewUserName = reviewUserName;
         ReviewText = reviewText;
         GameID = gameID;
+        this.reportNum = reportNum;
         this.objectId = objectId;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
@@ -41,11 +43,12 @@ public class ReviewModel {
 
     public ReviewModel(String reviewUser, String reviewUserName, String reviewText, String gameID,String objectId
             , Date createdAt, Date updatedAt, boolean isShowOnlyFriends, float ratingStar,
-                       int upCount,int downCount, String url) {
+                       int upCount,int downCount, String url, int reportNum) {
         ReviewUser = reviewUser;
         ReviewUserName = reviewUserName;
         ReviewText = reviewText;
         GameID = gameID;
+        this.reportNum = reportNum;
         this.objectId = objectId;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
@@ -59,6 +62,8 @@ public class ReviewModel {
     public String getObjectId() {
         return objectId;
     }
+
+    public int getreportNum(){ return reportNum;}
 
     public void setObjectId(String objectId) {
         this.objectId = objectId;

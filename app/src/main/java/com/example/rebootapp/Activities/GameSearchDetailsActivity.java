@@ -281,6 +281,7 @@ public class GameSearchDetailsActivity extends AppCompatActivity implements Adap
                         String gameID = reviewObject.getString("GameID") != null ? reviewObject.getString("GameID") : "";
                         String objectId = reviewObject.getObjectId();
                         boolean isShowOnlyFriends = reviewObject.getBoolean("isShowOnlyFriends");
+                        int reportNum = reviewObject.getInt("reportNumber");
                         // Number to float conversion with null check
                         float ratingStar = reviewObject.getNumber("ratingStar") != null ? reviewObject.getNumber("ratingStar").floatValue() : 0;
                         int upCount = reviewObject.has("upCount") ? reviewObject.getInt("upCount") : 0;
@@ -296,7 +297,8 @@ public class GameSearchDetailsActivity extends AppCompatActivity implements Adap
                                 isShowOnlyFriends,
                                 ratingStar,
                                 upCount,
-                                downCount
+                                downCount,
+                                reportNum
                         );
 
                         reviewList.add(review);

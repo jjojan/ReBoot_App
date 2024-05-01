@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.rebootapp.Activities.GameDetailsActivity;
@@ -48,6 +49,8 @@ public class ActivityFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
+    Boolean isMod;
+
     ArrayList<ReviewModel> reviewModel;
 
     ArrayList<YourReviewModel> yourreviewModel;
@@ -60,6 +63,8 @@ public class ActivityFragment extends Fragment {
     List<String> friendList = new ArrayList<>();
 
     TextView allbutton, friendsButton, yoursButton;
+
+    ImageButton deleteReview;
 
 
 
@@ -92,9 +97,17 @@ public class ActivityFragment extends Fragment {
         // Inflate the layout for this fragment
 
         binding = com.example.rebootapp.databinding.FragmentActivityBinding.inflate(getLayoutInflater());
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        isMod = currentUser.getBoolean("isMod");
         allbutton = binding.tvAll;
         friendsButton = binding.tvFriends;
         yoursButton = binding.tvYours;
+        if (isMod){
+            friendsButton.setText("Reviews");
+            yoursButton.setText("Users");
+
+
+        }
         return binding.getRoot();
 //        return inflater.inflate(R.layout.fragment_activity, container, false);
     }
@@ -136,7 +149,15 @@ public class ActivityFragment extends Fragment {
                 allbutton.setTextColor(getResources().getColor(R.color.black));
                 yoursButton.setTextColor(getResources().getColor(R.color.black));
 
-                fetchFriends2();
+                if(isMod){
+                    fetchReportedReviews();
+                }
+                else{
+                    fetchFriends2();
+
+                }
+
+
             }
         });
 
@@ -178,6 +199,68 @@ public class ActivityFragment extends Fragment {
 //        reviewModel = new ArrayList<>();
 
         fetchBlocked();
+    }
+
+    public void fetchReportedReviews() {
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        String userId = currentUser.getObjectId();
+
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Review");
+        query.include("source_user");
+        query.whereNotEqualTo("reportNumber",0 );
+        query.orderByDescending("reportNumber");
+
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> reviews, ParseException e) {
+                if (e == null) {
+
+                    reviewModel.clear();
+
+                    for (ParseObject reviewObject : reviews) {
+                        ParseUser user = reviewObject.getParseUser("source_user");
+                        if (user != null) {
+
+
+                            String username = user.getUsername();
+                            ParseFile picFile = user.getParseFile("profile_pic");
+                            String picUrl = picFile != null ? picFile.getUrl() : null;
+                            int reportNumber =  reviewObject.getInt("reportNumber");
+
+
+                            ReviewModel review = new ReviewModel(
+                                    reviewObject.getString("ReviewUser"),
+                                    username,
+                                    reviewObject.getString("ReviewText"),
+                                    reviewObject.getString("GameID"),
+                                    reviewObject.getObjectId(),
+                                    reviewObject.getCreatedAt(),
+                                    reviewObject.getUpdatedAt(),
+                                    reviewObject.getBoolean("isShowOnlyFriends"),
+                                    reviewObject.getNumber("ratingStar") != null ? reviewObject.getNumber("ratingStar").floatValue() : 0,
+                                    reviewObject.getInt("upvotes"),
+                                    reviewObject.getInt("downvotes"),
+                                    picUrl,
+                                    reportNumber
+                            );
+                            Log.i("yourreview", review.toString());
+                            if(reportNumber != 0){
+                                reviewModel.add(review);
+                            }
+//                            reviewModel.add(review);
+                        }
+                    }
+
+                    // Notify the adapter of the change on the UI thread
+                    getActivity().runOnUiThread(() -> {
+                        reviewAdapter.notifyDataSetChanged();
+                    });
+                } else {
+                    Log.e("fetchReviews", "Error: " + e.getMessage());
+                }
+            }
+        });
+
     }
 
 //    public void fetchFriends() {
@@ -340,6 +423,7 @@ public class ActivityFragment extends Fragment {
                                         String username = user.getUsername();
                                         ParseFile picFile = user.getParseFile("profile_pic");
                                         String picUrl = picFile != null ? picFile.getUrl() : null;
+                                        int reportNum = reviewObject.getInt("reportNumber");
 
                                         ReviewModel review = new ReviewModel(
                                                 reviewObject.getString("ReviewUser"),
@@ -353,7 +437,8 @@ public class ActivityFragment extends Fragment {
                                                 reviewObject.getNumber("ratingStar") != null ? reviewObject.getNumber("ratingStar").floatValue() : 0,
                                                 reviewObject.getInt("upvotes"),
                                                 reviewObject.getInt("downvotes"),
-                                                picUrl
+                                                picUrl,
+                                                reportNum
                                         );
                                         reviewModel.add(review);
                                     }
@@ -413,6 +498,7 @@ public class ActivityFragment extends Fragment {
                                                 String username = user.getUsername();
                                                 ParseFile picFile = user.getParseFile("profile_pic");
                                                 String picUrl = picFile != null ? picFile.getUrl() : null;
+                                                int reportNum = reviewObject.getInt("reportNumber");
 
                                                 ReviewModel review = new ReviewModel(
                                                         reviewUserId,
@@ -426,7 +512,8 @@ public class ActivityFragment extends Fragment {
                                                         reviewObject.getNumber("ratingStar") != null ? reviewObject.getNumber("ratingStar").floatValue() : 0,
                                                         reviewObject.getInt("upvotes"),
                                                         reviewObject.getInt("downvotes"),
-                                                        picUrl
+                                                        picUrl,
+                                                        reportNum
                                                 );
                                                 reviewModel.add(review);
                                             }
@@ -437,6 +524,7 @@ public class ActivityFragment extends Fragment {
                                 String username = user.getUsername();
                                 ParseFile picFile = user.getParseFile("profile_pic");
                                 String picUrl = picFile != null ? picFile.getUrl() : null;
+                                int reportNum = reviewObject.getInt("reportNumber");
 
                                 ReviewModel review = new ReviewModel(
                                         reviewUserId,
@@ -450,7 +538,8 @@ public class ActivityFragment extends Fragment {
                                         reviewObject.getNumber("ratingStar") != null ? reviewObject.getNumber("ratingStar").floatValue() : 0,
                                         reviewObject.getInt("upvotes"),
                                         reviewObject.getInt("downvotes"),
-                                        picUrl
+                                        picUrl,
+                                        reportNum
                                 );
                                 reviewModel.add(review);
                             }

@@ -1,12 +1,14 @@
 package com.example.rebootapp.Adapters;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -20,13 +22,17 @@ import com.example.rebootapp.Activities.FriendProfileActivity;
 import com.example.rebootapp.Activities.MainActivity;
 import com.example.rebootapp.Activities.SuggestedFriendProfileActivity;
 import com.example.rebootapp.Models.ReviewModel;
+import com.example.rebootapp.Models.YourReviewModel;
 import com.example.rebootapp.R;
+import com.parse.DeleteCallback;
 import com.parse.FunctionCallback;
+import com.parse.GetCallback;
 import com.parse.ParseCloud;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -49,9 +55,12 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
     // ViewHolder class
     public static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView imageView;
-        TextView tvUserName, tvReviewText, tvUp, tvDown,tvDate;
+        TextView tvUserName, tvReviewText, tvUp, tvDown,tvDate, reportMessage, reportNumber;
         RatingBar ratingBar;
         View view;
+        ImageButton btnDelete;
+
+
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -64,6 +73,9 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
             ratingBar = itemView.findViewById(R.id.ratingbarRecyclerView);
             view=itemView.getRootView();
             imageView = itemView.findViewById(R.id.imageView);
+            btnDelete = itemView.findViewById(R.id.btn_deleteReview);
+            reportMessage = itemView.findViewById(R.id.tvReport);
+            reportNumber = itemView.findViewById(R.id.tvReportNum);
         }
     }
     public void updateData(ArrayList<ReviewModel> newData) {
@@ -94,6 +106,21 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
         holder.tvUp.setOnClickListener(view -> sendVote(position, "up"));
         holder.tvDown.setOnClickListener(view -> sendVote(position, "down"));
         holder.view.setOnClickListener(view -> showDialog(position));
+        int reportNum = review.getreportNum();
+        String reportString = String.valueOf(reportNum);
+        holder.reportNumber.setText(reportString);
+
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        Log.i("deleting", currentUser.getObjectId());
+        Boolean isMod = currentUser.getBoolean("isMod");
+        Log.i("deleting", isMod.toString());
+        if (isMod){
+            holder.btnDelete.setVisibility(View.VISIBLE);
+            holder.reportMessage.setVisibility(View.VISIBLE);
+            holder.reportNumber.setVisibility(View.VISIBLE);
+        }
+
+        holder.btnDelete.setOnClickListener(view -> deleteReview(position));
 
         String uri = review.getPhoto_url();
         if (uri != null) {
@@ -103,7 +130,6 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
         }
 
         holder.imageView.setOnClickListener(v-> {
-            ParseUser currentUser = ParseUser.getCurrentUser();
             String oid = currentUser.getObjectId();
             HashMap<String, String> params = new HashMap<String, String>();
             params.put("userId1", oid);
@@ -145,6 +171,45 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
             }
         });
     }
+
+    public void deleteReview(int position) {
+
+        ReviewModel review = reviewList.get(position);
+
+        String objectID = review.getObjectId();
+
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Review");
+        query.whereEqualTo("objectId", objectID);
+
+        query.getInBackground(objectID, new GetCallback<ParseObject>() {
+            public void done(ParseObject review, ParseException e) {
+                if (e == null) {
+                    Log.i("delte", review.getObjectId());
+                    review.deleteInBackground(new DeleteCallback() {
+                        @Override
+                        public void done(ParseException e) {
+                            if (e == null) {
+                                reviewList.remove(position);
+                                notifyDataSetChanged();
+                                // Review deleted successfully
+                                // Update UI or data structures as needed
+                                // Optionally, provide user feedback (e.g., Toast message)
+                            } else {
+                                // Handle deletion error (e.g., log the error, display user-friendly message)
+                                Log.e("ReviewDeletion", "Error deleting review: " + e.getMessage());
+                            }
+                        }
+                    });
+                } else {
+                    Log.i("delte", "error");
+                }
+            }
+        });
+
+
+
+    }
+
     private void sendUpVote(int position) {
         // Query the Review table for the specific review using the objectId
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Review");
@@ -343,10 +408,57 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
 
         dialogBuilder.setMessage(message);
 
-        dialogBuilder.setPositiveButton("OK", (dialog, which) -> dialog.dismiss());
+//        dialogBuilder.setPositiveButton("Report", (dialog, which) -> dialog.dismiss());
+
+
+
+        dialogBuilder.setPositiveButton("Report", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Log.i("report", "repoeted");
+                        reportReview(position);
+                    }
+                });
 
         AlertDialog dialog = dialogBuilder.create();
         dialog.show();
+    }
+
+    public void reportReview(int position) {
+
+        ReviewModel review = reviewList.get(position);
+
+        String objectID = review.getObjectId();
+
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Review");
+        query.whereEqualTo("objectId", objectID);
+
+        query.getInBackground(objectID, new GetCallback<ParseObject>() {
+            public void done(ParseObject review, ParseException e) {
+                if (e == null) {
+                    Log.i("report", review.getObjectId());
+                    int currentReportNumber = review.getInt("reportNumber");
+
+                    currentReportNumber++;
+                    review.put("reportNumber", currentReportNumber);
+
+                    review.saveInBackground(new SaveCallback() {
+                        @Override
+                        public void done(ParseException e) {
+                            if (e == null) {
+                                // ReportNumber field updated successfully
+                                Log.d("Parse", "ReportNumber increased by one");
+                            } else {
+                                // Error occurred while saving the object
+                                Log.e("Parse", "Error updating reportNumber: " + e.getMessage());
+                            }
+                        }
+                    });
+                } else {
+                    Log.i("report", "error");
+                }
+            }
+        });
     }
 
     public  String formatDate(Date date) {

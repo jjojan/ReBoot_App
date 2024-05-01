@@ -392,6 +392,7 @@ public class GameDetailsActivity extends AppCompatActivity implements AdapterVie
                                             //                        String reviewUserName = reviewObject.getString("ReviewUsername") != null
                                             //                                ? reviewObject.getString("ReviewUsername") : "";
                                             String reviewText = reviewObject.getString("ReviewText") != null ? reviewObject.getString("ReviewText") : "";
+                                            int reportNum = reviewObject.getInt("reportNumber");
                                             String gameID = reviewObject.getString("GameID") != null ? reviewObject.getString("GameID") : "";
                                             String objectId = reviewObject.getObjectId();
                                             // Number to float conversion with null check
@@ -421,7 +422,8 @@ public class GameDetailsActivity extends AppCompatActivity implements AdapterVie
                                                     ratingStar,
                                                     upCount,
                                                     downCount,
-                                                    picUrl
+                                                    picUrl,
+                                                    reportNum
                                             );
 
                                             reviewList.add(review);
@@ -429,6 +431,7 @@ public class GameDetailsActivity extends AppCompatActivity implements AdapterVie
                                     }
                                 });
                             }else{
+                                int reportNum = reviewObject.getInt("reportNumber");
                                 String reviewUserName = user.getString("username");
                                 ParseFile picFile = user.getParseFile("profile_pic");
                                 String picUrl = picFile != null ? picFile.getUrl() : null;
@@ -465,7 +468,8 @@ public class GameDetailsActivity extends AppCompatActivity implements AdapterVie
                                         ratingStar,
                                         upCount,
                                         downCount,
-                                        picUrl
+                                        picUrl,
+                                        reportNum
                                 );
 
                                 reviewList.add(review);
