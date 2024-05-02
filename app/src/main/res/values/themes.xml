@@ -1,7 +1,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
-    <style name="Base.Theme.ReBoot3" parent="Theme.AppCompat.Light">
+    <style name="ReBoot3" parent="Theme.AppCompat.Light">
         <item name="colorPrimary">@color/white</item>
         <item name="colorSecondary">@color/aqua</item>
     </style>
