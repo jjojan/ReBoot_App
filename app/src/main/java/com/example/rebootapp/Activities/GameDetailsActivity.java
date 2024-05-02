@@ -3,6 +3,8 @@ package com.example.rebootapp.Activities;
 import android.app.ProgressDialog;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -203,6 +205,25 @@ public class GameDetailsActivity extends AppCompatActivity implements AdapterVie
 //        fetchReviews2();
         fetchBlocked();
         fetchRatings();
+
+        binding.etReviewBox.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                String enteredText = editable.toString();
+
+                binding.btnSaveReview.setEnabled(!enteredText.isEmpty());
+            }
+        });
         binding.tvAllReviews.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -210,6 +231,8 @@ public class GameDetailsActivity extends AppCompatActivity implements AdapterVie
                 binding.tvAllReviews.setVisibility(View.GONE);
             }
         });
+
+
         binding.btnSaveReview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -827,7 +850,7 @@ public class GameDetailsActivity extends AppCompatActivity implements AdapterVie
             Toast.makeText(GameDetailsActivity.this, "Please write a review!", Toast.LENGTH_SHORT).show();
             return;
         } else if (ratingFloat == 0) {
-            Toast.makeText(GameDetailsActivity.this, "Please select a review!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(GameDetailsActivity.this, "Please select a rating!", Toast.LENGTH_SHORT).show();
             return;
         }
 

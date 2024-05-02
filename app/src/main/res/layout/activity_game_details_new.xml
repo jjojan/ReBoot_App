@@ -613,7 +613,8 @@
                 android:background="@drawable/post_button"
                 android:paddingLeft="25dp"
                 android:paddingRight="25dp"
-                android:text="POST" />
+                android:text="POST"
+                android:enabled="false"/>
         </LinearLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>
