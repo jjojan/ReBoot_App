@@ -5,7 +5,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_alignParentBottom="false"
-    android:background="@color/color2"
+    android:background="@color/color1_2"
     android:visibility="visible"
     tools:context=".Activities.FriendProfileActivity">
 
@@ -63,7 +63,7 @@
         android:layout_marginTop="55dp"
         android:layout_marginLeft="15dp"
         android:layout_toRightOf="@+id/Friend_ProfilePic"
-        android:fontFamily="@font/thasadith_regular"
+        android:fontFamily="@font/agane_bold"
         android:textAlignment="textStart"
         android:textColor="@color/color5"
         android:textSize="20sp" />
@@ -75,7 +75,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="15dp"
         android:layout_marginTop="120dp"
-        android:fontFamily="@font/thasadith_regular"
+        android:fontFamily="@font/agane_bold"
         android:text="Bio"
         android:textColor="@color/color5"
         android:textSize="24sp" />
@@ -89,7 +89,8 @@
         android:paddingLeft="13dp"
         android:background="@drawable/rounded_textview"
         android:backgroundTint="@color/aqua1"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        android:fontFamily="@font/agane_bold"/>
 
 
     <!-- Link to Friends Page -->
@@ -99,7 +100,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="13dp"
         android:layout_marginTop="275dp"
-        android:fontFamily="@font/thasadith_regular"
+        android:fontFamily="@font/agane_bold"
         android:text="Friends"
         android:textColor="@color/color5"
         android:textSize="30sp" />
@@ -134,7 +135,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/friendsRecyclerView"
         android:layout_marginLeft="13dp"
-        android:fontFamily="@font/thasadith_regular"
+        android:fontFamily="@font/agane_bold"
         android:text="Favorites"
         android:textColor="@color/color5"
         android:textSize="25sp" />
@@ -168,7 +169,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/friendsRecyclerView"
         android:layout_marginLeft="200dp"
-        android:fontFamily="@font/thasadith_regular"
+        android:fontFamily="@font/agane_bold"
         android:text="Collections"
         android:textColor="@color/color5"
         android:textSize="25sp" />
@@ -202,14 +203,15 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="50dp"
         android:background="@color/aqua1"
-        android:text="Done" />
+        android:text="Done"
+        android:fontFamily="@font/agane_bold"/>
     <TextView
         android:id="@+id/MessageHeader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="225dp"
         android:layout_marginLeft="13dp"
-        android:fontFamily="@font/thasadith_regular"
+        android:fontFamily="@font/agane_bold"
         android:text="Message"
         android:textColor="@color/color5"
         android:textSize="25sp" />
@@ -219,7 +221,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="625dp"
         android:layout_marginLeft="13dp"
-        android:fontFamily="@font/thasadith_regular"
+        android:fontFamily="@font/agane_bold"
         android:text="Delete Friend"
         android:textColor="@color/color5"
         android:textSize="25sp" />

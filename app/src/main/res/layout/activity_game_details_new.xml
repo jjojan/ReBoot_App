@@ -13,7 +13,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" >
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@color/color1_2">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -43,7 +44,7 @@
 
                     android:layout_gravity="center"
                     android:layout_weight="0"
-                    android:fontFamily="@font/inter_regular"
+                    android:fontFamily="@font/agane_bold"
                     android:text="GTA IV"
                     android:textColor="@color/color5"
                     android:textSize="20sp" />
@@ -69,7 +70,7 @@
                     android:layout_marginLeft="10dp"
                     android:layout_weight="0"
                     android:src="@drawable/baseline_add_24"
-                    android:tint="@color/colorMainText" />
+                    android:tint="@color/color5" />
 
             </LinearLayout>
 
@@ -80,10 +81,10 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="20dp"
-                android:fontFamily="@font/inter_regular"
+                android:fontFamily="@font/agane_light"
                 android:text="Release Date: 2013-09-17"
                 android:textColor="@color/color5"
-                android:textSize="14sp" />
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/tvTRAILER"
@@ -92,7 +93,7 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="20dp"
-                android:fontFamily="@font/inter_regular"
+                android:fontFamily="@font/agane_bold"
                 android:gravity="center"
                 android:text="TRAILER"
                 android:textColor="@color/color5"
@@ -105,10 +106,10 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="20dp"
-                android:fontFamily="@font/inter_regular"
+                android:fontFamily="@font/agane_light"
                 android:text="When a young street hustler, a retired bank robber and a terrifying psychopath find themselves entangled with some of the most frightening and deranged elements of the criminal underworld, the U.S. government and the entertainment industry, they must pull off a series of dangerous heists to survive in a ruthless city in which they can trust nobody, least of all each other."
                 android:textColor="@color/color5"
-                android:textSize="14sp" />
+                android:textSize="20sp" />
 
             <View
                 android:layout_width="match_parent"
@@ -139,7 +140,7 @@
                         android:layout_marginTop="10dp"
                         android:layout_marginRight="20dp"
                         android:layout_weight="1"
-                        android:fontFamily="@font/inter_regular"
+                        android:fontFamily="@font/agane_bold"
                         android:text="Rating"
                         android:textColor="@color/color5"
                         android:textSize="16sp" />
@@ -161,7 +162,7 @@
                             android:layout_weight="1"
                             android:fontFamily="@font/inter_regular"
                             android:text="0"
-                            android:textColor="@color/colorMainText"
+                            android:textColor="@color/color5"
                             android:textSize="16sp" />
 
 
@@ -198,7 +199,7 @@
                         android:layout_weight="1"
                         android:fontFamily="@font/inter_regular"
                         android:text="5"
-                        android:textColor="@color/colorMainText"
+                        android:textColor="@color/color5"
                         android:textSize="14sp" />
 
                     <ProgressBar
@@ -226,7 +227,7 @@
                         android:layout_weight="1"
                         android:fontFamily="@font/inter_regular"
                         android:text="4"
-                        android:textColor="@color/colorMainText"
+                        android:textColor="@color/color5"
                         android:textSize="14sp" />
 
                     <ProgressBar
@@ -253,7 +254,7 @@
                         android:layout_weight="1"
                         android:fontFamily="@font/inter_regular"
                         android:text="3"
-                        android:textColor="@color/colorMainText"
+                        android:textColor="@color/color5"
                         android:textSize="14sp" />
 
                     <ProgressBar
@@ -280,7 +281,7 @@
                         android:layout_weight="1"
                         android:fontFamily="@font/inter_regular"
                         android:text="2"
-                        android:textColor="@color/colorMainText"
+                        android:textColor="@color/color5"
                         android:textSize="14sp" />
 
                     <ProgressBar
@@ -307,7 +308,7 @@
                         android:layout_weight="1"
                         android:fontFamily="@font/inter_regular"
                         android:text="1"
-                        android:textColor="@color/colorMainText"
+                        android:textColor="@color/color5"
                         android:textSize="14sp" />
 
                     <ProgressBar
@@ -343,7 +344,7 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginRight="20dp"
                     android:layout_weight="1"
-                    android:fontFamily="@font/inter_regular"
+                    android:fontFamily="@font/agane_light"
                     android:text="Where to buy"
                     android:textColor="@color/colorMainText"
                     android:textSize="16sp" />
@@ -392,7 +393,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="20dp"
                 android:layout_weight="0"
-                android:fontFamily="@font/inter_regular"
+                android:fontFamily="@font/agane_bold"
                 android:text="Reviews"
                 android:textColor="@color/color5"
                 android:textSize="16sp" />
@@ -414,7 +415,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="20dp"
                 android:layout_weight="0"
-                android:fontFamily="@font/inter_regular"
+                android:fontFamily="@font/agane_light"
                 android:gravity="center"
                 android:text="All Reviews"
                 android:textColor="@color/color5"
@@ -439,7 +440,7 @@
                 android:layout_marginRight="20dp"
                 android:layout_marginBottom="10dp"
                 android:layout_weight="0"
-                android:fontFamily="@font/inter_regular"
+                android:fontFamily="@font/agane_light"
                 android:text="Write Review"
                 android:textColor="@color/color5"
                 android:textSize="18sp" />
@@ -452,7 +453,7 @@
                 android:layout_marginRight="20dp"
                 android:background="@drawable/review_box"
                 android:ems="10"
-                android:fontFamily="@font/inter_regular"
+                android:fontFamily="@font/agane_light"
                 android:gravity="top|left"
                 android:hint="Write your review"
                 android:inputType="textMultiLine"
@@ -475,7 +476,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:fontFamily="@font/inter_regular"
+                    android:fontFamily="@font/agane_light"
                     android:text="Visibility"
                     android:textColor="@color/color5"
                     android:textSize="16sp" />
@@ -492,7 +493,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:background="@color/colorMainBg"
+                    android:background="@color/color5"
                     android:entries="@array/spinner_items"
                     />
 
@@ -508,7 +509,7 @@
                 android:drawablePadding="5dp"
                 android:fontFamily="@font/inter_regular"
                 android:text="Allow Comment"
-                android:textColor="@color/colorMainText"
+                android:textColor="@color/color5"
                 android:visibility="gone" />
 
 
@@ -527,7 +528,7 @@
                     android:layout_weight="1"
                     android:fontFamily="@font/inter_regular"
                     android:text="Recommend this game"
-                    android:textColor="@color/colorMainText"
+                    android:textColor="@color/color5"
                     android:textSize="16sp" />
 
                 <RadioButton

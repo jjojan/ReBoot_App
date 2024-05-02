@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_alignParentBottom="false"
-    android:background="@color/white"
+    android:background="@color/color1_2"
     android:visibility="visible"
     tools:context=".Activities.EditProfileActivity">
 
@@ -28,7 +28,7 @@
         android:layout_alignBottom="@+id/iv_currentUserProfilePic"
         android:layout_marginLeft="280dp"
         android:textSize="25dp"
-        android:fontFamily="@font/thasadith_bold"
+        android:fontFamily="@font/agane_bold"
         android:clickable="true"
         android:text="Edit" />
 
@@ -50,7 +50,7 @@
         android:layout_marginLeft="280dp"
         android:textSize="25dp"
         android:text="Edit"
-        android:fontFamily="@font/thasadith_bold"
+        android:fontFamily="@font/agane_bold"
         android:clickable="true"/>
 
     <Button
@@ -60,6 +60,7 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="50dp"
+        android:fontFamily="@font/agane_bold"
         android:text="Done" />
 
 
@@ -86,7 +87,6 @@
         android:layout_marginRight="20dp"
         android:background="@color/aqua1"
         android:ems="10"
-        android:fontFamily="@font/inter_regular"
         android:hint="Write a bio..."
         android:textColorHint="@color/black"
         android:inputType="textMultiLine"
@@ -96,7 +96,8 @@
         android:paddingTop="15dp"
         android:paddingRight="15dp"
         android:paddingBottom="15dp"
-        android:textColor="@color/black" />
+        android:textColor="@color/black"
+        android:fontFamily="@font/agane_bold"/>
 
     <TextView
         android:id="@+id/tv_CharCount"
@@ -104,7 +105,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/edt_Bio"
         android:layout_marginLeft="65dp"
-        android:text="0/225" />
+        android:text="0/225"
+        android:fontFamily="@font/agane_bold"/>
 
     <TextView
         android:id="@+id/btn_SaveProfile"
@@ -115,7 +117,7 @@
         android:layout_marginLeft="180dp"
         android:textSize="25dp"
         android:text="Save"
-        android:fontFamily="@font/thasadith_bold"
+        android:fontFamily="@font/agane_bold"
         android:clickable="true"/>
 
 

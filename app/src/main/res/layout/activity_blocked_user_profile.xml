@@ -40,7 +40,8 @@
         android:layout_marginLeft="15dp"
         android:layout_toRightOf="@+id/Friend_ProfilePic"
         android:textAlignment="textStart"
-        android:textSize="20sp" />
+        android:textSize="20sp"
+        android:fontFamily="@font/abel_regular"/>
     <!-- Email (not in friendModel profile) -->
     <TextView
         android:id="@+id/tvFriend_Email"
@@ -49,7 +50,8 @@
         android:layout_below="@+id/tvFriend_Friend_Username"
         android:layout_toRightOf="@+id/Friend_ProfilePic"
         android:textAlignment="textStart"
-        android:textSize="20sp" />
+        android:textSize="20sp"
+        android:fontFamily="@font/abel_regular"/>
     <!-- Profile Bio Header -->
     <TextView
         android:id="@+id/bioHeader"
@@ -59,7 +61,8 @@
         android:layout_marginLeft="15dp"
         android:layout_marginTop="13dp"
         android:text="Bio"
-        android:textSize="24sp" />
+        android:textSize="30sp"
+        android:fontFamily="@font/agane_bold"/>
     <!-- Bio -->
     <TextView
         android:id="@+id/friend_bio"
@@ -89,7 +92,8 @@
         android:layout_centerHorizontal="true"
         android:text="Account Private"
         android:textAlignment="center"
-        android:textSize="20sp" />
+        android:textSize="25sp"
+        android:fontFamily="@font/agane_bold"/>
 
     <TextView
         android:id="@+id/manage_user2"
@@ -98,7 +102,8 @@
         android:layout_marginLeft="13dp"
         android:layout_marginTop="515dp"
         android:text="Un-Block User"
-        android:textSize="30sp" />
+        android:textSize="30sp"
+        android:fontFamily="@font/agane_bold"/>
 
     <ImageButton
         android:id="@+id/btn_unblock"
@@ -108,7 +113,8 @@
         android:layout_alignBottom="@+id/manage_user2"
         android:layout_marginLeft="300dp"
         android:scaleType="centerCrop"
-        android:src="@drawable/block_user" />
+        android:src="@drawable/block_user"
+        />
 
 
     <Button
@@ -119,7 +125,8 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="50dp"
         android:background="@color/aqua1"
-        android:text="Close" />
+        android:text="Close"
+        android:fontFamily="@font/agane_bold"/>
 
 
 </RelativeLayout>

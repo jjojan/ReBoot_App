@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -26,6 +27,7 @@ import com.example.rebootapp.Fragments.ReviewFragment;
 import com.example.rebootapp.Fragments.SearchFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
+import com.google.android.material.navigation.NavigationView;
 
 import java.util.List;
 
@@ -63,7 +65,9 @@ public class MainActivity extends AppCompatActivity {
         // drawer layout instance to toggle the menu icon to open
         // drawer and back button to close drawer
         drawerLayout = findViewById(R.id.my_drawer_layout);
+
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.nav_open, R.string.nav_close);
+
 
         // pass the Open and Close toggle for the drawer layout listener
         // to toggle the button
@@ -136,20 +140,23 @@ public class MainActivity extends AppCompatActivity {
         if(!profile) bottomNavigationView.setSelectedItemId(R.id.mHome);
     }
 
+
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
+        Fragment fragment;
+
         switch (item.getItemId()) {
             case R.id.nav_account: {
+                fragment = new ProfileFragment();
+            }
+            case R.id.nav_friends:{
 
             }
-            case R.id.nav_notifications:{
+            case R.id.nav_favorites:{
 
             }
-            case R.id.nav_settings:{
-
-            }
-            case R.id.nav_privacy:{
+            case R.id.nav_collections:{
 
             }
             case R.id.nav_logout:{
@@ -158,6 +165,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if (actionBarDrawerToggle.onOptionsItemSelected(item)) {
+            //fragmentManager.beginTransaction().replace(R.id.fLayoutContainer, fragment).commit();
             return true;
         }
         return super.onOptionsItemSelected(item);

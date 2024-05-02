@@ -14,7 +14,7 @@
         android:layout_width="425dp"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:fontFamily="@font/thasadith_regular"
+        android:fontFamily="@font/agane_bold"
         android:text="Favorite Games"
         android:textAlignment="center"
         android:textColor="@color/color5"
@@ -33,6 +33,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="150dp"
         android:layout_marginTop="600dp"
-        android:text="Done" />
+        android:text="Done"
+        android:fontFamily="@font/agane_bold"/>
 
 </RelativeLayout>
