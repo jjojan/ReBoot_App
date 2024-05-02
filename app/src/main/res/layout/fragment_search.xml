@@ -23,6 +23,7 @@
         android:fontFamily="@font/thasadith_bold"
         android:queryHint="Search Games"
         android:searchSuggestSelection=" ?"
+        android:layout_marginTop="5dp"
         app:theme="@style/svSearch" >
 
     </SearchView>
