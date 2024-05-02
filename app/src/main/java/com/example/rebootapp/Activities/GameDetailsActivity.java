@@ -72,6 +72,8 @@ public class GameDetailsActivity extends AppCompatActivity implements AdapterVie
 
     ToggleButton imgFav;
 
+    TextView totalCount;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -95,6 +97,7 @@ public class GameDetailsActivity extends AppCompatActivity implements AdapterVie
 
         imgFav = findViewById(R.id.imgFav);
         vis_spinner = findViewById(R.id.spinner);
+        totalCount = findViewById(R.id.tvtotalReviews);
 
         vis_spinner.post(() -> {
             for (int i = 0; i < vis_spinner.getChildCount(); i++){
@@ -271,8 +274,10 @@ public class GameDetailsActivity extends AppCompatActivity implements AdapterVie
 
                     float averageRating = totalRating / allRatings.size();
 
+
                     averageRating = Math.round(averageRating * 10) / 10.0f;
 
+                    binding.tvtotalReviews.setText( String.valueOf(allRatings.size()) + " Reviews");
                     binding.tvRatingCount.setText(String.valueOf(averageRating));
                     binding.ratingBarMain.setRating(averageRating);
                     binding.progressBar5.setMax(allRatings.size());

@@ -68,11 +68,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/inputLayout"
-        android:layout_marginTop="77dp"
         android:layout_centerHorizontal="true"
+        android:layout_marginTop="77dp"
         android:background="@drawable/btn_background"
+        android:fontFamily="@font/thasadith_bold"
         android:text="Login"
-        android:fontFamily="@font/thasadith_bold"/>
+        android:textStyle="bold" />
     <TextView
         android:id="@+id/tvIntroduction"
         android:layout_width="350dp"
