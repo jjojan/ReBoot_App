@@ -2,7 +2,7 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="110dp"
-    android:layout_height="wrap_content"
+    android:layout_height="190dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardCornerRadius="15dp"
     app:cardPreventCornerOverlap="true"
@@ -23,6 +23,21 @@
             tools:srcCompat="@tools:sample/avatars"
             android:padding="0dp"
             android:cropToPadding="true"/>
+
+        <TextView
+            android:id="@+id/tvGameName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/gamePoster"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:text="Title"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:maxLines="1"
+            android:ellipsize="end"/>
     </RelativeLayout>
+
+
 
 </androidx.cardview.widget.CardView>

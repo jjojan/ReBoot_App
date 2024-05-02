@@ -65,10 +65,13 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.ViewHolder> {
         public ViewHolder(@NonNull View itemView){
             super(itemView);
             tvPoster = itemView.findViewById(R.id.gamePoster);
+            tvTitle = itemView.findViewById(R.id.tvGameName);
         }
 
         public void bind(GameModel gameModel) {
             String imageUrl;
+
+            tvTitle.setText(gameModel.getTitle());
 
 
             if(context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
