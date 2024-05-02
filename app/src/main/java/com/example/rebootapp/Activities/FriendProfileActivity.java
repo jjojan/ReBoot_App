@@ -2,6 +2,7 @@ package com.example.rebootapp.Activities;
 
 import static com.parse.Parse.getApplicationContext;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -9,11 +10,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -25,6 +30,7 @@ import com.example.rebootapp.Adapters.FavoriteGamesAdapter;
 import com.example.rebootapp.Adapters.FriendsListAdapter;
 import com.example.rebootapp.Adapters.ManageListAdapter;
 import com.example.rebootapp.Models.FriendModel;
+import com.example.rebootapp.Models.ReviewModel;
 import com.example.rebootapp.Models.UserListModel;
 import com.example.rebootapp.R;
 import com.parse.FindCallback;
@@ -37,10 +43,12 @@ import com.parse.ParseFile;
 import com.parse.ParseQuery;
 import com.parse.ParseRelation;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class FriendProfileActivity extends AppCompatActivity {
@@ -198,6 +206,72 @@ public class FriendProfileActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.options_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if(item.getItemId()==R.id.item_report){
+            reportUser();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    public void reportUser() {
+        Map<String, Object> params = new HashMap<>();
+        params.put("userId", friendUserID);
+
+        ParseCloud.callFunctionInBackground("reportUser", params, new FunctionCallback<Object>() {
+            @Override
+            public void done(Object response, ParseException e) {
+                if (e == null) {
+
+                    Log.d("Cloud", "reported: " + response.toString());
+                    Toast.makeText(getApplicationContext(), "User has been reported!", Toast.LENGTH_LONG).show();
+                } else {
+
+                    Log.e("Cloud", "Error " + e.getMessage());
+                }
+            }
+        });
+
+//
+//        ParseQuery<ParseUser> query = ParseQuery.getQuery("_User");
+//        query.whereEqualTo("objectId", friendUserID);
+//
+//        query.getInBackground(friendUserID, new GetCallback<ParseUser>() {
+//            public void done(ParseUser user, ParseException e) {
+//                if (e == null) {
+//                    Log.i("report", user.getObjectId());
+//                    int currentReportNumber = user.getInt("reportNum");
+//
+//                    currentReportNumber++;
+//                    user.put("reportNum", currentReportNumber);
+//
+//
+//                    user.saveInBackground(new SaveCallback() {
+//                        @Override
+//                        public void done(ParseException e) {
+//                            if (e == null) {
+//                                // ReportNumber field updated successfully
+//                                Log.d("Parse", "ReportNumber increased by one");
+//                            } else {
+//                                // Error occurred while saving the object
+//                                Log.e("Parse", "Error updating reportNumber: " + e.getMessage());
+//                            }
+//                        }
+//                    });
+//                } else {
+//                    Log.i("report", "error");
+//                }
+//            }
+//        });
     }
 
     public void manageCustomListDialog() {

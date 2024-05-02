@@ -12,25 +12,25 @@
     app:cardUseCompatPadding="true"
     android:theme="@style/Theme.MaterialComponents.Light">
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="8dp">
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="8dp">
 
-    <ImageView
-        android:id="@+id/imageViewProfile"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:scaleType="centerCrop" />
+        <ImageView
+            android:id="@+id/imageViewProfile"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:scaleType="centerCrop" />
 
-    <TextView
-        android:id="@+id/tv_FriendUsername"
-        android:layout_width="80dp"
-        android:gravity="center_horizontal"
-        android:layout_height="20dp"
-        android:padding="2dp"
-        android:textSize="12sp" />
-</LinearLayout>
+        <TextView
+            android:id="@+id/tv_FriendUsername"
+            android:layout_width="80dp"
+            android:gravity="center_horizontal"
+            android:layout_height="20dp"
+            android:padding="2dp"
+            android:textSize="12sp" />
+    </LinearLayout>
 
-    </com.google.android.material.card.MaterialCardView>
+</com.google.android.material.card.MaterialCardView>

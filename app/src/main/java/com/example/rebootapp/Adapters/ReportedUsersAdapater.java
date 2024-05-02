@@ -1,5 +1,7 @@
 package com.example.rebootapp.Adapters;
 
+import static com.parse.Parse.getApplicationContext;
+
 import android.content.Intent;
 import android.graphics.Color;
 import android.util.Log;
@@ -14,6 +16,7 @@ import com.example.rebootapp.Activities.BlockedUserProfileActivity;
 import com.example.rebootapp.Activities.FriendProfileActivity;
 import com.example.rebootapp.Activities.SuggestedFriendProfileActivity;
 import com.example.rebootapp.Models.FriendModel;
+import com.example.rebootapp.Models.ReportedUsersModel;
 import com.example.rebootapp.Models.ReviewModel;
 import com.example.rebootapp.Models.SuggestedFriendModel;
 import com.example.rebootapp.R;
@@ -47,10 +50,11 @@ import com.parse.ParseUser;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-public class SearchUserAdapter extends RecyclerView.Adapter<SearchUserAdapter.ViewHolder>{
+public class ReportedUsersAdapater extends RecyclerView.Adapter<ReportedUsersAdapater.ViewHolder>{
     private LayoutInflater mInflater;
-    private List<SuggestedFriendModel> suggestedFriendModels;
+    private List<ReportedUsersModel> reportedUsersModel;
     public static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView imageViewProfilePhoto;
         TextView tv_username;
@@ -65,56 +69,58 @@ public class SearchUserAdapter extends RecyclerView.Adapter<SearchUserAdapter.Vi
             super(view);
             imageViewProfilePhoto = view.findViewById(R.id.imageViewProfile);
             tv_username = view.findViewById(R.id.tv_FriendUsername);
+            tvReports = view.findViewById(R.id.tvReportUser);
+            deleteUser = view.findViewById(R.id.btn_deleteUser);
 
         }
 
 
     }
-    public SearchUserAdapter(List<SuggestedFriendModel> list){
-        this.suggestedFriendModels = list;
+    public ReportedUsersAdapater(List<ReportedUsersModel> list){
+        this.reportedUsersModel = list;
     }
 
     @NonNull
     @Override
-    public SearchUserAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ReportedUsersAdapater.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_profilephoto, parent, false);
+                .inflate(R.layout.item_reporteduser, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(SearchUserAdapter.ViewHolder holder, int position){
-        SuggestedFriendModel sfm = suggestedFriendModels.get(position);
-        String uri = sfm.getProfilePicUrl();
+    public void onBindViewHolder(ReportedUsersAdapater.ViewHolder holder, int position){
+        ReportedUsersModel reportedUsers = reportedUsersModel.get(position);
+        String uri = reportedUsers.getProfilePicUrl();
         if (uri != null) {
             Glide.with(holder.imageViewProfilePhoto.getContext()).load(uri).into(holder.imageViewProfilePhoto);
         } else {
             holder.imageViewProfilePhoto.setBackgroundColor(Color.BLACK);
         }
-        holder.tv_username.setText(sfm.getUsername());
-//        int reportNum = sfm.getreportNum();
-//        String reportString = "Reports:" + String.valueOf(reportNum);
-//        Log.i("userRreport", sfm.getUsername().toString());
-//        holder.tvReports.setText(reportString);
+        holder.tv_username.setText(reportedUsers.getUsername());
+        int reportNum = reportedUsers.getreportNum();
+        String reportString = "Reports: " + String.valueOf(reportNum);
+        Log.i("userRreport", reportedUsers.getUsername().toString());
+        holder.tvReports.setText(reportString);
 
         ParseUser currentUser = ParseUser.getCurrentUser();
-//        Log.i("deleting", currentUser.getObjectId());
-//        Boolean isMod = currentUser.getBoolean("isMod");
-//        Log.i("deleting", isMod.toString());
-//        if (isMod){
-//            holder.tvReports.setVisibility(View.VISIBLE);
-//            holder.deleteUser.setVisibility(View.VISIBLE);
-//
-//        }
-//
-//        holder.deleteUser.setOnClickListener(view -> deleteUser(position));
+        Log.i("deleting", currentUser.getObjectId());
+        Boolean isMod = currentUser.getBoolean("isMod");
+        Log.i("deleting", isMod.toString());
+        if (isMod){
+            holder.tvReports.setVisibility(View.VISIBLE);
+            holder.deleteUser.setVisibility(View.VISIBLE);
+
+        }
+
+        holder.deleteUser.setOnClickListener(view -> deleteUser(position));
 
 
         holder.itemView.setOnClickListener(v -> {
             String oid = currentUser.getObjectId();
             HashMap<String, String> params = new HashMap<String, String>();
             params.put("userId1", oid);
-            String fid = sfm.getObjectId();
+            String fid = reportedUsers.getObjectId();
             params.put("userId2", fid);
             ParseCloud.callFunctionInBackground("checkFriend", params, new FunctionCallback<HashMap>() {
                 @Override
@@ -125,11 +131,11 @@ public class SearchUserAdapter extends RecyclerView.Adapter<SearchUserAdapter.Vi
 
                             if(isFriend){
                                 Intent intent = new Intent(v.getContext(), FriendProfileActivity.class);
-                                intent.putExtra("FRIEND_ID", sfm.getObjectId());
+                                intent.putExtra("FRIEND_ID", reportedUsers.getObjectId());
                                 v.getContext().startActivity(intent);
                             } else {
                                 Intent intent = new Intent(v.getContext(), SuggestedFriendProfileActivity.class);
-                                intent.putExtra("FRIEND_ID", sfm.getObjectId());
+                                intent.putExtra("FRIEND_ID", reportedUsers.getObjectId());
                                 v.getContext().startActivity(intent);
                             }
 
@@ -149,55 +155,76 @@ public class SearchUserAdapter extends RecyclerView.Adapter<SearchUserAdapter.Vi
 
     public void deleteUser(int position) {
 
-        SuggestedFriendModel sfm = suggestedFriendModels.get(position);
+        ReportedUsersModel sfm = reportedUsersModel.get(position);
 
         String objectID = sfm.getObjectId();
 
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("_User");
+        ParseQuery<ParseUser> query = ParseQuery.getQuery("_User");
         query.whereEqualTo("objectId", objectID);
 
-        query.getInBackground(objectID, new GetCallback<ParseObject>() {
-            public void done(ParseObject user, ParseException e) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("userId", objectID);
+
+        ParseCloud.callFunctionInBackground("deleteUser", params, new FunctionCallback<Object>() {
+            @Override
+            public void done(Object response, ParseException e) {
                 if (e == null) {
-                    Log.i("delte", sfm.getObjectId());
-                    user.deleteInBackground(new DeleteCallback() {
-                        @Override
-                        public void done(ParseException e) {
-                            if (e == null) {
-                                suggestedFriendModels.remove(position);
-                                notifyDataSetChanged();
-                                // Review deleted successfully
-                                // Update UI or data structures as needed
-                                // Optionally, provide user feedback (e.g., Toast message)
-                            } else {
-                                // Handle deletion error (e.g., log the error, display user-friendly message)
-                                Log.e("SSERDelte", "Error deleting review: " + e.getMessage());
-                            }
-                        }
-                    });
+
+                    Log.d("Cloud Function", "User deleted: " + response.toString());
+                    reportedUsersModel.remove(position);
+                    notifyDataSetChanged();
+                    Toast.makeText(getApplicationContext(), "User has been banned!", Toast.LENGTH_LONG).show();
                 } else {
-                    Log.i("userdelte", "error");
+
+                    Log.e("Cloud", "Error deleting " + e.getMessage());
                 }
             }
         });
+
+
+//        query.getInBackground(objectID, new GetCallback<ParseUser>() {
+//            public void done(ParseUser user, ParseException e) {
+//                if (e == null) {
+//                    Log.i("delte", sfm.getObjectId());
+//                    user.deleteInBackground(new DeleteCallback() {
+//                        @Override
+//                        public void done(ParseException e) {
+//                            if (e == null) {
+//                                reportedUsersModel.remove(position);
+//                                notifyDataSetChanged();
+//                                // Review deleted successfully
+//                                // Update UI or data structures as needed
+//                                // Optionally, provide user feedback (e.g., Toast message)
+//                            } else {
+//                                // Handle deletion error (e.g., log the error, display user-friendly message)
+//                                Log.e("SSERDelte", "Error deleting review: " + e.getMessage());
+//                            }
+//                        }
+//                    });
+//                } else {
+//                    Log.e("userdelte", "id:  " + objectID);
+//                    Log.i("userdelte", "error");
+//                }
+//            }
+//        });
     }
 
     @Override
     public int getItemCount(){
-        return suggestedFriendModels.size();
+        return reportedUsersModel.size();
     }
 
-    public void updateData(List<SuggestedFriendModel> newFriendModels) {
+    public void updateData(List<ReportedUsersModel> newRepotedUsers) {
         int c = getItemCount();
-        this.suggestedFriendModels.clear();
+        this.reportedUsersModel.clear();
         notifyItemRangeRemoved(0, c);
-        this.suggestedFriendModels.addAll(newFriendModels);
-        notifyItemRangeInserted(0, suggestedFriendModels.size());
+        this.reportedUsersModel.addAll(newRepotedUsers);
+        notifyItemRangeInserted(0, reportedUsersModel.size());
     }
 
     public void updateClear(int size){
         if(size <= 0) size = 0;
-        this.suggestedFriendModels.clear();
+        this.reportedUsersModel.clear();
         notifyItemRangeRemoved(0, size);
     }
 }

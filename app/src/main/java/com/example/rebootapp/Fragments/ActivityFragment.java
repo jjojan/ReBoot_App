@@ -18,10 +18,14 @@ import android.widget.TextView;
 
 import com.example.rebootapp.Activities.GameDetailsActivity;
 import com.example.rebootapp.Adapters.GameAdapter;
+import com.example.rebootapp.Adapters.ReportedUsersAdapater;
 import com.example.rebootapp.Adapters.ReviewAdapter;
+import com.example.rebootapp.Adapters.SearchUserAdapter;
 import com.example.rebootapp.Adapters.YourReviewAdapter;
 import com.example.rebootapp.GameModel;
+import com.example.rebootapp.Models.ReportedUsersModel;
 import com.example.rebootapp.Models.ReviewModel;
+import com.example.rebootapp.Models.SuggestedFriendModel;
 import com.example.rebootapp.Models.YourReviewModel;
 import com.example.rebootapp.R;
 import com.google.android.material.switchmaterial.SwitchMaterial;
@@ -38,6 +42,7 @@ import com.parse.ParseUser;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class ActivityFragment extends Fragment {
 
@@ -55,9 +60,13 @@ public class ActivityFragment extends Fragment {
 
     ArrayList<YourReviewModel> yourreviewModel;
 
+    List<ReportedUsersModel> sfm;
+
     ReviewAdapter reviewAdapter;
 
     YourReviewAdapter yourreviewAdapter;
+
+    ReportedUsersAdapater searchUserAdapter;
 
     SwitchMaterial switchMaterial;
     List<String> friendList = new ArrayList<>();
@@ -118,13 +127,17 @@ public class ActivityFragment extends Fragment {
 
 
 
+        sfm = new ArrayList<>();
+
+        searchUserAdapter = new ReportedUsersAdapater(sfm);
         reviewModel = new ArrayList<>();
         reviewAdapter = new ReviewAdapter(getContext(), (ArrayList<ReviewModel>) reviewModel);
+
 
         yourreviewModel = new ArrayList<>();
         yourreviewAdapter = new YourReviewAdapter(getContext(), (ArrayList<YourReviewModel>) yourreviewModel);
 
-        // Now using binding to access the RecyclerView and set its properties
+
         binding.rvFeed.setAdapter(reviewAdapter);
         binding.rvFeed.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         fetchBlocked();
@@ -144,7 +157,7 @@ public class ActivityFragment extends Fragment {
         friendsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                binding.rvFeed.setAdapter(reviewAdapter);
+
                 friendsButton.setTextColor(getResources().getColor(R.color.color1));
                 allbutton.setTextColor(getResources().getColor(R.color.black));
                 yoursButton.setTextColor(getResources().getColor(R.color.black));
@@ -153,7 +166,8 @@ public class ActivityFragment extends Fragment {
                     fetchReportedReviews();
                 }
                 else{
-                    fetchFriends2();
+                    binding.rvFeed.setAdapter(reviewAdapter);
+                    fetchYourReviews();
 
                 }
 
@@ -171,7 +185,15 @@ public class ActivityFragment extends Fragment {
                 allbutton.setTextColor(getResources().getColor(R.color.black));
                 friendsButton.setTextColor(getResources().getColor(R.color.black));
 
-                fetchYourReviews();
+                if(isMod){
+                    binding.rvFeed.setAdapter(searchUserAdapter);
+                    fetchReportedUsers();
+                }
+                else{
+                    fetchYourReviews();
+
+                }
+
             }
         });
 
@@ -199,6 +221,48 @@ public class ActivityFragment extends Fragment {
 //        reviewModel = new ArrayList<>();
 
         fetchBlocked();
+    }
+
+    public void fetchReportedUsers() {
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("_User");
+        query.orderByDescending("reportNum");
+        System.out.println("Got to first part in search, keyword = " + query);
+
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> users, ParseException e) {
+                if (e == null) {
+
+
+
+                    for (ParseObject searchUserObject : users) {
+
+                            String username = searchUserObject.getString("username");
+                            ParseFile picFile = searchUserObject.getParseFile("profile_pic");
+                            String picUrl = picFile != null ? picFile.getUrl() : null;
+                            int reportNumber =  searchUserObject.getInt("reportNum");
+                            String id = searchUserObject.getObjectId();
+                            int b = 0;
+
+
+                        sfm.add(new ReportedUsersModel(username, picUrl, id, b, reportNumber));
+                            Log.i("yourreview", sfm.toString());
+                            if(reportNumber != 0){
+
+                            }
+//                            reviewModel.add(review);
+
+                    }
+
+                    // Notify the adapter of the change on the UI thread
+                    getActivity().runOnUiThread(() -> {
+                        searchUserAdapter.notifyDataSetChanged();
+                    });
+                }
+            }
+        });
+
+
     }
 
     public void fetchReportedReviews() {

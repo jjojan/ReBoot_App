@@ -1,6 +1,6 @@
 package com.example.rebootapp.Models;
 
-public class SuggestedFriendModel {
+public class ReportedUsersModel {
     private String username;
     private String profilePicUrl;
     private String objectId;
@@ -8,7 +8,7 @@ public class SuggestedFriendModel {
 
     private int reportNum;
 
-    public SuggestedFriendModel(String username, String profilePicUrl, String objectId, int mutualFriends, int reportNum) {
+    public ReportedUsersModel(String username, String profilePicUrl, String objectId, int mutualFriends, int reportNum) {
         this.username = username;
         this.profilePicUrl = profilePicUrl;
         this.objectId = objectId;
