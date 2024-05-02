@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorMainBg"
+    android:background="@color/white60"
     tools:context=".Activities.GameDetailsActivity">
 
     <ScrollView
@@ -45,7 +45,7 @@
                     android:layout_weight="0"
                     android:fontFamily="@font/inter_regular"
                     android:text="GTA IV"
-                    android:textColor="@color/colorMainText"
+                    android:textColor="@color/color5"
                     android:textSize="20sp" />
 
                 <ToggleButton
@@ -82,7 +82,7 @@
                 android:layout_marginRight="20dp"
                 android:fontFamily="@font/inter_regular"
                 android:text="Release Date: 2013-09-17"
-                android:textColor="@color/colorMainText"
+                android:textColor="@color/color5"
                 android:textSize="14sp" />
 
             <TextView
@@ -95,7 +95,7 @@
                 android:fontFamily="@font/inter_regular"
                 android:gravity="center"
                 android:text="TRAILER"
-                android:textColor="@color/colorMainText"
+                android:textColor="@color/color5"
                 android:textSize="14sp" />
 
             <TextView
@@ -107,7 +107,7 @@
                 android:layout_marginRight="20dp"
                 android:fontFamily="@font/inter_regular"
                 android:text="When a young street hustler, a retired bank robber and a terrifying psychopath find themselves entangled with some of the most frightening and deranged elements of the criminal underworld, the U.S. government and the entertainment industry, they must pull off a series of dangerous heists to survive in a ruthless city in which they can trust nobody, least of all each other."
-                android:textColor="@color/colorMainText"
+                android:textColor="@color/color5"
                 android:textSize="14sp" />
 
             <View
@@ -141,7 +141,7 @@
                         android:layout_weight="1"
                         android:fontFamily="@font/inter_regular"
                         android:text="Rating"
-                        android:textColor="@color/colorMainText"
+                        android:textColor="@color/color5"
                         android:textSize="16sp" />
 
                     <LinearLayout
@@ -394,7 +394,7 @@
                 android:layout_weight="0"
                 android:fontFamily="@font/inter_regular"
                 android:text="Reviews"
-                android:textColor="@color/colorMainText"
+                android:textColor="@color/color5"
                 android:textSize="16sp" />
 
             <androidx.recyclerview.widget.RecyclerView
@@ -417,7 +417,7 @@
                 android:fontFamily="@font/inter_regular"
                 android:gravity="center"
                 android:text="All Reviews"
-                android:textColor="@color/colorMainText"
+                android:textColor="@color/color5"
                 android:textSize="16sp" />
 
             <View
@@ -441,7 +441,7 @@
                 android:layout_weight="0"
                 android:fontFamily="@font/inter_regular"
                 android:text="Write Review"
-                android:textColor="@color/colorMainText"
+                android:textColor="@color/color5"
                 android:textSize="18sp" />
 
             <EditText
@@ -460,7 +460,7 @@
                 android:paddingTop="15dp"
                 android:paddingRight="15dp"
                 android:paddingBottom="15dp"
-                android:textColor="@color/colorMainText" />
+                android:textColor="@color/color5" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -477,7 +477,7 @@
                     android:layout_weight="1"
                     android:fontFamily="@font/inter_regular"
                     android:text="Visibility"
-                    android:textColor="@color/colorMainText"
+                    android:textColor="@color/color5"
                     android:textSize="16sp" />
 
                 <ImageView
@@ -537,7 +537,7 @@
                     android:layout_weight="1"
                     android:fontFamily="@font/inter_regular"
                     android:text="Yes"
-                    android:textColor="@color/colorMainText" />
+                    android:textColor="@color/color5" />
 
                 <RadioButton
                     android:id="@+id/radioNo"
@@ -546,7 +546,7 @@
                     android:layout_weight="1"
                     android:fontFamily="@font/inter_regular"
                     android:text="No"
-                    android:textColor="@color/colorMainText" />
+                    android:textColor="@color/color5" />
             </LinearLayout>
 
             <LinearLayout
@@ -563,7 +563,7 @@
                     android:layout_weight="1"
                     android:fontFamily="@font/inter_regular"
                     android:text="Rate this game"
-                    android:textColor="@color/colorMainText"
+                    android:textColor="@color/color5"
                     android:textSize="16sp" />
 
                 <RatingBar

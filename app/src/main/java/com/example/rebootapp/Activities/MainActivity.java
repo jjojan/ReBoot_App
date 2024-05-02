@@ -139,6 +139,24 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
+        switch (item.getItemId()) {
+            case R.id.nav_account: {
+
+            }
+            case R.id.nav_notifications:{
+
+            }
+            case R.id.nav_settings:{
+
+            }
+            case R.id.nav_privacy:{
+
+            }
+            case R.id.nav_logout:{
+
+            }
+        }
+
         if (actionBarDrawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
