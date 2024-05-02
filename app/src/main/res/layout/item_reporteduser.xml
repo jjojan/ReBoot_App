@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="400dp"
+    android:layout_height="200dp"
+    android:background="@color/color1"
+    android:backgroundTint="@color/white"
+    app:strokeColor="@color/black"
+    app:strokeWidth="1dp"
+    app:cardUseCompatPadding="true"
+    android:theme="@style/Theme.MaterialComponents.Light">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="400dp"
+        android:layout_height="190dp"
+        android:orientation="vertical"
+        android:padding="8dp">
+
+        <ImageView
+            android:id="@+id/imageViewProfile"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_marginEnd="232dp"
+            android:layout_marginBottom="24dp"
+            android:scaleType="centerCrop"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_FriendUsername"
+            android:layout_width="191dp"
+            android:layout_height="32dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="16dp"
+            android:gravity="start"
+            android:padding="2dp"
+            android:textSize="24sp"
+            app:layout_constraintBottom_toTopOf="@+id/tvReportUser"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <TextView
+            android:id="@+id/tvReportUser"
+            android:layout_width="153dp"
+            android:layout_height="25dp"
+            android:layout_marginEnd="56dp"
+            android:layout_marginBottom="92dp"
+            android:padding="0dp"
+            android:text="Reports:"
+            android:textSize="20sp"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <ImageButton
+            android:id="@+id/btn_deleteUser"
+            android:layout_width="54dp"
+            android:layout_height="52dp"
+            android:layout_marginEnd="152dp"
+            android:layout_marginBottom="24dp"
+            android:contentDescription="deleye"
+            android:scaleType="fitCenter"
+            android:src="@drawable/garbage"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>

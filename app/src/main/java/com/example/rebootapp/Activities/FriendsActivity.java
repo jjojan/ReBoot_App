@@ -376,9 +376,10 @@ public class FriendsActivity extends AppCompatActivity {
                         String id = (String) userMap.get("objectId");
                         String username = (String) userMap.get("username");
                         String pic_url = (String) userMap.get("profilePicUrl");
+                        int reportNum = (int) userMap.get("reportNum");
 
                         int mutualFriends = (int) details.get("mutualFriendsCount");
-                        sfml.add(new SuggestedFriendModel(username, pic_url, id, mutualFriends));
+                        sfml.add(new SuggestedFriendModel(username, pic_url, id, mutualFriends, reportNum));
 
 //                        SuggestedFriendModel sfm = new SuggestedFriendModel(username, pic_url, id, mutualFriends);
 
@@ -447,8 +448,9 @@ public class FriendsActivity extends AppCompatActivity {
                         ParseFile pic = a.getParseFile("profile_pic");
                         String picUrl = pic != null ? pic.getUrl() : null;
                         String b_String = String.valueOf(b);
+                        int reportNum = a.getInt("reportNum");
 //                        System.out.println("username: " + username + " m_friends: " + b_String);
-                        sfml.add(new SuggestedFriendModel(username, picUrl, id, b));
+                        sfml.add(new SuggestedFriendModel(username, picUrl, id, b, reportNum));
 
                         if(counter.decrementAndGet() == 0){
                             runOnUiThread(() -> {
@@ -481,9 +483,10 @@ public class FriendsActivity extends AppCompatActivity {
                         int b = (int) m.get("mutualFriendsCount");
                         ParseFile pic = a.getParseFile("profile_pic");
                         String picUrl = pic != null ? pic.getUrl() : null;
+                        int reportNum = a.getInt("reportNum");
                         String b_String = String.valueOf(b);
 //                        System.out.println("username: " + username + " m_friends: " + b_String);
-                        sfml.add(new SuggestedFriendModel(username, picUrl, id, b));
+                        sfml.add(new SuggestedFriendModel(username, picUrl, id, b, reportNum));
 
                         if(counter.decrementAndGet() == 0){
                             runOnUiThread(() -> {
@@ -520,9 +523,10 @@ public class FriendsActivity extends AppCompatActivity {
                         System.out.println(username);
                         ParseFile file = usr.getParseFile("profile_pic");
                         String picUrl = file != null ? file.getUrl() : null;
+                        int reportNum = usr.getInt("reportNum");
                         int mut = 1;
 
-                        sfml.add(new SuggestedFriendModel(username, picUrl, id, mut));
+                        sfml.add(new SuggestedFriendModel(username, picUrl, id, mut, reportNum));
 
                         if(counter.decrementAndGet() == 0){
                             runOnUiThread(() -> {
@@ -555,8 +559,9 @@ public class FriendsActivity extends AppCompatActivity {
                         int b = (int) m.get("mutualFriendsCount");
                         ParseFile pic = a.getParseFile("profile_pic");
                         String picUrl = pic != null ? pic.getUrl() : null;
+                        int reportNum = a.getInt("reportNum");
 
-                        sfml.add(new SuggestedFriendModel(username, picUrl, id, b));
+                        sfml.add(new SuggestedFriendModel(username, picUrl, id, b, reportNum));
 
                         if(counter.decrementAndGet() == 0){
                             runOnUiThread(() -> {
@@ -608,8 +613,9 @@ public class FriendsActivity extends AppCompatActivity {
                         int b = (int) m.get("mutualFriendsCount");
                         ParseFile pic = a.getParseFile("profile_pic");
                         String picUrl = pic != null ? pic.getUrl() : null;
+                        int reportNum = a.getInt("reportNum");
 
-                        sfml.add(new SuggestedFriendModel(username, picUrl, id, b));
+                        sfml.add(new SuggestedFriendModel(username, picUrl, id, b, reportNum));
 
                         if(counter.decrementAndGet() == 0){
                             runOnUiThread(() -> {
@@ -687,8 +693,9 @@ public class FriendsActivity extends AppCompatActivity {
                                 int b = (int) m.get("mutualFriendsCount");
                                 ParseFile pic = a.getParseFile("profile_pic");
                                 String picUrl = pic != null ? pic.getUrl() : null;
+                                int reportNum = a.getInt("reportNum");
 
-                                sfml.add(new SuggestedFriendModel(username, picUrl, id, b));
+                                sfml.add(new SuggestedFriendModel(username, picUrl, id, b, reportNum));
                                 System.out.println("what happened");
 
                                 if (counter.decrementAndGet() == 0) {
