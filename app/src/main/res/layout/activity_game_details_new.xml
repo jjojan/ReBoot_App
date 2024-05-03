@@ -193,6 +193,21 @@
                             android:secondaryProgressTint="@android:color/transparent"
                             android:stepSize="0.1" />
 
+
+                        <TextView
+                            android:id="@+id/tvtotalReviews"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginRight="20dp"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/inter_regular"
+                            android:text="0"
+                            android:textColor="@color/color5"
+                            android:textSize="16sp" />
+
+
                     </LinearLayout>
                 </LinearLayout>
 
@@ -611,7 +626,8 @@
                 android:background="@drawable/post_button"
                 android:paddingLeft="25dp"
                 android:paddingRight="25dp"
-                android:text="POST" />
+                android:text="POST"
+                android:enabled="false"/>
         </LinearLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

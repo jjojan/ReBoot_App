@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -48,6 +50,7 @@ public class SignUpActivity extends AppCompatActivity {
     TextView tvLoginLink;
     Context context;
 
+    CheckBox modCheckbox;
 
 
     @Override
@@ -61,6 +64,7 @@ public class SignUpActivity extends AppCompatActivity {
         edtRptPassword = findViewById(R.id.edtRptPassword);
         btnSignUp = findViewById(R.id.btnSignUp);
         tvLoginLink = findViewById(R.id.tvLoginLink);
+        modCheckbox = findViewById(R.id.checkBox);
 
         googleImage = findViewById(R.id.google_img);
 
@@ -180,6 +184,13 @@ public class SignUpActivity extends AppCompatActivity {
                         user.setUsername(username);
                         user.setEmail(email);
                         user.setPassword(password);
+
+                        Log.i("modCheck",String.valueOf(modCheckbox.isChecked()) );
+
+                        if(modCheckbox.isChecked()){
+                            user.put("isMod", true);
+                            Log.i("modCheck",  "true--");
+                        }
                         user.signUpInBackground(new SignUpCallback() {
                             @Override
                             public void done(ParseException e) {
@@ -244,6 +255,23 @@ public class SignUpActivity extends AppCompatActivity {
                 user.setEmail(personEmail);
                 user.setPassword(personId);
                 user.setEmail(personEmail);
+
+                Log.i("modCheck",String.valueOf(modCheckbox.isChecked()) );
+
+                if(modCheckbox.isChecked()){
+                    user.put("isMod", true);
+                    Log.i("modCheck",  "true--");
+                }
+
+//                modCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//                    @Override
+//                    public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+//                       if (isChecked){
+//                           user.put("isMod", true);
+//                           Log.i("mod", )
+//                       }
+//                    }
+//                });
 
                 ParseQuery<ParseObject> query = ParseQuery.getQuery("User");
 

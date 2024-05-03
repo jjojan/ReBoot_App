@@ -3,11 +3,11 @@ package com.example.rebootapp.Activities;
 import android.app.ProgressDialog;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.text.method.ScrollingMovementMethod;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.animation.OvershootInterpolator;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -30,7 +30,6 @@ import com.example.rebootapp.GameModel;
 import com.example.rebootapp.Models.ReviewModel;
 import com.example.rebootapp.Models.UserListModel;
 import com.example.rebootapp.R;
-import com.example.rebootapp.Utilities.ExpandableTextView;
 import com.parse.CountCallback;
 import com.parse.FindCallback;
 import com.parse.FunctionCallback;
@@ -48,7 +47,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.parceler.Parcels;
 
-import java.text.FieldPosition;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -73,10 +71,10 @@ public class GameDetailsActivity extends AppCompatActivity implements AdapterVie
     String GAME_URL = "https://api.rawg.io/api/games/";
     ArrayList<ReviewModel> reviewList;
     ReviewAdapter reviewAdapter;
-    ExpandableTextView tvGameDescription;
-    TextView toggle;
 
     ToggleButton imgFav;
+
+    TextView totalCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,28 +94,12 @@ public class GameDetailsActivity extends AppCompatActivity implements AdapterVie
                         "\nPosterPath: " + movie.getPosterPath() + "\nVote: " + movie.getVoteAverage());
         gameID = movie.getID();
         binding.tvTitle.setText(movie.getTitle());
-        binding.tvGameDescription.setText(movie.getOverview().toString());
-        binding.tvGameDescription.setAnimationDuration(750L);
-        binding.tvGameDescription.setInterpolator(new OvershootInterpolator());
-        binding.toggleView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(binding.tvGameDescription.isExpanded()){
-                    binding.tvGameDescription.collapse();
-                    binding.toggleView.setText(R.string.expand);
-                }
-                else{
-                    binding.tvGameDescription.expand();
-                    binding.toggleView.setText(R.string.collapse);
-                }
-            }
-        });{
-
-        };
+        binding.tvGameDescription.setText(movie.getOverview());
         binding.tvReleaseDate.setText( "Release Date: " + movie.getReleaseDate());
 
         imgFav = findViewById(R.id.imgFav);
         vis_spinner = findViewById(R.id.spinner);
+        totalCount = findViewById(R.id.tvtotalReviews);
 
         vis_spinner.post(() -> {
             for (int i = 0; i < vis_spinner.getChildCount(); i++){
@@ -223,6 +205,25 @@ public class GameDetailsActivity extends AppCompatActivity implements AdapterVie
 //        fetchReviews2();
         fetchBlocked();
         fetchRatings();
+
+        binding.etReviewBox.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                String enteredText = editable.toString();
+
+                binding.btnSaveReview.setEnabled(!enteredText.isEmpty());
+            }
+        });
         binding.tvAllReviews.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -230,6 +231,8 @@ public class GameDetailsActivity extends AppCompatActivity implements AdapterVie
                 binding.tvAllReviews.setVisibility(View.GONE);
             }
         });
+
+
         binding.btnSaveReview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -294,8 +297,10 @@ public class GameDetailsActivity extends AppCompatActivity implements AdapterVie
 
                     float averageRating = totalRating / allRatings.size();
 
+
                     averageRating = Math.round(averageRating * 10) / 10.0f;
 
+                    binding.tvtotalReviews.setText( String.valueOf(allRatings.size()) + " Reviews");
                     binding.tvRatingCount.setText(String.valueOf(averageRating));
                     binding.ratingBarMain.setRating(averageRating);
                     binding.progressBar5.setMax(allRatings.size());
@@ -845,7 +850,7 @@ public class GameDetailsActivity extends AppCompatActivity implements AdapterVie
             Toast.makeText(GameDetailsActivity.this, "Please write a review!", Toast.LENGTH_SHORT).show();
             return;
         } else if (ratingFloat == 0) {
-            Toast.makeText(GameDetailsActivity.this, "Please select a review!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(GameDetailsActivity.this, "Please select a rating!", Toast.LENGTH_SHORT).show();
             return;
         }
 
