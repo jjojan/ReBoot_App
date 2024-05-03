@@ -157,6 +157,7 @@ public class ActivityFragment extends Fragment {
         friendsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                binding.rvFeed.setAdapter(reviewAdapter);
 
                 friendsButton.setTextColor(getResources().getColor(R.color.color1));
                 allbutton.setTextColor(getResources().getColor(R.color.black));
