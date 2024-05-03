@@ -14,6 +14,7 @@
         android:layout_height="72dp"
         android:queryHint="Search by Stores"
         android:searchSuggestSelection=" ?"
+        android:fontFamily="@font/agane_bold"
         />
     <TextView
         android:id="@+id/tvReviewGame"
@@ -21,7 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/svSearchGame"
         android:text="Search Results"
-        android:fontFamily="@font/thasadith_bolditalic"
+        android:fontFamily="@font/agane_bold"
         android:textColor="@color/color5"
         android:textAppearance="@drawable/gradient_background"
         android:layout_marginVertical="5dp"

@@ -39,7 +39,8 @@
             android:layout_marginLeft="5dp"
             android:text="TextView"
             android:background="@color/white"
-            android:textColor="@color/black"/>
+            android:textColor="@color/black"
+            android:fontFamily="@font/agane_bold"/>
 
         <TextView
             android:id="@+id/tvReviewText"
@@ -49,7 +50,8 @@
             android:layout_marginLeft="5dp"
             android:text="TextView"
             android:background="@color/white"
-            android:textColor="@color/black"/>
+            android:textColor="@color/black"
+            android:fontFamily="@font/agane_bold"/>
 
     </RelativeLayout>
 

@@ -1,7 +1,11 @@
 package com.example.rebootapp.Fragments;
 
+import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -18,6 +22,7 @@ public class ProfileFragment2 extends Fragment {
     ShapeableImageView ProfilePic;
     ImageButton EditProfileBtn, CustomListBtn;
     TextView Username, Email, BioContent;
+    Uri profile_Uri;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

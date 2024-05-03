@@ -25,7 +25,7 @@
         android:layout_centerHorizontal="true"
         android:autoSizeTextType="uniform"
         android:textSize="20dp"
-        android:fontFamily="@font/thasadith_regular"
+        android:fontFamily="@font/agane_light"
         android:textAlignment="center"
         />
 
@@ -40,7 +40,7 @@
         android:layout_marginLeft="28dp"
         android:layout_marginRight="28dp"
         android:background="@drawable/edt_background"
-        android:fontFamily="@font/thasadith_bold"
+        android:fontFamily="@font/agane_light"
         android:paddingLeft="13dp"/>
 
 
@@ -56,7 +56,7 @@
         android:textColor="@color/color5"
         android:textSize="25dp"
         android:textStyle="normal"
-        android:fontFamily="@font/thasadith_regular"/>
+        android:fontFamily="@font/agane_light"/>
     <View
         android:layout_width="150dp"
         android:layout_height="2dp"
@@ -71,7 +71,7 @@
         android:layout_below="@id/edtUsername"
         android:hint="Email"
         android:textColorHint="@color/color5"
-        android:fontFamily="@font/thasadith_bold"
+        android:fontFamily="@font/agane_light"
         android:layout_marginTop="13dp"
         android:layout_marginLeft="28dp"
         android:layout_marginRight="28dp"
@@ -83,7 +83,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/edtEmail"
-        android:fontFamily="@font/thasadith_bold"
+        android:fontFamily="@font/agane_light"
         android:textColorHint="@color/aqua">
         <EditText
             android:id="@+id/edtPassword"
@@ -112,6 +112,7 @@
         android:layout_marginLeft="28dp"
         android:layout_marginRight="28dp"
         android:background="@drawable/edt_background"
+        android:fontFamily="@font/agane_light"
         android:inputType="textPassword"
         android:paddingLeft="13dp"/>
     
@@ -131,7 +132,7 @@
         android:layout_height="wrap_content"
         android:text="Sign Up"
         android:textColor="@color/black"
-        android:fontFamily="@font/thasadith_bold"
+        android:fontFamily="@font/agane_bold"
         android:layout_below="@id/edtRptPassword"
         android:layout_centerHorizontal="true"
         android:background="@drawable/btn_background"
@@ -148,7 +149,7 @@
         android:linksClickable="true"
         android:textSize="18dp"
         android:textColor="@color/color2"
-        android:fontFamily="@font/thasadith_bold"
+        android:fontFamily="@font/agane_light"
         android:layout_marginTop="10dp" />
     <ImageView
         android:layout_width="79dp"
@@ -166,7 +167,7 @@
         android:textColor="@color/color1"
         android:textSize="25dp"
         android:textStyle="normal"
-        android:fontFamily="@font/thasadith_regular"
+        android:fontFamily="@font/agane_light"
         android:layout_below="@+id/tvIntroduction"
         android:layout_marginLeft="95dp"
         android:layout_marginTop="15dp"/>
@@ -179,7 +180,8 @@
         android:layout_marginEnd="21dp"
         android:layout_marginBottom="-65dp"
         android:layout_toStartOf="@+id/btnSignUp"
-        android:text="Request Mod" />
+        android:text="Request Mod"
+        android:fontFamily="@font/agane_light"/>
 
 
 </RelativeLayout>

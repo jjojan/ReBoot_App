@@ -17,7 +17,8 @@
         android:text="WishList Games"
         android:textAlignment="center"
         android:textSize="34sp"
-        android:textColor="@color/aqua"/>
+        android:textColor="@color/aqua"
+        android:fontFamily="@font/agane_bold"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_wishlist_list"

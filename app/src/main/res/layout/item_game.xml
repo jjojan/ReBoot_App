@@ -35,7 +35,8 @@
             android:textSize="16sp"
             android:textStyle="bold"
             android:maxLines="1"
-            android:ellipsize="end"/>
+            android:ellipsize="end"
+            android:fontFamily="@font/agane_light"/>
     </RelativeLayout>
 
 

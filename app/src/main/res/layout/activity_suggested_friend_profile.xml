@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_alignParentBottom="false"
-    android:background="@color/color2"
+    android:background="@drawable/gradient_background"
     android:visibility="visible"
     tools:context=".Activities.FriendProfileActivity">
 
@@ -67,27 +67,28 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvFriend_Email"
-        android:layout_marginLeft="15dp"
+        android:layout_marginLeft="50dp"
         android:layout_marginTop="13dp"
         android:text="Bio"
-        android:textSize="24sp" />
+        android:textSize="30sp"
+        android:fontFamily="@font/agane_light"/>
     <!-- Bio -->
     <TextView
         android:id="@+id/friend_bio"
         android:layout_width="350dp"
         android:layout_height="60dp"
         android:background="@drawable/rounded_textview"
-        android:backgroundTint="@color/aqua1"
         android:layout_below="@id/bioHeader"
         android:layout_centerHorizontal="true"
+        android:layout_marginTop="45dp"
         android:textSize="16sp" />
 
     <ImageView
         android:id="@+id/iv_Lock"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="300dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_toRightOf="@+id/Friend_ProfilePic"
+        android:layout_marginTop="25dp"
         android:scaleType="fitCenter"
         app:srcCompat="@drawable/lock_icon_100" />
 
@@ -96,28 +97,31 @@
         android:layout_width="218dp"
         android:layout_height="wrap_content"
         android:layout_below="@id/iv_Lock"
-        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="120dp"
         android:text="Account Private"
         android:textAlignment="center"
-        android:textSize="20sp" />
+        android:textSize="20sp"
+        android:fontFamily="@font/agane_light"/>
 
     <TextView
         android:id="@+id/manage_user"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="13dp"
-        android:layout_marginTop="450dp"
+        android:layout_marginLeft="35dp"
+        android:layout_marginTop="350dp"
         android:text="Send Friend Request"
-        android:textSize="25sp" />
+        android:textSize="25sp"
+        android:fontFamily="@font/agane_light"/>
 
     <TextView
         android:id="@+id/manage_user2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="13dp"
-        android:layout_marginTop="515dp"
+        android:layout_marginLeft="35dp"
+        android:layout_marginTop="420dp"
         android:text="Block User"
-        android:textSize="25sp" />
+        android:textSize="25sp"
+        android:fontFamily="@font/agane_light"/>
 
     <ImageButton
         android:id="@+id/btn_request"

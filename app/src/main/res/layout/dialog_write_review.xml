@@ -13,7 +13,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@drawable/gradient_background">
 
         <TextView
             android:id="@+id/tvTitle"
@@ -22,7 +23,8 @@
             android:layout_marginTop="10dp"
             android:text="Share your review  about the game."
             android:textSize="20sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:fontFamily="@font/agane_bold"/>
 
         <EditText
             android:id="@+id/etReview"
@@ -31,7 +33,8 @@
             android:layout_marginTop="10dp"
             android:ems="10"
             android:hint="Write your review to here"
-            android:inputType="textMultiLine" />
+            android:inputType="textMultiLine"
+            android:fontFamily="@font/agane_bold"/>
 
         <RatingBar
             android:id="@+id/ratingBar"
@@ -45,20 +48,23 @@
             android:id="@+id/chckBoxPrivate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Show only to my friends" />
+            android:text="Show only to my friends"
+            android:fontFamily="@font/agane_bold"/>
 
         <Button
             android:id="@+id/btnSave"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="Save" />
+            android:text="Save"
+            android:fontFamily="@font/agane_bold"/>
 
         <Button
             android:id="@+id/btnCancel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:text="Cancel" />
+            android:text="Cancel"
+            android:fontFamily="@font/agane_bold"/>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

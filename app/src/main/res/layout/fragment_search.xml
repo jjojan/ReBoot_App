@@ -5,7 +5,8 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/white"
-    tools:context=".Fragments.SearchFragment">
+    tools:context=".Fragments.SearchFragment"
+    android:fontFamily="@font/agane_bold">
 
 <!--    <androidx.appcompat.widget.SearchView-->
 <!--        android:id="@+id/svGames"-->
@@ -20,7 +21,7 @@
         android:id="@+id/svSearch"
         android:layout_width="match_parent"
         android:layout_height="72dp"
-        android:fontFamily="@font/thasadith_bold"
+        android:fontFamily="@font/agane_bold"
         android:queryHint="Search Games"
         android:searchSuggestSelection=" ?"
         android:layout_marginTop="5dp"
@@ -48,62 +49,71 @@
                 android:checked="false"
                 android:text="Dev"
                 android:textOff="Dev Off"
-                android:textOn="Dev On" />
+                android:textOn="Dev On"
+                android:fontFamily="@font/agane_bold"/>
 
             <Button
                 android:layout_width="100dp"
                 android:id="@+id/actionButton"
                 android:layout_height="wrap_content"
-                android:text="Action"/>
+                android:text="Action"
+                android:fontFamily="@font/agane_bold"/>
 
             <Button
                 android:layout_width="100dp"
                 android:id="@+id/indieButton"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="15dp"
-                android:text="Indie"/>
+                android:text="Indie"
+                android:fontFamily="@font/agane_bold"/>
 
             <Button
                 android:layout_width="100dp"
                 android:id="@+id/shooterButton"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="15dp"
-                android:text="Shooter"/>
+                android:text="Shooter"
+                android:fontFamily="@font/agane_bold"/>
 
             <Button
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/rpgButton"
                 android:layout_marginLeft="15dp"
-                android:text="RPG"/>
+                android:text="RPG"
+                android:fontFamily="@font/agane_bold"/>
 
             <Button
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/casual"
                 android:layout_marginLeft="15dp"
-                android:text="Casual"/>
+                android:text="Casual"
+                android:fontFamily="@font/agane_bold"/>
 
             <Button
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/mmoButton"
                 android:layout_marginLeft="15dp"
-                android:text="MMO"/>
+                android:text="MMO"
+                android:fontFamily="@font/agane_bold"/>
 
             <Button
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/cardButton"
                 android:layout_marginLeft="15dp"
-                android:text="Card"/>
+                android:text="Card"
+                android:fontFamily="@font/agane_bold"/>
 
             <Button
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/familyButton"
                 android:layout_marginLeft="15dp"
-                android:text="Family"/>
+                android:text="Family"
+                android:fontFamily="@font/agane_bold"/>
 
 
         </LinearLayout>
@@ -122,7 +132,8 @@
         android:scrollbars="vertical"
         android:layout_below="@+id/hScrollView"
         android:textAlignment="center"
-        android:adjustViewBounds="true"/>
+        android:adjustViewBounds="true"
+        android:fontFamily="@font/agane_bold"/>
 
 
 </RelativeLayout>

@@ -67,7 +67,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/tvUser_Username"
             android:layout_marginRight="25dp"
-            android:fontFamily="@font/thasadith_bold"
+            android:fontFamily="@font/agane_bold"
             android:textAlignment="textEnd"
             android:textColor="@color/aqua"
             android:visibility="invisible"
@@ -80,7 +80,7 @@
             android:layout_below="@+id/tvUser_Email"
             android:layout_marginLeft="15dp"
             android:layout_marginTop="11dp"
-            android:fontFamily="@font/abel_regular"
+            android:fontFamily="@font/agane_bold"
             android:text="My Bio"
             android:textColor="@color/aqua"
             android:textSize="30sp" />
@@ -94,7 +94,7 @@
             android:layout_marginBottom="5dp"
 
             android:elegantTextHeight="true"
-            android:fontFamily="@font/thasadith_bold"
+            android:fontFamily="@font/agane_bold"
             android:hint="Tell us about yourself..."
             android:textAlignment="center"
             android:textSize="16sp" />
@@ -108,7 +108,7 @@
             android:layout_marginLeft="30dp"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="0dp"
-            android:fontFamily="@font/abel_regular"
+            android:fontFamily="@font/agane_bold"
             android:text="Friends"
             android:textColor="@color/aqua"
             android:textSize="30sp" />
@@ -145,7 +145,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/friendsRecyclerView"
             android:layout_marginLeft="13dp"
-            android:fontFamily="@font/abel_regular"
+            android:fontFamily="@font/agane_bold"
             android:text="Starred"
             android:textColor="@color/aqua"
             android:textSize="25sp" />
@@ -200,7 +200,7 @@
             android:layout_height="wrap_content"
             android:layout_alignBaseline="@+id/favoritesHeader"
             android:layout_marginLeft="180dp"
-            android:fontFamily="@font/abel_regular"
+            android:fontFamily="@font/agane_bold"
             android:text="Collections"
             android:textColor="@color/aqua"
             android:textSize="25sp" />
@@ -228,7 +228,8 @@
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="15dp"
             android:background="@color/aqua1"
-            android:text="Sign Out" />
+            android:text="Sign Out"
+            android:fontFamily="@font/agane_bold"/>
 
     </RelativeLayout>
 
