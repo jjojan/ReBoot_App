@@ -3,9 +3,11 @@ package com.example.rebootapp.Activities;
 import android.app.ProgressDialog;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.animation.OvershootInterpolator;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -28,6 +30,7 @@ import com.example.rebootapp.GameModel;
 import com.example.rebootapp.Models.ReviewModel;
 import com.example.rebootapp.Models.UserListModel;
 import com.example.rebootapp.R;
+import com.example.rebootapp.Utilities.ExpandableTextView;
 import com.parse.CountCallback;
 import com.parse.FindCallback;
 import com.parse.FunctionCallback;
@@ -45,6 +48,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.parceler.Parcels;
 
+import java.text.FieldPosition;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -69,6 +73,8 @@ public class GameDetailsActivity extends AppCompatActivity implements AdapterVie
     String GAME_URL = "https://api.rawg.io/api/games/";
     ArrayList<ReviewModel> reviewList;
     ReviewAdapter reviewAdapter;
+    ExpandableTextView tvGameDescription;
+    TextView toggle;
 
     ToggleButton imgFav;
 
@@ -90,7 +96,24 @@ public class GameDetailsActivity extends AppCompatActivity implements AdapterVie
                         "\nPosterPath: " + movie.getPosterPath() + "\nVote: " + movie.getVoteAverage());
         gameID = movie.getID();
         binding.tvTitle.setText(movie.getTitle());
-        binding.tvGameDescription.setText(movie.getOverview());
+        binding.tvGameDescription.setText(movie.getOverview().toString());
+        binding.tvGameDescription.setAnimationDuration(750L);
+        binding.tvGameDescription.setInterpolator(new OvershootInterpolator());
+        binding.toggleView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(binding.tvGameDescription.isExpanded()){
+                    binding.tvGameDescription.collapse();
+                    binding.toggleView.setText(R.string.expand);
+                }
+                else{
+                    binding.tvGameDescription.expand();
+                    binding.toggleView.setText(R.string.collapse);
+                }
+            }
+        });{
+
+        };
         binding.tvReleaseDate.setText( "Release Date: " + movie.getReleaseDate());
 
         imgFav = findViewById(R.id.imgFav);
