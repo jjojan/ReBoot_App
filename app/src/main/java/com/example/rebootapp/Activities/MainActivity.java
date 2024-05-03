@@ -1,6 +1,12 @@
 package com.example.rebootapp.Activities;
 
+import static android.app.PendingIntent.getActivity;
+
+import static com.parse.Parse.getApplicationContext;
+
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -8,6 +14,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -21,13 +28,21 @@ import androidx.fragment.app.FragmentManager;
 import com.example.rebootapp.Fragments.ActivityFragment;
 import com.example.rebootapp.Fragments.HomeFragment;
 import com.example.rebootapp.Fragments.ProfileFragment;
+import com.example.rebootapp.LoginActivity;
 import com.example.rebootapp.MovieModel;
 import com.example.rebootapp.R;
 import com.example.rebootapp.Fragments.ReviewFragment;
 import com.example.rebootapp.Fragments.SearchFragment;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.navigation.NavigationView;
+import com.parse.Parse;
+import com.parse.ParseUser;
 
 import java.util.List;
 
@@ -39,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
     List<MovieModel> movieModel;
 
     public DrawerLayout drawerLayout;
+    public NavigationView navigationView;
     public ActionBarDrawerToggle actionBarDrawerToggle;
 
     @Override
@@ -60,23 +76,17 @@ public class MainActivity extends AppCompatActivity {
         actionBar.setBackgroundDrawable(bottomNavigationView.getBackground());
 
 
-        final FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentManager fragmentManager = getSupportFragmentManager();
 
-        // drawer layout instance to toggle the menu icon to open
-        // drawer and back button to close drawer
         drawerLayout = findViewById(R.id.my_drawer_layout);
-
+        navigationView = findViewById(R.id.navigation);
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.nav_open, R.string.nav_close);
-
-
-        // pass the Open and Close toggle for the drawer layout listener
-        // to toggle the button
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
-
-        // to make the Navigation drawer icon always appear on the action bar
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        HomeFragment homeFragment = new HomeFragment();
+        fragmentManager.beginTransaction().replace(R.id.fLayoutContainer, homeFragment).commit();
 
 
 //        Intent intent = getIntent();
@@ -137,31 +147,110 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }
-        if(!profile) bottomNavigationView.setSelectedItemId(R.id.mHome);
+        //if(!profile) bottomNavigationView.setSelectedItemId(R.id.mHome);
+
+
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(MenuItem menuItem) {
+                GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                        .requestEmail().build();
+                GoogleSignInClient gsc = GoogleSignIn.getClient(getApplicationContext(), gso);
+
+                switch (menuItem.getItemId()) {
+                    case R.id.nav_account: {
+                        Fragment frag = new ProfileFragment();
+                        fragmentManager.beginTransaction().replace(R.id.fLayoutContainer, frag).commit();
+                        drawerLayout.closeDrawers();
+                        break;
+                    }
+                    case R.id.nav_friends:{
+                        Intent intent1 = new Intent(getApplicationContext(), FriendsActivity.class);
+                        startActivity(intent1);
+                        break;
+                    }
+                    case R.id.nav_favorites:{
+                        Intent intent2 = new Intent(getApplicationContext(), FavoriteGamesActivity.class);
+                        startActivity(intent2);
+                        break;
+                    }
+                    case R.id.nav_logout:{
+                        gsc.signOut().addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                ParseUser.logOutInBackground(e -> {
+                                    if (e == null) {
+                                        SharedPreferences getUser = Parse.getApplicationContext().getSharedPreferences("user info", Context.MODE_PRIVATE);
+                                        SharedPreferences.Editor ed = getUser.edit();
+                                        ed.remove("username");
+                                        ed.apply();
+                                        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                        startActivity(intent);
+                                    } else {
+
+                                        Log.e("LogoutError", "Parse logout failed", e);
+                                    }
+                                });
+                            }
+                        });
+                        break;
+                    }
+
+                }
+                return true;
+            }
+        });
     }
 
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
-        Fragment fragment;
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail().build();
+        GoogleSignInClient gsc = GoogleSignIn.getClient(getApplicationContext(), gso);
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
 
         switch (item.getItemId()) {
             case R.id.nav_account: {
-                fragment = new ProfileFragment();
+                Fragment frag = new ProfileFragment();
+                fragmentManager.beginTransaction().replace(R.id.fLayoutContainer, frag).commit();
+                break;
             }
             case R.id.nav_friends:{
-
+                Intent intent1 = new Intent(getApplicationContext(), FriendsActivity.class);
+                startActivity(intent1);
+                break;
             }
             case R.id.nav_favorites:{
-
-            }
-            case R.id.nav_collections:{
-
+                Intent intent2 = new Intent(getApplicationContext(), FavoriteGamesActivity.class);
+                startActivity(intent2);
+                break;
             }
             case R.id.nav_logout:{
+                gsc.signOut().addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        ParseUser.logOutInBackground(e -> {
+                            if (e == null) {
+                                SharedPreferences getUser = Parse.getApplicationContext().getSharedPreferences("user info", Context.MODE_PRIVATE);
+                                SharedPreferences.Editor ed = getUser.edit();
+                                ed.remove("username");
+                                ed.apply();
+                                Intent intent4 = new Intent(getApplicationContext(), LoginActivity.class);
+                                intent4.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(intent4);
+                            } else {
 
+                                Log.e("LogoutError", "Parse logout failed", e);
+                            }
+                        });
+                    }
+                });
             }
+            break;
         }
 
         if (actionBarDrawerToggle.onOptionsItemSelected(item)) {

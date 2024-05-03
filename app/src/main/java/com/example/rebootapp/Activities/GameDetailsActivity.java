@@ -8,6 +8,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.animation.OvershootInterpolator;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -95,11 +96,26 @@ public class GameDetailsActivity extends AppCompatActivity implements AdapterVie
         gameID = movie.getID();
         binding.tvTitle.setText(movie.getTitle());
         binding.tvGameDescription.setText(movie.getOverview());
+        binding.tvGameDescription.setAnimationDuration(750L);
+        binding.tvGameDescription.setInterpolator(new OvershootInterpolator());
+        binding.toggleView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(binding.tvGameDescription.isExpanded()){
+                    binding.tvGameDescription.collapse();
+                    binding.toggleView.setText(R.string.expand);
+                }
+                else{
+                    binding.tvGameDescription.expand();
+                    binding.toggleView.setText(R.string.collapse);
+                }
+            }
+        });
         binding.tvReleaseDate.setText( "Release Date: " + movie.getReleaseDate());
 
         imgFav = findViewById(R.id.imgFav);
         vis_spinner = findViewById(R.id.spinner);
-        totalCount = findViewById(R.id.tvtotalReviews);
+        totalCount = binding.tvtotalReviews;
 
         vis_spinner.post(() -> {
             for (int i = 0; i < vis_spinner.getChildCount(); i++){
